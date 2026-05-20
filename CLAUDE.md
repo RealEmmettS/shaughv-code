@@ -33,9 +33,6 @@ explicitly asks to expand scope.
 
 ## Quirks to leave alone
 
-- `skills/shaughv-design/SKILL.md` has `user-invocable: true` in frontmatter.
-  It's not part of the SKILL schema and is silently ignored by Claude Code —
-  it's Emmett's personal marker. Don't "fix" it.
 - The `skills/` directory MUST stay lowercase. Case-only renames on Windows
   need a two-step `mv` (e.g. `mv skills tmp && mv tmp skills`).
 

@@ -1,7 +1,6 @@
 ---
 name: shaughv-design
 description: Use this skill to generate well-branded interfaces and assets for SHAUGHV (Emmett Shaughnessy's personal brand), either for production or throwaway prototypes/mocks. Contains the brand's typography, palette, fonts, mark, motion vocabulary, and full UI kits for both the live brutalist personal site and the vintage-edition variant.
-user-invocable: true
 ---
 
 # SHAUGHV Design Skill
