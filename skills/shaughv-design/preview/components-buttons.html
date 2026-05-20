@@ -1,0 +1,28 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css">
+<style>
+  .btn { font-family: var(--font-heading); font-weight:700; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; padding:16px 32px; cursor:pointer; transition:background var(--dur-base) ease, color var(--dur-base) ease, border-color var(--dur-base) ease; border:none; }
+  .btn-primary { background:var(--accent); color:var(--sv-cream-100); }
+  .btn-primary:hover { background:var(--sv-olive); }
+  .btn-secondary { background:transparent; color:var(--fg); border:2px solid var(--border-hairline); }
+  .btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-ghost { background:transparent; color:var(--accent); padding:8px 0; display:inline-flex; align-items:center; gap:8px; }
+  .btn-ghost:hover { color:var(--warm); }
+  .btn-icon { width:48px; height:48px; padding:0; border:1px solid currentColor; border-radius:9999px; display:inline-flex; align-items:center; justify-content:center; background:transparent; color:var(--fg); }
+  .btn-icon:hover { background:var(--accent); border-color:var(--accent); color:var(--sv-cream-100); }
+</style>
+</head>
+<body class="card" style="min-height:220px">
+  <div class="section-label">Buttons · primary / secondary / ghost / icon</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:6px">
+    <button class="btn btn-primary">View Selected Works</button>
+    <button class="btn btn-secondary">Get In Touch</button>
+    <button class="btn btn-ghost">See more works →</button>
+    <button class="btn btn-icon" aria-label="External link">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg>
+    </button>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:12px;color:var(--fg-muted);margin-top:14px">
+    Square corners. No drop-shadow. Hover swaps color, never adds elevation. Icon buttons are pill-circles with current-color borders.
+  </div>
+</body></html>

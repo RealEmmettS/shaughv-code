@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css"></head>
+<body class="card" style="min-height:220px">
+  <div class="section-label">Shadows + Hairlines · structural separation, not depth</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px">
+    <div style="background:var(--bg-raised);border:1px solid var(--border-hairline);padding:14px 16px">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-soft);margin-bottom:6px">Hairline border</div>
+      <div style="font-family:var(--font-sans);font-size:13px">1px solid · olive @ 18% opacity</div>
+    </div>
+    <div style="background:var(--bg-raised);border:1px solid var(--border-strong);padding:14px 16px">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-soft);margin-bottom:6px">Strong border</div>
+      <div style="font-family:var(--font-sans);font-size:13px">1px solid · olive 100% (project rows, work-tiles)</div>
+    </div>
+    <div style="background:var(--bg-raised);box-shadow:0 6px 24px rgba(92,84,70,0.08);padding:14px 16px">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-soft);margin-bottom:6px">Card shadow</div>
+      <div style="font-family:var(--font-sans);font-size:13px">0 6px 24px · used sparingly on raised cards</div>
+    </div>
+    <div style="background:var(--bg-raised);box-shadow:0 30px 80px rgba(32,79,32,0.12);padding:14px 16px;border-radius:20px">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-soft);margin-bottom:6px">Floating shadow</div>
+      <div style="font-family:var(--font-sans);font-size:13px">0 30px 80px · only the Contact form glass panel</div>
+    </div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:12px;color:var(--fg-muted);margin-top:14px">
+    Depth lives in <em>borders</em>, not drop-shadows. Shadow is reserved for two cases: card lift, and the contact-form glass.
+  </div>
+</body></html>

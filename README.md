@@ -1,10 +1,59 @@
 # shaughv-code
 
+Emmett Shaughnessy's personal Claude Code plugin. Bundles every custom SHAUGHV skill into a single, marketplace-installable plugin so every Claude Code instance (and any agent that respects the same layout) picks up updates from one source of truth.
 
-All right, the intention here is to build a repo that stores all of my Claude skills, preferably so that Codex or other agents can reference this and get the same skills updated at the same time from one source, all just packaged together. I don't have to keep transporting things between agents.
+## Install
 
-The second part is aspirational. I don't know if this will remove the ability for Codex to use it, but I'd like to make this a Claude plugin. Claude should have a skill for this. The Claude code should be /create plugin or something simple like that. We can use that to package this all as one single plugin hosted at either this repo or another repo. I'm not quite sure how the plugin packager works, if it just packages into one thing that we can host at a repo. Not sure if we host it in this one, so we'll have to do some research on that.
+```text
+/plugin marketplace add RealEmmettS/shaughv-code
+/plugin install shaughv-code@shaughv-code
+```
 
-Package all of these skills that are custom into one plugin that I can share from the repo, that again can update just from the source from remote and then has all of those skills packaged inside of it. Then you don't have to manage each individual skill. 
+That's it. All skills below auto-load whenever their description matches the task.
 
-This is kind of a brain dump. If Claude, you're reading this, I'm so sorry you're gonna have to think hard and analyze what I'm talking about here, lmao. Ask questions if you need to. If you're a human, I apologize for the brain dump. I hope it makes sense. 
+To test locally before publishing:
+
+```bash
+claude --plugin-dir C:/Users/hey/git/shaughv-code
+```
+
+## Skills bundled
+
+| Skill | Purpose |
+|---|---|
+| `critical-thinking` | Four critical-thinking frameworks (contemplating, problem-solving, decision-making, design) plus devil's advocacy and a working canvas. |
+| `openai-audio` | OpenAI audio stack — Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports. Includes 13 runnable examples (py/js/ts). |
+| `perplexity-search` | Web search and AI-grounded answers via the Perplexity Agent, Search, and Sonar APIs. |
+| `pretext` | DOM-free text measurement and line layout using `@chenglou/pretext`. |
+| `quiver-ai` | SVG generation and raster→vector via Quiver AI's Arrow model. Reads `$env:QUIVERAI_API_KEY`. |
+| `shaughv-animated-brandmark` | Build the SHAUGHV animated brand mark — draws itself path-by-path, then loops between wordmark and icon. |
+| `shaughv-design` | Generate well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color tokens, type system, component previews, and two UI kits. |
+
+## Repo layout
+
+```
+shaughv-code/
+├── .claude-plugin/
+│   ├── plugin.json          # plugin manifest
+│   └── marketplace.json     # marketplace entry (single-plugin marketplace)
+└── skills/
+    ├── critical-thinking/
+    ├── openai-audio/
+    ├── perplexity-search/
+    ├── pretext/
+    ├── quiver-ai/
+    ├── shaughv-animated-brandmark/
+    └── shaughv-design/
+```
+
+Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit in place — there is no separate build step and no `.skill` zip to keep in sync.
+
+## Updating a skill
+
+1. Edit files under `skills/<name>/`.
+2. Commit and push.
+3. In any Claude Code instance: `/plugin marketplace update shaughv-code` then reload the plugin (or restart).
+
+## Author
+
+[Emmett Shaughnessy](https://emmetts.dev) · `hey@emmetts.dev` · [@RealEmmettS](https://github.com/RealEmmettS)

@@ -1,0 +1,131 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css">
+<style>
+  body.card { width: 920px; padding: 28px 32px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border-hairline);
+    height: 240px;
+    margin-top: 8px;
+  }
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .mark-host {
+    display: block;
+    height: 72px;
+    width: auto;
+    color: inherit;
+  }
+  .mark-host-icon { height: 96px; }
+  .tag {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .legend {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    color: var(--fg-muted);
+    line-height: 1.55;
+  }
+  .legend strong {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 4px;
+  }
+  .spec {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-hairline);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--fg);
+    line-height: 1.7;
+  }
+  .spec span { color: var(--accent); }
+  .footnote {
+    margin-top: 10px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--fg-muted);
+    line-height: 1.55;
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    background: var(--bg-raised);
+    padding: 1px 5px;
+    border: 1px solid var(--border-hairline);
+  }
+</style>
+</head>
+<body class="card">
+  <div class="section-label">Animated brand mark · loops wordmark ↔ icon · currentColor</div>
+
+  <div class="grid">
+    <div class="tile" style="background:var(--bg-raised);color:var(--sv-olive)">
+      <shaughv-mark class="mark-host" aria-label="SHAUGHV"></shaughv-mark>
+      <div class="tag">animated / olive on cream</div>
+    </div>
+    <div class="tile" style="background:var(--sv-olive);color:var(--sv-cream-100)">
+      <shaughv-mark class="mark-host" aria-label="SHAUGHV"></shaughv-mark>
+      <div class="tag" style="color:var(--sv-cream-100)">animated / cream on olive</div>
+    </div>
+    <div class="tile" style="background:#0B0B0B;color:var(--sv-brand-orange)">
+      <shaughv-mark class="mark-host" aria-label="SHAUGHV"></shaughv-mark>
+      <div class="tag" style="color:var(--sv-brand-orange);opacity:0.85">animated / orange on near-black</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div>
+      <strong>Animated · default</strong>
+      Wordmark holds 10 s, undraws (deco first, then letters reversed), pauses 3 s, the icon-only mustache + glasses draws in, holds 10 s, undraws, pauses 3 s, wordmark redraws.
+    </div>
+    <div>
+      <strong>Static fallback</strong>
+      For frameworks that can't run the JS file (PPTX, PDF, plain image consumers), use <code>assets/SHAUGHV-Official.svg</code> as a static drop-in. Same path data, no motion.
+    </div>
+    <div>
+      <strong>Icon variant</strong>
+      For ≤ 48 px surfaces (favicons, avatars) where letters would be illegible, use <code>assets/SHAUGHV-Favicon-*.svg</code> or pass <code>icon-only</code> to the mark element.
+    </div>
+  </div>
+
+  <div class="spec">
+    HOLD <span>10 000ms</span>  ·  PAUSE <span>3 000ms</span>  ·  W_STAGGER <span>650ms</span>  ·  W_STROKE <span>700ms</span>  ·  W_FILL <span>400ms</span><br>
+    I_STAGGER <span>1 800ms</span>  ·  I_STROKE <span>1 600ms</span>  ·  I_FILL <span>600ms</span>  ·  EASE <span>cubic-bezier(0.16, 1, 0.3, 1)</span>
+  </div>
+
+  <div class="footnote">
+    Drop-in integration — one script tag, one element. Color via <code>currentColor</code>. Honors <code>prefers-reduced-motion: reduce</code> by falling back to the static wordmark. Full recipe lives in <code>BRANDMARK.md</code> at the design-system root.
+  </div>
+
+  <pre style="margin-top:14px;padding:14px;background:var(--bg-raised);border:1px solid var(--border-hairline);font-family:var(--font-mono);font-size:10.5px;line-height:1.55;color:var(--fg);overflow:auto;"><span style="color:var(--fg-muted)">&lt;!-- color flows in from the host element's CSS color property --&gt;</span>
+&lt;shaughv-mark style=<span style="color:var(--accent)">"color: var(--fg); height: 56px;"</span>&gt;&lt;/shaughv-mark&gt;
+&lt;script src=<span style="color:var(--accent)">"assets/animated-brand-mark.js"</span>&gt;&lt;/script&gt;</pre>
+
+  <script src="../assets/animated-brand-mark.js"></script>
+</body></html>

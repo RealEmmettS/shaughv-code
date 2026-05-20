@@ -1,0 +1,24 @@
+{
+  "name": "shaughv-code",
+  "version": "0.1.0",
+  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, SHAUGHV brand design, animated brandmark) so they are available across every Claude Code instance from a single source.",
+  "author": {
+    "name": "Emmett Shaughnessy",
+    "email": "hey@emmetts.dev",
+    "url": "https://emmetts.dev"
+  },
+  "homepage": "https://github.com/RealEmmettS/shaughv-code",
+  "repository": "https://github.com/RealEmmettS/shaughv-code",
+  "license": "UNLICENSED",
+  "keywords": [
+    "shaughv",
+    "personal",
+    "skills",
+    "brand",
+    "design",
+    "openai-audio",
+    "perplexity",
+    "quiver",
+    "critical-thinking"
+  ]
+}

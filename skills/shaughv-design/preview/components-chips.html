@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css">
+<style>
+  .pill { font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; border:1px solid var(--border-strong); padding:6px 12px; border-radius:9999px; display:inline-block; }
+  .pill-accent { background:var(--accent); border-color:var(--accent); color:var(--sv-cream-100); }
+  .pill-warm { background:var(--warm); border-color:var(--warm); color:var(--sv-cream-100); }
+  .pill-ghost { color:var(--fg-soft); border-color:var(--border-hairline); }
+</style>
+</head>
+<body class="card" style="min-height:200px">
+  <div class="section-label">Chips & Pills · tech tags, badges, filters</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+    <span class="pill">Next.js, React</span>
+    <span class="pill">TypeScript</span>
+    <span class="pill">Rust, Shell</span>
+    <span class="pill pill-accent">Featured</span>
+    <span class="pill pill-accent">iOS</span>
+    <span class="pill pill-warm">In Selected</span>
+    <span class="pill pill-ghost">Deprecated</span>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px">
+    <button class="pill" style="cursor:pointer">All <span style="opacity:0.55">(27)</span></button>
+    <button class="pill pill-accent" style="cursor:pointer">Sites <span style="opacity:0.7">(11)</span></button>
+    <button class="pill" style="cursor:pointer">Tools <span style="opacity:0.55">(4)</span></button>
+    <button class="pill" style="cursor:pointer">Apps <span style="opacity:0.55">(2)</span></button>
+  </div>
+</body></html>

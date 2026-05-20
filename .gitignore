@@ -1,0 +1,13 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Local plugin settings
+.claude/*.local.md
+
+# Scratch dirs inside skills (e.g. shaughv-design/.tmp/)
+skills/**/.tmp/
