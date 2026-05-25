@@ -49,6 +49,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | Skill | Purpose |
 |---|---|
 | `critical-thinking` | Four critical-thinking frameworks (contemplating, problem-solving, decision-making, design) plus devil's advocacy and a working canvas. |
+| `gcs-storage` | Generic Google Cloud Storage reference. Install on macOS/Linux/Windows, ADC vs service-account auth, upload/download/list/delete, flat vs HNS folders, public access, signed URLs, CORS, lifecycle, scripting cheat-sheet, and a comprehensive gotchas catalog. Agent asks for project ID + bucket before mutating commands. |
 | `human-changelog` | Create/update a `HUMAN_CHANGELOG.md` by translating a repo's `CHANGELOG.md` into plain-English entries (no version numbers, no jargon), and wires up the repo's `CLAUDE.md` to keep both files in sync going forward. |
 | `naming-conventions` | SHAUGHV + general naming rules for any identifier — variables, files, folders, repos, branches, commits, PRs, columns, flags. Carries Code Complete 2 and DevOps Handbook principles plus SHAUGHV-specific conventions. |
 | `openai-audio` | OpenAI audio stack — Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports. Includes 13 runnable examples (py/js/ts). |
@@ -58,6 +59,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `shaughv-animated-brandmark` | Build the SHAUGHV animated brand mark — draws itself path-by-path, then loops between wordmark and icon. |
 | `shaughv-cdn` | Consumer guide for the `cdn.shaughv.com` private CDN. Covers URL conventions for `/brand/`, `/fonts/`, `/js/`; canonical `<link>`/`<script>`/`<img>` snippets; font preload patterns; cache contract; CORS; license restrictions. |
 | `shaughv-design` | Generate well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color tokens, type system, component previews, and two UI kits. |
+| `shaughv-gcs-storage` | Pre-wired skill for Emmett's personal public bucket at `gs://shaughv`. Bucket facts (uniform IAM, public reads, 7-day soft delete, versioning on, CORS off, US multi-region) baked in so the agent never has to ask. Returns `https://storage.googleapis.com/shaughv/<path>` URLs. Embeds the full cross-platform reference from `gcs-storage` so it stands alone. |
 
 ## Commands bundled
 
@@ -83,6 +85,7 @@ shaughv-code/
 │   └── create-video.md      # /shaughv-code:create-video
 └── skills/
     ├── critical-thinking/
+    ├── gcs-storage/
     ├── human-changelog/
     ├── naming-conventions/
     ├── openai-audio/
@@ -91,7 +94,8 @@ shaughv-code/
     ├── quiver-ai/
     ├── shaughv-animated-brandmark/
     ├── shaughv-cdn/
-    └── shaughv-design/
+    ├── shaughv-design/
+    └── shaughv-gcs-storage/
 ```
 
 Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit in place — there is no separate build step and no `.skill` zip to keep in sync.

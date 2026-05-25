@@ -50,6 +50,38 @@ Each of these was added by explicit ask — don't remove them without one:
 2. Put supporting docs in `skills/<name>/references/`, code in `examples/`,
    assets in `assets/`.
 3. Bump `version` in `.claude-plugin/plugin.json` if it's a substantive change.
+   Bump the same version in `.claude-plugin/marketplace.json` so the two
+   manifests stay aligned.
+4. Add a release entry to both changelogs (see the Changelog rule below).
+
+## Changelog rule
+
+This repo maintains two changelogs in parallel:
+
+- `CHANGELOG.md` — the technical changelog. Keep a Changelog format,
+  semver. Version numbers, file paths, manifest diffs, and concrete
+  details all belong here.
+- `HUMAN_CHANGELOG.md` — a plain-English companion for someone who isn't
+  reading code. Every release in `CHANGELOG.md` has a corresponding
+  section here. No version numbers, no file paths, no jargon — just what
+  changed and why it matters.
+
+**Whenever you bump `version` in `.claude-plugin/plugin.json` you MUST
+update BOTH changelogs in the same commit.** Translate each technical
+entry by stripping versions / paths / function names / metric details /
+PR numbers, replacing jargon with everyday words, and adding a one-line
+"why it matters" clause where the user-visible effect isn't obvious. Use
+the category labels **Added**, **Improved**, **Fixed**, **Removed**,
+**Security**, **Behind the scenes**.
+
+If a change is purely internal (refactor, dependency bump, test-only),
+still record it in `HUMAN_CHANGELOG.md` under **Behind the scenes** — a
+sentence is fine. Skipping entries is not allowed; the two files must
+stay in lockstep.
+
+The bundled `human-changelog` skill encodes the full translation rules
+and example before/after pairs. Invoke it if you need a refresher on
+tone or structure.
 
 ## Quirks to leave alone
 
