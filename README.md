@@ -72,6 +72,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | Server | Source | Purpose |
 |---|---|---|
 | `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
+| `craft-docs` | `https://mcp.craft.do/links/.../mcp` (Streamable HTTP) | Connects to a specific Craft Docs link. OAuth-gated — first tool use pops a Craft sign-in flow, so the bundled URL alone is not a credential. Exposes Craft's standard tools (read/write blocks, revert). |
 
 ## Repo layout
 
@@ -80,7 +81,7 @@ shaughv-code/
 ├── .claude-plugin/
 │   ├── plugin.json          # plugin manifest
 │   └── marketplace.json     # marketplace entry (single-plugin marketplace)
-├── .mcp.json                # bundled MCP servers (Remotion docs)
+├── .mcp.json                # bundled MCP servers (Remotion docs, Craft Docs)
 ├── commands/
 │   └── create-video.md      # /shaughv-code:create-video
 └── skills/

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.7.0] — 2026-05-25
+
+### Added
+- `.mcp.json` — bundles a second MCP server, `craft-docs`, pointing at the Craft Docs link `https://mcp.craft.do/links/LKUYYz65h6s/mcp` over Streamable HTTP transport (`"type": "http"`). The URL is OAuth-gated: installers see the server appear, then authenticate via Craft's OAuth flow on first tool use, so the link committed to this public repo is not itself a credential. Exposes Craft's standard tool set (`craft_read`, `craft_write`, `blocks_revert`).
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — version bumped `0.6.0` → `0.7.0`; `craft` and `craft-docs` added to `keywords`; plugin description updated to mention the Craft Docs MCP server alongside the Remotion documentation MCP.
+- `README.md` — "MCP servers bundled" table extended with a `craft-docs` row; `.mcp.json` comment in the repo-layout tree updated to mention both servers.
+
 ## [0.6.0] — 2026-05-25
 
 ### Added
@@ -81,6 +90,7 @@ A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) an
 ### Removed
 - Legacy binary `.skill` bundles in `SKILLS/` — replaced by the normalized `skills/` tree.
 
+[0.7.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.7.0
 [0.6.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.6.0
 [0.5.1]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.5.1
 [0.5.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.5.0

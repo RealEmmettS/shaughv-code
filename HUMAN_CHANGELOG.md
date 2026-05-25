@@ -9,6 +9,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late May 2026
 
 **Added**
+- The plugin now bundles a second small connector for the agent — this one links into a specific Craft note (Craft is a notes/documents app). When the agent works on something that touches the linked note, it can read from and write to that note directly instead of asking you to copy-paste content back and forth. The first time anyone uses it, Craft pops up its own sign-in window, so even though the link is committed to the public plugin repo, only people Craft itself authorizes can actually access the document. The link by itself is not a password.
+
+**Behind the scenes**
+- Plugin version bumped; the plugin's description and search keywords were extended so it shows up for "Craft" searches in the marketplace; the README's bundled-connectors table now lists both connectors (the existing Remotion-docs one and the new Craft one).
+
+---
+
+## Same day, earlier — late May 2026
+
+**Added**
 - Two new skills that teach Claude (and any other agent using this plugin) how to use Google Cloud's file-storage service end-to-end. The first one is generic — it can work with anyone's storage bucket once you tell it which project and bucket to use. The second is pre-set for Emmett's personal storage bucket, so the agent already knows the name, the URL pattern for sharing files, and the bucket's safety settings (deleted files are recoverable for a week, the bucket is public-read for sharing). Practical upshot: the agent can now upload screenshots, assets, or any other file and hand back a real shareable URL, instead of just describing the steps.
 - Both new skills include comprehensive setup help for Mac, Linux, and Windows — including the awkward gotchas like corporate firewalls that block secure connections, the difference between "the command-line tool is logged in" and "your script is logged in" (which trip people up constantly), and what to do when the install seems to work but the command isn't found in the terminal.
 
