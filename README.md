@@ -29,6 +29,7 @@ claude --plugin-dir C:/Users/hey/git/shaughv-code
 | `pretext` | DOM-free text measurement and line layout using `@chenglou/pretext`. |
 | `quiver-ai` | SVG generation and raster→vector via Quiver AI's Arrow model. Reads `$env:QUIVERAI_API_KEY`. |
 | `shaughv-animated-brandmark` | Build the SHAUGHV animated brand mark — draws itself path-by-path, then loops between wordmark and icon. |
+| `shaughv-cdn` | Consumer guide for the `cdn.shaughv.com` private CDN. Covers URL conventions for `/brand/`, `/fonts/`, `/js/`; canonical `<link>`/`<script>`/`<img>` snippets; font preload patterns; cache contract; CORS; license restrictions. |
 | `shaughv-design` | Generate well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color tokens, type system, component previews, and two UI kits. |
 
 ## Commands bundled
@@ -60,6 +61,7 @@ shaughv-code/
     ├── pretext/
     ├── quiver-ai/
     ├── shaughv-animated-brandmark/
+    ├── shaughv-cdn/
     └── shaughv-design/
 ```
 
