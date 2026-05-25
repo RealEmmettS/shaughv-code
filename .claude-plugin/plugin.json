@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "0.5.1",
-  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions), the Remotion documentation MCP server, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source.",
+  "version": "0.6.0",
+  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions, generic Google Cloud Storage reference, and a pre-wired SHAUGHV-bucket GCS skill), the Remotion documentation MCP server, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source.",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -26,6 +26,11 @@
     "video",
     "cdn",
     "naming",
-    "conventions"
+    "conventions",
+    "gcs",
+    "google-cloud-storage",
+    "gcloud",
+    "storage",
+    "upload"
   ]
 }
