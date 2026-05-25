@@ -11,3 +11,6 @@ Thumbs.db
 
 # Scratch dirs inside skills (e.g. shaughv-design/.tmp/)
 skills/**/.tmp/
+
+# Playwright MCP session snapshots (page/console dumps from browser automation)
+.playwright-mcp/

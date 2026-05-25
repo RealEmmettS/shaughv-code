@@ -13,6 +13,12 @@ Claude Code instances.
 Don't introduce `agents/`, `hooks/`, additional MCP servers, or additional
 commands unless Emmett explicitly asks to expand scope.
 
+The bundle is consumable two ways: (1) the Claude Code marketplace install
+documented in the README (delivers skills + the bundled MCP + slash command),
+and (2) `npx skills add RealEmmettS/shaughv-code` for a skills-only install
+in any [skills.sh](https://skills.sh)-supported agent. Both paths read the
+same source — the `skills/` directory — so editing a skill propagates to both.
+
 ## Bundled non-skill components
 
 Each of these was added by explicit ask — don't remove them without one:

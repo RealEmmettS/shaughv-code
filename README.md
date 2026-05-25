@@ -15,6 +15,16 @@ That's it. All skills below auto-load whenever their description matches the tas
 
 **Optional follow-up:** for the Remotion team's official skill set, run `npx skills add remotion-dev/skills` separately. Those skills aren't bundled here so they stay upstream-controlled.
 
+### Alternative: install skills-only with `npx skills`
+
+If you're using a non-Claude-Code agent (Cursor, OpenCode, Codex, Gemini CLI, and ~50 others), or you only want the skills (not the bundled Remotion docs MCP or `/shaughv-code:create-video` command), install via the [`skills`](https://skills.sh) CLI:
+
+```bash
+npx skills add RealEmmettS/shaughv-code
+```
+
+Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. To get the bundled MCP server and slash command too, use the marketplace flow above instead.
+
 ## Update
 
 If you already have it installed and just want to pick up the latest version — paste these two lines into any Claude Code session:
@@ -32,11 +42,15 @@ To develop against a local checkout instead of the published marketplace:
 claude --plugin-dir C:/Users/hey/git/shaughv-code
 ```
 
+If you originally installed with `npx skills add`, update with `npx skills update` (add `-g` if you installed globally).
+
 ## Skills bundled
 
 | Skill | Purpose |
 |---|---|
 | `critical-thinking` | Four critical-thinking frameworks (contemplating, problem-solving, decision-making, design) plus devil's advocacy and a working canvas. |
+| `human-changelog` | Create/update a `HUMAN_CHANGELOG.md` by translating a repo's `CHANGELOG.md` into plain-English entries (no version numbers, no jargon), and wires up the repo's `CLAUDE.md` to keep both files in sync going forward. |
+| `naming-conventions` | SHAUGHV + general naming rules for any identifier — variables, files, folders, repos, branches, commits, PRs, columns, flags. Carries Code Complete 2 and DevOps Handbook principles plus SHAUGHV-specific conventions. |
 | `openai-audio` | OpenAI audio stack — Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports. Includes 13 runnable examples (py/js/ts). |
 | `perplexity-search` | Web search and AI-grounded answers via the Perplexity Agent, Search, and Sonar APIs. |
 | `pretext` | DOM-free text measurement and line layout using `@chenglou/pretext`. |
@@ -69,6 +83,8 @@ shaughv-code/
 │   └── create-video.md      # /shaughv-code:create-video
 └── skills/
     ├── critical-thinking/
+    ├── human-changelog/
+    ├── naming-conventions/
     ├── openai-audio/
     ├── perplexity-search/
     ├── pretext/

@@ -79,14 +79,16 @@ Access OpenAI, Anthropic, Google, xAI, and more through one API, with integrated
 
 ## Prerequisites
 
-API key is configured:
-- Environment variable: `PERPLEXITY_API_KEY`
-- Hardcoded fallback in `scripts/perplexity.py`
+Set `PERPLEXITY_API_KEY` in your environment before invoking this skill:
+
+- macOS/Linux: `export PERPLEXITY_API_KEY=pplx-...` (or add to `~/.zshrc` / `~/.bashrc`)
+- Windows PowerShell (persistent): `[Environment]::SetEnvironmentVariable('PERPLEXITY_API_KEY', 'pplx-...', 'User')` — then start a new shell
+- Windows PowerShell (session-only): `$env:PERPLEXITY_API_KEY = 'pplx-...'`
 
 ### API Key Usage Rules
 
-- **Claude searching while coding** (research, fact-checking, looking up docs): Use the system `PERPLEXITY_API_KEY` env variable or the hardcoded fallback silently. No need to ask the user.
-- **Baking Perplexity into a project as a tool** (building an app/service that calls Perplexity): Ask the user for their API key. Do not embed the personal key into project code. The user should provide their own key or set up their own env variable for the project.
+- **Claude searching while coding** (research, fact-checking, looking up docs): Read `PERPLEXITY_API_KEY` from the environment directly. If it isn't set, ask the user to set it rather than prompting for the key value in chat.
+- **Baking Perplexity into a project as a tool** (building an app/service that calls Perplexity): Ask the user how the project should source the key (project-level env var, secrets manager, etc.). Do not embed any personal key into project code.
 
 Optional SDK install:
 ```bash
