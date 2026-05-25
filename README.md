@@ -4,6 +4,8 @@ Emmett Shaughnessy's personal Claude Code plugin. Bundles every custom SHAUGHV s
 
 ## Install
 
+For first-time install — paste these two lines into any Claude Code session:
+
 ```text
 /plugin marketplace add RealEmmettS/shaughv-code
 /plugin install shaughv-code@shaughv-code
@@ -13,7 +15,18 @@ That's it. All skills below auto-load whenever their description matches the tas
 
 **Optional follow-up:** for the Remotion team's official skill set, run `npx skills add remotion-dev/skills` separately. Those skills aren't bundled here so they stay upstream-controlled.
 
-To test locally before publishing:
+## Update
+
+If you already have it installed and just want to pick up the latest version — paste these two lines into any Claude Code session:
+
+```text
+/plugin marketplace update shaughv-code
+/reload-plugins
+```
+
+If a new component (skill, command, or MCP) doesn't show up after `/reload-plugins`, restart Claude Code — some changes (new MCP servers, new commands) only register on a fresh session.
+
+To develop against a local checkout instead of the published marketplace:
 
 ```bash
 claude --plugin-dir C:/Users/hey/git/shaughv-code
@@ -67,11 +80,15 @@ shaughv-code/
 
 Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit in place — there is no separate build step and no `.skill` zip to keep in sync.
 
-## Updating a skill
+## Editing a skill (maintainer workflow)
+
+For consumers: see [Update](#update) above — you don't need this section.
+
+For Emmett / anyone editing the plugin's source:
 
 1. Edit files under `skills/<name>/`.
 2. Commit and push.
-3. In any Claude Code instance: `/plugin marketplace update shaughv-code` then reload the plugin (or restart).
+3. In any Claude Code instance: `/plugin marketplace update shaughv-code` then `/reload-plugins` (or restart).
 
 ## Author
 
