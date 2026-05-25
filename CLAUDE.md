@@ -5,12 +5,26 @@ users installing it; this file is for you, future Claude, when editing it.
 
 ## What this repo is
 
-A **skills-only** plugin. No commands, no agents, no hooks, no MCP. The entire
-purpose is to be a single editable source of truth for every skill that should
-be available across all of Emmett's Claude Code instances.
+A primarily **skills-only** plugin. The entire purpose is to be a single
+editable source of truth for every skill (and the small set of bundled
+non-skill components below) that should be available across all of Emmett's
+Claude Code instances.
 
-Don't introduce `commands/`, `agents/`, `hooks/`, or `.mcp.json` unless Emmett
-explicitly asks to expand scope.
+Don't introduce `agents/`, `hooks/`, additional MCP servers, or additional
+commands unless Emmett explicitly asks to expand scope.
+
+## Bundled non-skill components
+
+Each of these was added by explicit ask — don't remove them without one:
+
+- **`.mcp.json` at repo root** — bundles the Remotion documentation MCP
+  server (`npx @remotion/mcp@latest`). Exposes a single tool,
+  `remotion-documentation`, that searches the live Remotion docs.
+- **`commands/create-video.md`** — `/shaughv-code:create-video` slash command
+  that scaffolds a Remotion Recorder project via
+  `npx create-video@latest --recorder`, then adds `@remotion/web-renderer`
+  inside the new project (`npx remotion add @remotion/web-renderer`). Order
+  is fixed because `remotion add` has to run from inside an existing project.
 
 ## Editing a skill
 

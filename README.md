@@ -9,7 +9,9 @@ Emmett Shaughnessy's personal Claude Code plugin. Bundles every custom SHAUGHV s
 /plugin install shaughv-code@shaughv-code
 ```
 
-That's it. All skills below auto-load whenever their description matches the task.
+That's it. All skills below auto-load whenever their description matches the task. The bundled MCP server connects on first use; the bundled slash command is available immediately.
+
+**Optional follow-up:** for the Remotion team's official skill set, run `npx skills add remotion-dev/skills` separately. Those skills aren't bundled here so they stay upstream-controlled.
 
 To test locally before publishing:
 
@@ -29,6 +31,18 @@ claude --plugin-dir C:/Users/hey/git/shaughv-code
 | `shaughv-animated-brandmark` | Build the SHAUGHV animated brand mark — draws itself path-by-path, then loops between wordmark and icon. |
 | `shaughv-design` | Generate well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color tokens, type system, component previews, and two UI kits. |
 
+## Commands bundled
+
+| Command | Purpose |
+|---|---|
+| `/shaughv-code:create-video` | Scaffold a new Remotion Recorder project via `npx create-video@latest --recorder`, then add `@remotion/web-renderer` inside the new project (`npx remotion add @remotion/web-renderer`). Asks for a directory name, then runs both steps non-interactively; falls back to `! npx ...` if either needs a TTY. |
+
+## MCP servers bundled
+
+| Server | Source | Purpose |
+|---|---|---|
+| `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
+
 ## Repo layout
 
 ```
@@ -36,6 +50,9 @@ shaughv-code/
 ├── .claude-plugin/
 │   ├── plugin.json          # plugin manifest
 │   └── marketplace.json     # marketplace entry (single-plugin marketplace)
+├── .mcp.json                # bundled MCP servers (Remotion docs)
+├── commands/
+│   └── create-video.md      # /shaughv-code:create-video
 └── skills/
     ├── critical-thinking/
     ├── openai-audio/
