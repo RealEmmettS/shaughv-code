@@ -9,6 +9,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late May 2026
 
 **Added**
+- Codex can now install this repo as a plugin too. In Codex, it brings in the same custom skills — brand design, OpenAI audio, naming conventions, changelog help, storage guidance, and the rest — without changing how the Claude Code version works.
+
+**Behind the scenes**
+- Added Codex-specific plugin metadata and a marketplace entry, updated the maintainer notes, bumped the plugin version, and documented the Codex install/update commands. The Codex version is intentionally skills-only for now; the existing Claude Code connector servers and shortcut command were left alone.
+
+---
+
+## Same week, earlier — late May 2026
+
+**Added**
 - The plugin now bundles a second small connector for the agent — this one links into a specific Craft note (Craft is a notes/documents app). When the agent works on something that touches the linked note, it can read from and write to that note directly instead of asking you to copy-paste content back and forth. The first time anyone uses it, Craft pops up its own sign-in window, so even though the link is committed to the public plugin repo, only people Craft itself authorizes can actually access the document. The link by itself is not a password.
 
 **Behind the scenes**

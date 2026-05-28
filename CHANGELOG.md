@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.8.0] — 2026-05-28
+
+### Added
+- `.codex-plugin/plugin.json` — adds a Codex skills-only plugin manifest for `shaughv-code`, pointing at the existing `skills/` tree and intentionally omitting `mcpServers` so Codex does not parse the Claude-style `.mcp.json`.
+- `.agents/plugins/marketplace.json` — adds a Codex marketplace entry that points `shaughv-code` at this repository with a Git URL source descriptor, preserving the root-level plugin layout that Claude Code already uses.
+- `AGENTS.md` — tracks the Codex-facing maintainer guide and documents that `.codex-plugin/` is lowercase, skills-only, and version-aligned with the Claude plugin surface.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — version bumped `0.7.0` → `0.8.0` so the Claude and Codex plugin surfaces stay aligned.
+- `README.md` — documented Codex install/update commands, the skills-only Codex scope, and the parallel Claude Code / Codex / `npx skills` consumption paths.
+
 ## [0.7.0] — 2026-05-25
 
 ### Added
@@ -90,6 +101,7 @@ A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) an
 ### Removed
 - Legacy binary `.skill` bundles in `SKILLS/` — replaced by the normalized `skills/` tree.
 
+[0.8.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.8.0
 [0.7.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.7.0
 [0.6.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.6.0
 [0.5.1]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.5.1

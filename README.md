@@ -1,8 +1,10 @@
 # shaughv-code
 
-Emmett Shaughnessy's personal Claude Code plugin. Bundles every custom SHAUGHV skill into a single, marketplace-installable plugin so every Claude Code instance (and any agent that respects the same layout) picks up updates from one source of truth.
+Emmett Shaughnessy's personal Claude Code and Codex plugin. Bundles every custom SHAUGHV skill into a single source of truth so Claude Code, Codex, and any agent that respects the same skills layout can pick up updates from one repo.
 
 ## Install
+
+### Claude Code install
 
 For first-time install — paste these two lines into any Claude Code session:
 
@@ -15,17 +17,30 @@ That's it. All skills below auto-load whenever their description matches the tas
 
 **Optional follow-up:** for the Remotion team's official skill set, run `npx skills add remotion-dev/skills` separately. Those skills aren't bundled here so they stay upstream-controlled.
 
+### Codex install (skills-only)
+
+For first-time install in Codex, run:
+
+```bash
+codex plugin marketplace add RealEmmettS/shaughv-code
+codex plugin add shaughv-code@shaughv-code
+```
+
+Codex currently receives the skills only. The bundled MCP servers and `/shaughv-code:create-video` command remain on the Claude Code marketplace surface until a Codex-compatible MCP/command pass is done.
+
 ### Alternative: install skills-only with `npx skills`
 
-If you're using a non-Claude-Code agent (Cursor, OpenCode, Codex, Gemini CLI, and ~50 others), or you only want the skills (not the bundled Remotion docs MCP or `/shaughv-code:create-video` command), install via the [`skills`](https://skills.sh) CLI:
+If you're using another agent (Cursor, OpenCode, Gemini CLI, and ~50 others), or you only want the skills without plugin marketplace metadata, install via the [`skills`](https://skills.sh) CLI:
 
 ```bash
 npx skills add RealEmmettS/shaughv-code
 ```
 
-Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. To get the bundled MCP server and slash command too, use the marketplace flow above instead.
+Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. To get the bundled MCP server and slash command too, use the Claude Code marketplace flow above instead.
 
 ## Update
+
+### Claude Code update
 
 If you already have it installed and just want to pick up the latest version — paste these two lines into any Claude Code session:
 
@@ -35,6 +50,17 @@ If you already have it installed and just want to pick up the latest version —
 ```
 
 If a new component (skill, command, or MCP) doesn't show up after `/reload-plugins`, restart Claude Code — some changes (new MCP servers, new commands) only register on a fresh session.
+
+### Codex update
+
+If you installed through Codex, refresh the marketplace snapshot and reinstall the plugin:
+
+```bash
+codex plugin marketplace upgrade shaughv-code
+codex plugin add shaughv-code@shaughv-code
+```
+
+Start a fresh Codex thread after reinstalling so new or changed skills are loaded.
 
 To develop against a local checkout instead of the published marketplace:
 
@@ -78,9 +104,14 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 
 ```
 shaughv-code/
+├── .agents/
+│   └── plugins/
+│       └── marketplace.json # Codex marketplace entry (skills-only)
 ├── .claude-plugin/
 │   ├── plugin.json          # plugin manifest
 │   └── marketplace.json     # marketplace entry (single-plugin marketplace)
+├── .codex-plugin/
+│   └── plugin.json          # Codex plugin manifest (skills-only)
 ├── .mcp.json                # bundled MCP servers (Remotion docs, Craft Docs)
 ├── commands/
 │   └── create-video.md      # /shaughv-code:create-video
@@ -110,6 +141,7 @@ For Emmett / anyone editing the plugin's source:
 1. Edit files under `skills/<name>/`.
 2. Commit and push.
 3. In any Claude Code instance: `/plugin marketplace update shaughv-code` then `/reload-plugins` (or restart).
+4. In Codex: `codex plugin marketplace upgrade shaughv-code`, then `codex plugin add shaughv-code@shaughv-code`, then start a fresh thread.
 
 ## Author
 

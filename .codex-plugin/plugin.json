@@ -1,0 +1,55 @@
+{
+  "name": "shaughv-code",
+  "version": "0.8.0",
+  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, brand design, animated brandmark, human changelog, CDN usage, naming conventions, and Google Cloud Storage.",
+  "author": {
+    "name": "Emmett Shaughnessy",
+    "email": "hey@emmetts.dev",
+    "url": "https://emmetts.dev"
+  },
+  "homepage": "https://github.com/RealEmmettS/shaughv-code",
+  "repository": "https://github.com/RealEmmettS/shaughv-code",
+  "license": "UNLICENSED",
+  "keywords": [
+    "shaughv",
+    "codex",
+    "personal",
+    "skills",
+    "brand",
+    "design",
+    "openai-audio",
+    "perplexity",
+    "quiver",
+    "critical-thinking",
+    "human-changelog",
+    "cdn",
+    "naming",
+    "conventions",
+    "gcs",
+    "google-cloud-storage",
+    "gcloud",
+    "storage",
+    "upload"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "shaughv-code",
+    "shortDescription": "Emmett's personal Codex skill bundle.",
+    "longDescription": "Use Emmett Shaughnessy's personal skills in Codex for SHAUGHV brand work, OpenAI audio, web search with Perplexity, Quiver AI vector generation, naming conventions, human changelogs, CDN usage, and Google Cloud Storage workflows. This Codex surface is skills-only; the Claude marketplace surface continues to carry the bundled MCP servers and slash command.",
+    "developerName": "Emmett Shaughnessy",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/RealEmmettS/shaughv-code",
+    "defaultPrompt": [
+      "Use shaughv-design to build a SHAUGHV-branded page.",
+      "Use openai-audio to plan a Realtime voice agent.",
+      "Use naming-conventions to name files, branches, and commits."
+    ],
+    "brandColor": "#FF5E1A",
+    "screenshots": []
+  }
+}
