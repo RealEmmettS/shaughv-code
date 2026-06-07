@@ -106,5 +106,5 @@ console.log(new Circle(new RasterRenderer(), 0, 0, 5).draw());
 - **Inheritance explosion** — `M × N` subclasses collapsed to `M + N` classes.
 - **Coupled hierarchies** — shapes that "know" how they're rendered, queries that "know" which driver they target.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

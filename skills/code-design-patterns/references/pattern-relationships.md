@@ -1,8 +1,8 @@
 # Pattern Relationships — Disambiguations
 
 The 22 GoF patterns overlap, complement, and get confused with each
-other constantly. This file collects the disambiguations Christian
-will actually need in conversation: "Strategy or State?", "Decorator
+other constantly. This file collects the disambiguations you'll
+actually need in conversation: "Strategy or State?", "Decorator
 or Proxy?", "Facade or Adapter?".
 
 When the user asks "which one is this?" or "what's the difference
@@ -211,7 +211,7 @@ language gives you the feature for free.
 
 ## A cheat sheet for fast classification
 
-Christian gives you a snippet. You want to classify quickly:
+The user gives you a snippet. You want to classify quickly:
 
 1. **It's `wrap → add behavior`?** Decorator.
 2. **It's `wrap → control access`?** Proxy.
@@ -224,6 +224,6 @@ Christian gives you a snippet. You want to classify quickly:
 9. **It's `walk a class hierarchy adding ops`?** Visitor.
 10. **It's `pipeline of optional handlers`?** Chain of Responsibility.
 
-Half of all design questions Christian will ask are answered above.
+Half of all design questions you'll field are answered above.
 The remaining half deserve a deeper read of the pattern's reference
 file.

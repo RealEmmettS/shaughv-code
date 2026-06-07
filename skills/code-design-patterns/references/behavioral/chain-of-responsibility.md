@@ -59,7 +59,7 @@ class DispatchHandler(Handler):
 
 chain = AuthHandler()
 chain.set_next(ValidateHandler()).set_next(DispatchHandler())
-print(chain.handle(Request(user="cadleta", payload={"project_id": 42})))
+print(chain.handle(Request(user="alice", payload={"project_id": 42})))
 ```
 
 ## Code example — TypeScript
@@ -92,7 +92,7 @@ class DispatchHandler extends Handler {
 
 const chain = new AuthHandler();
 chain.setNext(new ValidateHandler()).setNext(new DispatchHandler());
-console.log(chain.handle({ user: "cadleta", payload: { project_id: 42 } }));
+console.log(chain.handle({ user: "alice", payload: { project_id: 42 } }));
 ```
 
 ## SQL / data analogue
@@ -117,5 +117,5 @@ A pipeline of view layers (Bronze -> Silver -> Gold). Each layer applies its tra
 - Giant `if/elif` ladders that grow with every new rule — each branch becomes its own handler.
 - "God" controllers/services that mix auth, validation, and business logic — split along the chain.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

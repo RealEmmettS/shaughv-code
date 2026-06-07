@@ -116,5 +116,5 @@ console.log(r.render(43));
 - **Auth/logging copy-paste** — every method on the real object starting with the same `if not user.is_admin: raise` guard.
 - **Leaky remoting** — clients writing HTTP calls inline instead of speaking a normal object interface.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

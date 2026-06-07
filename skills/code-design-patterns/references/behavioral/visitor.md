@@ -114,5 +114,5 @@ Less common in pure SQL. The closest analogue is a function library that takes a
 - Element classes that grow a `to_json`, `to_pdf`, `to_csv`, `cost`, `validate` method each — pull operations out into visitors.
 - `isinstance` / `instanceof` chains scattered across the codebase doing per-type logic — centralize in a visitor.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

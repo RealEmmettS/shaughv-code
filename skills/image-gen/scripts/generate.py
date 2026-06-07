@@ -20,7 +20,7 @@ caller never has to choose.
 
 Why a JSON spec instead of many flags: the parameter surface differs wildly per
 provider, and inline JSON is painful to quote on PowerShell. A spec file keeps
-the contract uniform and Windows-safe (mirrors the acumatica-thin-gi pattern).
+the contract uniform and Windows-safe.
 
 USAGE
 -----

@@ -1,14 +1,10 @@
 # agent-assisted-debugging.md
 
-The Mode 2 formal protocol describes the Operator's (or autonomous Agent's) debugging discipline. At Millis the Operator is almost always **debugging alongside an Agent** (Claude Code is the default coding-Agent runtime, also GitHub Copilot, Cursor, Aider, ChatGPT). This file is the Agent-collaboration adaptation — what changes about each beat when an Agent is in the loop, what new failure modes emerge, and what to invoke when.
+The Mode 2 formal protocol describes the Operator's (or autonomous Agent's) debugging discipline. Often the Operator is **debugging alongside an Agent** (Claude Code is the default coding-Agent runtime, also GitHub Copilot, Cursor, Aider, ChatGPT). This file is the Agent-collaboration adaptation — what changes about each beat when an Agent is in the loop, what new failure modes emerge, and what to invoke when.
 
-> **Vocabulary.** In Millis terminology, **Operators** are human teammates (Christian, Emmett) and **Agents** are AI teammates (Talos, Hephaestus, and the coding-tool Agents in general). Both can run the Mode 2 protocol. This file describes the most common configuration — one Operator paired with one Agent — beat-by-beat.
-
-The Millis canonical source for Agent-assisted debugging is **Christian's `Software Debugger Advisor` prompt in the prompt-library skill** (`prompt-library:Software Debugger Advisor`, entry 24 in `references/internal-development.md`, ~8,800 chars). When you want the prompt itself — the one to load into a fresh session or hand to another Operator — invoke that. This file is the principles that prompt encodes, plus a few extensions specific to Claude Code on Millis stacks.
+> **Vocabulary.** **Operators** are the people driving the debug session (you or a teammate) and **Agents** are AI coding teammates. Both can run the Mode 2 protocol. This file describes the most common configuration — one Operator paired with one Agent — beat-by-beat.
 
 ## The five operating principles
-
-Drawn from the Software Debugger Advisor prompt:
 
 1. **The Agent accelerates spotting problems, but Operator judgment decides the fix.** The Agent is a pair programmer, not an autopilot. The Operator signs off on every change; the Agent proposes and reasons.
 2. **"Fix this" is the fastest way to hallucinate.** Context determines quality. Always gather context before suggesting solutions. A short, vague prompt invites the Agent to invent a plausible-looking fix that addresses a plausible-looking bug — neither of which is real.
@@ -88,21 +84,21 @@ Each Mode 2 beat with the Agent-collaboration motion that applies. The Operator 
 **Operator's job:** define the search predicate (the bug shape) and the search scope (which directories, which entities, which integrations).
 **Agent's job:** run the search. Grep the codebase. Read sibling modules. Report findings.
 
-**This is one of the highest-leverage Agent uses.** The Agent can grep 200 files in seconds; the Operator can't. Define the pattern precisely ("any function that reads from a CDP thin GI's `IntegratedProjects` column without first checking the GI's exposed column list"), then let the Agent search.
+**This is one of the highest-leverage Agent uses.** The Agent can grep 200 files in seconds; the Operator can't. Define the pattern precisely ("any function that reads from the integrated `projects` table's `contact` column without first checking the field-mapping config's projected column list"), then let the Agent search.
 
-## When to invoke the Software Debugger Advisor prompt
+## When to frame the session explicitly
 
-The full Software Debugger Advisor prompt (in `prompt-library`) is appropriate when:
+It's worth giving the Agent an explicit debugging frame (assume a senior-debugging-advisor role, walk through context-gathering → classification → hypothesis → fix → verification) when:
 
-- The Operator wants to **start a debugging session from scratch** with a clear protocol — paste the prompt, the Agent assumes the senior-debugging-advisor role, walks through context-gathering → classification → hypothesis → fix → verification.
-- The Operator is **handing off** to another Operator who hasn't been part of the debug session — the prompt frames the session so they can pick up cleanly.
+- The Operator wants to **start a debugging session from scratch** with a clear protocol rather than firing off ad-hoc prompts.
+- The Operator is **handing off** to another Operator who hasn't been part of the debug session — an explicit frame lets them pick up cleanly.
 - The bug is **complex enough** to warrant the full structured walk and the Operator doesn't want to remember the discipline beat by beat.
 
-In a Claude Code session inside the theia-tools repo, the `debugging-framework` skill (this skill) plus this file are usually enough — the skill carries the protocol, this file carries the Agent-collaboration discipline. The prompt is the standalone form for sessions outside Claude Code, for handoffs between Operators, or when you want the full Socratic interrogation.
+In a normal Claude Code session, the `debugging-framework` skill (this skill) plus this file are usually enough — the skill carries the protocol, this file carries the Agent-collaboration discipline. The explicit frame is most useful for handoffs between Operators, or when you want the full Socratic interrogation.
 
 ## The output structure (when the Agent is reporting)
 
-The Software Debugger Advisor prompt prescribes a five-section response format. The same structure works inside Claude Code when the Agent is reporting on a debug step:
+A five-section response format keeps an Agent's debug report disciplined:
 
 - **Analysis** — what the Agent observes from the information provided. Facts only, no speculation.
 - **Hypothesis** — best assessment of cause, with confidence and reasoning. (May be multiple, ranked.)
@@ -124,48 +120,43 @@ Use this structure when reporting on a complex debug step to the Operator; skip 
 | **Overloading context** | Pasting the entire codebase / 30 files into the prompt. | Be selective. The Agent's attention degrades with context bloat; the most-relevant 200 lines beat the most-comprehensive 20,000. |
 | **Asking the Agent to debug what it cannot see** | Asking about prod behavior the Agent has no access to. | The Agent sees only what you show it. For prod bugs: paste the prod log, paste the prod query result. Don't ask it to imagine prod. |
 | **Treating the Agent as the Operator** | Letting the Agent sign off on the fix; the Operator not reading the diff before commit. | The Operator is responsible for every line that ships. Agent-proposed = Operator-reviewed = Operator-accountable. |
-| **Skipping the postmortem because "the Agent fixed it"** | Bug gone, MC `result_notes` empty. | Same protocol applies. The fact that the Agent proposed the fix doesn't change the postmortem warrant. Record what shape the bug was, what allowed it, and any skill-update candidates. |
-| **Autonomous Agent acting without an Operator review gate** | An Agent (Talos, Hephaestus) ships a non-trivial fix to main without an Operator sign-off via PR or MC `question`-status check. | For non-trivial fixes, the Agent posts the hypothesis + proposed fix as a CONTEXT / QUESTION / OPTIONS update on Mission Control and waits for Operator sign-off. The MC `question`-status flow is the Agent's equivalent of "please review this diff." See § "When the Agent is debugging autonomously" below. |
+| **Skipping the postmortem because "the Agent fixed it"** | Bug gone, no write-up. | Same protocol applies. The fact that the Agent proposed the fix doesn't change the postmortem warrant. Record what shape the bug was, what allowed it, and any skill-update candidates. |
+| **Autonomous Agent acting without an Operator review gate** | An Agent ships a non-trivial fix to main without an Operator sign-off. | For non-trivial fixes, the Agent posts the hypothesis + proposed fix as a CONTEXT / QUESTION / OPTIONS write-up and waits for Operator sign-off — the equivalent of "please review this diff." See § "When the Agent is debugging autonomously" below. |
 
 ## A worked Agent-assisted Mode 2 example
 
-> **Bug.** `mcp__claude_ai_Millis_CDP__read_records entity=ProjectScorecard` returns 0 rows for a query that should match ~120.
+> **Bug.** `read_records entity=ProjectReport` returns 0 rows for a query that should match ~120.
 >
-> **Beat 1 — Stabilize.** Operator pastes the exact query into the Agent. Agent: "Can you confirm this query worked yesterday? Can you paste a query against a related entity to confirm the MCP connection is alive?" Operator runs the related-entity query — returns rows. So the connection is fine; the entity-specific query is the failure. Stable.
+> **Beat 1 — Stabilize.** Operator pastes the exact query into the Agent. Agent: "Can you confirm this query worked yesterday? Can you paste a query against a related entity to confirm the connection is alive?" Operator runs the related-entity query — returns rows. So the connection is fine; the entity-specific query is the failure. Stable.
 >
-> **Beat 2 — Locate.** Operator: "What's most likely to cause an empty result set with no error on an entity that worked yesterday?" Agent proposes three hypotheses ranked by likelihood: (a) entity definition was edited and now references a column that doesn't exist in the GI (silent no-match); (b) the GI was edited and dropped a column the entity depends on; (c) the entity's filter clause was edited.
+> **Beat 2 — Locate.** Operator: "What's most likely to cause an empty result set with no error on an entity that worked yesterday?" Agent proposes three hypotheses ranked by likelihood: (a) the entity config was edited and now references a column that doesn't exist in the underlying view (silent no-match); (b) the view was edited and dropped a column the entity depends on; (c) the entity's filter clause was edited.
 >
-> **Beat 3 — Hypothesize.** Operator pulls up `git log` on the entity YAML. Agent: "The most recent commit renamed `branch_id` to `branch_code`. Is the underlying GI's column also renamed?" Hypothesis: "The entity references `branch_code` but the GI still exposes `branch_id`." Confidence: 80%.
+> **Beat 3 — Hypothesize.** Operator pulls up `git log` on the entity config. Agent: "The most recent commit renamed `tenant_id` to `tenant_code`. Is the underlying view's column also renamed?" Hypothesis: "The entity references `tenant_code` but the view still exposes `tenant_id`." Confidence: 80%.
 >
-> **Beat 4 — Verify.** Operator dumps the GI's column list. `branch_id` is still there; `branch_code` is not. Hypothesis confirmed.
+> **Beat 4 — Verify.** Operator dumps the view's column list. `tenant_id` is still there; `tenant_code` is not. Hypothesis confirmed.
 >
-> **Beat 5 — Fix.** Agent proposes: "Rename the GI column to `branch_code` AND verify all other GI consumers of `branch_id` are updated." Operator: "Wait — that would break the other consumers. Is the right fix to revert the entity rename, or to also rename the GI?" Agent: "If `branch_code` is the intended canonical name, rename the GI and all consumers. If the entity rename was premature, revert it. Which canonical name does the team prefer? — that's a design decision, not a debugging decision." Operator makes the call: rename the GI and audit consumers.
+> **Beat 5 — Fix.** Agent proposes: "Rename the view column to `tenant_code` AND verify all other consumers of `tenant_id` are updated." Operator: "Wait — that would break the other consumers. Is the right fix to revert the entity rename, or to also rename the view?" Agent: "If `tenant_code` is the intended canonical name, rename the view and all consumers. If the entity rename was premature, revert it. Which canonical name does the team prefer? — that's a design decision, not a debugging decision." Operator makes the call: rename the view and audit consumers.
 >
-> **Beat 6 — Regression-test.** Operator writes a test that asserts the entity returns ≥1 row for a known-good filter. Runs it RED before the fix. Applies the fix. Runs it GREEN. Runs the full CDP test suite.
+> **Beat 6 — Regression-test.** Operator writes a test that asserts the entity returns ≥1 row for a known-good filter. Runs it RED before the fix. Applies the fix. Runs it GREEN. Runs the full test suite.
 >
-> **Beat 7 — Sweep.** Operator: "Grep the entity-definitions directory for any other column reference that doesn't exist in the underlying GI." Agent runs the grep, finds two more — same shape, same root cause, same fix. All three ship as one commit.
+> **Beat 7 — Sweep.** Operator: "Grep the entity-definitions directory for any other column reference that doesn't exist in the underlying view." Agent runs the grep, finds two more — same shape, same root cause, same fix. All three ship as one commit.
 >
-> **Postmortem (MC `result_notes`).** Operator (or Agent — whoever wrote the trail; sign with the appropriate name): "Bug shape: MCP entity ↔ thin-GI drift. What allowed it: entity YAML and GI XML are two separate config surfaces with no schema-agreement check between them. A rename in one without the other is silent. Sweep found 2 sibling cases, fixed in the same PR. Skill-update candidate: codify schema-agreement check as a `defensive-programming` rule, OR ship a pre-deploy validator that diffs entity column lists against GI exposed columns."
+> **Postmortem.** Operator (or Agent — whoever wrote the trail): "Bug shape: config ↔ schema drift. What allowed it: the entity config and the view definition are two separate surfaces with no schema-agreement check between them. A rename in one without the other is silent. Sweep found 2 sibling cases, fixed in the same PR. Skill-update candidate: codify a schema-agreement check as a `defensive-programming` rule, OR ship a pre-deploy validator that diffs entity column lists against the view's columns."
 
 The Agent's contribution was: structuring the hypotheses, running the grep, surfacing the design question disguised as a debugging question. The Operator's contribution was: pasting context, picking the canonical name, signing off on the fix, writing the test, recording the postmortem. **Pair programmer, not autopilot.**
 
 ## When the Agent is debugging autonomously
 
-When an Agent (Talos, Hephaestus) is debugging without an Operator actively at the keyboard, the protocol is the same — but the **review gate moves to Mission Control**.
+When an Agent is debugging without an Operator actively at the keyboard, the protocol is the same — but the **review gate moves to a written check-in**.
 
 - The Agent runs the Mode 2 beats end-to-end as normal.
-- For non-trivial fixes (anything that would qualify as Mode 2 in the first place), the Agent **posts a `question`-status MC update** before applying the fix, with the CONTEXT / QUESTION / OPTIONS format from `mission-control-checkins`:
+- For non-trivial fixes (anything that would qualify as Mode 2 in the first place), the Agent **posts a check-in** before applying the fix, with a CONTEXT / QUESTION / OPTIONS format:
   ```
   CONTEXT: <one paragraph — what was investigated, what was found>
   QUESTION: <should I apply this fix?>
   OPTIONS: A) apply as proposed; B) modify <specific way>; C) different approach
-  — <Agent name>
   ```
 - The Agent waits for Operator response before applying. This is the autonomous-Agent equivalent of "please review this diff."
-- For Mode 1 trivial fixes (typo, missing import, single-character correction), the Agent applies, then `agent_update`s with the result. No pre-approval needed.
+- For Mode 1 trivial fixes (typo, missing import, single-character correction), the Agent applies, then reports the result. No pre-approval needed.
 
 This protects the codebase from speed-biased autonomous fixes while preserving the Agent's ability to do the up-front investigation independently.
-
----
-
-— Authored under DT-22, DevOps Training milestone 2 (Millis Dev Skill Library), integrating principles from Christian Adleta's `Software Debugger Advisor` prompt (prompt-library entry 24). Talos.

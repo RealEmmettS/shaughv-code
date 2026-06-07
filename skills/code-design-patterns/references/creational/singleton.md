@@ -106,5 +106,5 @@ console.log(a === b, b.get("tenant"));              // true "acme"
 - **Resurrection bugs** — code holds a reference; you reset; the held reference is now a zombie disconnected from "the" instance.
 - **Concurrency myths** — `getInstance()` is thread-safe; *operations on the instance* often aren't, and Singleton encourages forgetting that.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

@@ -287,8 +287,6 @@ stage, run this; it's the only thing that makes the skill learn.
   its six-lens sweep fits better. If a strategy yields a process to run, hand off.
 - **`logical-reasoning`** — to check a strategic argument's validity or expose a
   fallacy in the opponent's (or your own) reasoning.
-- **`cto-advisor`** — run the sweep here, then translate the recommended line into
-  executive language there.
 - **`personal-productivity`** — when the contest is really about finite time and
   attention (what to drop, defer, delegate).
 

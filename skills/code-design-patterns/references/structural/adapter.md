@@ -78,7 +78,7 @@ console.log(checkout(new StripeAdapter(new LegacyStripeSDK()), 4999));
 ```
 
 ## SQL / data analogue
-**Database views that translate column names and types between systems.** The CDP's `integrated.*` views are textbook adapters: the Bronze `acumatica.PMProject` table speaks Acumatica's DAC field names (`ProjectCD`, `Description`, `Customer`), but downstream consumers want stable, source-agnostic names (`project_code`, `project_name`, `customer_id`). The view is the adapter; the Bronze table is the adaptee; the MCP/Power BI client is the target.
+**Database views that translate column names and types between systems.** An `integrated.*` view layer over a legacy table is a textbook adapter: the raw `legacy.PROJ_MSTR` table speaks a vendor's cryptic field names (`PROJ_CD`, `DESCR`, `CUST_NO`), but downstream consumers want stable, source-agnostic names (`project_code`, `project_name`, `customer_id`). The view is the adapter; the raw table is the adaptee; the reporting/BI client is the target.
 
 ## When to use it
 - You need to use an existing class but its interface doesn't match what your code expects.
@@ -100,5 +100,5 @@ console.log(checkout(new StripeAdapter(new LegacyStripeSDK()), 4999));
 - **Shotgun translation** — the same `dollars * 100`, `.upper()`, `result["status"] == "ok"` checks copy-pasted at every call site. The adapter does it once.
 - **Vendor lock-in by leakage** — SDK types appearing in domain code. The adapter draws the line.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

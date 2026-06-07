@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# worktree-list.sh — augmented worktree audit view
+# worktree-list.sh — worktree audit view
 #
-# Combines `git worktree list` with branch classification and best-effort
-# Mission Control ownership data. For the agent ownership column, the
-# skill itself should call Mission Control's task-listing tools and overlay
-# the data; this script provides the filesystem + git half.
+# Combines `git worktree list` with branch classification (workbranch /
+# task / hotfix) and branch age. Ownership is inferred from branch naming
+# (the `<developer>/` prefix on workbranches), so no external tracker is
+# needed — git is the only source of truth.
 
 set -uo pipefail
 
@@ -62,6 +62,6 @@ while read -r line; do
 done < <(git worktree list)
 
 echo
-echo "Note: Agent ownership data lives in Mission Control. The skill should"
-echo "      query MC to overlay 'who is working in each worktree' on top of"
-echo "      this view."
+echo "Note: ownership is inferred from the '<developer>/' prefix on workbranch"
+echo "      names. Combine with last-commit times (git log -1 --format=%cr"
+echo "      origin/<branch>) to gauge which worktrees are actively in flight."

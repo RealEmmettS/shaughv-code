@@ -57,7 +57,7 @@ class SyncJobBuilder:
         return SyncJobConfig(self._tenant, self._source, self._schedule,
                              self._retries, self._dlq, tuple(self._filters))
 
-cfg = (SyncJobBuilder("acme", "acumatica")
+cfg = (SyncJobBuilder("acme", "postgres")
        .daily().retry(3, "dlq-acme").filter("amount > 0").build())
 ```
 
@@ -90,12 +90,12 @@ class SyncJobBuilder {
   }
 }
 
-const cfg = new SyncJobBuilder("acme", "acumatica")
+const cfg = new SyncJobBuilder("acme", "postgres")
   .daily().retry(3, "dlq-acme").filter("amount > 0").build();
 ```
 
 ## SQL / data analogue
-**Query builders.** SQLAlchemy's `Query`, Knex, Drizzle, and Kysely all implement Builder: `db.select().from("t").where(...).orderBy(...).limit(10)` accumulates clauses and emits SQL at `.toSQL()` / execution time. Same shape, same purpose — many optional parts, build incrementally, finalize once. Acumatica Generic Inquiry XML is also Builder-shaped: you compose DAC + Relation + Field + Filter pieces, then emit the XML.
+**Query builders.** SQLAlchemy's `Query`, Knex, Drizzle, and Kysely all implement Builder: `db.select().from("t").where(...).orderBy(...).limit(10)` accumulates clauses and emits SQL at `.toSQL()` / execution time. Same shape, same purpose — many optional parts, build incrementally, finalize once. Many XML/JSON query DSLs are Builder-shaped too: you compose entity + relation + field + filter pieces, then emit the document.
 
 ## When to use it
 - A constructor would need more than ~4 parameters, most of them optional.
@@ -118,5 +118,5 @@ const cfg = new SyncJobBuilder("acme", "acumatica")
 - **Mutable half-built objects passed around** — Builder localizes mutation to the builder, returning an immutable product.
 - **Invariant violations at use time** — `build()` is a single point to enforce cross-field rules before the object exists.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

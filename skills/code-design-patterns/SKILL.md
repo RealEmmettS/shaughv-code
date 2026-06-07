@@ -1,11 +1,10 @@
 ---
 name: code-design-patterns
 description: >
-  Gang of Four design patterns reference and analyzer for Millis / Theia
-  codebases. Covers all 22 GoF patterns (5 Creational, 7 Structural, 10
-  Behavioral) from refactoring.guru, with Python, TypeScript, and SQL
-  examples tuned to our stack (CDP, Theia Construct, sync services, MCP
-  servers, Observe). Trigger when the user names a pattern (Singleton,
+  Gang of Four design patterns reference and analyzer. Covers all 22 GoF
+  patterns (5 Creational, 7 Structural, 10 Behavioral) from
+  refactoring.guru, with Python, TypeScript, and SQL examples. Trigger
+  when the user names a pattern (Singleton,
   Factory, Strategy, Observer, Adapter, Decorator, Builder, Proxy, Facade),
   asks "what pattern fits", "how should I structure this", "is this
   over-engineered", "how do I refactor this", "what SOLID violation is
@@ -19,13 +18,13 @@ description: >
 
 # Code Design Patterns — GoF Reference & Analysis Toolbelt
 
-This skill is Christian's pocket reference for the 22 Gang of Four design
+This skill is a pocket reference for the 22 Gang of Four design
 patterns, plus an active toolbelt for spotting them (and their absence) in
-the Millis / Theia codebases. The pattern entries are sourced from
+your codebases. The pattern entries are sourced from
 [refactoring.guru/design-patterns](https://refactoring.guru/design-patterns)
-and adapted with code examples in the languages we actually ship:
-Python (CDP sync, MCP servers, scripts), TypeScript (Observe app, internal
-tools), and SQL where the pattern has a meaningful database analogue.
+and adapted with code examples in widely used languages:
+Python, TypeScript, and SQL where the pattern has a meaningful database
+analogue.
 
 ## What this skill does — three modes
 
@@ -82,10 +81,10 @@ you're solving; the specific pattern is the move you pick within that
 category.
 
 **A grounding intuition:** patterns are not goals. They're vocabulary for
-trade-offs. The best use of this skill is to give Christian (and any
-teammate who pairs with him) the same vocabulary the broader software-
-engineering community uses, so that "I think this wants a Strategy" lands
-as a precise design move rather than a vague refactor instinct.
+trade-offs. The best use of this skill is to give you (and any teammate)
+the same vocabulary the broader software-engineering community uses, so
+that "I think this wants a Strategy" lands as a precise design move rather
+than a vague refactor instinct.
 
 ## The pattern catalog — load on demand
 
@@ -141,13 +140,13 @@ For the full lookup table including the analysis aids, see
 | `references/recommendations.md` | Problem → pattern decision tree. "I have problem X" → which patterns to evaluate |
 | `references/anti-patterns.md` | God Object, Switch-on-Type, Primitive Obsession, Feature Envy, Shotgun Surgery, etc. — each paired with the pattern(s) that resolve it |
 | `references/solid-principles.md` | The five SOLID principles, with the patterns that most often enforce them |
-| `references/pattern-relationships.md` | How the 22 patterns relate to each other (Strategy vs State, Decorator vs Proxy, Facade vs Adapter, etc.) — the disambiguations Christian will actually need in conversation |
+| `references/pattern-relationships.md` | How the 22 patterns relate to each other (Strategy vs State, Decorator vs Proxy, Facade vs Adapter, etc.) — the disambiguations you'll actually need in conversation |
 
 ## How to behave in this skill
 
-**Don't recite the catalog.** Christian doesn't need a textbook chapter —
-he needs the right move named at the right moment. State the pattern,
-state the trade-off, point at where in the reference he can read more.
+**Don't recite the catalog.** The user doesn't need a textbook chapter —
+they need the right move named at the right moment. State the pattern,
+state the trade-off, point at where in the reference they can read more.
 Two-paragraph answers beat ten-paragraph answers.
 
 **Cite refactoring.guru when you cite a pattern.** Every reference file
@@ -155,11 +154,11 @@ links to its source page on refactoring.guru. When you state a pattern's
 intent, you're effectively quoting that source — say so. The team should
 be able to follow the link and verify.
 
-**Use our stack in the examples.** If you're showing a code example,
-prefer Python or TypeScript over Java/C++ (the GoF originals). If the
-pattern has a SQL or schema analogue (Singleton ↔ unique constraint;
+**Use modern languages in the examples.** If you're showing a code
+example, prefer Python or TypeScript over Java/C++ (the GoF originals). If
+the pattern has a SQL or schema analogue (Singleton ↔ unique constraint;
 Observer ↔ database triggers; Strategy ↔ table-driven dispatch), surface
-it — most of our work is data-flavored.
+it — especially if the work is data-flavored.
 
 **Patterns are vocabulary, not goals.** If the user is reaching for a
 pattern when the answer is "just write a function" or "delete the
@@ -182,10 +181,7 @@ name the handoff and pause for confirmation before touching code.
 
 **Hand off when better skills exist:**
 - A git workflow question about how to land the refactor → `git-workflow`
-- Framing the refactor's business case for Dan → `cto-advisor`
-- The agile / sprint framing of where this work fits → `agile`
 - A bug that's surfaced *during* the analysis → `bug-triage`
-- The CDP-specific design pattern (data mesh, layering) → `cdp-design-pattern`
 - Teaching a teammate one of these patterns → `learn`
 
 ## Format of each pattern reference
@@ -204,7 +200,7 @@ Every file in `references/creational/`, `references/structural/`, and
 9. **When NOT to use it** — the common over-applications
 10. **Related patterns** — which patterns it pairs with, conflicts with, or might be confused for
 11. **Anti-patterns it resolves** — links into `anti-patterns.md`
-12. **Real examples in our codebase** — placeholder section, to be populated as the team finds them
+12. **Real examples in your codebase** — placeholder section, to be populated as you find them
 
 The template lives in `references/_template.md` if a new pattern (e.g.,
 modern ones outside GoF) is ever added.
@@ -216,7 +212,5 @@ modern ones outside GoF) is ever added.
   Elements of Reusable Object-Oriented Software* by Gamma, Helm, Johnson,
   Vlissides (1994). When refactoring.guru and the book disagree, the book
   wins on intent; refactoring.guru wins on modern idioms.
-- **This skill's source**: `theia-tools/skills/code-design-patterns/` (when
-  unpacked from `code-design-patterns.skill`)
 - **Sibling skill (forthcoming)**: `refactoring` — executes the multi-file
   changes that this skill recommends.

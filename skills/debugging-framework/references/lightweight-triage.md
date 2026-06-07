@@ -62,16 +62,16 @@ If step 5 confirms the fix, you are done. Total elapsed time: ≤ 5 minutes.
 Switch to Mode 2 the moment ANY of these is true. Do not bargain.
 
 - The 5-minute clock has elapsed.
-- The fix would touch a write path (DB write, Service Bus send, Procore POST, MCP `update_record`, file write).
+- The fix would touch a write path (DB write, queue publish, third-party POST, file write).
 - The bug is user-visible in production.
 - The first two fix attempts didn't work.
 - You don't fully understand why the fix would work.
 - The bug crosses a process, service, or network boundary.
-- The bug involves money, PII, or system-of-record data (Scorecards math, PSR financials, CDP rollups, Procore sync).
+- The bug involves money, PII, or system-of-record data (financial rollups, billing math, anything other systems treat as the source of truth).
 - The reproduction step (Mode 1 step 2) failed first try and "worked the second time" — intermittency is a Mode 2 signal.
-- Another Operator or Agent has been debugging this already (check MC `agent_update` history before starting).
+- Another Operator or Agent has been debugging this already (check the issue / PR history before starting).
 
-When you escalate: state the trigger explicitly in your next MC `agent_update` so the trail records WHY you switched modes. "Escalating Mode 1 → Mode 2: bug appeared on retry, intermittency triggers stabilization beat. — <your agent name>" (substitute your own Operator or Agent name in the sign-off).
+When you escalate: state the trigger explicitly in your notes (or the PR / issue tracking the fix) so the trail records WHY you switched modes. "Escalating Mode 1 → Mode 2: bug appeared on retry, intermittency triggers stabilization beat."
 
 ## Worked micro-examples
 
@@ -79,25 +79,25 @@ When you escalate: state the trigger explicitly in your next MC `agent_update` s
 
 > Test output: `KeyError: 'tenent'`
 >
-> 1. Stack trace points to `cdp_sync.py:142`. (15 s)
+> 1. Stack trace points to `sync.py:142`. (15 s)
 > 2. Re-run; same error. (15 s)
-> 3. `git log -1 --stat cdp_sync.py` — file changed 20 minutes ago. `git diff HEAD~1 -- cdp_sync.py` — line 142 was renamed `tenent` from `tenant_id`. (20 s)
+> 3. `git log -1 --stat sync.py` — file changed 20 minutes ago. `git diff HEAD~1 -- sync.py` — line 142 was renamed `tenent` from `tenant_id`. (20 s)
 > 4. Fix: change `'tenent'` → `'tenant'`. (15 s)
 > 5. Re-run; green. Full test suite (5 s on 200 tests). (5 s)
 >
-> Total: 70 seconds. Mode 1 succeeded. No MC update needed (typo-class bug, no postmortem warrant).
+> Total: 70 seconds. Mode 1 succeeded. No postmortem warranted (typo-class bug).
 
 ### Example B — Same symptom, Mode 2 bug
 
-> Test output: `KeyError: 'project_manager'`
+> Test output: `KeyError: 'owner'`
 >
-> 1. Stack trace points to `scorecard_refresh.py:301`. (15 s)
+> 1. Stack trace points to `report_refresh.py:301`. (15 s)
 > 2. Re-run; same error. (15 s)
-> 3. `git log -1 --stat scorecard_refresh.py` — file unchanged for 3 weeks. The `IntegratedProjects.contact` column it reads from has the right name. (30 s)
-> 4. **Attempted Mode 1 fix:** maybe the field is just missing from the dict — wrap in `.get("project_manager")`. Re-run; no longer errors, but the column is now `NULL`. The error went away but the value is wrong. (90 s)
-> 5. **Escalate.** The fix made the symptom disappear without addressing the cause — this is the symptom-hack anti-pattern. Real bug is the data-pipeline gap (CDP-27 archetype). Switching to Mode 2.
+> 3. `git log -1 --stat report_refresh.py` — file unchanged for 3 weeks. The `projects.contact` column it reads from has the right name. (30 s)
+> 4. **Attempted Mode 1 fix:** maybe the field is just missing from the dict — wrap in `.get("owner")`. Re-run; no longer errors, but the column is now `NULL`. The error went away but the value is wrong. (90 s)
+> 5. **Escalate.** The fix made the symptom disappear without addressing the cause — this is the symptom-hack anti-pattern. Real bug is the data-pipeline gap (the Example 1 archetype in `worked-examples.md`). Switching to Mode 2.
 >
-> The Mode 1 attempt that "worked" was actually the worst possible outcome — it silenced the loud error while leaving the value wrong, which means downstream consumers (the Scorecard UI) will now silently render `NULL` for every PM. The 5-minute clock plus the escalation triggers ("would touch a write path" — the refresh is a write; "involves system-of-record data" — Scorecards is) should have routed this to Mode 2 from minute zero.
+> The Mode 1 attempt that "worked" was actually the worst possible outcome — it silenced the loud error while leaving the value wrong, which means downstream consumers (the report UI) will now silently render `NULL` for every owner. The 5-minute clock plus the escalation triggers ("would touch a write path" — the refresh is a write; "involves system-of-record data" — the report rollup is) should have routed this to Mode 2 from minute zero.
 >
 > **Lesson:** when the symptom is a `KeyError` on a *data* field (not a *code* identifier), Mode 1 is almost never the right mode. Treat it as Mode 2 from the start.
 
@@ -114,10 +114,6 @@ What Mode 1 omits is:
 
 - Writing a failing test before the fix (the bug is small enough that the re-run is the verification).
 - The look-for-similar-defects sweep (the bug is contained enough that the sweep would find nothing).
-- The MC postmortem (the bug is mundane enough that there is no lesson).
+- The postmortem note (the bug is mundane enough that there is no lesson).
 
 If any of those "would-be-overkill" omissions feels uncomfortable on a specific bug, that discomfort is signal — escalate.
-
----
-
-— Authored under DT-22, DevOps Training milestone 2 (Millis Dev Skill Library). Talos.

@@ -91,7 +91,7 @@ console.log(e.render());
 ```
 
 ## SQL / data analogue
-**Recursive CTEs over hierarchical data.** Org charts, cost-code rollups, work breakdown structures, parent-child project structures — anywhere a row references its parent row by id. A `WITH RECURSIVE` CTE walks the tree and aggregates leaves into their composites, which is the SQL expression of the same idea: treat a node and a subtree uniformly. Acumatica's `PMTask` parent/child relationships and CSI cost-code groupings are direct candidates.
+**Recursive CTEs over hierarchical data.** Org charts, cost-code rollups, work breakdown structures, parent-child project structures — anywhere a row references its parent row by id. A `WITH RECURSIVE` CTE walks the tree and aggregates leaves into their composites, which is the SQL expression of the same idea: treat a node and a subtree uniformly. Any `task(id, parent_id)` self-referencing table or nested category taxonomy is a direct candidate.
 
 ## When to use it
 - The domain is genuinely a tree (or DAG): folders/files, BOM, WBS, GL account hierarchies, comment threads, menu structures.
@@ -113,5 +113,5 @@ console.log(e.render());
 - **Type-checking soup** — `if isinstance(x, Folder): ... else: ...` at every traversal site.
 - **Duplicated recursion** — every operation reimplementing the walk; Composite owns the walk per operation, once.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

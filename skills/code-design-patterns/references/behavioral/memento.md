@@ -88,7 +88,7 @@ doc.restore(hist.pop()!); console.log(doc.body); // Hello,
 ```
 
 ## SQL / data analogue
-Snapshot tables — the CDP literally implements this. A `<entity>_snapshot` table captures the state of a row (or a query) at a point in time; the original table is the Originator, the snapshot table is the Memento, and the workflow that writes/restores is the Caretaker. Database point-in-time restore, temporal tables (`FOR SYSTEM_TIME AS OF`), and event-sourced state rebuild are all this pattern at infrastructure scale.
+Snapshot tables are a direct implementation. A `<entity>_snapshot` table captures the state of a row (or a query) at a point in time; the original table is the Originator, the snapshot table is the Memento, and the workflow that writes/restores is the Caretaker. Database point-in-time restore, temporal tables (`FOR SYSTEM_TIME AS OF`), and event-sourced state rebuild are all this pattern at infrastructure scale.
 
 ## When to use it
 - You need undo/redo, branching history, or "rewind to last good state."
@@ -110,5 +110,5 @@ Snapshot tables — the CDP literally implements this. A `<entity>_snapshot` tab
 - Reimplementing "deep clone for backup" in every class — name the snapshot type.
 - Lossy undo (only some fields restored) — Memento captures the full state contract.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

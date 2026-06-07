@@ -116,5 +116,5 @@ Workflow engines (Camunda, Temporal, Azure Durable Functions) are State writ lar
 - Illegal transitions slipping through (paying a voided invoice) — make them impossible by construction.
 - Hidden state machines — a State implementation *is* the diagram, readable in one file.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

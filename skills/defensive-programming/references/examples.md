@@ -1,6 +1,6 @@
 # Do / Don't examples — defensive-programming
 
-Concrete pairs in Millis-style code. Six sections, organized so that the underlying rule lands once before the language-specific renderings start.
+Concrete do/don't pairs. Six sections, organized so that the underlying rule lands once before the language-specific renderings start.
 
 For each pair: setup paragraph, `❌ Don't`, `✅ Do`, **Why** (one sentence).
 
@@ -12,21 +12,21 @@ These four patterns surface in every language. The fix is shape-identical regard
 
 ### 0.1 Validate at the boundary, not in the middle
 
-**Setup.** A function that takes a `Project` object and computes its scorecard. The `Project` was already validated when it came off the wire at the HTTP / MCP / queue boundary. Re-checking inside is duplication.
+**Setup.** A function that takes an `Order` object and computes its summary. The `Order` was already validated when it came off the wire at the HTTP / RPC / queue boundary. Re-checking inside is duplication.
 
 ```text
 ❌ Don't
 
-def compute_scorecard(project):
+def summarize_order(order):
     # Defensive re-validation at every layer
-    if project is None:
+    if order is None:
         return None
-    if not hasattr(project, "id"):
-        log.warning("project missing id")
+    if not hasattr(order, "id"):
+        log.warning("order missing id")
         return None
-    if project.id is None or project.id == "":
+    if order.id is None or order.id == "":
         return None
-    if not hasattr(project, "fin_periods"):
+    if not hasattr(order, "line_items"):
         return None
     ...
 ```
@@ -34,14 +34,14 @@ def compute_scorecard(project):
 ```text
 ✅ Do
 
-def compute_scorecard(project: Project) -> Scorecard:
-    # Trust the type. If project.id can be None, fix the type.
-    return Scorecard.from_project(project)
+def summarize_order(order: Order) -> OrderSummary:
+    # Trust the type. If order.id can be None, fix the type.
+    return OrderSummary.from_order(order)
 
 # Validation lives at the boundary:
-def post_scorecard(request: HttpRequest) -> HttpResponse:
-    project = Project.model_validate(request.json())  # Pydantic — raises on bad shape
-    return ok(compute_scorecard(project))
+def post_order(request: HttpRequest) -> HttpResponse:
+    order = Order.model_validate(request.json())  # Pydantic — raises on bad shape
+    return ok(summarize_order(order))
 ```
 
 **Why.** The first version hides which layer is actually wrong; the second makes the shape-contract enforced exactly once, at the only place untrusted data crosses the trust line.
@@ -50,26 +50,26 @@ def post_scorecard(request: HttpRequest) -> HttpResponse:
 
 ### 0.2 Catch what is expected; let the rest fly
 
-**Setup.** A function that pulls a row from Cosmos DB. The expected failure is `ItemNotFound`. Anything else is a bug or an outage — surfacing it is the point.
+**Setup.** A function that pulls a document from a data store. The expected failure is "item not found." Anything else is a bug or an outage — surfacing it is the point.
 
 ```text
 ❌ Don't
 
-def get_project(project_id):
+def get_order(order_id):
     try:
-        return cosmos.read_item(project_id)
+        return store.read_item(order_id)
     except Exception as e:
-        log.error(f"failed to read project: {e}")
+        log.error(f"failed to read order: {e}")
         return None
 ```
 
 ```text
 ✅ Do
 
-def get_project(project_id: str) -> Project | None:
+def get_order(order_id: str) -> Order | None:
     try:
-        return cosmos.read_item(project_id)
-    except CosmosResourceNotFoundError:
+        return store.read_item(order_id)
+    except ItemNotFoundError:
         return None  # Expected — the caller distinguishes "absent" from "broken"
     # Network errors, auth errors, throttling, partition exhaustion — all propagate.
 ```
@@ -80,16 +80,16 @@ def get_project(project_id: str) -> Project | None:
 
 ### 0.3 Log-and-continue is silent failure with extra steps
 
-**Setup.** A sync job processes a batch of meetings. One meeting fails to parse. A defensive author skips it and continues. The job reports success. The bad meeting silently disappears from downstream tables until someone notices.
+**Setup.** A sync job processes a batch of records. One record fails to parse. A defensive author skips it and continues. The job reports success. The bad record silently disappears from downstream tables until someone notices.
 
 ```text
 ❌ Don't
 
-for meeting in batch:
+for record in batch:
     try:
-        save(parse(meeting))
+        save(parse(record))
     except Exception as e:
-        log.warning(f"skipped meeting: {e}")
+        log.warning(f"skipped record: {e}")
         continue
 return {"status": "ok", "processed": len(batch)}
 ```
@@ -97,14 +97,14 @@ return {"status": "ok", "processed": len(batch)}
 ```text
 ✅ Do
 
-errors: list[MeetingFailure] = []
+errors: list[RecordFailure] = []
 saved = 0
-for meeting in batch:
+for record in batch:
     try:
-        save(parse(meeting))
+        save(parse(record))
         saved += 1
-    except MeetingParseError as e:
-        errors.append(MeetingFailure(meeting_id=meeting.id, reason=str(e)))
+    except RecordParseError as e:
+        errors.append(RecordFailure(record_id=record.id, reason=str(e)))
 return {"status": "partial" if errors else "ok",
         "processed": saved,
         "failed": [e.model_dump() for e in errors]}
@@ -116,15 +116,15 @@ return {"status": "partial" if errors else "ok",
 
 ### 0.4 Bound every retry
 
-**Setup.** Calling Procore. Procore can 429 (rate limit) or 503 (transient). Retry is correct here — *unbounded* retry is not.
+**Setup.** Calling a third-party API. It can return 429 (rate limit) or 503 (transient). Retry is correct here — *unbounded* retry is not.
 
 ```text
 ❌ Don't
 
-def fetch_meetings(project_id):
+def fetch_orders(customer_id):
     while True:
         try:
-            return procore.get(f"/projects/{project_id}/meetings")
+            return api.get(f"/customers/{customer_id}/orders")
         except (RateLimitError, ServerError):
             time.sleep(2)  # Try forever
 ```
@@ -132,16 +132,16 @@ def fetch_meetings(project_id):
 ```text
 ✅ Do
 
-def fetch_meetings(project_id: str) -> list[Meeting]:
+def fetch_orders(customer_id: str) -> list[Order]:
     deadline = time.monotonic() + 60   # Wall-clock bound
     delay = 0.5
     for attempt in range(1, 6):        # Count bound
         try:
-            return procore.get(f"/projects/{project_id}/meetings", timeout=10)
+            return api.get(f"/customers/{customer_id}/orders", timeout=10)
         except (RateLimitError, ServerError) as e:
             if time.monotonic() >= deadline:
-                log.error("procore fetch exhausted",
-                          extra={"project_id": project_id,
+                log.error("order fetch exhausted",
+                          extra={"customer_id": customer_id,
                                  "attempts": attempt,
                                  "error_type": type(e).__name__})
                 raise
@@ -156,19 +156,19 @@ def fetch_meetings(project_id: str) -> list[Meeting]:
 
 ### 0.5 Convert input to a typed value at the boundary — never carry stringly-typed data inward
 
-**Setup.** A handler receives a string `"FP-2026-05"` representing a fiscal period. The lazy default is to pass the string around and `.split("-")` it wherever needed. The defensive default is to parse it into a `FinPeriod` value object once.
+**Setup.** A handler receives a string `"2026-05"` representing a billing period. The lazy default is to pass the string around and `.split("-")` it wherever needed. The defensive default is to parse it into a `BillingPeriod` value object once.
 
 ```python
 # ❌ Don't
-def compute_scorecard(project_id: str, period: str) -> Scorecard:
+def summarize_order(order_id: str, period: str) -> OrderSummary:
     parts = period.split("-")              # Parse #1
-    year = int(parts[1])
-    month = int(parts[2])
+    year = int(parts[0])
+    month = int(parts[1])
     ...
 
 def render_header(period: str) -> str:
     parts = period.split("-")              # Parse #2
-    return f"FY {parts[1]} Period {parts[2]}"
+    return f"Year {parts[0]} Month {parts[1]}"
 ```
 
 ```python
@@ -177,23 +177,23 @@ from dataclasses import dataclass
 import re
 
 @dataclass(frozen=True)
-class FinPeriod:
+class BillingPeriod:
     year: int
     month: int
 
     @classmethod
-    def parse(cls, s: str) -> "FinPeriod":
-        m = re.fullmatch(r"FP-(\d{4})-(\d{2})", s)
+    def parse(cls, s: str) -> "BillingPeriod":
+        m = re.fullmatch(r"(\d{4})-(\d{2})", s)
         if not m:
-            raise ValueError(f"invalid FinPeriod {s!r} (expected 'FP-YYYY-MM')")
+            raise ValueError(f"invalid BillingPeriod {s!r} (expected 'YYYY-MM')")
         return cls(year=int(m[1]), month=int(m[2]))
 
-def compute_scorecard(project_id: str, period: FinPeriod) -> Scorecard:
+def summarize_order(order_id: str, period: BillingPeriod) -> OrderSummary:
     # period.year, period.month — typed, no re-parsing
     ...
 
-def render_header(period: FinPeriod) -> str:
-    return f"FY {period.year} Period {period.month:02d}"
+def render_header(period: BillingPeriod) -> str:
+    return f"Year {period.year} Month {period.month:02d}"
 ```
 
 **Why.** Re-parsing the same string in five places is five chances to disagree on the format. One typed value object is one source of truth. (Code Complete §8.5: *"Convert input data to the proper type at input time."*)
@@ -202,9 +202,9 @@ def render_header(period: FinPeriod) -> str:
 
 ## §1 — Python
 
-### 1.1 Pydantic at the MCP tool entry; trust inside
+### 1.1 Pydantic at the RPC / tool entry; trust inside
 
-**Setup.** An MCP tool that reads a CDP entity. The function signature has been re-validated at every internal call. The fix is to validate once at the tool entry, then trust the typed model.
+**Setup.** An RPC / tool handler that reads an entity from a data store. The function signature has been re-validated at every internal call. The fix is to validate once at the entry, then trust the typed model.
 
 ```python
 # ❌ Don't
@@ -242,7 +242,7 @@ def read_record(args: dict) -> ReadRecordResult:
 
 def _do_read(args: ReadRecordArgs) -> ReadRecordResult:
     # No re-validation. The type IS the contract.
-    return cdp.read(args.entity, args.id)
+    return store.read(args.entity, args.id)
 ```
 
 **Why.** Pydantic crashes loudly with a useful message on bad input; the interior code is small, fast, and trustable.
@@ -281,25 +281,25 @@ def percentage(numerator: int, denominator: int) -> float:
 
 ### 1.3 Chain causes with `raise ... from err`
 
-**Setup.** A sync wrapper around the Procore SDK. The wrapper wants to add Millis-specific context to errors without losing the original cause.
+**Setup.** A sync wrapper around a third-party SDK. The wrapper wants to add domain-specific context to errors without losing the original cause.
 
 ```python
 # ❌ Don't
-def sync_meetings(project_id: str) -> int:
+def sync_orders(customer_id: str) -> int:
     try:
-        return procore.get_meetings(project_id)
+        return api.get_orders(customer_id)
     except Exception as e:
         raise RuntimeError(f"sync failed: {e}")   # Original cause lost in str()
 ```
 
 ```python
 # ✅ Do
-def sync_meetings(project_id: str) -> int:
+def sync_orders(customer_id: str) -> int:
     try:
-        return procore.get_meetings(project_id)
-    except ProcoreApiError as e:
-        raise MeetingSyncError(
-            f"Procore meeting fetch failed for project_id={project_id}",
+        return api.get_orders(customer_id)
+    except ApiError as e:
+        raise OrderSyncError(
+            f"order fetch failed for customer_id={customer_id}",
         ) from e   # Original traceback + type preserved
 ```
 
@@ -309,10 +309,10 @@ def sync_meetings(project_id: str) -> int:
 
 ### 1.4 Library code re-raises; never silently swallows
 
-**Setup.** A reusable helper in `millis_sync/utils.py` — code that other modules import. It must not decide error policy for its callers.
+**Setup.** A reusable helper in `mypackage/utils.py` — code that other modules import. It must not decide error policy for its callers.
 
 ```python
-# ❌ Don't  (file: millis_sync/utils.py)
+# ❌ Don't  (file: mypackage/utils.py)
 def fetch_json(url: str) -> dict:
     try:
         resp = requests.get(url, timeout=10)
@@ -323,7 +323,7 @@ def fetch_json(url: str) -> dict:
 ```
 
 ```python
-# ✅ Do  (file: millis_sync/utils.py)
+# ✅ Do  (file: mypackage/utils.py)
 def fetch_json(url: str) -> dict:
     try:
         resp = requests.get(url, timeout=10)
@@ -343,9 +343,9 @@ def fetch_json(url: str) -> dict:
 
 ---
 
-### 1.5 Domain primitives — make `Money`, `ProjectId`, `FinPeriod` distinct types
+### 1.5 Domain primitives — make `Money`, `ProjectId`, `BillingPeriod` distinct types
 
-**Setup.** Many Millis bugs around "wrong-value-passed-to-the-wrong-parameter" trace back to primitive-obsession — using `int` for everything from `project_id` to `record_count` to `amount_cents`.
+**Setup.** Many "wrong-value-passed-to-the-wrong-parameter" bugs trace back to primitive-obsession — using `int` for everything from `project_id` to `record_count` to `amount_cents`.
 
 ```python
 # ❌ Don't
@@ -381,9 +381,9 @@ adjust_balance(amount_cents, project_id)  # Type error at mypy / pyright.
 
 These three share a runtime story (V8 + async). Examples are written in TypeScript but flag where the JS / Node differences matter.
 
-### 2.1 Zod at the Cloudflare Worker / HTTP boundary; trust the type inside
+### 2.1 Zod at the HTTP / edge boundary; trust the type inside
 
-**Setup.** A Cloudflare Worker `fetch` handler that accepts a JSON body. The body is untrusted; the handler validates with Zod and passes a typed model into the business logic.
+**Setup.** An HTTP / edge `fetch` handler that accepts a JSON body. The body is untrusted; the handler validates with Zod and passes a typed model into the business logic.
 
 ```typescript
 // ❌ Don't
@@ -391,8 +391,8 @@ export default {
   async fetch(request: Request): Promise<Response> {
     const body = await request.json() as any;     // `any` defeats the type checker
     if (!body) return new Response("missing body", { status: 400 });
-    if (!body.projectId) return new Response("missing projectId", { status: 400 });
-    return computeScorecard(body);                  // computeScorecard re-checks everything
+    if (!body.orderId) return new Response("missing orderId", { status: 400 });
+    return handleOrder(body);                       // handleOrder re-checks everything
   },
 };
 ```
@@ -401,23 +401,23 @@ export default {
 // ✅ Do
 import { z } from "zod";
 
-const ScorecardRequest = z.object({
-  projectId: z.string().min(1),
-  periodId: z.string().regex(/^FP-\d{4}-\d{2}$/),
+const OrderRequest = z.object({
+  orderId: z.string().min(1),
+  periodId: z.string().regex(/^\d{4}-\d{2}$/),
 });
-type ScorecardRequest = z.infer<typeof ScorecardRequest>;
+type OrderRequest = z.infer<typeof OrderRequest>;
 
 export default {
   async fetch(request: Request): Promise<Response> {
-    const parsed = ScorecardRequest.safeParse(await request.json());
+    const parsed = OrderRequest.safeParse(await request.json());
     if (!parsed.success) {
       return Response.json({ error: parsed.error.flatten() }, { status: 400 });
     }
-    return computeScorecard(parsed.data);   // computeScorecard takes ScorecardRequest — typed
+    return handleOrder(parsed.data);   // handleOrder takes OrderRequest — typed
   },
 };
 
-function computeScorecard(req: ScorecardRequest): Response {
+function handleOrder(req: OrderRequest): Response {
   // No re-validation. parsed.data is the contract.
   ...
 }
@@ -477,7 +477,7 @@ try {
 try {
   await readEntity(id);
 } catch (e: unknown) {
-  if (e instanceof CdpNotFoundError) {
+  if (e instanceof NotFoundError) {
     return null;                     // Expected absence
   }
   if (e instanceof Error) {
@@ -499,9 +499,9 @@ try {
 
 ```typescript
 // ❌ Don't
-async function fetchScorecard(id: string): Promise<Scorecard | null> {
+async function fetchOrder(id: string): Promise<Order | null> {
   try {
-    return await api.get(`/scorecards/${id}`);
+    return await api.get(`/orders/${id}`);
   } catch {
     return null;                     // Caller can't tell "absent" from "broke"
   }
@@ -514,15 +514,15 @@ type Result<T, E> =
   | { ok: true; value: T }
   | { ok: false; error: E };
 
-type ScorecardError =
+type OrderError =
   | { kind: "not_found" }
   | { kind: "unauthorized" }
   | { kind: "upstream"; status: number }
   | { kind: "network"; cause: unknown };
 
-async function fetchScorecard(id: string): Promise<Result<Scorecard, ScorecardError>> {
+async function fetchOrder(id: string): Promise<Result<Order, OrderError>> {
   try {
-    return { ok: true, value: await api.get(`/scorecards/${id}`) };
+    return { ok: true, value: await api.get(`/orders/${id}`) };
   } catch (e: unknown) {
     if (e instanceof HttpError && e.status === 404) return { ok: false, error: { kind: "not_found" } };
     if (e instanceof HttpError && e.status === 401) return { ok: false, error: { kind: "unauthorized" } };
@@ -532,7 +532,7 @@ async function fetchScorecard(id: string): Promise<Result<Scorecard, ScorecardEr
 }
 
 // Caller — exhaustiveness check from the compiler
-const r = await fetchScorecard(id);
+const r = await fetchOrder(id);
 if (!r.ok) {
   switch (r.error.kind) {
     case "not_found":    return render404();
@@ -541,7 +541,7 @@ if (!r.ok) {
     case "network":      return render503();
   }
 }
-return renderScorecard(r.value);
+return renderOrder(r.value);
 ```
 
 **Why.** A discriminated union makes "every error class is handled" a compile-time guarantee; `null` collapses every failure mode into "I don't know."
@@ -554,15 +554,15 @@ Rust's type system already prevents most of the defensive-programming mistakes o
 
 ### 3.1 `Result<T, E>` + `?` propagation in library code; never `.unwrap()`
 
-**Setup.** A library function that parses a Procore JSON response. The application binary can decide to crash; library code must not.
+**Setup.** A library function that parses a third-party JSON response. The application binary can decide to crash; library code must not.
 
 ```rust
 // ❌ Don't
-pub fn parse_meeting(blob: &str) -> Meeting {
+pub fn parse_order(blob: &str) -> Order {
     let v: Value = serde_json::from_str(blob).unwrap();        // Panics on bad input
     let id = v["id"].as_str().unwrap().to_string();             // Panics if missing
     let title = v["title"].as_str().unwrap_or("").to_string();  // Silently empty
-    Meeting { id, title }
+    Order { id, title }
 }
 ```
 
@@ -571,18 +571,18 @@ pub fn parse_meeting(blob: &str) -> Meeting {
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum MeetingParseError {
+pub enum OrderParseError {
     #[error("invalid JSON: {0}")]
     Json(#[from] serde_json::Error),
     #[error("missing required field: {0}")]
     MissingField(&'static str),
 }
 
-pub fn parse_meeting(blob: &str) -> Result<Meeting, MeetingParseError> {
+pub fn parse_order(blob: &str) -> Result<Order, OrderParseError> {
     let v: Value = serde_json::from_str(blob)?;                                  // Propagates with type
-    let id = v["id"].as_str().ok_or(MeetingParseError::MissingField("id"))?.to_string();
-    let title = v["title"].as_str().ok_or(MeetingParseError::MissingField("title"))?.to_string();
-    Ok(Meeting { id, title })
+    let id = v["id"].as_str().ok_or(OrderParseError::MissingField("id"))?.to_string();
+    let title = v["title"].as_str().ok_or(OrderParseError::MissingField("title"))?.to_string();
+    Ok(Order { id, title })
 }
 ```
 
@@ -670,19 +670,19 @@ pub fn load_project(id: &str) -> Result<Project, ProjectLoadError> {
 
 ### 4.1 Specific exception types — not `catch (Exception)` — in library code
 
-**Setup.** A repository method that calls Cosmos DB. The two expected failures are `CosmosException` with `StatusCode == NotFound` and a transient `RequestRateTooLargeException`. Anything else is propagated.
+**Setup.** A repository method that calls a remote data store over HTTP. The two expected failures are an `ApiException` with `StatusCode == NotFound` and a transient `StatusCode == TooManyRequests`. Anything else is propagated.
 
 ```csharp
 // ❌ Don't
-public async Task<Project?> GetProjectAsync(string id)
+public async Task<Order?> GetOrderAsync(string id)
 {
     try
     {
-        return await _container.ReadItemAsync<Project>(id, new PartitionKey(id));
+        return await _client.ReadItemAsync<Order>(id);
     }
     catch (Exception ex)
     {
-        _logger.LogError(ex, "failed to read project");
+        _logger.LogError(ex, "failed to read order");
         return null;
     }
 }
@@ -690,27 +690,27 @@ public async Task<Project?> GetProjectAsync(string id)
 
 ```csharp
 // ✅ Do
-public async Task<Project?> GetProjectAsync(string id, CancellationToken ct)
+public async Task<Order?> GetOrderAsync(string id, CancellationToken ct)
 {
     try
     {
-        var resp = await _container.ReadItemAsync<Project>(id, new PartitionKey(id), cancellationToken: ct);
+        var resp = await _client.ReadItemAsync<Order>(id, cancellationToken: ct);
         return resp.Resource;
     }
-    catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+    catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
     {
         return null;                          // Expected — caller distinguishes
     }
-    catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.TooManyRequests)
+    catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.TooManyRequests)
     {
-        _logger.LogWarning(ex, "cosmos throttled, propagating to retry policy");
-        throw;                                // Let Polly retry policy handle it
+        _logger.LogWarning(ex, "store throttled, propagating to retry policy");
+        throw;                                // Let the retry policy handle it
     }
     // Network, auth, deserialization errors propagate.
 }
 ```
 
-**Why.** `when` clauses keep each catch narrow and named; a bare `catch (Exception)` would swallow auth failures and partition-not-found errors that should page someone.
+**Why.** `when` clauses keep each catch narrow and named; a bare `catch (Exception)` would swallow auth failures and not-found errors that should page someone.
 
 ---
 
@@ -748,12 +748,12 @@ public async Task<string> DownloadAsync(string url, CancellationToken ct)
 
 ```csharp
 // ❌ Don't
-public Scorecard Build(Project project, FinPeriod period)
+public OrderSummary Build(Order order, BillingPeriod period)
 {
-    if (project == null) return null;                     // Returns null on bad input — silent
+    if (order == null) return null;                       // Returns null on bad input — silent
     if (period == null) return null;
-    if (project.Id == null) return null;
-    if (project.Name == null) project.Name = "(missing)"; // Mutating + defaulting
+    if (order.Id == null) return null;
+    if (order.Name == null) order.Name = "(missing)";     // Mutating + defaulting
     ...
 }
 ```
@@ -761,12 +761,12 @@ public Scorecard Build(Project project, FinPeriod period)
 ```csharp
 // ✅ Do
 #nullable enable
-public Scorecard Build(Project project, FinPeriod period)
+public OrderSummary Build(Order order, BillingPeriod period)
 {
-    ArgumentNullException.ThrowIfNull(project);
+    ArgumentNullException.ThrowIfNull(order);
     ArgumentNullException.ThrowIfNull(period);
-    // Project and FinPeriod are non-nullable from here on — compiler enforces.
-    return new Scorecard(project, period);
+    // Order and BillingPeriod are non-nullable from here on — compiler enforces.
+    return new OrderSummary(order, period);
 }
 ```
 
@@ -774,9 +774,9 @@ public Scorecard Build(Project project, FinPeriod period)
 
 ---
 
-## §5 — SQL (Azure SQL flavor)
+## §5 — SQL (T-SQL flavor)
 
-SQL is mostly a boundary layer. The two examples cover the two most common defensive failures: string concatenation and bare multi-statement writes.
+SQL is mostly a boundary layer. The examples cover the most common defensive failures: string concatenation, bare multi-statement writes, and unbounded input length. (T-SQL shown; the same discipline applies in any SQL dialect.)
 
 ### 5.1 Parameterize — always
 
@@ -807,8 +807,8 @@ WHERE  status = @status;
 ```sql
 -- ❌ Don't
 BEGIN TRANSACTION;
-    UPDATE projects   SET status = @status   WHERE project_id = @id;
-    UPDATE scorecards SET dirty  = 1         WHERE project_id = @id;
+    UPDATE projects      SET status = @status WHERE project_id = @id;
+    UPDATE project_cache SET dirty  = 1       WHERE project_id = @id;
     INSERT INTO audit (project_id, action, actor) VALUES (@id, 'status_change', @actor);
 COMMIT;
 -- No CATCH. On failure, the partial state is left around and the connection error is silent.
@@ -829,8 +829,8 @@ BEGIN TRY
     ELSE
         SAVE TRANSACTION @savepoint;      -- Caller owns it; we get a savepoint to roll back to.
 
-    UPDATE projects   SET status = @status   WHERE project_id = @id;
-    UPDATE scorecards SET dirty  = 1         WHERE project_id = @id;
+    UPDATE projects      SET status = @status WHERE project_id = @id;
+    UPDATE project_cache SET dirty  = 1       WHERE project_id = @id;
     INSERT INTO audit (project_id, action, actor) VALUES (@id, 'status_change', @actor);
 
     IF @outer_trancount = 0

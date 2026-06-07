@@ -8,7 +8,7 @@
 Provide a unified, higher-level interface to a set of interfaces in a subsystem. Facade defines an entry point that makes the subsystem easier to use for the 80% case, without preventing power users from reaching the underlying classes when they need to.
 
 ## Problem
-You're using a subsystem — a video-encoding library, a payments stack, the Acumatica + Procore + SharePoint trio — and every client has to know the same five classes, call them in the same order, handle the same intermediate types, and clean up the same resources. The knowledge of "how to use it correctly" gets copy-pasted across the codebase. When the subsystem changes, every caller breaks. A facade is a single class with a small, opinionated surface (`create_project()`, `sync_costs()`) that does the orchestration internally so clients depend on one thing instead of ten.
+You're using a subsystem — a video-encoding library, a payments stack, a cluster of third-party integrations — and every client has to know the same five classes, call them in the same order, handle the same intermediate types, and clean up the same resources. The knowledge of "how to use it correctly" gets copy-pasted across the codebase. When the subsystem changes, every caller breaks. A facade is a single class with a small, opinionated surface (`create_project()`, `sync_costs()`) that does the orchestration internally so clients depend on one thing instead of ten.
 
 ## Structure
 ```
@@ -45,7 +45,7 @@ class ProjectFacade:  # Facade
         self._notify.announce(pid)
         return pid
 
-print(ProjectFacade().create_project("cadleta", "Tower A"))
+print(ProjectFacade().create_project("alice", "Tower A"))
 ```
 
 ## Code example — TypeScript
@@ -70,11 +70,11 @@ class ProjectFacade {
   }
 }
 
-console.log(new ProjectFacade().createProject("cadleta", "Tower A"));
+console.log(new ProjectFacade().createProject("alice", "Tower A"));
 ```
 
 ## SQL / data analogue
-**A single repository class that hides multi-table joins.** A `ProjectScorecardRepo.get(project_id)` method that internally joins `acumatica.PMProject`, `procore.RFI`, `cdp.GLTran`, applies WIP math, and returns one flat DTO — that's a facade over the database. The MCP entity layer in the CDP plays the same role: one `Project` entity facades a dozen Bronze tables. Stored procedures often serve this purpose too: one `sp_GetProjectFinancials` instead of teaching every caller the joins.
+**A single repository class that hides multi-table joins.** A `ProjectSummaryRepo.get(project_id)` method that internally joins `projects`, `tasks`, and `ledger`, applies some derived math, and returns one flat DTO — that's a facade over the database. An entity/ORM layer plays the same role: one `Project` entity facades a dozen underlying tables. Stored procedures often serve this purpose too: one `sp_GetProjectFinancials` instead of teaching every caller the joins.
 
 ## When to use it
 - A subsystem has many classes and clients only use a small slice in stereotyped ways.
@@ -97,5 +97,5 @@ console.log(new ProjectFacade().createProject("cadleta", "Tower A"));
 - **Shotgun coupling** — every client importing the same 8 subsystem classes and repeating the same call sequence.
 - **Hidden ordering bugs** — "you have to call `auth()` before `init()` before `start()`" — Facade encodes the order once.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

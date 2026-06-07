@@ -26,7 +26,7 @@ The investigator is **read-only** and can be wrong cheaply. The executor gets a 
 Dispatch **one** subagent:
 - Model: **the latest Opus with 1M context (currently Opus 4.8 `[1m]`)** at **XHIGH** thinking. Never downgrade.
 - Mode: **read-only**. It diagnoses; it does **not** implement, deploy, or edit.
-- Optional pairing: have it invoke **theia-tools:critical-thinking** and a triage skill (e.g. **bug-triage**) when the problem is a bug or an ambiguous failure.
+- Optional pairing: have it invoke **critical-thinking** and a triage skill (e.g. **bug-triage**) when the problem is a bug or an ambiguous failure.
 - Output: a findings report with the **actual evidence** (paths, queries, row counts, errors) and a **recommended fix** — scoped (files, repos, risk, reversibility) and ranked if there are options.
 
 Dispatch template (Agent tool, `model: "opus"`, `run_in_background: true`):
@@ -34,7 +34,7 @@ Dispatch template (Agent tool, `model: "opus"`, `run_in_background: true`):
 ```
 You are a READ-ONLY INVESTIGATION subagent. Work at MAXIMUM reasoning depth (XHIGH).
 Do NOT make any code/SQL/infra changes — produce findings + a recommended fix only.
-[If a bug:] invoke the bug-triage skill and theia-tools:critical-thinking.
+[If a bug:] invoke the bug-triage skill and critical-thinking.
 PROBLEM: <one-paragraph statement + where to look>.
 ANSWER, with evidence: <the specific questions to settle>.
 DELIVER: findings (with numbers), root cause, recommended fix (scope / risk / reversibility / repos),
@@ -47,9 +47,9 @@ When it returns, **read the findings** and decide the fix. Don't stop at the rep
 ## Phase 2 — Execute
 
 From the investigation:
-1. **File a Mission Control task** (project as appropriate) capturing the problem + the intended fix, scoped enough that a fresh agent could pick it up cold (the new-hire test).
+1. **Write up the fix as a concrete brief** capturing the problem + the intended fix, scoped enough that a fresh agent could pick it up cold (the new-hire test).
 2. Dispatch a **separate** subagent (again the latest Opus `[1m]`, XHIGH) to implement it:
-   - invoke **theia-tools:git-workflow** (and **theia-tools:mission-control-toolkit** to claim/update the task),
+   - invoke **git-workflow**,
    - **fully reversible** — capture the exact rollback,
    - **live-verified** — prove the fix on the real target, not just "it should work,"
    - open a **PR but do NOT self-merge** — the orchestrator reviews and merges.
@@ -58,21 +58,21 @@ Dispatch template:
 
 ```
 You are a fix subagent. Work at MAXIMUM reasoning depth (XHIGH).
-Invoke theia-tools:mission-control-toolkit + theia-tools:git-workflow (+ theia-tools:critical-thinking).
-Claim MC task <ID> and execute it end-to-end.
+Invoke git-workflow (+ critical-thinking).
+Execute the fix brief end-to-end.
 FIX: <the investigation's recommended fix, made concrete>.
 GUARDRAILS: additive / reversible where possible; capture exact rollback; verify live;
 git-workflow worktree off the latest origin/main; PR — do NOT self-merge (operator merges).
-ON DONE: update the task completed/done with evidence + rollback; check out; report what changed,
-the verification, the PR number, and anything needing the operator.
+ON DONE: report what changed, the verification, the PR number, the exact rollback,
+and anything needing the operator.
 ```
 
 ## Standing conventions (bake these into every dispatch)
 
 - **Always the latest Opus with 1M context (currently Opus 4.8 `[1m]`) at XHIGH.** Never downgrade a subagent to a smaller model or lower thinking to save cost — correctness and depth win. When "latest Opus" advances past 4.8, follow it.
-- **Investigation → task → fix chain.** When an investigation surfaces a fixable issue, drive it to done: file the task, dispatch the executor. Don't hand the operator a passive report.
+- **Investigation → fix chain.** When an investigation surfaces a fixable issue, drive it to done: write the brief, dispatch the executor. Don't hand the operator a passive report.
 - **Separate agents for investigate vs execute.** Clean, single-purpose context each.
-- **Orchestrator stays in the loop.** Verify each agent's result against the live target. Optionally run a **theia-tools:critical-thinking review agent** over the executed work (was the task scoped well? was it done thoroughly?) before merging. Then merge.
+- **Orchestrator stays in the loop.** Verify each agent's result against the live target. Optionally run a **critical-thinking review agent** over the executed work (was the task scoped well? was it done thoroughly?) before merging. Then merge.
 - **Reversibility first.** Every production change carries a captured rollback.
 
 ## Anti-recursion (why this is invoke-only)

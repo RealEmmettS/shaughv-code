@@ -90,7 +90,7 @@ console.log(src.read("config.yaml")); // cached
 ```
 
 ## SQL / data analogue
-**Middleware chains and stacked views.** Express/Koa middleware, FastAPI dependencies, and ASP.NET filters are decorator pipelines — each layer wraps `handler(req)` to add auth, logging, compression, then forwards. In SQL, view stacking is the same shape: `analytics.project_margin` selects from `integrated.project_costs` which selects from `acumatica.PMTran` — each view adds a concern (renaming, filtering, joining) while preserving the row-set interface so downstream consumers can treat any layer as "a table." Python decorators (`@retry`, `@cache`, `@log`) are the literal language-level expression of this pattern.
+**Middleware chains and stacked views.** Express/Koa middleware, FastAPI dependencies, and ASP.NET filters are decorator pipelines — each layer wraps `handler(req)` to add auth, logging, compression, then forwards. In SQL, view stacking is the same shape: `analytics.project_margin` selects from `integrated.project_costs` which selects from `raw.transactions` — each view adds a concern (renaming, filtering, joining) while preserving the row-set interface so downstream consumers can treat any layer as "a table." Python decorators (`@retry`, `@cache`, `@log`) are the literal language-level expression of this pattern.
 
 ## When to use it
 - You need to add cross-cutting concerns (logging, caching, retries, auth, metrics) without modifying the core object.
@@ -113,5 +113,5 @@ console.log(src.read("config.yaml")); // cached
 - **God object** — one class with `enable_cache`, `enable_logging`, `enable_retry` flags. Decorators split each concern into its own class.
 - **Subclass explosion** — `CachedLoggingRetryingHttpClient`. Decorators compose at runtime.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

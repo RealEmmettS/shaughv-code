@@ -21,9 +21,7 @@ At session start, propose a path. Default options:
    You can open it in another window and watch it update."*
 2. **Convention default** — `~/critical-thinking-sessions/<YYYY-MM-DD>-<topic>.md` if the
    user wants the agent to pick.
-3. **Mission Control task notes** — when the session is tied to a specific tracked task,
-   maintain the canvas in the task's `result_notes` field via the Task List Manager MCP.
-4. **Project-local** — `<project-root>/docs/thinking/<date>-<topic>.md` when the session
+3. **Project-local** — `<project-root>/docs/thinking/<date>-<topic>.md` when the session
    is project work.
 
 The agent updates the canvas every turn. If the user has it open in another editor, they'll
@@ -37,7 +35,7 @@ see the updates as they happen.
 **Date:** YYYY-MM-DD
 **Framework:** <Contemplating | Decision-Making | Design | Problem-Solving>
 **Mode:** <Facilitate | Provoke | Recommend>
-**Stacked skills:** <none | cto-advisor | agile | ...>
+**Stacked skills:** <none | logical-reasoning | strategic-thinking | ...>
 
 ---
 

@@ -99,5 +99,5 @@ console.log(`unique TreeTypes: ${TreeTypeFactory.size()}`);
 - **Object bloat** — a million objects each carrying the same 200-byte texture path.
 - **Memory leaks from copy-on-create** — caching by key replaces repeated allocation.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

@@ -19,7 +19,7 @@ Sibling layout, never nested:
 
 ```
 ~/code/myrepo/                              ← main checkout, always on main
-~/code/myrepo-christian-wb-2026-05-19/      ← workbranch worktree
+~/code/myrepo-taylor-wb-2026-05-19/         ← workbranch worktree
 ~/code/myrepo-feat-add-csv-export-142/      ← task worktree
 ~/code/myrepo-fix-login-bug-156/            ← task worktree
 ```
@@ -29,7 +29,7 @@ hyphens).**
 
 Examples:
 - `feat/add-csv-export-142` → `myrepo-feat-add-csv-export-142`
-- `christian/wb-2026-05-19` → `myrepo-christian-wb-2026-05-19`
+- `taylor/wb-2026-05-19` → `myrepo-taylor-wb-2026-05-19`
 - `hotfix/prod-crash` → `myrepo-hotfix-prod-crash`
 
 Slashes in branch names become hyphens because filesystem paths can't
@@ -52,14 +52,14 @@ Examples:
 # Task worktree off today's workbranch
 git worktree add ../myrepo-feat-csv-export-142 \
   -b feat/csv-export-142 \
-  origin/christian/wb-2026-05-19
+  origin/taylor/wb-2026-05-19
 
 # Workbranch worktree off main
 # (Note: workbranches are normally created via `git checkout -b` in the
 # main checkout. Use a worktree for the workbranch only if you want to
 # leave main checkout on main while actively working on the workbranch.)
-git worktree add ../myrepo-christian-wb-2026-05-19 \
-  -b christian/wb-2026-05-19 \
+git worktree add ../myrepo-taylor-wb-2026-05-19 \
+  -b taylor/wb-2026-05-19 \
   origin/main
 
 # Hotfix worktree off main
@@ -214,12 +214,12 @@ Output looks like:
 
 ```
 ~/code/myrepo                            abc1234 [main]
-~/code/myrepo-christian-wb-2026-05-19    def5678 [christian/wb-2026-05-19]
+~/code/myrepo-taylor-wb-2026-05-19       def5678 [taylor/wb-2026-05-19]
 ~/code/myrepo-feat-csv-export-142        9abcdef [feat/csv-export-142]
 ```
 
-For the augmented view with agent ownership (via Mission Control), use
-`scripts/worktree-list.sh`.
+For an augmented view that classifies each branch (workbranch / task /
+hotfix) and reports branch age, use `worktree-list.sh`.
 
 ## Common errors and fixes
 

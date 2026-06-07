@@ -1,27 +1,27 @@
-# By stack layer — what counts as a boundary at Millis
+# By stack layer — what counts as a boundary
 
-The four rules in `SKILL.md` apply everywhere; the *implementation* of boundary validation depends on the layer. This file enumerates the layers Millis code actually touches, names what counts as "the boundary" at each, and shows what validation belongs there.
+The four rules in `SKILL.md` apply everywhere; the *implementation* of boundary validation depends on the layer. This file enumerates the boundary layers a typical backend touches, names what counts as "the boundary" at each, and shows what validation belongs there.
 
 For each layer, four things:
 
 1. **What counts as the boundary.** The specific function / event / API surface where untrusted data first lands.
 2. **What validates at the boundary.** The libraries, schemas, or runtime checks that belong there.
 3. **What does NOT belong inside.** Defensive bloat patterns common at this layer.
-4. **Common pitfall.** The mistake most often made when implementing this layer at Millis.
+4. **Common pitfall.** The mistake most often made when implementing this layer.
 
 ---
 
 ## HTTP / REST handler
 
-Includes Flask, FastAPI, ASP.NET Core controllers, Cloudflare Worker `fetch()`, AWS Lambda HTTP integrations.
+Includes Flask, FastAPI, ASP.NET Core controllers, serverless HTTP handlers, Express / Fastify routes.
 
 **Boundary.** The handler function called with the request object. Everything before the handler is framework; everything after is internal business logic.
 
 **Validates at the boundary.**
-- **FastAPI:** Pydantic models declared on the route signature (`def endpoint(body: ScorecardRequest)`).
+- **FastAPI:** Pydantic models declared on the route signature (`def endpoint(body: OrderRequest)`).
 - **Flask:** Pydantic / Marshmallow at the top of the view function.
 - **ASP.NET Core:** Model binding + `[ApiController]` validation attributes + `ProblemDetails` for 4xx.
-- **Cloudflare Worker:** Zod `safeParse` on `await request.json()` inside `fetch()`.
+- **Node (Express / serverless):** Zod `safeParse` on `await request.json()` inside the handler.
 - Per-route auth: middleware that produces a typed `Principal`. Below the handler, code receives `Principal`, never `Request.headers.get("Authorization")`.
 
 **What does NOT belong inside.**
@@ -33,103 +33,103 @@ Includes Flask, FastAPI, ASP.NET Core controllers, Cloudflare Worker `fetch()`, 
 
 ---
 
-## MCP tool entry
+## RPC / tool entry
 
-The decorated tool function in an MCP server. The entry receives an arguments dict from the MCP runtime; below the entry is internal logic that should never re-parse that dict.
+The entry function of an RPC method, gRPC handler, or tool/plugin call. The entry receives an arguments payload from the runtime; below the entry is internal logic that should never re-parse that payload.
 
-**Boundary.** The function annotated with the MCP `@tool` (or equivalent) decorator.
+**Boundary.** The function exposed to the runtime as the RPC method or tool handler (often via a decorator or registration call).
 
 **Validates at the boundary.**
-- Pydantic model for the args dict, declared per tool.
-- One `ToolResult`-shaped return type — discriminated union of success vs error — so the caller (Claude) gets structured feedback.
-- Permission checks (which operator can call this tool) at the entry, never deeper.
+- Pydantic / schema model for the args payload, declared per method.
+- One result-shaped return type — discriminated union of success vs error — so the caller gets structured feedback.
+- Permission checks (who is allowed to call this method) at the entry, never deeper.
 
 **What does NOT belong inside.**
 - `args.get("field")` inside helper functions.
-- Inline string formatting of error messages — emit a typed `ToolError`.
+- Inline string formatting of error messages — emit a typed error result.
 
 **Common pitfall.** Returning `{"error": "something went wrong"}` instead of `{"error": {"code": "RATE_LIMIT", "message": "...", "retry_after_seconds": 30}}`. The caller can pattern-match on a code; it cannot reliably pattern-match on a free-form string.
 
 ---
 
-## Azure Function trigger
+## Serverless function trigger
 
-HTTP triggers, Timer triggers, Queue triggers, Service Bus triggers, Event Grid triggers, Blob triggers.
+HTTP triggers, scheduled / timer triggers, queue triggers, event / topic triggers, object-storage triggers (the equivalents in Lambda, Cloud Functions, Azure Functions, etc.).
 
-**Boundary.** The decorated trigger function. For Timer triggers the "input" is the schedule fire; for everything else there is a payload that must be validated.
+**Boundary.** The trigger function the platform invokes. For timer triggers the "input" is the schedule fire; for everything else there is a payload that must be validated.
 
 **Validates at the boundary.**
 - For HTTP triggers: same rules as HTTP handlers above.
-- For Queue / Service Bus / Event Grid: parse the payload into a typed message class at the top of the function. Treat the binding as untrusted — the message may have been authored by a previous version of the producer.
-- For Blob triggers: validate the blob's metadata AND its first read — a "JSON blob" may be empty, partial, or someone else's format.
-- For Timer triggers: validate config / state read at the start of each invocation, not at module import time. Config can change between invocations.
+- For queue / event / topic triggers: parse the payload into a typed message class at the top of the function. Treat the binding as untrusted — the message may have been authored by a previous version of the producer.
+- For object-storage triggers: validate the object's metadata AND its first read — a "JSON object" may be empty, partial, or someone else's format.
+- For timer triggers: validate config / state read at the start of each invocation, not at module import time. Config can change between invocations.
 
 **What does NOT belong inside.**
 - `os.getenv("…")` calls scattered through the function body. Load once at entry, fail fast if missing.
 - Assuming the trigger payload's shape is whatever the producer last shipped.
 
-**Common pitfall.** Treating a Service Bus message as exactly-once. Service Bus is *at-least-once*. Build idempotency into the receiver (see `SKILL.md § Idempotency`); the trigger function must be safe to call twice with the same message.
+**Common pitfall.** Treating a queue message as exactly-once. Most message brokers are *at-least-once*. Build idempotency into the receiver (see `SKILL.md § Idempotency`); the trigger function must be safe to call twice with the same message.
 
 ---
 
-## Cloudflare Worker fetch / cron handler
+## Edge / serverless HTTP + cron handler
 
-**Boundary.** `export default { fetch(request, env, ctx) }` for HTTP, `scheduled(event, env, ctx)` for cron.
+**Boundary.** The exported `fetch(request, env, ctx)`-style handler for HTTP, and the `scheduled(event, env, ctx)`-style handler for cron.
 
 **Validates at the boundary.**
-- `env` is the binding object — read it once at the top and assign to typed locals. Never read `env.SOME_VAR` 30 calls deep.
+- `env` is the binding / config object — read it once at the top and assign to typed locals. Never read `env.SOME_VAR` 30 calls deep.
 - `request` is untrusted. Use Zod on `await request.json()` or `request.formData()`.
-- For `scheduled`, validate any state read from KV / D1 / R2 — those are external systems whose schema can drift.
+- For the scheduled handler, validate any state read from external stores (key-value, SQL, object storage) — those are external systems whose schema can drift.
 
 **What does NOT belong inside.**
 - `as any` on the request body.
-- Unhandled `await`-less Promises — Workers terminate when the handler returns, and pending Promises are killed. Always `await` or pass to `ctx.waitUntil()`.
+- Unhandled `await`-less Promises — edge runtimes terminate when the handler returns, and pending Promises are killed. Always `await` or hand the promise to the platform's "keep running after response" primitive (e.g. `ctx.waitUntil()`).
 
-**Common pitfall.** Forgetting `ctx.waitUntil()` for fire-and-forget work (logging, analytics). The work *appears* to start, then dies when the response is returned. Either `await` it or `ctx.waitUntil(promise)` it.
+**Common pitfall.** Forgetting to keep fire-and-forget work alive (logging, analytics). The work *appears* to start, then dies when the response is returned. Either `await` it or pass it to the runtime's background-work primitive.
 
 ---
 
-## Service Bus / Event Grid message handler
+## Queue / message handler
 
-Whether triggered by Azure Functions, a Worker, or a standalone consumer.
+Whether triggered by a serverless function, an edge handler, or a standalone consumer.
 
 **Boundary.** The first function that receives the deserialized message.
 
 **Validates at the boundary.**
 - Parse the message body into a typed model. Tag the schema with a version (`v1`, `v2`) so producers and consumers can evolve.
 - Reject malformed messages explicitly. Dead-letter them with a structured error — do not silently re-queue or silently drop.
-- Honor the lock — finish before the lock duration, or renew it explicitly.
+- Honor the lock / visibility timeout — finish before it expires, or renew it explicitly.
 
 **What does NOT belong inside.**
-- Assuming message order. Service Bus sessions give order; topics and queues do not.
-- Assuming exactly-once. See "Common pitfall" under Azure Function trigger.
+- Assuming message order. Some brokers offer ordered delivery (e.g. via sessions or FIFO queues); plain topics and queues do not.
+- Assuming exactly-once. See "Common pitfall" under Serverless function trigger.
 
-**Common pitfall.** Logging the failure and `complete()`-ing the message anyway, so it disappears from the queue. The DLQ exists for a reason — let failed messages route there so they can be inspected and replayed.
+**Common pitfall.** Logging the failure and acknowledging / `complete()`-ing the message anyway, so it disappears from the queue. The dead-letter queue exists for a reason — let failed messages route there so they can be inspected and replayed.
 
 ---
 
-## Procore / Acumatica / external SaaS API call
+## Third-party API call
 
-Every external HTTP call to a vendor whose backend Millis does not own.
+Every external HTTP call to a vendor whose backend you do not own.
 
 **Boundary.** The HTTP request boundary AND the response parse. Both sides are untrusted.
 
 **Validates at the boundary.**
-- **Outbound:** Construct the request with parameterized URL builders, never string concatenation; include a `User-Agent` that identifies Millis; set a timeout (10s default for synchronous, 60s for background); include retry headers Procore expects (`Procore-Company-Id`, etc.).
+- **Outbound:** Construct the request with parameterized URL builders, never string concatenation; include a `User-Agent` that identifies your service; set a timeout (10s default for synchronous, 60s for background); include any required headers the API expects (auth, tenant/account id, etc.).
 - **Inbound:** Parse the response into a typed model even if the vendor's docs promise a shape. The shape can change in a minor version bump; parsing into Pydantic / Zod / `serde` catches the drift loudly.
 
 **What does NOT belong inside.**
 - `response.json()` followed by `["field"]` indexing — that is implicit trust of an external contract.
 - Retrying on `4xx`. `400`, `401`, `403`, `404`, `422` are not transient; retrying just multiplies the failure (and may trip rate limits).
-- Catching the SDK's generic `ApiException` / `HttpError` and re-throwing it as `Exception` — the wrapper module must enumerate the specific subclasses the SDK can raise (Code Complete §8.4: *"Know the exceptions your library code throws"*) and re-raise them as typed Millis errors. If the SDK doesn't document its exceptions, write a 30-line probe script and find out.
+- Catching the SDK's generic `ApiException` / `HttpError` and re-throwing it as `Exception` — the wrapper module must enumerate the specific subclasses the SDK can raise (Code Complete §8.4: *"Know the exceptions your library code throws"*) and re-raise them as typed errors. If the SDK doesn't document its exceptions, write a 30-line probe script and find out.
 
-**Common pitfall.** Not handling the rate-limit response (`429`) explicitly. Procore publishes `Retry-After`; honor it. A retry that ignores `Retry-After` and immediately backs off-and-retries is more polite than infinite hammering but still wrong.
+**Common pitfall.** Not handling the rate-limit response (`429`) explicitly. Most APIs publish a `Retry-After` header; honor it. A retry that ignores `Retry-After` and immediately backs off-and-retries is more polite than infinite hammering but still wrong.
 
 ---
 
-## Azure SQL row hydration (read)
+## Database row hydration (read)
 
-Reading rows from Azure SQL into Python / TypeScript / C# / Rust application memory.
+Reading rows from a relational database into Python / TypeScript / C# / Rust application memory.
 
 **Boundary.** The mapping function that turns a row tuple / `dict` / `DataReader` into a typed model.
 
@@ -146,9 +146,9 @@ Reading rows from Azure SQL into Python / TypeScript / C# / Rust application mem
 
 ---
 
-## Azure SQL write (transaction)
+## Database write (transaction)
 
-Inserts, updates, deletes — especially multi-statement writes.
+Inserts, updates, deletes — especially multi-statement writes. (T-SQL shown; the same discipline applies in any SQL dialect.)
 
 **Boundary.** The application function that issues the write, plus the SQL transaction inside.
 
@@ -168,25 +168,25 @@ Inserts, updates, deletes — especially multi-statement writes.
 
 ---
 
-## Cosmos DB read / write
+## NoSQL document store read / write
 
 **Boundary.** The repository function that calls the SDK.
 
 **Validates at the boundary.**
-- The partition key is supplied on every read. If the partition key is wrong, Cosmos cross-partitions, which is slow and expensive — not a silent failure but an operational one.
+- The partition key is supplied on every read. If the partition key is wrong, the store fans out across partitions, which is slow and expensive — not a silent failure but an operational one.
 - Documents parse into a typed model on read; raw `dict` access is the antipattern.
-- Writes specify the ETag / `IfMatchEtag` if optimistic concurrency matters.
+- Writes specify the ETag / `If-Match` if optimistic concurrency matters.
 
 **What does NOT belong inside.**
-- Catching `CosmosException` broadly. Branch on `StatusCode` — `404` is expected absence, `429` is throttle (let Polly / retry policy handle), `412` is precondition failed (concurrency conflict — handle explicitly).
+- Catching the SDK's generic exception broadly. Branch on the status code — `404` is expected absence, `429` is throttle (let the retry policy handle it), `412` is precondition failed (concurrency conflict — handle explicitly).
 
-**Common pitfall.** Reading a document without a partition key by relying on the SDK's `CrossPartitionQuery`. It works in dev (small data) and fails-by-cost in prod.
+**Common pitfall.** Reading a document without a partition key by relying on the SDK's cross-partition query. It works in dev (small data) and fails-by-cost in prod.
 
 ---
 
 ## CLI argument parse
 
-Scripts, one-shot operator tools, ad-hoc CDP backfills.
+Scripts, one-shot operator tools, ad-hoc data backfills.
 
 **Boundary.** The `argparse` / `click` / `typer` / `clap` / `commander` parser at the top of the script.
 
@@ -205,7 +205,7 @@ Scripts, one-shot operator tools, ad-hoc CDP backfills.
 
 ## Config / environment variable load
 
-Application startup; reads from `.env`, environment, Azure App Config, Key Vault.
+Application startup; reads from `.env`, environment variables, a config service, or a secret manager.
 
 **Boundary.** The single function that loads all config at process start.
 
@@ -213,7 +213,7 @@ Application startup; reads from `.env`, environment, Azure App Config, Key Vault
 - One config model (Pydantic `BaseSettings`, Zod, `IOptions<T>`). One source of truth.
 - Required values fail loud at startup if missing. The process must not start without them.
 - Defaults are explicit and named (e.g., `RETRY_MAX: int = 3`), not implicit (silently `None` if missing).
-- Secrets come from Key Vault or a secret manager — never from `os.getenv` against a plain string named `..._SECRET`.
+- Secrets come from a secret manager — never from `os.getenv` against a plain string named `..._SECRET`.
 
 **What does NOT belong inside.**
 - `os.getenv("FOO")` scattered through business logic.
@@ -223,9 +223,9 @@ Application startup; reads from `.env`, environment, Azure App Config, Key Vault
 
 ---
 
-## Secret read (Key Vault)
+## Secret read (secret manager)
 
-**Boundary.** The function that reads from Key Vault and hydrates the config / credential.
+**Boundary.** The function that reads from the secret manager and hydrates the config / credential.
 
 **Validates at the boundary.**
 - Read at startup; cache for the process lifetime if rotation is not in scope.
@@ -234,19 +234,19 @@ Application startup; reads from `.env`, environment, Azure App Config, Key Vault
 
 **What does NOT belong inside.**
 - Logging the secret value (even at `DEBUG`). Log the secret *name* or a hash of the version.
-- Catching the Key Vault `ResourceNotFoundError` and substituting an empty string.
+- Catching the "secret not found" error and substituting an empty string.
 
-**Common pitfall.** Using a managed identity in prod but a personal credential locally, with no clear separation. Use the credential chain (`DefaultAzureCredential`) and document which credential is expected in each environment.
+**Common pitfall.** Using a workload identity in prod but a personal credential locally, with no clear separation. Use the platform's default credential chain and document which credential is expected in each environment.
 
 ---
 
-## Scheduled job tick (Timer trigger, cron, Workers cron)
+## Scheduled job tick (timer / cron)
 
 **Boundary.** The function fired by the scheduler. The "input" is the fire time + any state read from a checkpoint table.
 
 **Validates at the boundary.**
 - Read the checkpoint state at the start of every invocation; do not rely on in-memory state across ticks (scheduler may run on a different worker).
-- Treat overlapping invocations as possible — use a lock table, lease, or `singleton` binding.
+- Treat overlapping invocations as possible — use a lock table, lease, or a singleton/single-instance guard.
 - Validate that the wall-clock fire time is plausible (occasionally a scheduler will fire late by hours after a degradation; the job's logic should detect this).
 
 **What does NOT belong inside.**
@@ -292,7 +292,7 @@ Forms, search boxes, URL params, drag-and-drop, file uploads.
   - Integer overflow (Python is bigint-safe; TS / C# / Rust need an explicit `i64` / `BigInt` decision).
   - Path traversal (`../../etc/passwd` for upload paths).
   - Open-redirect (untrusted URL in a 302 Location header).
-  - XML / XXE for any XML input (Acumatica).
+  - XML / XXE for any XML input (e.g. a SOAP or XML-based partner integration).
 
   The check is *which of these apply to this layer* — not whether all of them apply. The layer's documentation must answer the question.
 
@@ -325,21 +325,21 @@ Forms, search boxes, URL params, drag-and-drop, file uploads.
 | Layer | Validate | Do not |
 |---|---|---|
 | HTTP / REST | Pydantic / Zod / model-binding on the route | Re-check `body.field` deeper down |
-| MCP tool | Pydantic on args, typed `ToolResult` return | Free-form error strings |
-| Azure Function trigger | Typed message at the trigger boundary | Assume exactly-once delivery |
-| Cloudflare Worker | Zod on body, `await` or `waitUntil()` everything | Read `env` 30 calls deep |
-| Service Bus / Event Grid | Parse to typed model, version the schema | Silently drop bad messages |
-| External SaaS API | Parse response into typed model; retry only transients | Trust the raw dict |
-| Azure SQL read | One model per entity, explicit column list | `SELECT *` + positional access |
-| Azure SQL write | TRY / TRAN / CATCH / THROW; idempotency key | Bare `BEGIN TRAN` |
-| Cosmos DB | Supply partition key, branch on `StatusCode` | Cross-partition by accident |
+| RPC / tool | Pydantic on args, typed result return | Free-form error strings |
+| Serverless function trigger | Typed message at the trigger boundary | Assume exactly-once delivery |
+| Edge / serverless handler | Zod on body, `await` or keep-alive everything | Read `env` 30 calls deep |
+| Queue / message handler | Parse to typed model, version the schema | Silently drop bad messages |
+| Third-party API | Parse response into typed model; retry only transients | Trust the raw dict |
+| Database read | One model per entity, explicit column list | `SELECT *` + positional access |
+| Database write | TRY / TRAN / CATCH / THROW; idempotency key | Bare `BEGIN TRAN` |
+| NoSQL document store | Supply partition key, branch on status code | Cross-partition by accident |
 | CLI parse | Required args at parser, typed values | Re-parse `sys.argv` mid-script |
 | Config / env | One model, fail loud on missing | `os.getenv` scattered |
-| Key Vault | Cache by lifetime; fail loud at start | Log the secret value |
+| Secret manager | Cache by lifetime; fail loud at start | Log the secret value |
 | Scheduled job | Read checkpoint each tick; lock against overlap | Stateful in-memory across ticks |
 | File I/O | Encoding declared; atomic writes | Swallow "file not found" |
 | Front-end input | Re-validate server-side; sniff file content | Trust client validation alone |
 | SignalR / WebSocket | Auth on connect; schema per message; rate-limit | Trust client-supplied identity |
-| Domain primitives (Money, ProjectId, FinPeriod) | Newtype / branded / wrapped struct at the boundary | Pass naked `int` / `str` across module boundaries |
+| Domain primitives (Money, UserId, EmailAddress) | Newtype / branded / wrapped struct at the boundary | Pass naked `int` / `str` across module boundaries |
 
 Every row reads the same way: the boundary is *here*, not *there*. Inside, trust the type.

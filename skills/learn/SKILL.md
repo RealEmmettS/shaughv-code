@@ -310,11 +310,8 @@ When the user hits these things during a learning session, hand off to
 
 Other stacks:
 
-- **`/cto-advisor`** — when the learning goal is professional development with executive
-  framing implications. Goal-Setting Step 5 (Connect to Values) often surfaces the need.
-- **`/agile`** — when the learning project should be run as a series of timeboxed
-  iterations.
-- **`/prompt-library`** — if a relevant stored prompt exists for the topic, suggest it.
+- **`personal-productivity`** — when the learning project is really about fitting
+  deliberate practice into finite time and attention.
 
 ---
 

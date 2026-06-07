@@ -114,5 +114,5 @@ Event log / outbox tables. Each row is a serialized command: `(id, kind, payload
 - "Log this action" sprinkled everywhere — centralize in the Invoker.
 - Hand-rolled retry/queue logic per endpoint — let Commands flow through one worker.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.10.0] — 2026-06-07
+
+### Changed
+- Decoupled the imported skills from Emmett's private work stack so the public bundle no longer leaks work-specific context. Across `skills/{debugging-framework,defensive-programming,bug-triage,code-design-patterns,git-workflow,critical-thinking,learn,strategic-thinking,spawn}/`, every reference to the `theia-tools` work plugin, the Millis / TheiaConstruct data platform (CDP, Procore, Acumatica, Azure / Cosmos / Service Bus, thin-GI, Scorecard / PSR, `data.theiaconstruct.com`, `mcp__claude_ai_Millis_CDP__*`), the Mission Control task tracker, and named teammates / work agents (Christian, Dan, Talos, Hephaestus) was genericized or removed. Frontmatter `description`s were rewritten to trigger on the same generic intents minus the Millis framing; the debugging worked examples and the defensive-programming / design-pattern example domains were rewritten as stack-neutral composites.
+- Rewired cross-skill references to the bare local skill names that exist in this bundle (`critical-thinking`, `git-workflow`, `bug-triage`, `learn`, `defensive-programming`, `naming-conventions`); no `theia-tools:`-namespaced references remain. Real external-plugin references (`superpowers:*`, `pr-review-toolkit:*`) were preserved.
+- `skills/debugging-framework/references/millis-bug-shapes.md` → `skills/debugging-framework/references/bug-shapes.md` (renamed via `git mv`; all in-skill references updated and the "Millis bug shape" vocabulary relabeled "bug shape").
+- `skills/spawn/` Phase 2 no longer files a Mission Control task — the flow is now investigate → execute, with the executor briefed directly from the investigation findings.
+- `skills/git-workflow/` multi-agent coordination now runs on git-native signals (branch names on origin, `git worktree list`, last-commit times) instead of the Mission Control overlay.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.9.0` → `0.10.0`.
+
+### Removed
+- References to skills with no equivalent in this bundle: `mission-control-toolkit`, `cdp-design-pattern`, `cto-advisor`, `agile`, plus dead cross-refs to `mission-control-checkins`, `acumatica-thin-gi`, and `prompt-library`. The Mission Control tracker is Millis-only with no public counterpart, so its machinery (`result_notes`, `current_activity`, `update_task`, agent check-ins) was dropped rather than remapped.
+
 ## [0.9.0] — 2026-06-06
 
 ### Added
@@ -22,7 +35,7 @@ A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) an
   - `skills/personal-productivity/` — productivity toolbox distilled from five books (Burkeman ×2, Newport ×2, Vaden).
   - `skills/spawn/` — manual-invocation-only `/spawn` orchestration playbook; two-phase Opus subagent pattern (INVESTIGATE then EXECUTE); explicitly never auto-triggers.
   - `skills/strategic-thinking/` — turn-based strategic facilitation: Strategic Picture plus four lenses (Art of War, 36 Stratagems, Five Rings, game theory).
-- Not imported: the bundle's twelfth skill, a Millis-work variant of `naming-conventions`, was deliberately skipped so the repo's SHAUGHV-personal `skills/naming-conventions/` stays untouched.
+- Not imported: the bundle's twelfth skill, a work-specific variant of `naming-conventions`, was deliberately skipped so the repo's SHAUGHV-personal `skills/naming-conventions/` stays untouched.
 
 ### Changed
 - `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.8.0` → `0.9.0` across all three manifests; descriptions and keywords extended to cover the eleven new skills.

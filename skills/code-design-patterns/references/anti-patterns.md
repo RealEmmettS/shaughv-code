@@ -199,7 +199,7 @@ See `creational/singleton.md` for the long version.
 
 **Resolution:**
 - Not a pattern problem — a *discipline* problem. When you ship the new path, **delete the old one** in the same PR or the very next one.
-- Feature flag policy: every flag has a deletion date. (See `theia-tools:git-workflow` for the flag-cleanup rule.)
+- Feature flag policy: every flag has a deletion date. (See `git-workflow` for the flag-cleanup rule.)
 
 ---
 
@@ -248,4 +248,4 @@ For each smell above, ask:
 4. **Are we about to delete this anyway?** Don't refactor code that's being replaced.
 
 The skill's job is to *name* smells precisely, not to demand fixes.
-Christian decides what to fix.
+You decide what to fix.

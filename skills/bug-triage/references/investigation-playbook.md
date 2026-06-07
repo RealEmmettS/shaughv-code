@@ -41,10 +41,10 @@ display problems, form errors, or anything the end-user sees in a browser.
 - Use `get_page_text` to capture the visible content for your report.
 - If the page state matters, describe what you see from read_page output.
 
-### Millis Data Platform
+### Data Platform / Backing Data Store
 
 Use these when the bug might involve incorrect data, missing records, or data
-integrity issues. Load the Millis Data Platform tools via `tool_search`.
+integrity issues. Load the relevant data-platform tools via `tool_search`.
 
 **Investigation approach:**
 1. First, use `describe_entities` to understand what data entities are available

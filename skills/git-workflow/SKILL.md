@@ -36,13 +36,13 @@ We use a **three-tier branch hierarchy**:
 
 ```
 main (trunk)
- └── christian/wb-2026-05-19 (workbranch, ≤24h, rebases onto main continuously)
+ └── taylor/wb-2026-05-19 (workbranch, ≤24h, rebases onto main continuously)
       ├── feat/csv-export-142 (worktree, ≤2d, one agent)
       ├── fix/auth-bug-156 (worktree, ≤2d, one agent)
       └── refactor/pdf-gen-203 (worktree, ≤2d, one agent)
 ```
 
-Each developer (Christian, Emmett) runs their own workbranch. Workbranches
+Each developer runs their own workbranch. Workbranches
 are isolated from each other but both rebase onto `main` continuously, which
 keeps them implicitly aligned. Task worktrees branch from the workbranch
 and merge back into it. At end of day (or end of batch), the workbranch
@@ -73,7 +73,7 @@ worktrees are sibling directories: `~/code/myrepo/`, `~/code/myrepo-feat-csv-exp
    never shared as collaboration spaces between agents.
 7. **Push to origin before starting.** Every new branch (workbranch or task)
    gets pushed to `origin` immediately on creation, before any work is done,
-   so other agents and Mission Control can see it exists.
+   so other agents can see it exists.
 8. **A worktree must be verified runnable before agent work starts.**
    A fresh worktree is missing `.env*`, `node_modules`, generated files, and
    other `.gitignore`d state. Bootstrap copies these in; verify proves the
@@ -178,7 +178,7 @@ The workbranch is the daily integration layer for one developer. Name format:
 ```
 
 Examples:
-- `christian/wb-2026-05-19`
+- `taylor/wb-2026-05-19`
 - `emmett/wb-2026-05-19`
 
 **Check if today's workbranch already exists** (you may have created it
@@ -186,7 +186,7 @@ earlier today):
 
 ```bash
 git fetch origin --quiet
-git show-ref --verify --quiet refs/remotes/origin/christian/wb-2026-05-19 \
+git show-ref --verify --quiet refs/remotes/origin/taylor/wb-2026-05-19 \
   && echo "Workbranch exists on origin — will resume" \
   || echo "Workbranch does not exist — will create"
 ```
@@ -195,9 +195,9 @@ git show-ref --verify --quiet refs/remotes/origin/christian/wb-2026-05-19 \
 
 ```bash
 # Still in ~/code/myrepo on main
-git checkout -b christian/wb-2026-05-19
-git push -u origin christian/wb-2026-05-19
-# Workbranch now exists on origin — other agents and Mission Control can see it
+git checkout -b taylor/wb-2026-05-19
+git push -u origin taylor/wb-2026-05-19
+# Workbranch now exists on origin — other agents can see it
 git checkout main  # leave main checkout on main
 ```
 
@@ -210,7 +210,7 @@ off it shortly.
 is under 24h old:
 
 ```bash
-git log --reverse --pretty=format:%ct christian/wb-2026-05-19 ^main | head -1
+git log --reverse --pretty=format:%ct taylor/wb-2026-05-19 ^main | head -1
 # Compare result to current epoch — if > 86400 seconds, the workbranch is over cap
 ```
 
@@ -238,16 +238,20 @@ Types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `hotfix`.
 See `references/branch-naming.md` for full convention.
 
 **Multi-agent check.** Before creating the worktree, check if another agent
-is already on this branch or working in this repo:
+is already on this branch or working in this repo. The signals are
+git-native — local worktrees plus branches on origin:
 
 ```bash
-# List active agents and their working directories via Mission Control
-# (the skill should invoke get_my_tasks or similar — see
-# references/multi-agent.md)
+# Filesystem: what's checked out locally
+git worktree list
+# Remote: what every agent has pushed (push-on-creation makes this complete)
+git fetch origin --prune && git branch -r
+gh pr list --limit 20 --state open
+# (see references/multi-agent.md for the full detection protocol)
 ```
 
-If another agent has claimed this exact branch: refuse to create the
-worktree, redirect the human.
+If a branch with this exact name already exists on origin: refuse to create
+the worktree, redirect the human.
 If another agent has another active task in this repo: warn (they're
 sharing a workbranch parent), proceed.
 
@@ -261,7 +265,7 @@ cd ~/code/myrepo
 git fetch origin --quiet
 git worktree add ../myrepo-feat-add-csv-export-142 \
   -b feat/add-csv-export-142 \
-  origin/christian/wb-2026-05-19
+  origin/taylor/wb-2026-05-19
 cd ../myrepo-feat-add-csv-export-142
 ```
 
@@ -277,8 +281,7 @@ git push -u origin feat/add-csv-export-142
 ```
 
 The branch now exists on origin from minute zero, with no commits yet.
-Other agents can see it. Mission Control can see it. If your machine dies,
-the branch is recoverable.
+Other agents can see it. If your machine dies, the branch is recoverable.
 
 **Bootstrap the worktree — the worktree starts broken.**
 
@@ -360,7 +363,7 @@ git commit -m "feat(reports): add CSV export endpoint"
 
 ```bash
 git fetch origin
-git rebase origin/christian/wb-2026-05-19
+git rebase origin/taylor/wb-2026-05-19
 ```
 
 Note: rebase onto the **workbranch**, not main. The workbranch is your
@@ -375,9 +378,9 @@ this on a cadence (at task starts and every ~2h):
 # In the main checkout
 cd ~/code/myrepo
 git fetch origin --quiet
-git checkout christian/wb-2026-05-19
+git checkout taylor/wb-2026-05-19
 git rebase origin/main
-git push --force-with-lease origin christian/wb-2026-05-19
+git push --force-with-lease origin taylor/wb-2026-05-19
 git checkout main  # return main checkout to main
 ```
 
@@ -432,7 +435,7 @@ section "Worktree → workbranch gates" for the full list. Summary:
 
 ```bash
 gh pr create \
-  --base christian/wb-2026-05-19 \
+  --base taylor/wb-2026-05-19 \
   --head feat/add-csv-export-142 \
   --title "feat(reports): add CSV export endpoint" \
   --body "$(cat <<'EOF'
@@ -501,10 +504,10 @@ flow.
 ```bash
 cd ~/code/myrepo
 git fetch origin --quiet
-git checkout christian/wb-2026-05-19
+git checkout taylor/wb-2026-05-19
 git rebase origin/main
 # Resolve any conflicts, then:
-git push --force-with-lease origin christian/wb-2026-05-19
+git push --force-with-lease origin taylor/wb-2026-05-19
 ```
 
 If continuous rebase has been happening as required, this should be a
@@ -522,11 +525,11 @@ with override. Tier 3 gets recorded.
 ```bash
 gh pr create \
   --base main \
-  --head christian/wb-2026-05-19 \
-  --title "Ship: christian's batch for 2026-05-19" \
+  --head taylor/wb-2026-05-19 \
+  --title "Ship: taylor's batch for 2026-05-19" \
   --body "$(cat <<'EOF'
 ## Batch summary
-This PR ships today's accumulated work from christian/wb-2026-05-19.
+This PR ships today's accumulated work from taylor/wb-2026-05-19.
 
 ## Tasks included
 - feat(reports): add CSV export endpoint (#142)
@@ -580,7 +583,7 @@ itself is the "ship the day" marker.
 cd ~/code/myrepo
 git checkout main
 git pull --ff-only --prune
-git branch -d christian/wb-2026-05-19
+git branch -d taylor/wb-2026-05-19
 ```
 
 The workbranch is now gone — locally, on origin, and from your day. Start
@@ -625,9 +628,9 @@ onto the new `main` to pick up the fix:
 ```bash
 cd ~/code/myrepo
 git fetch origin --quiet
-git checkout christian/wb-2026-05-19
+git checkout taylor/wb-2026-05-19
 git rebase origin/main
-git push --force-with-lease origin christian/wb-2026-05-19
+git push --force-with-lease origin taylor/wb-2026-05-19
 ```
 
 ## Common situations and what to do
@@ -725,14 +728,14 @@ Override possible (e.g., the README typo), but log the reason.
 # === Start of day ===
 cd ~/code/myrepo
 git checkout main && git pull --ff-only --prune
-git checkout -b christian/wb-2026-05-19
-git push -u origin christian/wb-2026-05-19
+git checkout -b taylor/wb-2026-05-19
+git push -u origin taylor/wb-2026-05-19
 git checkout main
 
 # === Start a task (off the workbranch) ===
 git fetch origin --quiet
 git worktree add ../myrepo-feat-csv-export -b feat/csv-export-142 \
-    origin/christian/wb-2026-05-19
+    origin/taylor/wb-2026-05-19
 cd ../myrepo-feat-csv-export
 git push -u origin feat/csv-export-142
 # Then bootstrap (cp .env, npm install, etc.)
@@ -740,17 +743,17 @@ git push -u origin feat/csv-export-142
 # === While working: refresh ===
 # Workbranch onto main (every ~2h, done in main checkout)
 cd ~/code/myrepo
-git checkout christian/wb-2026-05-19 && git fetch origin
+git checkout taylor/wb-2026-05-19 && git fetch origin
 git rebase origin/main && git push --force-with-lease
 git checkout main
 
 # Task worktree onto workbranch (every ~2h, done in worktree)
 cd ../myrepo-feat-csv-export
-git fetch origin && git rebase origin/christian/wb-2026-05-19
+git fetch origin && git rebase origin/taylor/wb-2026-05-19
 git push --force-with-lease origin feat/csv-export-142
 
 # === Finish a task (worktree → workbranch) ===
-gh pr create --base christian/wb-2026-05-19 --head feat/csv-export-142 \
+gh pr create --base taylor/wb-2026-05-19 --head feat/csv-export-142 \
     --title "..." --body "..."
 gh pr merge --squash --delete-branch
 
@@ -759,16 +762,16 @@ git worktree remove ../myrepo-feat-csv-export
 
 # === Ship the day (workbranch → main) ===
 cd ~/code/myrepo
-git checkout christian/wb-2026-05-19
+git checkout taylor/wb-2026-05-19
 git fetch origin && git rebase origin/main
 git push --force-with-lease
 
 # Walk full pre-PR gates, then:
-gh pr create --base main --head christian/wb-2026-05-19 --title "..." --body "..."
+gh pr create --base main --head taylor/wb-2026-05-19 --title "..." --body "..."
 gh pr merge --merge --delete-branch
 
 git checkout main && git pull --ff-only --prune
-git branch -d christian/wb-2026-05-19
+git branch -d taylor/wb-2026-05-19
 ```
 
 ## When to read the references
@@ -780,8 +783,8 @@ git branch -d christian/wb-2026-05-19
   workbranch. Naming, lifecycle, the continuous-rebase cadence, what to do
   when the workbranch goes wrong.
 - **`references/multi-agent.md`** — REQUIRED when multiple agents are
-  active in the same repo. The detection protocol, coordination via Mission
-  Control, what to do when worktree state is ambiguous.
+  active in the same repo. The git-native detection protocol (worktrees +
+  branches on origin), and what to do when worktree state is ambiguous.
 - **`references/pre-pr-gates.md`** — REQUIRED reading before any `gh pr create`
   call. The canonical pre-PR gate list, with two sections: gates for
   worktree → workbranch (lighter) and gates for workbranch → main (full).
@@ -802,8 +805,8 @@ git branch -d christian/wb-2026-05-19
   back to a regex pass.
 - `scripts/worktree-add.sh` — wrapper for `git worktree add` that handles
   bootstrap (copy .env, run install hook, push to origin).
-- `scripts/worktree-list.sh` — audit view of worktrees and their owners
-  via Mission Control.
+- `scripts/worktree-list.sh` — audit view of worktrees with branch
+  classification and age (ownership inferred from branch naming).
 - `scripts/workbranch-status.sh` — shows today's workbranch state: age,
   active task worktrees, drift from main, pending merges.
 

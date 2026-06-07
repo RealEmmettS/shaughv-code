@@ -4,7 +4,7 @@ The rationalization gallery for debugging. Mirrors `defensive-programming/refere
 
 Pull this when:
 - You catch yourself making one of these excuses.
-- Another teammate — Operator or Agent (Hephaestus on a `question`-status MC update, the Agent in your session) — is making one.
+- Another teammate — Operator or Agent (the Agent in your session) — is making one.
 - You are reviewing a PR whose description hints at one — "quick fix to unblock the demo", "added a defensive check", "rolled back, will investigate later".
 
 ---
@@ -16,7 +16,7 @@ Pull this when:
 | *"It's just a small bug, Mode 1 is fine."* | Mode 1 explicitly does NOT apply when the bug is user-visible in prod, touches a write path, or involves system-of-record data. Re-read `references/lightweight-triage.md` § Hard escalation triggers — if any trigger fires, the bug is Mode 2 regardless of size. |
 | *"I've already tried Mode 1 three times, one more attempt and I'll get it."* | Three failed attempts is not "almost there" — it's signal that the hypothesis is wrong, the fix layer is wrong, or the architecture is wrong (`superpowers:systematic-debugging` Phase 4.5). Escalate. The fourth attempt costs more than the formal protocol it bypasses. |
 | *"There's no time for the full protocol, the demo is in an hour."* | Systematic debugging is **faster** than guess-and-check thrashing — the McConnell 20-to-1 statistic is the headline. Under deadline pressure, the protocol is what protects you from shipping a band-aid you'll spend tomorrow morning unwrapping. |
-| *"It's intermittent, I can't really repro it, so I'll just guess at the fix."* | Guessing at the fix on an intermittent bug is the worst outcome — at best lucky, at worst makes the bug less frequent without solving it (now it's hard to even know if your fix worked). **Instrument first, fix second.** See `references/millis-bug-shapes.md` § Lock-conflict masquerading. |
+| *"It's intermittent, I can't really repro it, so I'll just guess at the fix."* | Guessing at the fix on an intermittent bug is the worst outcome — at best lucky, at worst makes the bug less frequent without solving it (now it's hard to even know if your fix worked). **Instrument first, fix second.** See `references/bug-shapes.md` § Lock-conflict masquerading. |
 | *"It works on retry, so it's transient — just add retry logic."* | Sometimes true; often a lock-conflict-masquerading bug where the retry path is masking a real problem (idempotency replay, partial write, race). Confirm the retry is correct AND the operation is idempotent before declaring it solved. |
 
 ---
@@ -28,7 +28,7 @@ Pull this when:
 | *"The fix at the source is out of scope — I'll add a null check at the consumer."* | A null check at the consumer is a symptom-hack (Code Complete §23, page-575 — "special-case makeup that changes the symptom but not the problem"). It silences THIS consumer and guarantees the next consumer will hit the same root cause. Either fix at source, or fix at source AND surface the symptom loudly so future consumers fail fast — never silence without fixing source. |
 | *"I'll add a `try/except: pass` around it for now and come back later."* | "Come back later" is the same character defect as TODO comments that ship to prod and outlive the Operator who wrote them. If the exception is expected and recoverable, name the type and handle it; if not, let it propagate. Bare `except: pass` is a silent-failure trap by definition. Cross-ref `pr-review-toolkit:silent-failure-hunter`. |
 | *"The library is buggy, I'll work around it."* | The library is wrong roughly 1 in 100 times; you are wrong roughly 99 in 100 (Code Complete §23, page-577 — superstitious debugging). When the library IS wrong, prove it with a minimal repro. Then file a GitHub issue. Then work around it deliberately — with a comment naming the upstream issue. |
-| *"This is just how Acumatica / Procore / SQL Server works — there's nothing we can do."* | Sometimes true; often a refusal to read the vendor's docs / call their support / understand their actual contract. Confirm the vendor's behavior with a minimal repro before declaring it immutable. When it IS the vendor, encapsulate the workaround in the boundary layer, not scattered through consumers. |
+| *"This is just how the database / third-party API works — there's nothing we can do."* | Sometimes true; often a refusal to read the vendor's docs / call their support / understand their actual contract. Confirm the vendor's behavior with a minimal repro before declaring it immutable. When it IS the vendor, encapsulate the workaround in the boundary layer, not scattered through consumers. |
 | *"The data is wrong, the code is fine."* | Sometimes true; usually means the code that produced the data has a bug the current code is masking. Trace upstream until you find where the bad data was written. Cross-ref `superpowers:systematic-debugging/root-cause-tracing.md`. |
 | *"It's clearly an edge case, let me just special-case it."* | Special-casing has its place (truly unique inputs) and its trap (every special case is a future bug that the next consumer triggers). Ask: is this special case a domain truth (only this one tenant has this requirement) or a hack (we don't know why the value is weird, but `if (val == 'weird') return default` makes the error go away)? The first is fine; the second is the symptom-hack anti-pattern. |
 
@@ -40,8 +40,8 @@ Pull this when:
 |---|---|
 | *"I'll write the test after I confirm the fix works."* | Untested fixes don't stick. A test written AFTER the fix is "what does this code do?" — it codifies whatever you happened to ship. A test written BEFORE the fix is "what SHOULD this code do?" — it codifies the bug's absence as a property. Cross-ref `superpowers:test-driven-development`. |
 | *"This bug is too hard to write a test for."* | Almost always means you don't fully understand the bug yet. The act of writing a test that reproduces it is the act of stating exactly what's wrong. If you cannot write a failing test, you cannot articulate the bug — which means you cannot defensibly fix it. |
-| *"It's just a config / data change, no test needed."* | Config changes break things too. Cosmos partition key changes, env var renames, feature flag flips — all of these have shipped Millis outages. If the change has a runtime effect, the effect can be tested (deployment smoke test, post-deploy assertion, manual repro script). |
-| *"I'll skip the regression test, the manual repro is enough."* | The bug WILL come back — every Operator at Millis has watched a bug reappear after a different change re-introduced it. The regression test is the only thing that catches the re-introduction in CI rather than in prod. |
+| *"It's just a config / data change, no test needed."* | Config changes break things too. Partition-key changes, env var renames, feature flag flips — all of these have shipped real outages. If the change has a runtime effect, the effect can be tested (deployment smoke test, post-deploy assertion, manual repro script). |
+| *"I'll skip the regression test, the manual repro is enough."* | The bug WILL come back — every engineer has watched a bug reappear after a different change re-introduced it. The regression test is the only thing that catches the re-introduction in CI rather than in prod. |
 | *"Tests are flaky in CI, I'll just merge."* | Flaky tests are a separate bug; treat them as Mode 2 themselves, don't paper over them. Merging through flake is how flake becomes the team's default and the test suite stops being trusted. |
 
 ---
@@ -50,9 +50,9 @@ Pull this when:
 
 | Rationalization | Rebuttal |
 |---|---|
-| *"This bug is unique to this one project / tenant / row."* | Usually wrong. Defects cluster (Code Complete §23, page-591). If the root cause was a thin-GI mapping omission, every other thin GI is a candidate. If the root cause was a type-coercion gap, every other URL-state → SQL path is a candidate. The sweep is 10 minutes; finding the second occurrence in prod next week is hours. |
-| *"I'll do the sweep next sprint."* | "Next sprint" never comes. The sweep is part of the bug, not an enhancement. The fix isn't done until the sweep is done. Bake the sweep into the same MC `result_notes` as the fix. |
-| *"The sweep would touch too many files."* | Then the bug shape is structural and worth a `defensive-programming` rule (or a `references/millis-bug-shapes.md` entry). Either fix the root structural cause OR document the shape so the next fix-it has 12 minutes of pattern-match instead of 12 hours of investigation. |
+| *"This bug is unique to this one project / tenant / row."* | Usually wrong. Defects cluster (Code Complete §23, page-591). If the root cause was a field-mapping omission, every other mapping is a candidate. If the root cause was a type-coercion gap, every other URL-state → SQL path is a candidate. The sweep is 10 minutes; finding the second occurrence in prod next week is hours. |
+| *"I'll do the sweep next sprint."* | "Next sprint" never comes. The sweep is part of the bug, not an enhancement. The fix isn't done until the sweep is done. Bake the sweep into the same write-up as the fix. |
+| *"The sweep would touch too many files."* | Then the bug shape is structural and worth a `defensive-programming` rule (or a `references/bug-shapes.md` entry). Either fix the root structural cause OR document the shape so the next fix-it has 12 minutes of pattern-match instead of 12 hours of investigation. |
 | *"Other instances might be intentional."* | They might. The sweep doesn't fix them — it FLAGS them. Each flag becomes a deliberate review decision: confirm intentional, or add to the fix scope. Both are better than silently shipping a fix that left siblings firing. |
 
 ---
@@ -61,7 +61,7 @@ Pull this when:
 
 | Rationalization | Rebuttal |
 |---|---|
-| *"I've been staring at this code for an hour, the bug is NOT in this function."* | Debugging blindness (Code Complete §23, page-592). You sliced away the region with the bug because you "knew" it was fine. Cure: re-read the function letter by letter; have another Operator or Agent look; OR rubber-duck explain the code (out loud, to the duck, or to Hephaestus on a `question`-status MC update). |
+| *"I've been staring at this code for an hour, the bug is NOT in this function."* | Debugging blindness (Code Complete §23, page-592). You sliced away the region with the bug because you "knew" it was fine. Cure: re-read the function letter by letter; have another Operator or Agent look; OR rubber-duck explain the code (out loud, to the duck, or to the Agent in your session). |
 | *"The variable is clearly named `tenant_id`, I checked."* | Psychological set (Code Complete §23, page-592). You read what you expected to read. Cure: read each character. Diff against the schema. If two variables differ by one letter, fix the naming (`naming-conventions` skill — names should have insufficient psychological distance traps designed out). |
 | *"I'll just take a five-minute break, then keep going."* | Five minutes is rarely enough. After 30+ minutes of stuck-thrashing, take a real break — 30 minutes, lunch, the walk to coffee, tomorrow morning. Many veteran engineers report their best debugging happens after distance (Code Complete §23, page-597). The careful fix made while exhausted is the fix that introduces three new bugs. |
 | *"My code is fine, the bug must be in the framework."* | Almost always wrong. Ego interference (Code Complete §23, page-591). The "your code is good" default is fast in the moment and slow over the bug lifetime. Assume the bug is yours until proven otherwise (Code Complete §23, page-577 — "The assumption helps you debug."). |
@@ -69,14 +69,14 @@ Pull this when:
 
 ---
 
-## The Mission Control excuses (skipping the MC trail)
+## The trail excuses (skipping the debugging trail)
 
 | Rationalization | Rebuttal |
 |---|---|
-| *"I'll update Mission Control after I ship the fix."* | The MC trail is the diagnostic log, not the postmortem write-up. Updating it AS you debug means the next teammate (Operator or Agent) who picks up the task has the trail; updating it after means they re-derive your investigation from scratch. |
-| *"The bug is small, no MC entry needed."* | Mode 1 bugs (typo-class) don't need MC entries. Mode 2 bugs always do — they touched a write path, were user-visible in prod, or involved system-of-record data. The MC entry IS the durable artifact; the code commit is the implementation detail. |
-| *"I'll just put it all in the commit message."* | Commit messages are a code-historical artifact, not a debugging trail. They tell you WHAT changed; they don't tell you HOW you got there or what siblings you swept for. The MC `result_notes` carries the investigation; the commit carries the diff. Both, not either. |
-| *"Agents shouldn't be in MC for debug work."* | Wrong — that's exactly when MC matters most. The check-in tells the Operators (and any other Agent) that someone is on the bug; the `agent_update` lets them follow without context-switching to the Agent's terminal; the `result_notes` post-mortem is durable. See `mission-control-checkins`. |
+| *"I'll write up the investigation after I ship the fix."* | The trail is the diagnostic log, not the postmortem write-up. Updating it AS you debug means the next teammate (Operator or Agent) who picks up the task has the trail; updating it after means they re-derive your investigation from scratch. |
+| *"The bug is small, no write-up needed."* | Mode 1 bugs (typo-class) don't need a write-up. Mode 2 bugs always do — they touched a write path, were user-visible in prod, or involved system-of-record data. The write-up IS the durable artifact; the code commit is the implementation detail. |
+| *"I'll just put it all in the commit message."* | Commit messages are a code-historical artifact, not a debugging trail. They tell you WHAT changed; they don't tell you HOW you got there or what siblings you swept for. The investigation belongs in the PR description (or wherever the fix is tracked); the commit carries the diff. Both, not either. |
+| *"An Agent doing the debugging doesn't need to leave a trail."* | Wrong — that's exactly when the trail matters most. It tells everyone else that someone is on the bug, lets them follow without context-switching into the Agent's terminal, and leaves a durable postmortem. Record it where the fix is tracked. |
 
 ---
 
@@ -111,8 +111,4 @@ These are the additional rationalizations that show up when an Agent is in the l
 
 Every rationalization above ends with the same trade-off: **a few minutes saved now in exchange for a bug that lasts longer, returns, or seeds a sibling**. The skill exists because that trade-off is bad every time you make it.
 
-When you catch yourself in one of these excuses, the move is not to delete the excuse and pretend it didn't happen — it's to **name the excuse, name the trade-off, name the alternative, and choose**. If you still choose the shortcut, log the reason in MC `result_notes` so the audit trail records what you traded for what.
-
----
-
-— Authored under DT-22, DevOps Training milestone 2 (Millis Dev Skill Library). Talos.
+When you catch yourself in one of these excuses, the move is not to delete the excuse and pretend it didn't happen — it's to **name the excuse, name the trade-off, name the alternative, and choose**. If you still choose the shortcut, log the reason where the fix is tracked so the audit trail records what you traded for what.

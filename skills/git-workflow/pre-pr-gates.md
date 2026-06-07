@@ -24,7 +24,7 @@ workbranch is reviewed as one logical unit.
 
 For Moment 2 specifically, the test/lint/typecheck/console gates run on
 the FULL workbranch state, not just the most recent commit. The diff to
-analyze is `git diff main...christian/wb-2026-05-19`.
+analyze is `git diff main...taylor/wb-2026-05-19`.
 
 ## How the tiers work
 

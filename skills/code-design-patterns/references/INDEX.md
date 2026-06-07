@@ -71,10 +71,7 @@ with `recommendations.md` or `recognition.md`.
 
 ## Sibling skills (handoffs)
 
-- `theia-tools:git-workflow` — when the refactor needs to land via PR
-- `theia-tools:cdp-design-pattern` — for CDP-specific architecture
-- `theia-tools:cto-advisor` — framing the refactor's business case
-- `theia-tools:agile` — fitting the refactor into a sprint / iteration
-- `theia-tools:bug-triage` — when analysis surfaces a defect
-- `theia-tools:learn` — teaching a teammate one of these patterns
+- `git-workflow` — when the refactor needs to land via PR
+- `bug-triage` — when analysis surfaces a defect
+- `learn` — teaching a teammate one of these patterns
 - **`refactoring`** (forthcoming) — actually carrying out the multi-file refactor this skill recommends

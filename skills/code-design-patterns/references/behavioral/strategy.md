@@ -62,7 +62,7 @@ console.log(total(100, "OR")); // 100
 ```
 
 ## SQL / data analogue
-Table-driven dispatch — a lookup table maps a key to a function name (or a SQL expression) and the caller picks the row, then invokes the named thing. In our CDP, mapping each `source_tenant` to its sync handler, or each entity to its output-view name, is Strategy stored in a table. Beats hard-coded `CASE WHEN tenant = 'X' THEN ...`.
+Table-driven dispatch — a lookup table maps a key to a function name (or a SQL expression) and the caller picks the row, then invokes the named thing. Mapping each `source_type` to its handler, or each entity to its output-view name, is Strategy stored in a table. Beats hard-coded `CASE WHEN source = 'X' THEN ...`.
 
 ## When to use it
 - You have two or more algorithms that do the same kind of thing differently.
@@ -85,5 +85,5 @@ Table-driven dispatch — a lookup table maps a key to a function name (or a SQL
 - "Just add a flag" — every new flag adds a branch; new strategy = new entry.
 - Untestable mega-functions doing seven things — split them into named strategies.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

@@ -13,7 +13,7 @@ Each item links to its SKILL.md or supporting-file source.
 - [ ] **Every external input has a typed model at the boundary.** Pydantic / Zod / DTO / `serde` — not a raw `dict` / `any` / `object`. (`SKILL.md § Boundary vs interior`, `by-stack-layer.md`)
 - [ ] **No interior code re-validates a shape the type signature already guarantees.** Found one? Either the type is wrong or the check is wrong. Fix the type. (`SKILL.md § Null / undefined checks`)
 - [ ] **Every external call has a timeout.** No `requests.get(url)` / `await fetch(url)` / `HttpClient.GetAsync(url)` without a deadline. (`SKILL.md § Retry/backoff/timeout`)
-- [ ] **External input is converted to a typed value at the boundary, not carried as a string inward.** No `period.split("-")` reachable from two functions; parse to `FinPeriod` once. (`SKILL.md § Boundary vs interior`, `examples.md §0.5`)
+- [ ] **External input is converted to a typed value at the boundary, not carried as a string inward.** No `period.split("-")` reachable from two functions; parse to `BillingPeriod` once. (`SKILL.md § Boundary vs interior`, `examples.md §0.5`)
 - [ ] **The "garbage in" response is explicit — one of: nothing out, error message out, or no garbage allowed in.** Never "garbage in, garbage out." (`SKILL.md § Input-handling response matrix`)
 
 ### Error handling
@@ -23,7 +23,7 @@ Each item links to its SKILL.md or supporting-file source.
 - [ ] **Every new exception class chains its cause.** Python `raise X from err`; C# `throw new X(msg, innerException)`; TS `new Error(msg, { cause: err })`; Rust `#[source]`; T-SQL `THROW;`. (`SKILL.md § Exception design`)
 - [ ] **`assert` only for dev-time invariants — never for boundary or security checks.** `python -O` strips them. (`SKILL.md § Assert vs raise`)
 - [ ] **No exception thrown from a constructor / `__init__` / class constructor** without a paired safe-construct pattern. (`SKILL.md § Exception design`)
-- [ ] **For library code: every external SDK exception class the wrapper can encounter is named** in the wrapper's docstring / header comment AND mapped to a typed Millis error. No `except Exception` to paper over "I don't know what this throws." (`SKILL.md § Exception design`)
+- [ ] **For library code: every external SDK exception class the wrapper can encounter is named** in the wrapper's docstring / header comment AND mapped to a typed error. No `except Exception` to paper over "I don't know what this throws." (`SKILL.md § Exception design`)
 - [ ] **The module declares whether it favors correctness or robustness** when the two would conflict. (`SKILL.md § Robustness vs correctness`)
 - [ ] **User-facing message ≠ developer log message.** Internal class names, stack frames, and SQL fragments do not leak to the user. (`SKILL.md § Exception design`)
 
@@ -32,7 +32,7 @@ Each item links to its SKILL.md or supporting-file source.
 - [ ] **Every retry has both a count bound and a wall-clock bound.** (`SKILL.md § Retry/backoff/timeout`)
 - [ ] **Retry only idempotent operations.** A retried non-idempotent POST is a duplicate write. (`SKILL.md § Idempotency`)
 - [ ] **Retry only transient error classes.** No retry on `400` / `401` / `403` / `404` / `422` / schema errors. (`SKILL.md § Retry/backoff/timeout`)
-- [ ] **Every queue / Service Bus / Event Grid receiver is safe to call twice with the same message.** (`SKILL.md § Idempotency`, `by-stack-layer.md § Service Bus / Event Grid message handler`)
+- [ ] **Every queue / message receiver is safe to call twice with the same message.** (`SKILL.md § Idempotency`, `by-stack-layer.md § Queue / message handler`)
 - [ ] **Every external-call return value is either checked OR has a one-line comment justifying why the result is safe to discard.** (Code Complete §8.3.)
 
 ### Logging
@@ -77,12 +77,12 @@ Each item links to its SKILL.md or supporting-file source.
 ### Contracts
 
 - [ ] **For every new function, is the return type strong enough to express success and known failure modes?** A `Project | None` collapses two cases; `Result<Project, NotFound | Unauthorized | Upstream>` keeps them. (`examples.md § 2.4`)
-- [ ] **For every new external API call, has the response been parsed into a typed model?** (`SKILL.md § Hard defaults`, `by-stack-layer.md § Procore / Acumatica`)
+- [ ] **For every new external API call, has the response been parsed into a typed model?** (`SKILL.md § Hard defaults`, `by-stack-layer.md § Third-party API call`)
 - [ ] **For every new write, is there an idempotency key OR is the operation provably idempotent?** (`SKILL.md § Idempotency`)
 
 ### Logs an operator would want
 
-- [ ] **If this fails at 3 AM, can the operator find this incident in App Insights / Sentry?** The log line should include `entity_id`, `operation`, `error_type`, and the correlation id.
+- [ ] **If this fails at 3 AM, can the operator find this incident in the error tracker / log aggregator?** The log line should include `entity_id`, `operation`, `error_type`, and the correlation id.
 - [ ] **If the operator pages someone, will they have enough to start debugging?** No "sync failed" — that is not actionable.
 
 ### Test coverage
@@ -112,32 +112,32 @@ Pull the relevant one when reviewing a diff scoped to that layer.
 - [ ] Return type is a typed result, not a free-form dict.
 - [ ] Error returns include a `code` field clients can branch on.
 
-### Azure Function / Service Bus / Event Grid diff
+### Serverless function / queue / message handler diff
 
 - [ ] Trigger payload parsed at the top of the function into a typed message class.
 - [ ] Function is idempotent (safe to invoke twice with the same payload).
 - [ ] On unrecoverable parse error, message routes to DLQ — not silently completed.
 
-### Procore / external SaaS call diff
+### Third-party API call diff
 
 - [ ] Outbound: timeout, `User-Agent`, parameterized URL.
 - [ ] Inbound: response parsed into a typed model.
 - [ ] `429` honors `Retry-After`; `4xx` is not retried.
 
-### Azure SQL diff
+### Database (SQL) diff
 
 - [ ] Explicit column list — no `SELECT *`.
 - [ ] Multi-statement writes wrapped in `TRY / TRAN / CATCH / THROW`.
 - [ ] `XACT_ABORT ON` if the procedure modifies multiple tables.
 - [ ] Idempotency key on writes that may be retried.
 
-### Cosmos DB diff
+### NoSQL document store diff
 
 - [ ] Partition key supplied on every read.
-- [ ] `CosmosException` branches on `StatusCode` — not caught broadly.
-- [ ] ETag / `IfMatchEtag` on writes with concurrency requirements.
+- [ ] SDK exceptions branch on the status code — not caught broadly.
+- [ ] ETag / `If-Match` on writes with concurrency requirements.
 
-### Config / Key Vault diff
+### Config / secret manager diff
 
 - [ ] Single config model loaded at startup; required values fail loud if missing.
 - [ ] No `os.getenv` / `process.env` reads in business logic.
@@ -173,4 +173,4 @@ When taking over a module:
 10. `grep -n "# type: ignore\|@ts-ignore\|@ts-nocheck\|#\[allow(\|pragma warning disable" <module>` — every suppressed type / lint check needs a comment justifying why. Bare suppressions become permanent over time.
 11. Read the module's docstring / header: does it state which error-handling regime applies (correctness vs robustness) AND which 4xx / 5xx / domain exceptions it can produce? If not, write that paragraph; future readers will need it.
 
-Record the result in `result_notes` on the related Mission Control task, signed off.
+Record the result somewhere durable — the PR description or the module's audit notes.

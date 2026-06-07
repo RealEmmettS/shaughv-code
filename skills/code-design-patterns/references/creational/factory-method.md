@@ -8,7 +8,7 @@
 Define an interface for creating an object, but let subclasses decide which concrete class to instantiate. Factory Method lets a class defer instantiation to subclasses.
 
 ## Problem
-You have code that operates on a family of related objects — say, a sync pipeline that pulls records from a "source." Initially there's only one source (Acumatica), so you `new AcumaticaSource()` everywhere. Then Procore arrives, then SharePoint. Every `new` call becomes a branch on source type, scattered across the codebase. Adding a fourth source means hunting down every conditional. The construction code is tightly coupled to the concrete classes, and the high-level pipeline can no longer be tested without standing up real sources.
+You have code that operates on a family of related objects — say, an import pipeline that pulls records from a "source." Initially there's only one source (a CSV file), so you `new CsvSource()` everywhere. Then a REST API arrives, then a database. Every `new` call becomes a branch on source type, scattered across the codebase. Adding a fourth source means hunting down every conditional. The construction code is tightly coupled to the concrete classes, and the high-level pipeline can no longer be tested without standing up real sources.
 
 ## Structure
 ```
@@ -37,15 +37,15 @@ class Source(ABC):
     @abstractmethod
     def fetch(self) -> list[Record]: ...
 
-class AcumaticaSource(Source):
+class CsvSource(Source):
     def fetch(self) -> list[Record]:
-        return [Record("PM-1", {"amount": 100})]
+        return [Record("row-1", {"amount": 100})]
 
-class ProcoreSource(Source):
+class ApiSource(Source):
     def fetch(self) -> list[Record]:
-        return [Record("RFI-9", {"status": "open"})]
+        return [Record("rec-9", {"status": "open"})]
 
-class SyncJob(ABC):
+class ImportJob(ABC):
     @abstractmethod
     def make_source(self) -> Source: ...        # factory method
 
@@ -53,13 +53,13 @@ class SyncJob(ABC):
         records = self.make_source().fetch()
         return len(records)
 
-class AcumaticaSyncJob(SyncJob):
-    def make_source(self) -> Source: return AcumaticaSource()
+class CsvImportJob(ImportJob):
+    def make_source(self) -> Source: return CsvSource()
 
-class ProcoreSyncJob(SyncJob):
-    def make_source(self) -> Source: return ProcoreSource()
+class ApiImportJob(ImportJob):
+    def make_source(self) -> Source: return ApiSource()
 
-print(AcumaticaSyncJob().run(), ProcoreSyncJob().run())
+print(CsvImportJob().run(), ApiImportJob().run())
 ```
 
 ## Code example — TypeScript
@@ -68,26 +68,26 @@ interface Record { id: string; payload: Record<string, unknown>; }
 
 interface Source { fetch(): Record[]; }
 
-class AcumaticaSource implements Source {
-  fetch(): Record[] { return [{ id: "PM-1", payload: { amount: 100 } }]; }
+class CsvSource implements Source {
+  fetch(): Record[] { return [{ id: "row-1", payload: { amount: 100 } }]; }
 }
-class ProcoreSource implements Source {
-  fetch(): Record[] { return [{ id: "RFI-9", payload: { status: "open" } }]; }
+class ApiSource implements Source {
+  fetch(): Record[] { return [{ id: "rec-9", payload: { status: "open" } }]; }
 }
 
-abstract class SyncJob {
+abstract class ImportJob {
   protected abstract makeSource(): Source;     // factory method
   run(): number { return this.makeSource().fetch().length; }
 }
 
-class AcumaticaSyncJob extends SyncJob {
-  protected makeSource(): Source { return new AcumaticaSource(); }
+class CsvImportJob extends ImportJob {
+  protected makeSource(): Source { return new CsvSource(); }
 }
-class ProcoreSyncJob extends SyncJob {
-  protected makeSource(): Source { return new ProcoreSource(); }
+class ApiImportJob extends ImportJob {
+  protected makeSource(): Source { return new ApiSource(); }
 }
 
-console.log(new AcumaticaSyncJob().run(), new ProcoreSyncJob().run());
+console.log(new CsvImportJob().run(), new ApiImportJob().run());
 ```
 
 ## SQL / data analogue
@@ -110,7 +110,7 @@ No direct data analogue — pure object pattern. The closest cousin is a stored 
 
 ## Anti-patterns it resolves
 - **Scattered `new` calls** — every place that constructs the concrete type becomes a maintenance trap; Factory Method funnels construction through one overridable hook.
-- **Constructor branching (`if type == "acumatica"`)** — replaces conditional dispatch with polymorphism.
+- **Constructor branching (`if type == "csv"`)** — replaces conditional dispatch with polymorphism.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

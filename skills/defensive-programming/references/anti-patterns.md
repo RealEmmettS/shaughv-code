@@ -18,7 +18,7 @@ Use this file:
 | "What if the network blips?" | Author wants infinite retry. | "Then bound the retry and propagate the final failure. Unbounded retry turns a blip into an outage." See `SKILL.md § Retry/backoff/timeout`. |
 | "I don't want to crash production." | Author would rather log-and-continue than surface the bug. | "Production already crashed — it just looked successful. You moved the bug downstream where it costs more to find." |
 | "We can log it and figure it out later." | The log will not be looked at. | "Logs without alerts are documentation. If this matters, alert on it; if it does not, do not catch it." |
-| "Defensive coding is best practice." | Author conflates "defensive" with "broad try/except." | "Defensive coding at Millis is boundary validation + fail loud + push invariants into types. The four rules. Broad catches are the opposite." |
+| "Defensive coding is best practice." | Author conflates "defensive" with "broad try/except." | "Defensive coding is boundary validation + fail loud + push invariants into types. The four rules. Broad catches are the opposite." |
 | "We've always done it this way." | Codebase has accumulated the pattern. | "The pattern is the bug we are removing. Each PR is the place to remove one instance." |
 | "What if the JSON shape changes?" | Author wants to silently accept any shape. | "If the JSON shape changes, fail loud at the parse step so we notice. Silent acceptance becomes silent data corruption." |
 | "It's just a script." | Author is using the word "script" to justify skipping discipline. | "A script that runs once is exempt. A script that runs in CI / cron / a sync job is production." |
@@ -31,8 +31,8 @@ Use this file:
 | "It's a single edge case." | Author wants to add one more guard. | "Then it is testable. Write the test; then either the guard is justified by the test, or the test reveals the guard is wrong." |
 | "Removing the catch will break the build." | Catch is load-bearing for some downstream caller. | "Then the downstream caller has a real failure mode we are hiding. Surface it; fix the downstream caller." |
 | "Other code in this repo does it." | Appeal to local convention. | "Local convention can be wrong; that is why this skill exists. Fix the rest as you encounter it." |
-| "I read this pattern in a tutorial." | Pattern is from a different context. | "Tutorials simplify. This is the Millis context. Apply the four rules." |
-| "Christian / Emmett / a senior reviewer told me to add this." | Authority pushback. | "Re-ask them, citing `SKILL.md § Common pitfalls`. They may have given the advice for a different context that does not apply here." |
+| "I read this pattern in a tutorial." | Pattern is from a different context. | "Tutorials simplify. Apply the four rules to this context." |
+| "A senior reviewer told me to add this." | Authority pushback. | "Re-ask them, citing `SKILL.md § Common pitfalls`. They may have given the advice for a different context that does not apply here." |
 | "It's defensive for the long term." | Author imagines future failure modes. | "Add the defense when the failure mode is concrete. Speculative defense is YAGNI with extra steps and a worse signal-to-noise ratio in logs." |
 | "We don't have time to do it the right way." | Sprint pressure. | "The right way is *cheaper now* — narrowing one catch takes minutes; debugging a silent failure in production takes hours." |
 | "We can't just crash — that would page someone." | Author wants to swallow the error to avoid the operational consequence. | "The page IS the point. If this should not page, *it should not be at `ERROR`* — either it's actually `WARNING` (degraded but working) or it's actually a bug we should fix. Pick one." |
@@ -58,7 +58,7 @@ Self-check while authoring or reviewing. Each item below means stop and apply a 
 9. The `assert` is used for a boundary check or a security check.
 10. The new error type does not chain its cause (`from err`, `innerException`, `cause:`, `#[source]`).
 11. The new code reads `os.getenv` / `process.env` / `Environment.GetEnvironmentVariable` inside a hot path instead of from a typed config object.
-12. The new code reads from a Service Bus / Event Grid / Procore webhook and treats the message as exactly-once.
+12. The new code reads from a queue / event bus / third-party webhook and treats the message as exactly-once.
 13. The new code does a `SELECT *` and then accesses columns by position.
 14. The new code returns a mutable internal collection from a getter.
 15. The new feature flag has no plan to be turned on or removed.
@@ -88,7 +88,7 @@ Defensive bloat is often emotional — authors feel like they are protecting use
 4. **Show the do/don't pair.** "`examples.md § <relevant-section>` is the same shape; the `✅ Do` form is the suggested edit."
 5. **Offer the smallest concrete edit.** Not "consider refactoring" — name the lines to change.
 
-If the author still pushes back, escalate the *decision* to the operator in `result_notes` on the related task. Defensive trade-offs that contradict this skill are fine *when stated and reviewed* — they are not fine when smuggled in.
+If the author still pushes back, escalate the *decision* and record it durably — in the PR description or a code comment at the site. Defensive trade-offs that contradict this skill are fine *when stated and reviewed* — they are not fine when smuggled in.
 
 ---
 

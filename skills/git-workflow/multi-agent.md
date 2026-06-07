@@ -13,39 +13,30 @@ the only agent until you've checked.
 
 ## Where the coordination happens
 
-Three sources of truth:
+Coordination is **git-native** — there is no separate task tracker. Every
+signal an agent needs comes from git itself, which means it survives
+crashes, works across machines, and never drifts out of sync with reality.
 
-1. **Mission Control task queue.** Each agent checks in with `agent_checkin`,
-   announces what it's working on with `claim_task` / `agent_update`, and
-   checks out at end of session. The task queue is the canonical view of
-   "who is doing what."
-2. **`git worktree list`.** The filesystem-level view of which worktrees
-   exist and what branch each is on.
-3. **`git branch -r`** and `gh pr list`. The remote-level view of which
-   branches and PRs are active.
+Two sources of truth:
 
-These three should agree. When they disagree, something has gone wrong
-(crashed agent, manual operator action, stale state).
+1. **`git worktree list`.** The filesystem-level view of which worktrees
+   exist locally and what branch each is on.
+2. **`git branch -r`** and `gh pr list`. The remote-level view of which
+   branches and PRs are active across all agents and developers.
+
+The key discipline that makes this work is **non-negotiable #7: push every
+new branch to origin immediately on creation**. Because branches appear on
+origin from minute zero, any agent can see what every other agent is doing
+with a single `git fetch`. Branch names are the coordination protocol.
+
+When the filesystem view and the remote view disagree, something has gone
+wrong (crashed agent, manual operator action, stale state).
 
 ## The multi-agent check (Phase 2 of SKILL.md)
 
 Before creating a new worktree, the skill MUST run this check:
 
-### Step 1 — Check Mission Control
-
-Query for active agents in this repo:
-
-```
-get_my_tasks() / get_available_tasks() — filter for tasks where
-working_directory matches this repo
-```
-
-For each active agent (status: `working` or `blocked`):
-- What branch are they on?
-- When was their last update?
-- Are they on the same task you're about to claim?
-
-### Step 2 — Check filesystem
+### Step 1 — Check the filesystem
 
 ```bash
 cd ~/code/myrepo
@@ -53,9 +44,11 @@ git worktree list
 ```
 
 Each worktree shown is an active filesystem checkout. The branch name
-tells you what's in flight.
+tells you what's in flight locally. A branch checked out in a worktree
+is, by git's own rule, owned by whoever is working in that worktree —
+it can't be checked out twice.
 
-### Step 3 — Check origin
+### Step 2 — Check origin
 
 ```bash
 git fetch origin --prune
@@ -64,17 +57,24 @@ gh pr list --limit 20 --state open
 ```
 
 Branches and PRs on origin reflect "what's been touched" across all agents
-and developers.
+and developers. Because of the push-on-creation rule, a branch on origin
+with recent commits means another agent is (or recently was) on it. Use
+the last-commit time to gauge activity:
+
+```bash
+# When was the most recent commit on a given branch?
+git log -1 --format=%cr origin/<branch>
+```
 
 ### Decision tree
 
 | What you find | Action |
 |---|---|
-| No other agent active, no conflicting worktree, no conflicting branch | Proceed normally. |
-| Another agent active but on a different task/branch | Proceed normally. Note their presence in `agent_update`. |
-| Another agent has the EXACT branch you're trying to create | **STOP**. Don't create the worktree. Either pick a different task, or coordinate at the human level. |
-| Worktree exists for the branch but no agent is checked in | Suspicious — likely a crashed agent. See "Stale worktrees" below. |
-| Branch exists on origin but no local worktree and no active agent | Likely an abandoned branch. Check the PR; if closed/merged, the branch is safe to delete. |
+| No conflicting worktree, no conflicting branch on origin | Proceed normally. |
+| Another branch active but distinct from the one you're creating | Proceed normally — your worktrees won't collide. |
+| A branch with the EXACT name you're trying to create already exists on origin (recent commits) | **STOP**. Another agent has reserved it. Pick a different task, or coordinate at the human level. |
+| Worktree exists locally for the branch but it looks abandoned | Suspicious — likely a crashed agent. See "Stale worktrees" below. |
+| Branch exists on origin but no local worktree and no recent commits | Likely an abandoned branch. Check the PR; if closed/merged, the branch is safe to delete. |
 | Same developer has 4+ active workbranches on this repo | Warn the operator — this is unusual. |
 
 ## Per-developer workbranches and cross-agent coordination
@@ -82,40 +82,40 @@ and developers.
 Each developer has at most ONE active workbranch per day. Multiple agents
 under the same developer share that workbranch as their merge target.
 
-When agent A and agent B are both running under "christian":
-- Both branch task worktrees off `christian/wb-2026-05-19`
-- Both merge their task PRs into `christian/wb-2026-05-19`
+When agent A and agent B are both running under "taylor":
+- Both branch task worktrees off `taylor/wb-2026-05-19`
+- Both merge their task PRs into `taylor/wb-2026-05-19`
 - They share the workbranch but never see each other's worktrees
 
-When agent A is under "christian" and agent B is under "emmett":
-- Agent A branches off `christian/wb-2026-05-19`
+When agent A is under "taylor" and agent B is under "emmett":
+- Agent A branches off `taylor/wb-2026-05-19`
 - Agent B branches off `emmett/wb-2026-05-19`
 - The two workbranches don't talk to each other. They both rebase from
   `main` continuously, which keeps them implicitly aligned.
 
 ### How does the skill know which developer it's running as?
 
-The cleanest source is the `agent_checkin` operator identity. The skill
-should use that to construct the workbranch name. Fallbacks:
+The workbranch name is derived from the developer's identity, in order of
+preference:
 - `git config user.email` — the configured email's local part
 - `whoami` — the OS username
 - Operator-provided override at session start
 
 If none of these are available or unambiguous, the skill should ask the
-operator: "I need to know which workbranch to use. Are you christian or
-emmett?"
+operator: "I need to know which workbranch to use. Which developer are
+you?"
 
 ## Stale worktrees
 
 The most common multi-agent failure mode: an agent crashed or was killed,
-leaving its worktree in place but its task in `working` state in Mission
-Control.
+leaving its worktree in place with no one actively working in it.
 
-Detection:
-- Mission Control shows a task in `working` state with `last_update` >
-  30 minutes ago
-- A worktree exists on disk for that task's branch
-- No active session corresponds to that agent
+Detection (all git-native):
+- A worktree exists on disk for a task branch
+- Its branch's last commit is well in the past (e.g. `git log -1
+  --format=%cr` on the branch shows hours ago), yet the task was supposed
+  to be in progress
+- No active session corresponds to that worktree
 
 What to do:
 1. Don't just blow away the worktree — it may have uncommitted work.
@@ -125,9 +125,9 @@ What to do:
    crashed agent. Review before cleanup."
 3. If the work is salvageable, the operator can either commit it on the
    existing branch (taking over the task) or stash it and abandon.
-4. After resolution, remove the worktree (`git worktree remove`) and
-   update Mission Control (`update_task` with status `failed` or
-   `completed`).
+4. After resolution, remove the worktree (`git worktree remove`). If the
+   task is being abandoned, also delete its branch locally and on origin
+   so it stops showing up as in-flight.
 
 ## Branch reservation via push-to-origin-first
 
@@ -136,7 +136,6 @@ how agents reserve branches across sessions. The moment a branch exists
 on origin:
 
 - Other agents see it in `git branch -r` after a fetch
-- Mission Control's branch-aware tools can see it
 - If the agent crashes, the branch survives and is recoverable
 
 Without this rule, two agents could simultaneously create the same branch
@@ -157,8 +156,9 @@ Coordination protocol:
    git worktree list | grep -v "main"
    ```
 2. **If active worktrees exist**, the rebase will move ground under those
-   agents. Announce it via Mission Control's `agent_update` with a note,
-   so any concurrent agents see it.
+   agents. Make it visible by pushing the rebased workbranch to origin
+   right away, so any concurrent agents pick up the new tip on their next
+   fetch.
 3. **Perform the rebase** in the main checkout.
 4. **Active worktrees should rebase onto the new workbranch tip** when
    they next refresh. The skill's "refresh every 2h" cadence handles this
@@ -194,38 +194,39 @@ worktree. The skill should detect this:
 
 ## The audit view
 
-`scripts/worktree-list.sh` (provided in `scripts/`) prints an augmented
-view combining `git worktree list`, Mission Control, and last-update times:
+`worktree-list.sh` prints a view combining `git worktree list` with branch
+classification (workbranch / task / hotfix) and branch age, inferring
+ownership from branch naming:
 
 ```
-Worktrees and agents in this repo:
-  ~/code/myrepo                          main      (no agent)
-  ~/code/myrepo-christian-wb-2026-05-19  workbranch (christian, owner)
-  ~/code/myrepo-feat-csv-export-142      task      (agent A, working, last update 4m ago)
-  ~/code/myrepo-fix-stale-cache-203      task      (agent B, blocked, last update 2h ago — STALE?)
+Worktrees in this repo (filesystem + git view):
+  ~/code/myrepo                          main      main checkout
+  ~/code/myrepo-taylor-wb-2026-05-19     taylor/wb-2026-05-19   workbranch (taylor) — age 4h
+  ~/code/myrepo-feat-csv-export-142      feat/csv-export-142    task — age 1h
+  ~/code/myrepo-fix-stale-cache-203      fix/stale-cache-203    task — age 26h OVER CAP
 ```
 
-Run this whenever multi-agent state is ambiguous. It's the single source
-of truth for "what's actually happening right now."
+Run this whenever multi-agent state is ambiguous. Combined with last-commit
+times on origin, it's the single source of truth for "what's actually
+happening right now."
 
 ## Quick reference
 
 ```bash
-# Detect other active agents in this repo via Mission Control
-# (Skill should call the appropriate Mission Control tool — query for
-# tasks where working_directory matches the current repo)
-
-# Detect filesystem-level activity
+# Detect filesystem-level activity (who has what checked out locally)
 cd ~/code/myrepo
 git worktree list
 
-# Detect remote-level activity
+# Detect remote-level activity (what every agent has pushed)
 git fetch origin --prune
 git branch -r
 gh pr list --limit 20 --state open
 
-# Audit view (combines all three)
-scripts/worktree-list.sh
+# Gauge how active a given branch is
+git log -1 --format=%cr origin/<branch>
+
+# Audit view (worktrees + classification + age)
+./worktree-list.sh
 
 # Find your own workbranch (if it exists)
 git branch -r | grep "$(whoami)/wb-$(date +%Y-%m-%d)"

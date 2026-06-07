@@ -1,13 +1,13 @@
 ---
 name: bug-triage
 description: >
-  Interactive bug triage and investigation agent for internal tools and platforms at Millis
-  Companies. Use this skill whenever a user reports a bug, issue, error, or unexpected behavior
+  Interactive bug triage and investigation agent for internal tools and platforms.
+  Use this skill whenever a user reports a bug, issue, error, or unexpected behavior
   in an internal tool — or when they forward a bug report from an end-user. Also trigger when
   the user says "bug", "issue", "broken", "not working", "error", "something's wrong with",
   "investigate this", "triage this", "reproduce this", "bug report", "defect", or describes
-  unexpected behavior in any internal system (Millis Data Platform, TheiaConstruct, SharePoint
-  tools, internal dashboards, etc.). This skill actively investigates using browser tools and
+  unexpected behavior in any internal system (internal dashboards, web apps, data platforms,
+  admin tools, etc.). This skill actively investigates using browser tools and
   data platform queries — it doesn't just ask questions. If the user pastes a screenshot, error
   message, or Slack message about something broken, use this skill.
 ---
@@ -42,8 +42,8 @@ a screenshot, or a vague "X is broken"), your first job is to understand what's 
 
 **Gather these essentials — ask for what's missing, skip what's already provided:**
 
-1. **What tool/platform is affected?** (e.g., Millis Data Platform, TheiaConstruct, a
-   SharePoint app, an internal dashboard, a specific URL)
+1. **What tool/platform is affected?** (e.g., an internal dashboard, a web app, a
+   data platform, an admin tool, a specific URL)
 2. **What happened?** The actual behavior — in their words or the reporter's words.
 3. **What should have happened?** The expected behavior.
 4. **Who reported it?** (the user themselves, or a specific end-user — name/role if available)
@@ -75,7 +75,7 @@ Follow this cycle — repeat as many times as needed:
    - Navigate to the affected tool/page using browser tools
    - Try to reproduce the reported behavior step by step
    - Check console logs and network requests for errors
-   - Query the Millis Data Platform if data integrity might be involved
+   - Query the backing data store / data platform if data integrity might be involved
    - Take note of what you observe vs. what was reported
 
 **2. Form a hypothesis that accounts for the data.**
@@ -113,7 +113,7 @@ too. Document:
 
 After each significant finding, share it conversationally:
 - "I navigated to [URL] and tried [action]. Here's what I found..."
-- "I checked the data in Millis Data Platform and the records show [X], which
+- "I checked the data in the data store and the records show [X], which
   suggests [Y]..."
 - "I wasn't able to reproduce the exact error, but I did notice [related issue]..."
 
@@ -183,6 +183,6 @@ Assign a severity based on your investigation:
 - **Time-box investigations.** If you've spent significant effort and can't pin down
   the root cause, document what you found and what's still unknown. A partial
   investigation is better than no report.
-- **Connect to the existing debugger prompt.** If the investigation reveals a code-level
-  bug that needs deeper debugging, suggest the user engage the Software Debugger Advisor
-  prompt from the prompt library for the code-fix phase.
+- **Hand off to the debugging skill.** If the investigation reveals a code-level
+  bug that needs deeper debugging, suggest the user engage the `debugging-framework`
+  skill for the code-fix phase.

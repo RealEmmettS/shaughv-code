@@ -128,5 +128,5 @@ Also: most ORMs expose a `.copy()` or `.clone()` on records for the same reason 
 - **Leaking concrete classes** — callers stop importing `ConcreteReportSubclass` just to make a copy.
 - **Stale defaults in test fixtures** — one canonical prototype per fixture; tests clone and tweak.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

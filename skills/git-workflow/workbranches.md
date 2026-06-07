@@ -13,7 +13,7 @@ merges into `main`.
 
 ```
 main
- └── christian/wb-2026-05-19      ← Christian's daily workbranch
+ └── taylor/wb-2026-05-19         ← Taylor's daily workbranch
       ├── feat/csv-export-142     ← worktree task
       ├── fix/auth-bug-156        ← worktree task
       └── refactor/pdf-gen-203    ← worktree task
@@ -28,7 +28,7 @@ Workbranches enable:
   `main`, in case tasks have implicit interactions.
 
 What workbranches do NOT do:
-- They don't merge into each other. Christian's and Emmett's workbranches
+- They don't merge into each other. Taylor's and Emmett's workbranches
   never touch; they only meet on `main`.
 - They don't live longer than 24 hours, ever. If a batch isn't ready to
   ship in a day, it ships incomplete (behind flags) or gets sliced.
@@ -44,16 +44,16 @@ What workbranches do NOT do:
 The `wb-` prefix makes workbranches distinct from any other personal branch.
 The date is for human readability and forensic value. Examples:
 
-- `christian/wb-2026-05-19`
+- `taylor/wb-2026-05-19`
 - `emmett/wb-2026-05-19`
-- `christian/wb-2026-05-20`
+- `taylor/wb-2026-05-20`
 
 If you happen to create a second workbranch in the same day (rare —
 typically because you shipped the first one at lunch and started fresh
 for the afternoon), append `-pm` or `-2`:
 
-- `christian/wb-2026-05-19-pm`
-- `christian/wb-2026-05-19-2`
+- `taylor/wb-2026-05-19-pm`
+- `taylor/wb-2026-05-19-2`
 
 ## Workbranch lifecycle
 
@@ -65,13 +65,13 @@ In the main checkout, on `main`:
 cd ~/code/myrepo
 git checkout main
 git pull --ff-only --prune
-git checkout -b christian/wb-2026-05-19
-git push -u origin christian/wb-2026-05-19
+git checkout -b taylor/wb-2026-05-19
+git push -u origin taylor/wb-2026-05-19
 git checkout main           # return main checkout to main
 ```
 
 The branch is now on origin from minute zero. Task worktrees can be branched
-off `origin/christian/wb-2026-05-19` immediately.
+off `origin/taylor/wb-2026-05-19` immediately.
 
 ### Working on it (via task worktrees)
 
@@ -88,10 +88,10 @@ the workbranch from drifting away from `main`.
 
 ```bash
 cd ~/code/myrepo
-git checkout christian/wb-2026-05-19
+git checkout taylor/wb-2026-05-19
 git fetch origin
 git rebase origin/main
-git push --force-with-lease origin christian/wb-2026-05-19
+git push --force-with-lease origin taylor/wb-2026-05-19
 git checkout main           # return to main on main checkout
 ```
 
@@ -122,7 +122,7 @@ After the workbranch merges to `main`:
 cd ~/code/myrepo
 git checkout main
 git pull --ff-only --prune
-git branch -d christian/wb-2026-05-19   # local cleanup
+git branch -d taylor/wb-2026-05-19   # local cleanup
 # The remote was deleted by `gh pr merge --delete-branch`
 ```
 
@@ -161,9 +161,9 @@ When this happens:
 3. **Revert it on the workbranch** OR fix-forward immediately:
    ```bash
    # Revert
-   git checkout christian/wb-2026-05-19
+   git checkout taylor/wb-2026-05-19
    git revert -m 1 <merge-commit-sha>
-   git push origin christian/wb-2026-05-19
+   git push origin taylor/wb-2026-05-19
    ```
 4. **Communicate** with anyone whose task worktree was branched off the
    workbranch — their base just moved.
@@ -183,8 +183,8 @@ full 24h. If by 2pm you have a coherent batch ready to ship:
 3. Phase 1 again (create a new workbranch for the afternoon).
 4. New task worktrees branch off the new workbranch.
 
-The naming for the afternoon workbranch can be `christian/wb-2026-05-19-pm`
-or `christian/wb-2026-05-19-2`. Either is fine.
+The naming for the afternoon workbranch can be `taylor/wb-2026-05-19-pm`
+or `taylor/wb-2026-05-19-2`. Either is fine.
 
 The 24h cap is a maximum, not a target. Smaller batches are better.
 
@@ -197,17 +197,17 @@ the rebase).
 
 Conflict scenarios:
 
-**Christian and Emmett both touch the same file in their workbranches.**
+**Taylor and Emmett both touch the same file in their workbranches.**
 Whichever workbranch lands on `main` first wins. The second one rebases
 onto the new `main` (which now includes the first one's changes) and
 resolves conflicts at that point.
 
-**Christian and Emmett's tasks have a semantic dependency.** E.g., Emmett's
-task adds a new function that Christian's task calls. Resolution depends
+**Taylor and Emmett's tasks have a semantic dependency.** E.g., Emmett's
+task adds a new function that Taylor's task calls. Resolution depends
 on which lands first:
-- If Emmett's lands first, Christian's continuous rebase picks up the new
-  function; Christian's task continues normally.
-- If Christian's lands first, his task is calling a function that doesn't
+- If Emmett's lands first, Taylor's continuous rebase picks up the new
+  function; Taylor's task continues normally.
+- If Taylor's lands first, that task is calling a function that doesn't
   exist yet, which means the test gate caught it before merge — or didn't,
   and `main` is now broken (revert immediately).
 

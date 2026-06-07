@@ -8,17 +8,17 @@
 Provide an interface for creating *families* of related or dependent objects without specifying their concrete classes. Clients work entirely against the abstract interfaces, and the choice of family happens in one place.
 
 ## Problem
-You're building a multi-tenant data platform where each tenant (general contractor) uses a different ERP. For tenant A you need an `AcumaticaClient`, an `AcumaticaSchemaMapper`, and an `AcumaticaWriter`; for tenant B you need the Procore trio. These three objects must be *consistent with each other* — you can't pair a Procore client with an Acumatica schema mapper or you get garbage at runtime. If construction is left to callers, nothing stops them from mixing families. You want one place that says: "for this tenant, here is the matched set."
+You're building a cross-platform UI toolkit. On macOS you need a `MacButton`, a `MacCheckbox`, and a `MacMenu`; on Windows you need the Windows trio. These three widgets must be *consistent with each other* — you can't pair a Windows button with a macOS checkbox or you get a visually broken, half-native UI. If construction is left to callers, nothing stops them from mixing families. You want one place that says: "for this platform, here is the matched set of widgets."
 
 ## Structure
 ```
 AbstractFactory
-  + createClient()   -> AbstractClient
-  + createMapper()   -> AbstractMapper
-  + createWriter()   -> AbstractWriter
+  + createButton()   -> AbstractButton
+  + createCheckbox() -> AbstractCheckbox
+  + createMenu()     -> AbstractMenu
        |
-       +-- AcumaticaFactory -> {AcumaticaClient, AcumaticaMapper, AcumaticaWriter}
-       +-- ProcoreFactory   -> {ProcoreClient,   ProcoreMapper,   ProcoreWriter}
+       +-- MacFactory     -> {MacButton,     MacCheckbox,     MacMenu}
+       +-- WindowsFactory  -> {WindowsButton, WindowsCheckbox, WindowsMenu}
 
 Client code depends only on AbstractFactory + Abstract* products.
 ```
@@ -27,79 +27,82 @@ Client code depends only on AbstractFactory + Abstract* products.
 ```python
 from abc import ABC, abstractmethod
 
-class Client(ABC):
+class Button(ABC):
     @abstractmethod
-    def pull(self) -> list[dict]: ...
+    def render(self) -> str: ...
 
-class Writer(ABC):
+class Checkbox(ABC):
     @abstractmethod
-    def write(self, rows: list[dict]) -> int: ...
+    def render(self) -> str: ...
 
-class AcumaticaClient(Client):
-    def pull(self): return [{"src": "acu", "id": 1}]
-class AcumaticaWriter(Writer):
-    def write(self, rows): return len(rows)
+class MacButton(Button):
+    def render(self): return "[ mac button ]"
+class MacCheckbox(Checkbox):
+    def render(self): return "( mac checkbox )"
 
-class ProcoreClient(Client):
-    def pull(self): return [{"src": "pcr", "id": 1}]
-class ProcoreWriter(Writer):
-    def write(self, rows): return len(rows)
+class WindowsButton(Button):
+    def render(self): return "[ win button ]"
+class WindowsCheckbox(Checkbox):
+    def render(self): return "( win checkbox )"
 
-class ERPFactory(ABC):
+class GUIFactory(ABC):
     @abstractmethod
-    def client(self) -> Client: ...
+    def button(self) -> Button: ...
     @abstractmethod
-    def writer(self) -> Writer: ...
+    def checkbox(self) -> Checkbox: ...
 
-class AcumaticaFactory(ERPFactory):
-    def client(self): return AcumaticaClient()
-    def writer(self): return AcumaticaWriter()
+class MacFactory(GUIFactory):
+    def button(self): return MacButton()
+    def checkbox(self): return MacCheckbox()
 
-class ProcoreFactory(ERPFactory):
-    def client(self): return ProcoreClient()
-    def writer(self): return ProcoreWriter()
+class WindowsFactory(GUIFactory):
+    def button(self): return WindowsButton()
+    def checkbox(self): return WindowsCheckbox()
 
-def sync(f: ERPFactory) -> int:
-    return f.writer().write(f.client().pull())
+def render_form(f: GUIFactory) -> str:
+    return f.button().render() + " " + f.checkbox().render()
 
-print(sync(AcumaticaFactory()), sync(ProcoreFactory()))
+print(render_form(MacFactory()))
+print(render_form(WindowsFactory()))
 ```
 
 ## Code example — TypeScript
 ```typescript
-interface Client { pull(): Array<Record<string, unknown>>; }
-interface Writer { write(rows: Array<Record<string, unknown>>): number; }
+interface Button { render(): string; }
+interface Checkbox { render(): string; }
 
-class AcumaticaClient implements Client { pull() { return [{ src: "acu" }]; } }
-class AcumaticaWriter implements Writer { write(r: object[]) { return r.length; } }
-class ProcoreClient   implements Client { pull() { return [{ src: "pcr" }]; } }
-class ProcoreWriter   implements Writer { write(r: object[]) { return r.length; } }
+class MacButton implements Button { render() { return "[ mac button ]"; } }
+class MacCheckbox implements Checkbox { render() { return "( mac checkbox )"; } }
+class WindowsButton   implements Button { render() { return "[ win button ]"; } }
+class WindowsCheckbox implements Checkbox { render() { return "( win checkbox )"; } }
 
-interface ERPFactory {
-  client(): Client;
-  writer(): Writer;
+interface GUIFactory {
+  button(): Button;
+  checkbox(): Checkbox;
 }
 
-class AcumaticaFactory implements ERPFactory {
-  client() { return new AcumaticaClient(); }
-  writer() { return new AcumaticaWriter(); }
+class MacFactory implements GUIFactory {
+  button() { return new MacButton(); }
+  checkbox() { return new MacCheckbox(); }
 }
-class ProcoreFactory implements ERPFactory {
-  client() { return new ProcoreClient(); }
-  writer() { return new ProcoreWriter(); }
+class WindowsFactory implements GUIFactory {
+  button() { return new WindowsButton(); }
+  checkbox() { return new WindowsCheckbox(); }
 }
 
-const sync = (f: ERPFactory) => f.writer().write(f.client().pull());
-console.log(sync(new AcumaticaFactory()), sync(new ProcoreFactory()));
+const renderForm = (f: GUIFactory) =>
+  `${f.button().render()} ${f.checkbox().render()}`;
+console.log(renderForm(new MacFactory()));
+console.log(renderForm(new WindowsFactory()));
 ```
 
 ## SQL / data analogue
-**Tenant-specific schema factories.** A CDP onboarding routine that, given a tenant code, provisions a matched set of objects in one transaction — `{tenant}_raw`, `{tenant}_staging`, `{tenant}_marts` schemas plus the role grants and sync-pipeline rows that go with them. The "family" is the cluster of schema + roles + pipeline rows that only make sense together. Mixing pieces from two tenants would corrupt the platform.
+**Per-tenant schema provisioning.** An onboarding routine that, given a tenant code, provisions a matched set of objects in one transaction — `{tenant}_raw`, `{tenant}_staging`, `{tenant}_marts` schemas plus the role grants and pipeline rows that go with them. The "family" is the cluster of schema + roles + pipeline rows that only make sense together. Mixing pieces from two tenants would corrupt the data.
 
 ## When to use it
 - Your code must work with multiple **families** of related products, and one product from family A should never be paired with another from family B.
 - You want to swap the entire family in one place (constructor injection of the factory).
-- You're building a cross-platform or multi-tenant or multi-vendor system where each "platform" has a coherent set of components.
+- You're building a cross-platform or multi-vendor system where each "platform" has a coherent set of components.
 
 ## When NOT to use it
 - You only have *one* product, not a family. Use Factory Method.
@@ -109,11 +112,11 @@ console.log(sync(new AcumaticaFactory()), sync(new ProcoreFactory()));
 ## Related patterns
 - **Factory Method** — Abstract Factory is typically implemented as a class with several Factory Methods, one per product type in the family.
 - **Builder** — Builder constructs *one* complex object step by step; Abstract Factory constructs *families* of objects in one call. Often confused because both hide `new`; the distinction is "complex single object" vs. "matched set."
-- **Often confused with Service Locator / DI container** because both wire up object graphs; the distinction is that Abstract Factory is a typed, narrow interface ("give me the ERP set"), while a DI container is a generic untyped registry.
+- **Often confused with Service Locator / DI container** because both wire up object graphs; the distinction is that Abstract Factory is a typed, narrow interface ("give me the widget set"), while a DI container is a generic untyped registry.
 
 ## Anti-patterns it resolves
-- **Mismatched product families** — preventing the runtime "wrong client + wrong mapper" combo via the type system.
-- **Tenant-branching spaghetti** — replaces `if tenant == "X": ... elif tenant == "Y": ...` repeated across the codebase with a single factory lookup at the edge.
+- **Mismatched product families** — preventing the runtime "wrong button + wrong checkbox" combo via the type system.
+- **Platform-branching spaghetti** — replaces `if platform == "X": ... elif platform == "Y": ...` repeated across the codebase with a single factory lookup at the edge.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

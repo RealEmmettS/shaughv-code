@@ -94,7 +94,7 @@ new CsvSync().run();
 ```
 
 ## SQL / data analogue
-A stored procedure that runs a fixed sequence and calls "hook" procs (or dynamic SQL with a configurable proc name) for the variable steps. ELT job runners that follow `pre_hook -> sql -> post_hook` (dbt is the famous example) are Template Method. In our CDP, a base sync runner that always does `truncate-stage / merge / log / snapshot` and lets each entity inject its own staging query is Template Method.
+A stored procedure that runs a fixed sequence and calls "hook" procs (or dynamic SQL with a configurable proc name) for the variable steps. ELT job runners that follow `pre_hook -> sql -> post_hook` (dbt is the famous example) are Template Method. A base sync runner that always does `truncate-stage / merge / log / snapshot` and lets each entity inject its own staging query is Template Method.
 
 ## When to use it
 - The same algorithm skeleton repeats with small variations.
@@ -116,5 +116,5 @@ A stored procedure that runs a fixed sequence and calls "hook" procs (or dynamic
 - Subclasses that forget a cleanup step — the base class enforces it.
 - Copy-pasted "almost the same function" with two lines different — extract a hook.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

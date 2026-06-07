@@ -66,8 +66,8 @@ this section's body.]
 
 - [Anti-pattern from anti-patterns.md] — [how this pattern addresses it]
 
-## Real examples in our codebase
+## Real examples in your codebase
 
-> _To be populated as the team finds them. When you spot this pattern
-> (or a missed opportunity for it) in CDP, Theia Construct, the Observe
-> app, or any internal tool, add the file:line reference here._
+> _To be populated as you find them. When you spot this pattern (or a
+> missed opportunity for it) in your codebase, add the file:line
+> reference here._

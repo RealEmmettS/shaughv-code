@@ -107,5 +107,5 @@ A "dispatcher" stored procedure that other procs call instead of calling each ot
 - "Change one widget, break three others" — centralize the rules.
 - Duplicated coordination logic scattered across event handlers.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

@@ -35,8 +35,8 @@ When the canvas has accumulated more than ~5 facts, ~3 assumptions, or ~3 option
   confidence regardless of correctness)
 - *"The cross-domain failure mode"* (rather than restating the colleague-building-a-data-
   system anecdote in detail every time)
-- *"Dan's three priorities"* (rather than enumerating: Procore audit, Scorecard
-  readiness, May 11 deadline)
+- *"the three launch blockers"* (rather than enumerating: the auth migration, the billing
+  rewrite, the end-of-month deadline)
 
 ### When chunking goes wrong
 
@@ -118,7 +118,7 @@ use a metaphor. Metaphors carry feeling and shape; analogies carry structure.
   just busy.)
 - *"You're not at a crossroads — you're at the edge of a cliff with three rope bridges."*
   (The decisions are not equivalent in risk; one is much more dangerous.)
-- *"The CDP feels like a house of cards right now."* (Structurally fragile, small things
+- *"The release pipeline feels like a house of cards right now."* (Structurally fragile, small things
   can collapse it.)
 
 Metaphors are useful in **Contemplating** sessions especially — they let the user name

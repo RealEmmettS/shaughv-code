@@ -52,7 +52,7 @@ Five cross-cutting disciplines apply throughout:
   (`references/visual-models/`) instead of more prose
 - **Cognitive Scaffolds** — use chunks, analogies, metaphors, active recall
   (`references/cognitive-scaffolds.md`) to help the user navigate the canvas
-- **Stacking** — when invoked alongside `/cto-advisor`, `/agile`, `/prompt-library`, etc.,
+- **Stacking** — when invoked alongside other skills (e.g. `logical-reasoning`, `strategic-thinking`),
   follow the stacking rules below
 
 ---
@@ -427,15 +427,13 @@ Communicate the confidence band when surfacing the claim, not just at session en
 
 When `/critical-thinking` is invoked alongside other skills:
 
-- **`/cto-advisor`** — Use critical-thinking for structure, cto-advisor for executive
-  framing. Run pre-flight + framework first; then translate conclusions into business
-  language using the CTO Advisor lens.
-- **`/agile`** — Use critical-thinking for the decision/design, agile for the delivery
-  shape. Decision-Making Step 4 (Generate Options) pairs well with Agile framings
-  (reshape vs. extend, MVP vs. complete, etc.).
-- **`/prompt-library`** — If the prompt library has a relevant prompt (Critical Thinking
-  Copilot, Decision-Maker, Provocateur), check whether it does this job better than the
-  framework. Sometimes a stored prompt is the right tool.
+- **`logical-reasoning`** — when a decision or design hinges on an argument's validity.
+  Use critical-thinking for structure, logical-reasoning to test the argument and expose
+  fallacies.
+- **`strategic-thinking`** — when the situation is adversarial or competitive. Run the
+  framework here, then pressure-test the chosen line through the strategic lenses.
+- **`personal-productivity`** — when the crux is really finite time and attention (what to
+  drop, defer, or delegate).
 - **Multiple skills at once** — don't run them sequentially as separate sessions. Blend
   them into a single coherent response. Name which skill is informing which part if it
   helps the user follow.

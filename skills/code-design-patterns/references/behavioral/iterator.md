@@ -67,7 +67,7 @@ console.log(total); // 45
 ```
 
 ## SQL / data analogue
-SQL cursors are the textbook example: `DECLARE CURSOR ... FETCH NEXT FROM ...` is `next()`. Server-side pagination (`OFFSET/FETCH` or keyset pagination with `WHERE id > @last_id`), and streaming result sets (PEP 249 cursor, ODBC, async iterators over query results) are all the Iterator pattern in disguise. In our CDP, any sync that walks an OData feed page-by-page is using Iterator.
+SQL cursors are the textbook example: `DECLARE CURSOR ... FETCH NEXT FROM ...` is `next()`. Server-side pagination (`OFFSET/FETCH` or keyset pagination with `WHERE id > @last_id`), and streaming result sets (PEP 249 cursor, ODBC, async iterators over query results) are all the Iterator pattern in disguise. Any job that walks a paginated REST or OData feed page-by-page is using Iterator.
 
 ## When to use it
 - The collection's structure (paged API, tree, cursor) should stay private.
@@ -89,5 +89,5 @@ SQL cursors are the textbook example: `DECLARE CURSOR ... FETCH NEXT FROM ...` i
 - Loading entire datasets into memory just to walk them once — go lazy.
 - Two collections, two completely different traversal APIs — unify them.
 
-## Real examples in our codebase
-> _To be populated as the team finds them._
+## Real examples in your codebase
+> _To be populated as you find them._

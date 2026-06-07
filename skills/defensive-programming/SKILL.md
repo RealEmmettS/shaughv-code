@@ -1,15 +1,15 @@
 ---
 name: defensive-programming
-description: Use when writing or reviewing Millis code at a system boundary (HTTP handler, MCP tool entry, Procore call, SQL row hydration, Service Bus message, Azure Function trigger, Cloudflare Worker fetch, CLI parse, config load), when authoring or critiquing a try-except block, when designing an error contract, when adding retry-backoff or timeout logic, when adding a feature flag as a safety net, when reviewing a diff that introduces null-checks or AssertionErrors, or when a code review surfaces broad exception swallowing, silent fallback behavior, or validation duplicated across internal layers. Tightens what "defensive" means at Millis so the codebase gets the safety without the noise.
+description: Use when writing or reviewing code at a system boundary (HTTP handler, RPC/tool entry, third-party API call, database row hydration, queue/message handler, serverless function trigger, CLI parse, config/env load), when authoring or critiquing a try-except block, when designing an error contract, when adding retry-backoff or timeout logic, when adding a feature flag as a safety net, when reviewing a diff that introduces null-checks or AssertionErrors, or when a code review surfaces broad exception swallowing, silent fallback behavior, or validation duplicated across internal layers. Tightens what "defensive" means so the codebase gets the safety without the noise.
 ---
 
 # defensive-programming
 
 ## Overview
 
-Defensive programming at Millis means **validate at the boundary, fail loud not silent, push invariants into types**. It does NOT mean broad `try/except`, null-checks for impossible nulls, log-and-continue fallback chains, or validating the same shape in every internal layer. The first kind of code prevents bugs; the second kind hides them and bloats diffs.
+Defensive programming means **validate at the boundary, fail loud not silent, push invariants into types**. It does NOT mean broad `try/except`, null-checks for impossible nulls, log-and-continue fallback chains, or validating the same shape in every internal layer. The first kind of code prevents bugs; the second kind hides them and bloats diffs.
 
-This skill is the Millis-calibrated guide. It is the authoring mirror of the `silent-failure-hunter` review agent: same stance, applied before the code is written instead of after.
+This skill is a calibrated guide. It is the authoring mirror of the `silent-failure-hunter` review agent: same stance, applied before the code is written instead of after.
 
 Defensive programming is the *second* line of defense. The first is not inserting the bug — TDD, types that make illegal states unrepresentable, code review, and pseudocode-first authoring catch more bugs than defensive code ever will. Code Complete 2e §8.1 puts it bluntly: *"The best form of defensive coding is not inserting errors in the first place."* This skill assumes that line of defense is also active; defensive programming closes the gaps the first line leaves open.
 
@@ -17,7 +17,7 @@ Defensive programming is the *second* line of defense. The first is not insertin
 
 Invoke this skill (or follow its rules from memory) at any of these moments:
 
-- Writing code at a **system boundary** — HTTP handler, MCP tool entry, Procore API call, Azure SQL row hydration, Cosmos DB write, Cloudflare Worker fetch, Service Bus or Event Grid message, Azure Function trigger, CLI argument parse, config/env load.
+- Writing code at a **system boundary** — HTTP handler, RPC / tool entry, third-party API call, database row hydration, NoSQL document write, serverless function fetch / trigger, queue or message handler, CLI argument parse, config/env load.
 - Authoring or reviewing a **`try`/`except`** (Python), **`try`/`catch`** (TS, C#, JS), **`Result<T,E>` `?`** (Rust), or **`TRY ... CATCH ... THROW`** (T-SQL) block.
 - Designing an **error contract** for a function, module, or API.
 - Adding **retry / backoff / timeout** logic.
@@ -43,7 +43,7 @@ These are the load-bearing principles. Every other section restates one of them 
 
 ## Hard defaults
 
-These apply to every Millis change unless explicitly overridden in the task description or PR. Explicit overrides win; defaults are the starting point.
+These apply to every change unless explicitly overridden in the task description or PR. Explicit overrides win; defaults are the starting point.
 
 - **Every external input gets a typed model at the boundary.** Pydantic in Python, Zod in TypeScript, `serde` in Rust, DTOs in C#, parameterized queries in SQL.
 - **Every external call gets a timeout.** No exceptions. Network calls without a deadline are how production systems get held hostage by a slow third party.
@@ -57,14 +57,14 @@ These apply to every Millis change unless explicitly overridden in the task desc
 
 When external data is malformed, there are four canonical responses (Code Complete §8.1). Pick deliberately; do not default to the first one that comes to mind.
 
-| Response | When it applies | Example at Millis |
+| Response | When it applies | Example |
 |---|---|---|
 | **Garbage in, garbage out** | Never. Mark of a sloppy, nonsecure program. | — |
 | **Garbage in, nothing out** | The caller can interpret "no result" as a domain-meaningful absence. | `read_record(entity, id)` returns `None` for "not found." |
-| **Garbage in, error message out** | User-facing input; the user can correct it. | HTTP 422 with a typed body; MCP `ToolResult.error` with a `code`. |
+| **Garbage in, error message out** | User-facing input; the user can correct it. | HTTP 422 with a typed body; a tool/RPC error result with a `code`. |
 | **No garbage allowed in** | Validate at the boundary and reject before any processing happens. | Pydantic / Zod / DTO parse-and-raise at the entry function. |
 
-The Millis default is **no garbage allowed in** — parse-and-raise at every boundary. The other two are exceptions, used only when the contract is explicit. "Garbage in, garbage out" is never acceptable.
+The default is **no garbage allowed in** — parse-and-raise at every boundary. The other two are exceptions, used only when the contract is explicit. "Garbage in, garbage out" is never acceptable.
 
 ## Boundary vs interior — where validation belongs
 
@@ -73,18 +73,18 @@ A boundary is any place data crosses a trust line. Interior is everything that s
 | Layer | Treat as | What goes here |
 |---|---|---|
 | HTTP / API handler entry | Boundary | Parse + type-check + reject malformed early. Return 4xx with an actionable message. |
-| MCP tool entry function | Boundary | Same as HTTP — validate the args dict against a Pydantic/Zod schema before doing anything. |
-| Azure Function trigger | Boundary | The trigger payload is external. Validate before passing into any internal helper. |
-| Cloudflare Worker `fetch()` handler | Boundary | Same as HTTP. |
-| Service Bus / Event Grid handler | Boundary | The message is from another process and may be malformed, replayed, or out-of-order. Validate, then process. |
-| Procore / Acumatica / external SaaS response | Boundary | Untrusted. Even a `200` may have a wrong shape. Parse into a typed model. |
-| Azure SQL row → typed model | Boundary | The schema can drift. Hydrate into a dataclass/interface that asserts the shape. |
+| RPC / tool entry function | Boundary | Same as HTTP — validate the args against a Pydantic/Zod schema before doing anything. |
+| Serverless function trigger | Boundary | The trigger payload is external. Validate before passing into any internal helper. |
+| Serverless HTTP fetch handler | Boundary | Same as HTTP. |
+| Queue / message handler | Boundary | The message is from another process and may be malformed, replayed, or out-of-order. Validate, then process. |
+| Third-party API response | Boundary | Untrusted. Even a `200` may have a wrong shape. Parse into a typed model. |
+| Database row → typed model | Boundary | The schema can drift. Hydrate into a dataclass/interface that asserts the shape. |
 | Config / env var load | Boundary | Validate at process start and crash loud if a required value is missing. Never silently default. |
-| Secret read (Key Vault) | Boundary | Same as config — fail fast at start. |
+| Secret read (secret manager) | Boundary | Same as config — fail fast at start. |
 | Private helper inside a service | **Interior** | Trust the typed inputs. No null-checks for `None`-impossible-by-contract. |
 | Internal module-to-module call | **Interior** | Same — the type signature is the contract. If it lies, fix the type. |
 
-See `references/by-stack-layer.md` for the full Millis stack and per-layer validation patterns.
+See `references/by-stack-layer.md` for the full set of boundary layers and per-layer validation patterns.
 
 ## Error contracts
 
@@ -94,7 +94,7 @@ Decide what each error *means* before choosing how to handle it.
 |---|---|---|
 | Expected, recoverable failure (network 503, lock conflict, rate limit) | Narrow `except SpecificError:` with bounded retry + final-failure log at `ERROR` | Bare `except:` / `except Exception:` |
 | Impossible-given-contract condition (internal invariant violated) | `assert` (dev-time) or raise `AssertionError` / a custom invariant error | Returning `None` and hoping a downstream caller notices |
-| Unrecoverable bug (data corrupt, invariant broken) | Raise; let it bubble to the top-level handler that logs to Sentry / App Insights | Swallow + continue |
+| Unrecoverable bug (data corrupt, invariant broken) | Raise; let it bubble to the top-level handler that logs to your error tracker (e.g. Sentry) | Swallow + continue |
 | User-facing input is bad | Raise a domain `ValueError` with an *actionable* message; return 4xx at the boundary | 500 with a raw stack trace; silent default |
 | Third-party API returns success but with a wrong shape | Parse into typed model; on parse failure raise a wrapping error with context | Treat the raw dict as truth |
 | The write may have partially succeeded | Verify by reading back, or use an idempotency key and retry | Assume success because the call returned |
@@ -105,22 +105,22 @@ Two competing design priorities (Code Complete §8.3). Naming which one a given 
 
 | Priority | Meaning | When to favor it |
 |---|---|---|
-| **Correctness** | Never return a wrong answer. Returning *no* answer is better than returning a wrong one. | Procore meeting sync, financial calculations, scorecard math, anything that becomes a system of record. |
+| **Correctness** | Never return a wrong answer. Returning *no* answer is better than returning a wrong one. | Data sync, financial calculations, billing math, anything that becomes a system of record. |
 | **Robustness** | Always keep operating. An approximate answer is better than no answer. | Status dashboards, log render, UI auto-refresh, anything where a momentary glitch is preferable to a blank screen. |
 
 The radiation-machine example (Code Complete §8.3) is the canonical correctness case: a wrong dosage is catastrophically worse than no dosage. The word-processor example is the canonical robustness case: a fraction of a stray line is better than the editor crashing mid-paragraph.
 
-**Millis default:** correctness for write paths, robustness for read-only render paths. Document the choice in the module's docstring / header comment when it deviates.
+**Default:** correctness for write paths, robustness for read-only render paths. Document the choice in the module's docstring / header comment when it deviates.
 
 ## Exception design
 
 - **Specific types over flag fields.** `RateLimitError` and `ValidationError` are easier to catch narrowly than `ApiError(kind="rate_limit")`.
 - **Chain causes.** Python: `raise WrapperError("context") from original`. C#: pass `innerException`. JS: `new Error("context", { cause: original })`. Rust: `thiserror` with `#[source]`. SQL: `THROW` propagates the original `ERROR_NUMBER()`.
-- **Include the operation and identifiers in the message.** `"Procore meeting sync failed for project_id=4521, meeting_id=2024-XX"` beats `"Sync failed"`.
+- **Include the operation and identifiers in the message.** `"order sync failed for customer_id=4521, order_id=2024-XX"` beats `"Sync failed"`.
 - **No empty catch blocks. Ever.** If catching to suppress is intentional, document the specific reason in a one-line comment AND log at `WARNING` AND limit the suppressed type as narrowly as possible.
 - **No exceptions thrown from constructors / `__init__` / class constructors** without a paired safe-construct pattern (Code Complete §8.4). C# constructor exceptions skip `Dispose`; Python `__init__` exceptions skip `__del__`; TS class constructor exceptions skip the new object's setup. Construct cheaply; do the work in an `initialize()` / `start()` method that can be wrapped in `try/finally`.
-- **One project-scoped exception base class.** Each Millis service has a `MillisError` (or `<Service>Error`) base so the top-level handler catches and logs uniformly without `except Exception`. The base carries the standard structured fields (`correlation_id`, `operation`, `entity_type`, `entity_id`); subclasses add domain context.
-- **Library-code wrapper documents its exception types.** When adopting a new external library (Procore SDK, Acumatica client, a fresh Cosmos SDK release), the wrapper module names the specific exception classes the library can raise — in a one-paragraph header comment AND in the typed re-raise. "I don't know what this throws" gets resolved by prototyping, not by `except Exception` (Code Complete §8.4: *"Know the exceptions your library code throws"*).
+- **One project-scoped exception base class.** Each service has a `<Service>Error` base so the top-level handler catches and logs uniformly without `except Exception`. The base carries the standard structured fields (`correlation_id`, `operation`, `entity_type`, `entity_id`); subclasses add domain context.
+- **Library-code wrapper documents its exception types.** When adopting a new external library (a vendor SDK, a third-party API client, a fresh database driver release), the wrapper module names the specific exception classes the library can raise — in a one-paragraph header comment AND in the typed re-raise. "I don't know what this throws" gets resolved by prototyping, not by `except Exception` (Code Complete §8.4: *"Know the exceptions your library code throws"*).
 - **User-facing message ≠ developer-facing message.** The exception's `message` is for the developer log; the user-facing string is constructed at the outermost layer, localized, and never leaks internal class names or stack frames (Code Complete §8.7).
 - **Application code handles locally when it can; library code propagates.** A handler at the top of a request can catch a typed error, log it, and render an error page. The repository function it called must not — that decision belongs to the handler.
 
@@ -148,9 +148,9 @@ In Python this is the default. In C# / TS, never wrap `Debug.Assert` / `console.
 
 Code Complete §8.2 makes the case for highly robust, long-lived code: *assert* the invariant AND *handle* the error if the assert fails anyway. The reasoning: large codebases evolve over years, contributors come and go, parts of the system get rewritten under deadline pressure, and the assumption encoded today may not hold next quarter.
 
-Apply this pattern in Millis code when:
-- The invariant is load-bearing for a sync operation that runs unattended (Procore sync, scorecard recompute, CDP rollups).
-- The code path is rarely-exercised — annual fiscal close, year-end Procore reset, schema migration.
+Apply this pattern when:
+- The invariant is load-bearing for a sync operation that runs unattended (data sync, metric recompute, nightly rollups).
+- The code path is rarely-exercised — annual fiscal close, year-end reset, schema migration.
 - The cost of a wrong answer in production is high *and* there is a sensible degraded behavior available.
 
 Skip it for hot paths where the assert-and-handle pair would add measurable cost.
@@ -174,7 +174,7 @@ Prefer types that cannot be wrong. See `pr-review-toolkit:type-design-analyzer`.
 | `INFO` | Normal operation milestones an operator might audit. | The identifier of what was touched. |
 | `WARNING` | Degraded but functioning. Humans do not need to act *right now*. | The degraded path being taken and why. |
 | `ERROR` | Something failed that an operator must see. | A re-raise OR a return that propagates the failure. Never an `ERROR` log followed by silent recovery. |
-| `CRITICAL` | System integrity at stake (data loss imminent, sync broken, queue dead-lettered). | A page or a Sentry / App Insights alert. |
+| `CRITICAL` | System integrity at stake (data loss imminent, sync broken, queue dead-lettered). | A page or an error-tracker alert. |
 
 **A log line is not a substitute for surfacing the error.** Logging-and-continuing is silent failure with extra steps.
 
@@ -189,9 +189,9 @@ The dev / prod regimes are different, and the difference is design, not accident
 | **Dev / CI / staging** | Crash loudly. Assert. Halt the test suite. Refuse to start. Page the developer. |
 | **Prod** | Surface the failure to the operator — log at `ERROR`, dead-letter the message, return 5xx with a correlation id — *without* taking the whole system down for other users / tenants / requests. |
 
-Practical applications at Millis:
+Practical applications:
 - **Switch / match exhaustiveness:** in dev, the `default:` arm asserts. In prod, it logs at `ERROR` and routes the work to a DLQ.
-- **Schema mismatch on a Procore response:** in dev, raises and halts. In prod, the offending record is logged with full payload and the batch continues with the rest (only if the module favors *robustness*; see § Robustness vs correctness).
+- **Schema mismatch on a third-party API response:** in dev, raises and halts. In prod, the offending record is logged with full payload and the batch continues with the rest (only if the module favors *robustness*; see § Robustness vs correctness).
 - **Internal invariant checks:** assert in dev (stripped or no-op in prod). For invariants that *must* hold in prod, raise — never both-default-and-continue.
 
 The mistake to avoid: a single setting that softens everything in prod, including failures that should still surface loudly. Soften the *response* (don't crash the worker), not the *detection* (do still log + surface).
@@ -209,7 +209,7 @@ Some defensive code belongs in dev and should be stripped, disabled, or no-op'd 
 | Structured-logging breadcrumb (`logger.info("step complete", extra=...)`) | On | **On** — these aid prod debugging |
 | Graceful-crash code (catches an unrecoverable error, drains queues, logs final state, exits) | On | **On** — Mars Pathfinder case (Code Complete §8.7) |
 
-Implementation in the Millis stack:
+Implementation:
 - **Python:** gate expensive checks on `if settings.environment != "prod":` or on a feature flag.
 - **TS:** gate on `process.env.NODE_ENV !== "production"`.
 - **Rust:** use `debug_assert!` for invariants stripped in release.
@@ -224,7 +224,7 @@ Always log as structured fields, not interpolated strings:
 - ❌ `logger.error(f"sync failed for {project_id}: {err}")`
 - ✅ `logger.error("sync failed", extra={"project_id": project_id, "error_type": type(err).__name__, "error_msg": str(err)})`
 
-The standard Millis log envelope includes: `operation`, `entity_type`, `entity_id`, `correlation_id`, `attempt`, `duration_ms`, `error_type` (when applicable).
+A good standard log envelope includes: `operation`, `entity_type`, `entity_id`, `correlation_id`, `attempt`, `duration_ms`, `error_type` (when applicable).
 
 ## Retry / backoff / timeout
 
@@ -241,7 +241,7 @@ Defense, not denial. Rules:
 
 ## Idempotency
 
-At-least-once delivery is the rule, not the exception. Service Bus, Event Grid, SQS, Procore webhooks — all redeliver. Design every write to be replayable.
+At-least-once delivery is the rule, not the exception. Message queues, event buses, and third-party webhooks all redeliver. Design every write to be replayable.
 
 - **Idempotency key:** include a stable key in the write (event id, correlation id, hash of the inputs). On duplicate, check-and-skip.
 - **Upsert over insert** when the natural key is known.
@@ -300,7 +300,7 @@ Returning a reference to a mutable internal collection means a caller can mutate
 - TS: type as `readonly T[]` and freeze with `Object.freeze` if cross-realm
 - Rust: pass by `&[T]` (slice) rather than `Vec<T>`
 
-Most Millis bugs in this category come from accidentally-shared dicts/lists. The fix is at the type, not at the consumer.
+Most bugs in this category come from accidentally-shared dicts/lists. The fix is at the type, not at the consumer.
 
 ## Time and date pitfalls
 
@@ -316,7 +316,7 @@ Most Millis bugs in this category come from accidentally-shared dicts/lists. The
 - "Exactly-once" delivery does not exist at the transport layer — build idempotency into the receiver.
 - A retry that arrives at a different replica may see stale state. Read-after-write consistency is not free.
 
-These are not paranoia — they are the assumptions Azure SQL, Service Bus, Cosmos DB, Procore, and Cloudflare's edge already publish about themselves. Coding against them is defensive; coding *as if* they did not exist is the actual exposure.
+These are not paranoia — they are the assumptions relational databases, message queues, NoSQL stores, third-party APIs, and edge runtimes already publish about themselves. Coding against them is defensive; coding *as if* they did not exist is the actual exposure.
 
 ## Common pitfalls
 
@@ -337,7 +337,7 @@ These are not paranoia — they are the assumptions Azure SQL, Service Bus, Cosm
 | `catch (e: any)` in TypeScript | Use `catch (e: unknown)`; narrow with `instanceof` before using. |
 | `.unwrap()` / `.expect()` in Rust library code | Return `Result<T, E>` and propagate with `?`. |
 | `SELECT *` followed by positional row access | Name the columns; let SQL schema drift fail loud. |
-| Procore (or any external) response trusted without parsing | Parse into a typed model; fail on shape mismatch. |
+| Third-party API response trusted without parsing | Parse into a typed model; fail on shape mismatch. |
 | Bare `BEGIN TRAN` with no `TRY/CATCH/ROLLBACK` | Wrap; on error `ROLLBACK` then `THROW`. |
 | Dead feature flag (on for everyone for months) | Delete it. |
 | Null-check immediately following a parameter typed non-nullable | Either the type or the check is a lie. Fix the type. |
@@ -356,7 +356,7 @@ These are not paranoia — they are the assumptions Azure SQL, Service Bus, Cosm
 For depth, examples, and self-review tools:
 
 - **`references/examples.md`** — Do/don't code pairs across Python, TypeScript / JavaScript / Node, Rust, C# / .NET, SQL, plus cross-language pseudo-code. Pull when implementing in a specific language.
-- **`references/by-stack-layer.md`** — Per-Millis-layer boundary rules (HTTP, MCP, Azure Function, Cloudflare Worker, Service Bus, Procore call, Azure SQL row, Cosmos DB, config, secret). Pull when designing a new boundary surface.
+- **`references/by-stack-layer.md`** — Per-layer boundary rules (HTTP, RPC/tool, serverless function, queue/message handler, third-party API call, database row, NoSQL document, config, secret). Pull when designing a new boundary surface.
 - **`references/anti-patterns.md`** — The rationalization gallery. Two-column table: what authors say to justify defensive bloat, and the rebuttal. Pull during PR review or when an author pushes back on a defensive-programming critique.
 - **`references/checklist.md`** — Pre-commit (author) and pre-PR (reviewer) self-review checklist, copy-pasteable into a PR template.
 
@@ -368,18 +368,16 @@ For depth, examples, and self-review tools:
 - `superpowers:systematic-debugging` — what to do *when* something fails loudly. Defensive design surfaces the failure; debugging methodology finds the root cause.
 - `superpowers:verification-before-completion` — defensive code does not replace verifying the side-effect landed.
 - `superpowers:test-driven-development` — the strongest defense against regressions is a failing test before the fix.
-- `mission-control-checkins` — log a deliberate non-defensive trade-off (e.g., "skipped retry on this one-shot script") in `result_notes` so the call is recoverable later.
-- `naming-conventions` (DT-28) — error class names follow the Millis naming standard.
-- `millis-data-access-patterns` (DT-41) — for data-access-specific defensive rules (CDP MCP vs direct SQL, verify-after-write checklist). This skill links there rather than duplicating.
+- `naming-conventions` — error class names follow a consistent naming standard.
+
+When you make a deliberate non-defensive trade-off (e.g., "skipped retry on this one-shot script"), record the decision somewhere durable — the PR description, a code comment at the site — so the call is reviewable and recoverable later.
 
 ## Sign-off
 
-This skill exists because Millis code historically over-defended (broad catches, log-and-continue, redundant validation) and that pattern hid the bugs it was meant to prevent. Tightening the meaning of "defensive" — boundary validation, fail-loud, types-not-runtime-checks, verify-after-write — is how the codebase gets the safety without the noise.
+This skill exists because over-defended code (broad catches, log-and-continue, redundant validation) hides the bugs it was meant to prevent. Tightening the meaning of "defensive" — boundary validation, fail-loud, types-not-runtime-checks, verify-after-write — is how the codebase gets the safety without the noise.
 
-When a defensive choice contradicts a rule here, document it in the PR description AND in `result_notes` on the related Mission Control task. The rules above are the default; deliberate exceptions are fine when stated and reviewed.
+When a defensive choice contradicts a rule here, document it in the PR description. The rules above are the default; deliberate exceptions are fine when stated and reviewed.
 
-**Error-handling policy is a project-level decision, not a per-routine one** (Code Complete §8.3). A Millis service that mixes raise-and-let-fly with return-error-codes with log-and-continue is a service no one can debug. Each repo's `CLAUDE.md` (or `README.md`) should pin the convention: which kinds of failure raise, which return a typed result, which return `None`, which log and continue. The rules above are the *default* convention; deliberate deviations are fine when stated.
+**Error-handling policy is a project-level decision, not a per-routine one** (Code Complete §8.3). A service that mixes raise-and-let-fly with return-error-codes with log-and-continue is a service no one can debug. Each repo's `CLAUDE.md` (or `README.md`) should pin the convention: which kinds of failure raise, which return a typed result, which return `None`, which log and continue. The rules above are the *default* convention; deliberate deviations are fine when stated.
 
 **Character prerequisite.** Fail-loud defensive coding requires intellectual honesty (Code Complete §33.4). Refusing to suppress a compiler warning without understanding it, refusing to "just compile and see if it works," and refusing to silently swallow an exception are character habits, not technical skills. The skill teaches the techniques; the habits are what make the techniques stick.
-
-— Authored under DT-29, DevOps Training milestone 2 (Millis Dev Skill Library). Talos.

@@ -2,7 +2,7 @@
 
 The Code Complete §23 source material that grounds the formal protocol in `SKILL.md`. Pull this when you want the original quotes — for example, when defending the discipline to a skeptical Operator or Agent, or when the digest in SKILL.md feels too abstract.
 
-> McConnell's prose uses "programmer" — the literal quotes below preserve that. The surrounding commentary uses **Operator** (human teammate: Christian, Emmett) and **Agent** (AI teammate: Talos, Hephaestus) per Millis convention.
+> McConnell's prose uses "programmer" — the literal quotes below preserve that. The surrounding commentary uses **Operator** (the person driving the debug session: you or a teammate) and **Agent** (an AI coding teammate) per this skill's convention.
 
 All page citations refer to the page-numbered Markdown extract of Steve McConnell's *Code Complete, 2nd Edition*, Chapter 23 "Debugging." Page numbers are the printed page (which matches the file naming `page-NNN/markdown.md` in the OCR processed copy).
 
@@ -82,7 +82,7 @@ The full suite, not just the new test. A fix that breaks two other tests is not 
 
 > *"Defects tend to occur in groups... Look for others that are similar."* — page-591
 
-This is the highest-leverage step. The fix you just shipped is one fix; the sweep finds the three siblings before they fire. At Millis, sister entities / sister GIs / sister integrations / sister tenants are the right axes to sweep.
+This is the highest-leverage step. The fix you just shipped is one fix; the sweep finds the three siblings before they fire. Sister entities / sister mappings / sister integrations / sister tenants are the right axes to sweep.
 
 ---
 
@@ -158,7 +158,7 @@ Tension impairs judgement when fixing code. The careful fix made while exhausted
 
 > *"Talk to someone else about the problem."* — page-597
 
-Rubber duck. The act of explaining the bug — to another Operator, to an Agent (Hephaestus on a `question`-status MC update, the Agent in your session), to a literal duck — often surfaces the answer. Sometimes the other party spots it instantly; sometimes you spot it while phrasing the question.
+Rubber duck. The act of explaining the bug — to another Operator, to the Agent in your session, to a literal duck — often surfaces the answer. Sometimes the other party spots it instantly; sometimes you spot it while phrasing the question.
 
 ---
 
@@ -195,7 +195,3 @@ Stepping through code without a hypothesis is just slow reading. The debugger is
 | Look for similar errors (page-591) | Beat 7 — Look for similar defects |
 
 The cross-references in SKILL.md (e.g. `Code Complete §23, page-583`) all resolve to the quotes above.
-
----
-
-— Authored under DT-22, DevOps Training milestone 2 (Millis Dev Skill Library). Talos.

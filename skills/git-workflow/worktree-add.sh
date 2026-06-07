@@ -6,7 +6,7 @@
 #
 # Examples:
 #   ./scripts/worktree-add.sh feat/add-csv-export-142
-#   ./scripts/worktree-add.sh feat/add-csv-export-142 origin/christian/wb-2026-05-19
+#   ./scripts/worktree-add.sh feat/add-csv-export-142 origin/taylor/wb-2026-05-19
 #   ./scripts/worktree-add.sh hotfix/prod-crash main
 #
 # If <base-branch> is omitted, defaults to origin/<developer>/wb-<today>

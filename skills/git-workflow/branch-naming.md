@@ -11,10 +11,10 @@ integration layers).
 ```
 
 Examples:
-- `christian/wb-2026-05-19`
+- `taylor/wb-2026-05-19`
 - `emmett/wb-2026-05-19`
-- `christian/wb-2026-05-19-pm` (a second workbranch the same day)
-- `christian/wb-2026-05-19-2` (alternative second-workbranch naming)
+- `taylor/wb-2026-05-19-pm` (a second workbranch the same day)
+- `taylor/wb-2026-05-19-2` (alternative second-workbranch naming)
 
 The `wb-` prefix marks the branch as a workbranch. The date is for human
 readability. Workbranches live ≤24h and merge to `main` via the full
@@ -74,7 +74,7 @@ into the developer's workbranch via the lightweight gate flow. They live
 | `dev` | No description, no scope |
 | `wip` | "Work in progress" is implied — name what it does |
 | `feature/big-thing` | Generic; "big" suggests >2 days |
-| `christian/improvements` | Developer-name branches encourage ownership and long life |
+| `taylor/improvements` | Developer-name branches encourage ownership and long life |
 | `update` | What kind? What's being updated? |
 | `temp-branch` | Branches aren't temp — they're short-lived. Name the work. |
 | `main-v2` / `develop` / `staging` | Long-lived environment branches — not TBD |

@@ -164,7 +164,7 @@ root works:
 
 | Flag | Added | Owner | Default | Status | Remove By |
 |---|---|---|---|---|---|
-| REPORTS_CSV_EXPORT | 2026-05-19 | christian | off | on in prod | 2026-06-15 |
+| REPORTS_CSV_EXPORT | 2026-05-19 | taylor | off | on in prod | 2026-06-15 |
 | AUTH_REQUIRE_2FA | 2026-05-12 | teammate | off | ramping | 2026-06-09 |
 ```
 

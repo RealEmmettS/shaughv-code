@@ -8,6 +8,17 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — early June 2026
 
+**Changed**
+- Several of the recently imported skills still name-dropped Emmett's day-job setup — internal work systems, a work-only task tracker, and a few teammates and work AI assistants by name. Because this bundle is personal and public, all of that was stripped out or swapped for neutral, generic wording. The skills do exactly the same jobs as before (debugging, writing fail-safe code, bug triage, software design patterns, the git workflow, critical thinking, learning, strategy, and the helper-agent playbook) — they just no longer mention anything work-specific, so they read as general-purpose tools anyone could use.
+- Where these skills used to point at companion skills that only exist in the work setup, they now point at the matching skill that's actually in this bundle — or, for the ones with no match here, drop the mention so nothing links to something that isn't included. The work-only task tracker was removed rather than replaced with a stand-in, and the git workflow's multi-person coordination now relies on plain git instead.
+
+**Behind the scenes**
+- One supporting file was renamed to drop a work-specific word from its name, and the bundle's version number was bumped.
+
+---
+
+## A day earlier — early June 2026
+
 **Added**
 - Eleven new skills joined the bundle, imported from an exported skill collection: a bug-investigation helper that actually digs into problems instead of just asking questions, a catalog of classic software design patterns, a structured debugging guide, advice on writing code that fails safely instead of silently, the team's official way of working with git, an image generation and editing helper, a coach for learning new topics deliberately, a toolkit for rigorous logical reasoning, a personal-productivity toolbox drawn from five well-known books, a carefully fenced playbook for running helper agents, and a facilitator for thinking through strategic situations. Why it matters: all of these now travel with the bundle, so they're available on every machine it's installed on instead of living only where they were first created.
 

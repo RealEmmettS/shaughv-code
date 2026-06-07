@@ -48,7 +48,7 @@
 | `dev` | No description, no scope |
 | `wip` | "Work in progress" is implied — name what it does |
 | `feature/big-thing` | Generic; "big" suggests >2 days |
-| `christian/improvements` | Developer-name branches encourage ownership and long life |
+| `taylor/improvements` | Developer-name branches encourage ownership and long life |
 | `update` | What kind? What's being updated? |
 | `temp-branch` | Branches aren't temp — they're short-lived. Name the work. |
 | `main-v2` / `develop` / `staging` | Long-lived environment branches — not TBD |
