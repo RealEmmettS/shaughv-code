@@ -10,7 +10,7 @@
       "name": "shaughv-code",
       "source": "./",
       "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills so they are available across every Claude Code instance from a single source.",
-      "version": "0.8.0",
+      "version": "0.9.0",
       "homepage": "https://github.com/RealEmmettS/shaughv-code",
       "keywords": [
         "shaughv",
@@ -24,7 +24,18 @@
         "storage",
         "upload",
         "craft",
-        "craft-docs"
+        "craft-docs",
+        "bug-triage",
+        "design-patterns",
+        "debugging",
+        "defensive-programming",
+        "git",
+        "image-gen",
+        "learning",
+        "logic",
+        "productivity",
+        "spawn",
+        "strategy"
       ]
     }
   ]

@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.9.0] — 2026-06-06
+
+### Added
+- Eleven new skills imported from a `.skill` bundle export (each ships its `SKILL.md` — frontmatter `name` matching the directory name — plus any bundled `references/` docs, unmodified):
+  - `skills/bug-triage/` — interactive bug triage and investigation agent for internal tools; investigates with browser tools and data-platform queries rather than only asking questions.
+  - `skills/code-design-patterns/` — Gang of Four design-patterns reference and analyzer; all 22 GoF patterns with Python/TypeScript/SQL examples.
+  - `skills/debugging-framework/` — structured debugging for stack bugs: integration drift, missing writes, vanished messages, 5xx, datetime/idempotency gotchas.
+  - `skills/defensive-programming/` — boundary-focused defensive coding: error contracts, try/except critique, retry-backoff/timeouts, validation placement.
+  - `skills/git-workflow/` — official git workflow and committing strategy: branches, worktrees, commits, PRs, rebasing, conflicts, hotfixes, multi-agent coordination.
+  - `skills/image-gen/` — text-to-image and image-to-image generation routed to Nano Banana 2 / Gemini (via fal.ai or native API), MAI-Image-2.5 (fal.ai), or Reve; asks provider first; saves to Downloads.
+  - `skills/learn/` — guided facilitation for deliberate learning: Kickoff/Session/Review/Course-Correct, the Learning Loop, Learning Journal.
+  - `skills/logical-reasoning/` — deductive/inductive reasoning toolkit: Copi-style natural deduction, propositional/predicate/categorical/modal logic, fallacies, induction, IBE.
+  - `skills/personal-productivity/` — productivity toolbox distilled from five books (Burkeman ×2, Newport ×2, Vaden).
+  - `skills/spawn/` — manual-invocation-only `/spawn` orchestration playbook; two-phase Opus subagent pattern (INVESTIGATE then EXECUTE); explicitly never auto-triggers.
+  - `skills/strategic-thinking/` — turn-based strategic facilitation: Strategic Picture plus four lenses (Art of War, 36 Stratagems, Five Rings, game theory).
+- Not imported: the bundle's twelfth skill, a Millis-work variant of `naming-conventions`, was deliberately skipped so the repo's SHAUGHV-personal `skills/naming-conventions/` stays untouched.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.8.0` → `0.9.0` across all three manifests; descriptions and keywords extended to cover the eleven new skills.
+- `README.md` — "Skills bundled" table extended with eleven new rows (kept alphabetical).
+
+### Fixed
+- Normalized CRLF → LF line endings on `.md`/`.sh` files in the eleven imported skills (the export was Windows-authored) and on the pre-existing `skills/shaughv-animated-brandmark/` markdown files (`SKILL.md` + `references/implementation.md`), whose `SKILL.md` frontmatter `name` carried a trailing `\r`. Matches the repo's `* text=auto` `.gitattributes` policy.
+
 ## [0.8.0] — 2026-05-28
 
 ### Added
@@ -70,43 +94,4 @@ A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) an
 
 ### Added
 - `.mcp.json` — bundles the Remotion documentation MCP server (`npx @remotion/mcp@latest`). Exposes a single tool, `remotion-documentation`, proxied to `mcp.remotion.dev`.
-- `commands/create-video.md` — `/shaughv-code:create-video` slash command that scaffolds a Remotion Recorder project via `npx create-video@latest --recorder`, then adds `@remotion/web-renderer` inside the new project (`npx remotion add @remotion/web-renderer`). Falls back to `! npx ...` if either step needs a TTY.
-
-### Changed
-- Version bumped `0.2.0` → `0.3.0`.
-
-## [0.2.0] — 2026-05-20
-
-### Added
-- `skills/human-changelog/` — translates a repo's `CHANGELOG.md` into a plain-English `HUMAN_CHANGELOG.md`, and installs a standing rule in the repo's `CLAUDE.md` so future agent edits keep the two in lockstep.
-
-### Changed
-- Normalized the new skill's `reference/` directory to `references/` to match the rest of the plugin.
-- Removed the no-op `user-invocable: true` setting from `shaughv-design` (defaults to true; setting it was redundant). Dropped the now-obsolete "leave it alone" warning from `CLAUDE.md`.
-- Version bumped `0.1.0` → `0.2.0`.
-
-## [0.1.0] — 2026-05-19
-
-### Added
-- Initial plugin scaffolding. `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` manifests, `.gitignore`, `CLAUDE.md` developer notes, README with installation and repo-layout documentation.
-- Initial set of seven skills, migrated from legacy binary `.skill` bundles into a normalized `skills/` tree:
-  - `skills/critical-thinking/` — four critical-thinking frameworks (contemplating, problem-solving, decision-making, design) plus devil's advocacy and a working canvas.
-  - `skills/openai-audio/` — OpenAI audio stack (Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports) with 13 runnable examples in Python / JS / TS.
-  - `skills/perplexity-search/` — web search and AI-grounded answers via the Perplexity Agent, Search, and Sonar APIs.
-  - `skills/pretext/` — DOM-free text measurement and line layout using `@chenglou/pretext`.
-  - `skills/quiver-ai/` — SVG generation and raster→vector via Quiver AI's Arrow model.
-  - `skills/shaughv-animated-brandmark/` — build the SHAUGHV animated brand mark (draws itself path-by-path, then loops between wordmark and icon).
-  - `skills/shaughv-design/` — generate well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color tokens, type system, component previews, and two UI kits.
-
-### Removed
-- Legacy binary `.skill` bundles in `SKILLS/` — replaced by the normalized `skills/` tree.
-
-[0.8.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.8.0
-[0.7.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.7.0
-[0.6.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.6.0
-[0.5.1]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.5.1
-[0.5.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.5.0
-[0.4.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.4.0
-[0.3.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.3.0
-[0.2.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.2.0
-[0.1.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.1.0
+- `commands/create-video.md` — `/shaughv-code:create-video` slash command that scaffolds a Remotion Recorder project via

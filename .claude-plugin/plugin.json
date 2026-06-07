@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "0.8.0",
-  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions, generic Google Cloud Storage reference, and a pre-wired SHAUGHV-bucket GCS skill), the Remotion documentation and Craft Docs MCP servers, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source.",
+  "version": "0.9.0",
+  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions, generic Google Cloud Storage reference, a pre-wired SHAUGHV-bucket GCS skill, bug triage, GoF code design patterns, a debugging framework, defensive programming, git workflow, image generation, deliberate learning, logical reasoning, personal productivity, the /spawn orchestration playbook, and strategic thinking), the Remotion documentation and Craft Docs MCP servers, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source.",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -33,6 +33,17 @@
     "storage",
     "upload",
     "craft",
-    "craft-docs"
+    "craft-docs",
+    "bug-triage",
+    "design-patterns",
+    "debugging",
+    "defensive-programming",
+    "git",
+    "image-gen",
+    "learning",
+    "logic",
+    "productivity",
+    "spawn",
+    "strategy"
   ]
 }

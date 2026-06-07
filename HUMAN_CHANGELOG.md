@@ -6,7 +6,20 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — late May 2026
+## Most recent release — early June 2026
+
+**Added**
+- Eleven new skills joined the bundle, imported from an exported skill collection: a bug-investigation helper that actually digs into problems instead of just asking questions, a catalog of classic software design patterns, a structured debugging guide, advice on writing code that fails safely instead of silently, the team's official way of working with git, an image generation and editing helper, a coach for learning new topics deliberately, a toolkit for rigorous logical reasoning, a personal-productivity toolbox drawn from five well-known books, a carefully fenced playbook for running helper agents, and a facilitator for thinking through strategic situations. Why it matters: all of these now travel with the bundle, so they're available on every machine it's installed on instead of living only where they were first created.
+
+**Fixed**
+- Cleaned up an invisible formatting quirk (Windows-style line endings) in the newly imported skills and in one older skill, where it could have caused the skill's name to be read with a stray hidden character. Everything now uses the same convention as the rest of the project.
+
+**Behind the scenes**
+- The exported collection also contained a work-specific variant of the naming-rules guide. It was deliberately left out so the personal naming rules already in the bundle stay exactly as they are. The plugin's version, descriptions, search keywords, and the README's skill list were all updated to match the new contents.
+
+---
+
+## Late May 2026
 
 **Added**
 - Codex can now install this repo as a plugin too. In Codex, it brings in the same custom skills — brand design, OpenAI audio, naming conventions, changelog help, storage guidance, and the rest — without changing how the Claude Code version works.
@@ -97,14 +110,4 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Initial release — mid-May 2026
 
 **Added**
-- First release of the plugin. Bundles seven skills into a single installable package, so every Claude Code instance Emmett uses picks them up from one source of truth:
-  - **Critical-thinking** — four frameworks for thinking through hard problems (contemplating, problem-solving, decision-making, design), plus tools for steelmanning the other side of an argument.
-  - **OpenAI audio** — comprehensive guide for using OpenAI's audio products (realtime conversations, transcription, translation, text-to-speech) over the web. Includes runnable examples in three languages.
-  - **Perplexity search** — lets the agent search the web and get cited answers via Perplexity's AI search APIs.
-  - **PreText** — a niche layout library for measuring and laying out text without rendering it to a browser.
-  - **Quiver AI** — Emmett's own tool for generating SVG vector graphics and converting raster images to vectors, via the Arrow model.
-  - **SHAUGHV animated brandmark** — instructions for building the SHAUGHV brand mark that draws itself in path by path, then loops between the wordmark and the icon-only version.
-  - **SHAUGHV design** — generates well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color palettes, type rules, sample components, and two complete UI kits.
-
-**Removed**
-- The old delivery mechanism for these skills was a set of binary "skill bundle" files. Replaced with a normal folder-per-skill layout that's easier to read, easier to edit, and shows up cleanly in version control. Users don't see this change; maintainers (mostly Emmett) get a much nicer editing experience.
+- First release of the plugin. Bundles seven skills into a single installable package, so every Claude Code instance Emmett us
