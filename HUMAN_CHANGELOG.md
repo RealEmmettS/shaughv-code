@@ -110,4 +110,14 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Initial release — mid-May 2026
 
 **Added**
-- First release of the plugin. Bundles seven skills into a single installable package, so every Claude Code instance Emmett us
+- First release of the plugin. Bundles seven skills into a single installable package, so every Claude Code instance Emmett uses picks them up from one source of truth:
+  - **Critical-thinking** — four frameworks for thinking through hard problems (contemplating, problem-solving, decision-making, design), plus tools for steelmanning the other side of an argument.
+  - **OpenAI audio** — comprehensive guide for using OpenAI's audio products (realtime conversations, transcription, translation, text-to-speech) over the web. Includes runnable examples in three languages.
+  - **Perplexity search** — lets the agent search the web and get cited answers via Perplexity's AI search APIs.
+  - **PreText** — a niche layout library for measuring and laying out text without rendering it to a browser.
+  - **Quiver AI** — Emmett's own tool for generating SVG vector graphics and converting raster images to vectors, via the Arrow model.
+  - **SHAUGHV animated brandmark** — instructions for building the SHAUGHV brand mark that draws itself in path by path, then loops between the wordmark and the icon-only version.
+  - **SHAUGHV design** — generates well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color palettes, type rules, sample components, and two complete UI kits.
+
+**Removed**
+- The old delivery mechanism for these skills was a set of binary "skill bundle" files. Replaced with a normal folder-per-skill layout that's easier to read, easier to edit, and shows up cleanly in version control. Users don't see this change; maintainers (mostly Emmett) get a much nicer editing experience.

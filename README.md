@@ -102,4 +102,58 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 
 | Command | Purpose |
 |---|---|
-| `/shaughv-code:create-video` | Scaffold a new Remotion Recorder project via `npx create-video@latest --recorder`, then add `@remotion/web-renderer` inside the new project (`npx remotion add @remotion/web-renderer`). Asks for a directory name, then runs both steps non-interactively; falls back to `! npx ...` if either need
+| `/shaughv-code:create-video` | Scaffold a new Remotion Recorder project via `npx create-video@latest --recorder`, then add `@remotion/web-renderer` inside the new project (`npx remotion add @remotion/web-renderer`). Asks for a directory name, then runs both steps non-interactively; falls back to `! npx ...` if either needs a TTY. |
+
+## MCP servers bundled
+
+| Server | Source | Purpose |
+|---|---|---|
+| `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
+| `craft-docs` | `https://mcp.craft.do/links/.../mcp` (Streamable HTTP) | Connects to a specific Craft Docs link. OAuth-gated — first tool use pops a Craft sign-in flow, so the bundled URL alone is not a credential. Exposes Craft's standard tools (read/write blocks, revert). |
+
+## Repo layout
+
+```
+shaughv-code/
+├── .agents/
+│   └── plugins/
+│       └── marketplace.json # Codex marketplace entry (skills-only)
+├── .claude-plugin/
+│   ├── plugin.json          # plugin manifest
+│   └── marketplace.json     # marketplace entry (single-plugin marketplace)
+├── .codex-plugin/
+│   └── plugin.json          # Codex plugin manifest (skills-only)
+├── .mcp.json                # bundled MCP servers (Remotion docs, Craft Docs)
+├── commands/
+│   └── create-video.md      # /shaughv-code:create-video
+└── skills/
+    ├── critical-thinking/
+    ├── gcs-storage/
+    ├── human-changelog/
+    ├── naming-conventions/
+    ├── openai-audio/
+    ├── perplexity-search/
+    ├── pretext/
+    ├── quiver-ai/
+    ├── shaughv-animated-brandmark/
+    ├── shaughv-cdn/
+    ├── shaughv-design/
+    └── shaughv-gcs-storage/
+```
+
+Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit in place — there is no separate build step and no `.skill` zip to keep in sync.
+
+## Editing a skill (maintainer workflow)
+
+For consumers: see [Update](#update) above — you don't need this section.
+
+For Emmett / anyone editing the plugin's source:
+
+1. Edit files under `skills/<name>/`.
+2. Commit and push.
+3. In any Claude Code instance: `/plugin marketplace update shaughv-code` then `/reload-plugins` (or restart).
+4. In Codex: `codex plugin marketplace upgrade shaughv-code`, then `codex plugin add shaughv-code@shaughv-code`, then start a fresh thread.
+
+## Author
+
+[Emmett Shaughnessy](https://emmetts.dev) · `hey@emmetts.dev` · [@RealEmmettS](https://github.com/RealEmmettS)

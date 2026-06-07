@@ -94,4 +94,43 @@ A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) an
 
 ### Added
 - `.mcp.json` — bundles the Remotion documentation MCP server (`npx @remotion/mcp@latest`). Exposes a single tool, `remotion-documentation`, proxied to `mcp.remotion.dev`.
-- `commands/create-video.md` — `/shaughv-code:create-video` slash command that scaffolds a Remotion Recorder project via
+- `commands/create-video.md` — `/shaughv-code:create-video` slash command that scaffolds a Remotion Recorder project via `npx create-video@latest --recorder`, then adds `@remotion/web-renderer` inside the new project (`npx remotion add @remotion/web-renderer`). Falls back to `! npx ...` if either step needs a TTY.
+
+### Changed
+- Version bumped `0.2.0` → `0.3.0`.
+
+## [0.2.0] — 2026-05-20
+
+### Added
+- `skills/human-changelog/` — translates a repo's `CHANGELOG.md` into a plain-English `HUMAN_CHANGELOG.md`, and installs a standing rule in the repo's `CLAUDE.md` so future agent edits keep the two in lockstep.
+
+### Changed
+- Normalized the new skill's `reference/` directory to `references/` to match the rest of the plugin.
+- Removed the no-op `user-invocable: true` setting from `shaughv-design` (defaults to true; setting it was redundant). Dropped the now-obsolete "leave it alone" warning from `CLAUDE.md`.
+- Version bumped `0.1.0` → `0.2.0`.
+
+## [0.1.0] — 2026-05-19
+
+### Added
+- Initial plugin scaffolding. `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` manifests, `.gitignore`, `CLAUDE.md` developer notes, README with installation and repo-layout documentation.
+- Initial set of seven skills, migrated from legacy binary `.skill` bundles into a normalized `skills/` tree:
+  - `skills/critical-thinking/` — four critical-thinking frameworks (contemplating, problem-solving, decision-making, design) plus devil's advocacy and a working canvas.
+  - `skills/openai-audio/` — OpenAI audio stack (Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports) with 13 runnable examples in Python / JS / TS.
+  - `skills/perplexity-search/` — web search and AI-grounded answers via the Perplexity Agent, Search, and Sonar APIs.
+  - `skills/pretext/` — DOM-free text measurement and line layout using `@chenglou/pretext`.
+  - `skills/quiver-ai/` — SVG generation and raster→vector via Quiver AI's Arrow model.
+  - `skills/shaughv-animated-brandmark/` — build the SHAUGHV animated brand mark (draws itself path-by-path, then loops between wordmark and icon).
+  - `skills/shaughv-design/` — generate well-branded interfaces and assets for the SHAUGHV brand. Ships fonts, favicons, color tokens, type system, component previews, and two UI kits.
+
+### Removed
+- Legacy binary `.skill` bundles in `SKILLS/` — replaced by the normalized `skills/` tree.
+
+[0.8.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.8.0
+[0.7.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.7.0
+[0.6.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.6.0
+[0.5.1]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.5.1
+[0.5.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.5.0
+[0.4.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.4.0
+[0.3.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.3.0
+[0.2.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.2.0
+[0.1.0]: https://github.com/RealEmmettS/shaughv-code/releases/tag/v0.1.0
