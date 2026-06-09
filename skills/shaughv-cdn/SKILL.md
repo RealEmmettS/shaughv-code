@@ -6,9 +6,10 @@ description: >
   user mentions cdn.shaughv.com, the SHAUGHV logo or wordmark, the SHAUGHV favicon, SHAUGHV
   figurines (figurine-header, figurine-404, figurine-footer, figurine-mail, figurine-look-at-this),
   the animated SHAUGHV brand mark (<shaughv-mark>), the SHAUGHV loader (<shaughv-loader>),
-  the Makira display font, or IBM Plex Mono in a SHAUGHV context. Also use when building any
-  SHAUGHV-branded webpage or app that needs to embed assets, when adding @font-face for Makira
-  or IBM Plex Mono, when preloading fonts for performance, or any time a cdn.shaughv.com URL
+  the Makira display font, IBM Plex Mono, or the opt-in Unbounded brutalist display font in a
+  SHAUGHV context. Also use when building any SHAUGHV-branded webpage or app that needs to
+  embed assets, when adding @font-face for Makira, IBM Plex Mono, or Unbounded, when preloading
+  fonts for performance, or any time a cdn.shaughv.com URL
   appears in code or conversation. Covers URL conventions for /brand/, /fonts/, and /js/;
   canonical <link>/<script>/<img> snippets; font preload patterns; the cache contract
   (1-year immutable binaries, 1-day SWR for CSS/JS); CORS; license restrictions; and how
@@ -19,7 +20,8 @@ description: >
 # SHAUGHV CDN
 
 `cdn.shaughv.com` is Emmett Shaughnessy's private CDN for SHAUGHV brand assets, licensed
-fonts (Makira + IBM Plex Mono), and a small set of shared vanilla-JS drop-ins (animated
+fonts (Makira + IBM Plex Mono, plus the opt-in Unbounded display face), and a small set of
+shared vanilla-JS drop-ins (animated
 brand mark, loader). It's a Cloudflare R2 bucket served behind a custom domain — no
 Worker, no auth, open CORS on `GET`/`HEAD`.
 
@@ -49,9 +51,12 @@ https://cdn.shaughv.com
 │   ├── makira/                  SHAUGHV display family — Makira Sans-Serif (commercial, self-hosted)
 │   │   ├── makira.css             one stylesheet, every weight as @font-face
 │   │   ├── otf/  ttf/  woff/  woff2/  variable/
-│   └── ibm-plex-mono/           SHAUGHV monospace — IBM Plex Mono (SIL OFL 1.1)
-│       ├── ibm-plex-mono.css      one stylesheet, every weight as @font-face
-│       └── ttf/  woff/  woff2/
+│   ├── ibm-plex-mono/           SHAUGHV monospace — IBM Plex Mono (SIL OFL 1.1)
+│   │   ├── ibm-plex-mono.css      one stylesheet, every weight as @font-face
+│   │   └── ttf/  woff/  woff2/
+│   └── unbounded/               brutalist display face — opt-in, NOT in fonts.css (SIL OFL 1.1)
+│       ├── unbounded.css          one stylesheet; weights 300–900 + "Unbounded Blond" cut
+│       └── woff2/
 └── /js/                         zero-dep vanilla drop-ins
     ├── animated-brand-mark.js   defines <shaughv-mark> custom element + draw-on animation loop
     ├── shaughv-loader.js        defines <shaughv-loader> custom element
@@ -163,6 +168,26 @@ won't reuse a preload across origins without it.
 Use this when animating font-weight, or to cut down on font requests in apps that paint many
 weights. IBM Plex Mono does **not** ship a variable build on the CDN.
 
+### Unbounded (opt-in brutalist display face)
+
+`Unbounded` is the chunky display face used for headlines on the **dark / brutalist** SHAUGHV
+site. It's **opt-in** — deliberately *not* part of the combined `fonts/fonts.css` bundle, so
+the Makira + IBM Plex Mono two-font system stays the default. Link its stylesheet directly:
+
+```html
+<link rel="stylesheet" href="https://cdn.shaughv.com/fonts/unbounded/unbounded.css" />
+```
+
+```css
+:root {
+  --font-headline: "Unbounded", system-ui, sans-serif;  /* weights 300 · 400 · 500 · 700 · 900 */
+}
+```
+
+The stylistic `Blond` cut ships under its own family name — use `font-family: "Unbounded Blond";`
+(a regular-weight stylistic alternate, so it can't share `"Unbounded"` 400). Unbounded is
+woff2-only, and is for SHAUGHV's own brutalist surfaces — not third-party work.
+
 ### Figurines (mascot illustrations)
 
 ```html
@@ -249,6 +274,7 @@ Quick decision matrix when an agent gets a fuzzy ask:
 | "Mascot" / "figurine" / "illustration" | `/brand/shaughv/figurines/figurine-*.webp` |
 | "SHAUGHV fonts" / "the display font" / "Makira" | `/fonts/makira/makira.css` |
 | "Monospace font" / "code font" / "IBM Plex Mono" | `/fonts/ibm-plex-mono/ibm-plex-mono.css` |
+| "Brutalist / display headline font" / "Unbounded" (dark site only) | `/fonts/unbounded/unbounded.css` (opt-in) |
 | "Loading spinner" / "loader" | `<shaughv-loader>` via `/js/shaughv-loader.js` |
 | "I want the React version of the brand mark" | `/js/react/AnimatedBrandMark.jsx` |
 

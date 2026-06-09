@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.11.0] — 2026-06-09
+
+### Changed
+- `skills/shaughv-cdn/SKILL.md` — documented the **Unbounded** font family, now hosted on the CDN as an opt-in brutalist display face for the dark personal site. Added it to the `/fonts/` URL-family tree, a dedicated "Unbounded (opt-in brutalist display face)" usage section (`<link>` to `fonts/unbounded/unbounded.css`, a `--font-headline` token, the `"Unbounded Blond"` stylistic cut, woff2-only), and a row in the "Which path do I need?" matrix. Extended the frontmatter `description` to trigger on Unbounded. Kept the guidance that Unbounded is deliberately **not** in the combined `fonts/fonts.css` bundle so the Makira + IBM Plex Mono two-font system stays the default. (Paired with the CDN-side change in `RealEmmettS/shaughv-cdn`, which adds `fonts/unbounded/`.)
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — version bumped `0.10.0` → `0.11.0`; added `unbounded` and `fonts` keywords.
+
 ## [0.10.0] — 2026-06-07
 
 ### Changed

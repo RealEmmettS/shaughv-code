@@ -6,7 +6,17 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — early June 2026
+## Most recent release — mid-June 2026
+
+**Changed**
+- The guide that teaches AI assistants how to use Emmett's asset CDN now covers a third typeface, **Unbounded** — the chunky "brutalist" headline font from the dark version of the personal site. It explains that the font lives on the CDN, how to switch it on for a page (it's deliberately kept separate from the usual two-font set, so it only loads when a page asks for it), that it comes in five thicknesses plus one special stylistic version, and when to reach for it versus the standard fonts. Why it matters: any assistant building or reusing the brutalist look now knows the headline font is available from the shared CDN and how to wire it up, instead of shipping its own copy.
+
+**Behind the scenes**
+- The plugin's version number was bumped and a couple of search keywords were added so the CDN guide is easier to find.
+
+---
+
+## An earlier release — early June 2026
 
 **Changed**
 - Several of the recently imported skills still name-dropped Emmett's day-job setup — internal work systems, a work-only task tracker, and a few teammates and work AI assistants by name. Because this bundle is personal and public, all of that was stripped out or swapped for neutral, generic wording. The skills do exactly the same jobs as before (debugging, writing fail-safe code, bug triage, software design patterns, the git workflow, critical thinking, learning, strategy, and the helper-agent playbook) — they just no longer mention anything work-specific, so they read as general-purpose tools anyone could use.
