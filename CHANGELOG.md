@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.11.0] — 2026-06-11
+
+### Added
+- `skills/wb300/` — the **wb300** branch / worktree / agent control-tower skill, imported from a `.skill` bundle export. Teaches the agent to reach for `wb300 agent` (JSON, schema `wb300.agent.v2`) as its read interface for branch/worktree/agent state, to map user questions ("what's running / dirty / ready to review / will collide / safe to delete") onto the schema's lifecycle and collision fields, and to hand the interactive full-screen TUI to the human rather than launching it itself. Ships `SKILL.md` plus three references: `references/agent-json.md` (full `wb300.agent.v2` schema + jq/PowerShell recipes), `references/install.md` (cross-platform install/update/uninstall matrix), and `references/tui.md` (views, keys, symbols). Frontmatter `name: wb300` matches the directory.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.10.0` → `0.11.0` across all three manifests; the Claude and Codex descriptions extended to mention the wb300 control tower, and keywords extended with `wb300`, `worktree`, `workbranch`, `branch`.
+- `README.md` — "Skills bundled" table extended with a `wb300` row (kept alphabetical).
+
 ## [0.10.0] — 2026-06-07
 
 ### Changed

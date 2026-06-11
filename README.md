@@ -97,6 +97,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `shaughv-gcs-storage` | Pre-wired skill for Emmett's personal public bucket at `gs://shaughv`. Bucket facts (uniform IAM, public reads, 7-day soft delete, versioning on, CORS off, US multi-region) baked in so the agent never has to ask. Returns `https://storage.googleapis.com/shaughv/<path>` URLs. Embeds the full cross-platform reference from `gcs-storage` so it stands alone. |
 | `spawn` | Manual-invocation-only `/spawn` orchestration playbook — two-phase Opus subagent pattern (read-only INVESTIGATE, then EXECUTE) for driving one problem to done. Never auto-triggers. |
 | `strategic-thinking` | Turn-based facilitation for any strategic situation — builds a Strategic Picture, pulls four lenses (Art of War, 36 Stratagems, Five Rings, game theory), converges on a recommended line plus alternatives. |
+| `wb300` | Inspect and supervise Git branches, worktrees, and the coding agents running across them via the `wb300` control tower — `wb300 agent` JSON for answering "what's running / dirty / ready to review / safe to clean up / will collide", plus install/update/uninstall guidance and how to point the human at the live TUI. |
 
 ## Commands bundled
 

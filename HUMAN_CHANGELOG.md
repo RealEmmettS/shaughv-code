@@ -6,7 +6,17 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — early June 2026
+## Most recent release — mid-June 2026
+
+**Added**
+- A new "branch control tower" skill joined the bundle. When you ask things like "what am I working on across all my projects", "which branches are finished and ready to review", "what's still a work in progress", "what's safe to clean up", or "will these two lines of work clash when I combine them", the agent now knows to lean on a dedicated tool that reads your project's history and shows a live picture of every branch, every working copy on disk, and every coding assistant currently running — for one project or your whole machine at once. The skill also tells the agent to leave the full-screen live dashboard for you to open yourself (it would otherwise take over the screen) and how to install or update the tool. Why it matters: it travels with the bundle now, so any machine it's installed on can answer "what's the state of all my work?" without you piecing it together by hand.
+
+**Behind the scenes**
+- Bumped the plugin's version, extended its descriptions and search keywords so the marketplace surfaces it for branch- and worktree-related searches, and added a row to the README's list of bundled skills.
+
+---
+
+## A few days earlier — early June 2026
 
 **Changed**
 - Several of the recently imported skills still name-dropped Emmett's day-job setup — internal work systems, a work-only task tracker, and a few teammates and work AI assistants by name. Because this bundle is personal and public, all of that was stripped out or swapped for neutral, generic wording. The skills do exactly the same jobs as before (debugging, writing fail-safe code, bug triage, software design patterns, the git workflow, critical thinking, learning, strategy, and the helper-agent playbook) — they just no longer mention anything work-specific, so they read as general-purpose tools anyone could use.
