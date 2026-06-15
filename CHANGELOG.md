@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.15.0] — 2026-06-14
+
+### Added
+- `skills/usage-statusline/scripts/install.mjs` — a cross-platform, zero-dependency Node installer for the usage status line, **dynamic by design**: it locates the bundled `statusline-usage.mjs` next to itself (`import.meta.url`), resolves the Claude config dir from `$CLAUDE_CONFIG_DIR` (else `~/.claude`), copies the script there, computes the absolute `node "<path>"` command **for the host it runs on** (forward slashes, quoted for spaces), merges that into `<config>/settings.json` non-destructively (backing the file up first; aborts rather than clobber invalid JSON), and runs the script's `--selftest`. Supports `--dry-run` and `--uninstall`. This makes installing the plugin + status line on several separate machines safe — each install resolves its own home dir, config dir, and absolute path; nothing is pinned to the authoring machine. Verified against a throwaway `CLAUDE_CONFIG_DIR`: it wrote that dir's path (not the author's) and preserved pre-existing settings keys.
+
+### Changed
+- `skills/usage-statusline/SKILL.md` — install section reworked around the one-command installer, with the manual copy-and-wire steps kept as a fallback (now with explicit per-machine absolute-path resolution instead of a literal example path). Added an explicit "nothing is tied to a specific machine" guarantee; frontmatter gained an `install:` line; uninstall now points at `install.mjs --uninstall`.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.14.0` → `0.15.0` across all three manifests.
+- `README.md` — the `usage-statusline` row notes the cross-platform installer and the path-resolves-per-machine behavior.
+
 ## [0.14.0] — 2026-06-14
 
 ### Changed

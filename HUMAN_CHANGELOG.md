@@ -8,6 +8,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — mid-June 2026
 
+**Improved**
+- The status-line skill now installs itself with a single command that adapts to whatever computer it's run on. Since you'll be setting this up on more than one machine, this is the part that matters: the installer figures out that machine's own home folder, drops the program in the right spot, and writes the setting that points at it using that machine's own full path — so it's never tied to one specific computer. It also leaves the rest of your settings untouched (making a backup first), checks that it works, and can cleanly undo the whole thing later. Why it matters: set up the bundle and the status line on a second or third machine and each one just works on its own, with no leftover path from the first.
+
+**Behind the scenes**
+- To confirm this, the installer was test-run against a stand-in "other machine" — it correctly used that machine's paths and left the existing settings alone. Bumped the version and updated the README's note about this skill.
+
+---
+
+## Earlier the same day — mid-June 2026
+
 **Changed**
 - The SHAUGHV CDN skill — the helper that knows how to pull Emmett's logos, fonts, favicons, figurines, and brand widgets into a web page — was rebuilt to be self-updating. Instead of carrying a baked-in list of file locations that slowly goes stale, it now reads a live "table of contents" the CDN publishes about itself and uses whatever addresses that hands back. So when assets are added, renamed, or moved, the skill just keeps working with no one editing it. All the genuinely useful guidance a bare file list can't capture was kept: the licensing and redistribution rules, the rule that the animated logo needs a minimum size, the font-loading performance tips, and a cheat-sheet for matching a vague request to the right asset. A pending note about a new "Unbounded" headline font — which had been waiting on a side branch — was folded in at the same time, and that now-unnecessary branch was deleted, since the live table of contents already lists that font on its own.
 
@@ -16,7 +26,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Earlier the same day — mid-June 2026
+## Also that day — mid-June 2026
 
 **Added**
 - A skill for installing Emmett's custom Claude Code status line now ships with the bundle. The status line is the always-visible strip at the bottom of the session; this one shows, in real time, how much of your 5-hour and weekly usage limits you've used up (as color-coded bars that shift green → yellow → orange → red as they fill), your running session cost, and — the clever part — an estimate of how much time you have left before you'd hit the 5-hour limit at your current pace, colored red when you're speeding up and green when you're easing off. The skill carries the exact, ready-made program for it, so any machine with the bundle can set up the identical status line on request: it drops the program into place, wires it into your settings, checks that it works, and tells you to restart. Why it matters: it's the same status line on every computer now, instead of something you'd rebuild by hand each time. (The live usage numbers only show on Pro/Max plans, and it needs Node installed.)
