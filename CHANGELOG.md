@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.13.0] — 2026-06-14
+
+### Added
+- `skills/usage-statusline/` — a skill that installs and standardizes Emmett's Claude Code **usage status line**: a two-row status line showing live 5-hour and weekly usage percentages (color-coded sub-cell progress bars), model / context-fill / session-cost, and a locally-computed burn-rate "time left" projection for the 5-hour window with a red/green acceleration-trend color and a bold-red <30-min urgency override. Ships the **canonical, byte-identical** runtime as a bundled artifact — `scripts/statusline-usage.mjs` (Node ≥18, zero dependencies, extracted verbatim from the source build guide; its built-in `--selftest` passes 35/35) — plus `references/build-guide.md` (the full design rationale: the stdin schema, the burn-rate algorithm, the trend indicator, tuning knobs, and edge cases). `SKILL.md` (frontmatter `name: usage-statusline` matching the directory) walks the agent through copying the script into `<CLAUDE_DIR>` (not the version-stamped plugin cache, so its rolling state file persists), merging the `statusLine` block into `settings.json`, verifying with `--selftest`, and uninstalling. Bundling the script as a skill is the supported path because Claude Code reads `statusLine` only from `settings.json` — a plugin cannot ship one as a native component.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.12.0` → `0.13.0` across all three manifests; the Claude and Codex descriptions extended to mention the usage status-line installer, and keywords extended with `statusline`, `usage`, `rate-limit`, and `burn-rate`.
+- `README.md` — "Skills bundled" table extended with a `usage-statusline` row (kept alphabetical, between `strategic-thinking` and `wb300`).
+
 ## [0.12.0] — 2026-06-14
 
 ### Added

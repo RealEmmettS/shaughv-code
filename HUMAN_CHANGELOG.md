@@ -9,6 +9,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — mid-June 2026
 
 **Added**
+- A skill for installing Emmett's custom Claude Code status line now ships with the bundle. The status line is the always-visible strip at the bottom of the session; this one shows, in real time, how much of your 5-hour and weekly usage limits you've used up (as color-coded bars that shift green → yellow → orange → red as they fill), your running session cost, and — the clever part — an estimate of how much time you have left before you'd hit the 5-hour limit at your current pace, colored red when you're speeding up and green when you're easing off. The skill carries the exact, ready-made program for it, so any machine with the bundle can set up the identical status line on request: it drops the program into place, wires it into your settings, checks that it works, and tells you to restart. Why it matters: it's the same status line on every computer now, instead of something you'd rebuild by hand each time. (The live usage numbers only show on Pro/Max plans, and it needs Node installed.)
+
+**Behind the scenes**
+- Worth knowing why this is a skill rather than something the bundle flips on for you automatically: Claude Code only reads the status-line setting from your own personal settings file, so a plugin isn't allowed to set it silently — the skill does the setup on request instead. Also bumped the version, extended the descriptions and search keywords, and added a row to the README's list of bundled skills.
+
+---
+
+## Earlier the same day — mid-June 2026
+
+**Added**
 - A new image-upscaling skill joined the bundle. When you ask to make a picture bigger, sharper, or higher-resolution — or to rescue a blurry, low-res, or over-compressed photo, or get an image ready for print or a high-DPI screen — the agent now knows to run it through an online service that's specially tuned for faces, portraits, and profile pictures. It can enlarge anywhere from a gentle 2× polish up to a dramatic 200× restoration, with a dial that trades off "stay perfectly faithful to the original" against "reinvent missing detail" (kept faithful by default so real faces don't get invented). It handles the whole job end to end: hands the image to the service, waits for the result, saves it, and tells you exactly what it cost. If a photo is too big for the service's size limit, it automatically shrinks a copy to fit first — gently, and double-checking that the shrunk copy is still the same picture — without ever touching your original. Why it matters: it travels with the bundle now, so any machine it's installed on can upscale and restore images on request. (Using it needs an access key for the service, which charges a small amount per megapixel of the finished image.)
 
 **Behind the scenes**
