@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.14.0] — 2026-06-14
+
+### Changed
+- `skills/shaughv-cdn/SKILL.md` — **rebuilt as a manifest-driven hybrid.** The skill now leads with the CDN's own canonical rule — fetch the self-describing JSON manifest at `https://cdn.shaughv.com/tree.json` (alias `/tree`) and use the `url` / `embed` / `css_url` it returns, never hardcode asset paths — so the guide self-heals across asset additions, renames, and reorganizations (verified live: `count: 99`). It documents the manifest shape (`base_url` / `count` / `usage` / `fonts` / `tree`) and how to walk it. The high-value human context a bare manifest can't express was preserved from the previous hardcoded version: the license / redistribution table, the 64px animated-mark minimum, the `crossorigin` font-preload requirement, the cache contract, CORS, the "which asset do I need?" matrix, and the consumer-vs-maintainer scoping. The previously-unmerged `feat/document-unbounded-on-cdn` work was folded in — the **Unbounded** opt-in brutalist display family (weights 300–900 plus the "Unbounded Blond" stylistic cut, woff2-only, OFL 1.1, reserved for SHAUGHV's own surfaces) is now documented.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.13.0` → `0.14.0` across all three manifests.
+- `README.md` — the `shaughv-cdn` row reworded to reflect the manifest-driven approach and the added Unbounded font.
+
+### Removed
+- Branch `feat/document-unbounded-on-cdn` (local + `origin`) — its sole change (hand-documenting the Unbounded font on the old hardcoded skill) is superseded by the manifest-driven rebuild, which surfaces Unbounded automatically. Its substance was folded into `main` first, so nothing was lost.
+
+> Context: the `shaughvCDN.skill` file that prompted this was identified as a byte-for-byte copy of the CDN's own self-published `/agents` guide (not a repo artifact and not from any branch); it motivated adopting that manifest-driven approach in the bundled skill.
+
 ## [0.13.0] — 2026-06-14
 
 ### Added
