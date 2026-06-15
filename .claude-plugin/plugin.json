@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "0.11.0",
-  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions, generic Google Cloud Storage reference, a pre-wired SHAUGHV-bucket GCS skill, bug triage, GoF code design patterns, a debugging framework, defensive programming, git workflow, image generation, deliberate learning, logical reasoning, personal productivity, the /spawn orchestration playbook, strategic thinking, and the wb300 git branch / worktree / agent control tower), the Remotion documentation and Craft Docs MCP servers, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source.",
+  "version": "0.12.0",
+  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions, generic Google Cloud Storage reference, a pre-wired SHAUGHV-bucket GCS skill, bug triage, GoF code design patterns, a debugging framework, defensive programming, git workflow, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, the /spawn orchestration playbook, strategic thinking, and the wb300 git branch / worktree / agent control tower), the Remotion documentation and Craft Docs MCP servers, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source.",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -48,6 +48,13 @@
     "wb300",
     "worktree",
     "workbranch",
-    "branch"
+    "branch",
+    "crystal-upscaler",
+    "upscale",
+    "upscaling",
+    "super-resolution",
+    "fal",
+    "fal-ai",
+    "image-enhancement"
   ]
 }

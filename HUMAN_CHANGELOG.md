@@ -9,6 +9,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — mid-June 2026
 
 **Added**
+- A new image-upscaling skill joined the bundle. When you ask to make a picture bigger, sharper, or higher-resolution — or to rescue a blurry, low-res, or over-compressed photo, or get an image ready for print or a high-DPI screen — the agent now knows to run it through an online service that's specially tuned for faces, portraits, and profile pictures. It can enlarge anywhere from a gentle 2× polish up to a dramatic 200× restoration, with a dial that trades off "stay perfectly faithful to the original" against "reinvent missing detail" (kept faithful by default so real faces don't get invented). It handles the whole job end to end: hands the image to the service, waits for the result, saves it, and tells you exactly what it cost. If a photo is too big for the service's size limit, it automatically shrinks a copy to fit first — gently, and double-checking that the shrunk copy is still the same picture — without ever touching your original. Why it matters: it travels with the bundle now, so any machine it's installed on can upscale and restore images on request. (Using it needs an access key for the service, which charges a small amount per megapixel of the finished image.)
+
+**Behind the scenes**
+- Bumped the plugin's version, extended its descriptions and search keywords so the marketplace surfaces it for upscaling and image-enhancement searches, and added a row to the README's list of bundled skills.
+
+---
+
+## A few days earlier — mid-June 2026
+
+**Added**
 - A new "branch control tower" skill joined the bundle. When you ask things like "what am I working on across all my projects", "which branches are finished and ready to review", "what's still a work in progress", "what's safe to clean up", or "will these two lines of work clash when I combine them", the agent now knows to lean on a dedicated tool that reads your project's history and shows a live picture of every branch, every working copy on disk, and every coding assistant currently running — for one project or your whole machine at once. The skill also tells the agent to leave the full-screen live dashboard for you to open yourself (it would otherwise take over the screen) and how to install or update the tool. Why it matters: it travels with the bundle now, so any machine it's installed on can answer "what's the state of all my work?" without you piecing it together by hand.
 
 **Behind the scenes**

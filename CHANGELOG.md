@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.12.0] — 2026-06-14
+
+### Added
+- `skills/crystal-upscaler/` — the **crystal-upscaler** image-upscaling skill, imported from a `.skill` bundle export. Wraps fal.ai's Clarity Crystal Upscaler (`clarityai/crystal-upscaler`, image-to-image, tuned for facial detail / portraits) for resolution increase, sharpening, low-res / blur restoration, and print / retina prep at 1×–200× scale with a 0–10 creativity dial and PNG/JPG output. Ships `SKILL.md` (frontmatter `name: crystal-upscaler` matching the directory), `references/api-reference.md` (verbatim input/output schema, queue + webhook endpoints, the full pricing table, and cURL / `fal_client` / `@fal-ai/client` snippets), and three `scripts/`: `upscale.py` (the recommended path — upload, queue polling, output download, cost reporting, a `--json` agent contract on stdout, and auto-fitting of oversized inputs; falls back to a dependency-free stdlib queue client when `fal-client` is absent), `fit.py` (a least→most-destructive ladder that shrinks an over-limit input under the 100 MiB API cap behind a structural-integrity gate, working on a copy), and `requirements.txt` (`fal-client` + Pillow). Reads `FAL_KEY` from the environment; bills $0.016 per output megapixel.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.11.0` → `0.12.0` across all three manifests; the Claude and Codex descriptions extended to mention the fal.ai Crystal image upscaler, and keywords extended with `crystal-upscaler`, `upscale`, `upscaling`, `super-resolution`, `fal`, `fal-ai`, and `image-enhancement`.
+- `README.md` — "Skills bundled" table extended with a `crystal-upscaler` row (kept alphabetical, between `critical-thinking` and `debugging-framework`).
+
 ## [0.11.0] — 2026-06-11
 
 ### Added
