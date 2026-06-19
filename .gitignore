@@ -14,3 +14,16 @@ skills/**/.tmp/
 
 # Playwright MCP session snapshots (page/console dumps from browser automation)
 .playwright-mcp/
+
+# Locally-packaged .skill bundles (one zip per skill) — regenerated on demand,
+# never committed. See zipped-skills/pack.ps1.
+zipped-skills/
+
+# Local API-key files a skill may write (e.g. the mistral skill's key flow)
+.env
+.mistral.env
+.env.local
+
+# Python bytecode cache (e.g. from running skill scripts locally)
+__pycache__/
+*.pyc

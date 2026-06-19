@@ -6,6 +6,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Most recent release — late June 2026
+
+**Added**
+- A big new **Mistral AI** skill joined the bundle. It teaches the assistant to use Mistral's entire online service, with three headline jobs: pulling the text out of documents and PDFs (OCR), turning recorded speech into written text, and turning written text into spoken audio. It also covers everything else Mistral offers — chat, tool use, structured answers, embeddings, code completion, content moderation, file handling, bulk jobs, custom-model training, and Mistral's agents/conversations. It knows how to find your Mistral access key automatically, and if it can't, it asks you for one and offers to save it — either to your computer (so every future session has it) or just to the current project. It comes with ready-to-run helpers for the three main jobs, and it carries a complete offline copy of Mistral's own API guide so its instructions stay accurate, with a built-in way to check the live version for any changes. It also cleans up after itself: whenever it has to upload a file to Mistral to get a job done, it deletes that file the moment the result comes back, so you're never charged to store leftovers. Why it matters: any machine with the bundle can now read documents, transcribe audio, generate speech, and use the rest of Mistral on request — without hunting for setup steps.
+
+**Behind the scenes**
+- Confirmed the skill works end to end by saving a key to the machine and running a real Mistral request through the skill itself. Set up a private, never-shared folder inside the project that keeps zipped, ready-to-install copies of every skill (so they're easy to hand off), and made sure those zips and any saved key files stay out of version control. Bumped the version, extended the plugin's descriptions and search keywords so it surfaces for "Mistral", "OCR", "transcription", and "text-to-speech", and added a row to the README's list of bundled skills.
+
+---
+
 ## Most recent release — mid-June 2026
 
 **Improved**
