@@ -60,6 +60,9 @@ Each of these was added by explicit ask — don't remove them without one:
    description: <trigger-phrase-rich description>
    ---
    ```
+   Keep the `description` under **1024 chars** — Claude Code silently skips a
+   skill whose description exceeds the cap (`mistral`, `shaughv-cdn`, and
+   `gcs-storage` currently exceed it and should be trimmed).
 2. Put supporting docs in `skills/<name>/references/`, code in `examples/`,
    assets in `assets/`.
 3. Bump `version` in `.claude-plugin/plugin.json` if it's a substantive change.
@@ -101,6 +104,11 @@ tone or structure.
 
 - The `skills/` directory MUST stay lowercase. Case-only renames on Windows
   need a two-step `mv` (e.g. `mv skills tmp && mv tmp skills`).
+- `.gitattributes` pins the Codex package's *generated* `.mcp.json` to LF
+  (`.mcp.json text eol=lf`). `build-codex-plugin.ps1 -Check` SHA-compares
+  byte-exact and the build writes LF, so `* text=auto` would otherwise check it
+  out as CRLF on Windows CI and fail the gate (`hash mismatch: .mcp.json`). Pin
+  any new *generated* (not verbatim-copied) package file to LF the same way.
 
 ## What not to do
 

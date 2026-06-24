@@ -8,6 +8,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — late June 2026
 
+**Fixed**
+- Tightened the automated check added in the previous release so it passes reliably. A line-ending quirk was making it flag a false mismatch in the Codex copy of the bundle on the Windows test machine; that's now pinned so the check behaves the same everywhere.
+
+**Behind the scenes**
+- Wrote down two easy-to-trip-on rules for whoever maintains the bundle next (so the same snags don't recur), and nudged the version up a notch.
+
+---
+
+## Earlier that day — late June 2026
+
 **Added**
 - Emmett pulled the newest versions of several thinking-and-working skills over from his work bundle and **scrubbed out everything work-specific** — every mention of his employer's tools, systems, projects, and teammates was removed or swapped for a neutral example, so the personal bundle stays clean and general.
 - The **critical-thinking** skill grew from four thinking frameworks to six. The two new ones: a way to handle being **buried in information** — a pile of documents, or one dense message with a decision hidden inside it — that sorts everything down to "what do you actually need to decide, and what can wait until tomorrow"; and a **scientific-inquiry** approach for "why is this happening?" questions, which gathers evidence, lays out competing guesses, and runs the cheapest test that tells them apart. It also gained a set of ready-to-use interactive mini-web-pages — sliders and tables you can poke at — for the moments a long session has too many moving parts to hold in your head at once.

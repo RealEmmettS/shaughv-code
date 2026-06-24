@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.18.1] — 2026-06-24
+
+Patch: make the new CI validate gate's `-Check` line-ending-reproducible on Windows runners, and capture two recurring maintainer gotchas in the repo docs.
+
+### Fixed
+- `.gitattributes` — pinned the Codex package's generated `.mcp.json` to LF (`.mcp.json text eol=lf`). `build-codex-plugin.ps1 -Check` SHA-compares byte-exact and the build writes the wrapped `.mcp.json` as LF, so the repo's `* text=auto` was checking the committed copy out as **CRLF** on the Windows CI runner — failing the 0.18.0 validate gate with `hash mismatch: .mcp.json`. Skill files were unaffected (copied verbatim, identical treatment on both sides). Pin any future *generated* (not verbatim-copied) package file the same way.
+
+### Changed
+- `CLAUDE.md`, `AGENTS.md` — documented two recurring gotchas for future maintainers: the LF-pin requirement for any *generated* package file, and the **1024-char** Claude Code skill-`description` cap above which a skill is silently skipped (flagging `mistral`, `shaughv-cdn`, `gcs-storage` as currently over the cap).
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.18.0` → `0.18.1`.
+- `plugins/shaughv-code/` — regenerated (version lockstep); `-Check` passes.
+
 ## [0.18.0] — 2026-06-24
 
 Synced the bundle against the upstream work `theia-tools` skills and **de-work-ified** everything brought over — every Millis / Theia / Mission Control / CDP / Procore / Acumatica / Christian reference stripped or genericized. Net: a major `critical-thinking` expansion, four new general-purpose skills, and a reconciliation pass over the shared skills (most of which were already ahead of upstream, so were left untouched).
