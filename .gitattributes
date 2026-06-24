@@ -1,2 +1,11 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# build-codex-plugin.ps1 writes the wrapped Codex .mcp.json as byte-exact UTF-8/LF
+# and CI compares it by SHA256. With `* text=auto` + core.eol=native a Windows CI
+# runner would check the committed copy out as CRLF, so the rebuilt-LF vs
+# checked-out-CRLF hashes would never match. Pin every .mcp.json to LF on checkout
+# (any platform) so the tracked Codex package stays byte-reproducible. The root
+# .mcp.json is pinned too, for parity.
+.mcp.json text eol=lf
+
