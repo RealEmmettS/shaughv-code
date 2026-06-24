@@ -1,0 +1,174 @@
+<!--
+  Browser client for the WebRTC voice agent.
+
+  REQUIREMENTS
+  ------------
+  Run the companion server first (see server.js or server.ts). The server
+  mediates the SDP exchange with OpenAI on the server side, so the browser
+  never sees the OPENAI_API_KEY.
+
+  Setup steps:
+    1. cd examples/webrtc-browser-voice-agent
+    2. npm install express
+    3. export OPENAI_API_KEY=sk-...
+    4. node server.js          (or:  npx ts-node server.ts)
+    5. Open http://localhost:3000 in a Chromium-based browser.
+    6. Click "Start session" and grant microphone access.
+
+  Browser requirements:
+    - Microphone access.
+    - WebRTC (modern Chromium / Firefox / Safari).
+    - Localhost (or HTTPS) — browsers block getUserMedia on plain HTTP.
+
+  Pairs with: references/06-transport-webrtc.md
+  Live-tested: server endpoint smoke-tested via curl. Full browser round trip
+               needs manual verification (see examples/README.md).
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>OpenAI Realtime — WebRTC voice agent</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 4rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .row { display: flex; gap: 0.5rem; align-items: center; margin: 1rem 0; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; }
+    #log { background: #f5f5f5; padding: 1rem; border-radius: 8px; max-height: 320px; overflow: auto; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+    .pill { padding: 0.1rem 0.4rem; border-radius: 999px; font-size: 0.75rem; }
+    .ok { background: #d4f1d4; color: #1a601a; }
+    .warn { background: #fff3cd; color: #856404; }
+    .err { background: #f8d7da; color: #721c24; }
+    .muted { color: #777; }
+  </style>
+</head>
+<body>
+  <h1>OpenAI Realtime — WebRTC voice agent</h1>
+
+  <p class="muted">
+    This page connects to the OpenAI Realtime API through the local
+    <code>/session</code> endpoint (see <code>server.js</code>). Your microphone
+    audio is streamed live; the model's reply is played through your speakers.
+  </p>
+
+  <p class="muted">
+    Voice agents are AI-generated. Please disclose this to your end users in
+    production builds.
+  </p>
+
+  <div class="row">
+    <button id="start">Start session</button>
+    <button id="stop" disabled>Hang up</button>
+    <span id="status" class="pill warn">idle</span>
+  </div>
+
+  <audio id="remote" autoplay></audio>
+  <pre id="log"></pre>
+
+  <script type="module">
+    const startBtn = document.getElementById("start");
+    const stopBtn = document.getElementById("stop");
+    const statusEl = document.getElementById("status");
+    const logEl = document.getElementById("log");
+    const remoteAudio = document.getElementById("remote");
+
+    let pc = null;
+    let dc = null;
+    let micStream = null;
+
+    function setStatus(text, kind = "warn") {
+      statusEl.textContent = text;
+      statusEl.className = `pill ${kind}`;
+    }
+
+    function log(...args) {
+      const line = args
+        .map((a) => (typeof a === "string" ? a : JSON.stringify(a)))
+        .join(" ");
+      logEl.textContent += `${line}\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    startBtn.addEventListener("click", async () => {
+      startBtn.disabled = true;
+      setStatus("connecting…", "warn");
+
+      try {
+        pc = new RTCPeerConnection();
+
+        pc.ontrack = (event) => {
+          remoteAudio.srcObject = event.streams[0];
+        };
+
+        pc.onconnectionstatechange = () => {
+          log("[pc]", pc.connectionState);
+          if (pc.connectionState === "connected") setStatus("connected", "ok");
+          if (pc.connectionState === "failed") setStatus("failed", "err");
+          if (pc.connectionState === "disconnected") setStatus("disconnected", "warn");
+        };
+
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        for (const track of micStream.getAudioTracks()) {
+          pc.addTrack(track, micStream);
+        }
+
+        dc = pc.createDataChannel("oai-events");
+        dc.addEventListener("open", () => log("[dc] open"));
+        dc.addEventListener("message", (e) => {
+          const event = JSON.parse(e.data);
+          if (event.type === "response.output_audio_transcript.delta") {
+            // Don't log every delta — too noisy.
+            return;
+          }
+          if (event.type === "response.output_audio_transcript.done") {
+            log("[transcript]", event.transcript);
+            return;
+          }
+          if (event.type === "error") {
+            log("[error]", event);
+            setStatus("error", "err");
+            return;
+          }
+          log("[event]", event.type);
+        });
+
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+
+        const r = await fetch("/session", {
+          method: "POST",
+          headers: { "Content-Type": "application/sdp" },
+          body: offer.sdp,
+        });
+        if (!r.ok) throw new Error(`/session HTTP ${r.status}: ${await r.text()}`);
+
+        const answerSdp = await r.text();
+        await pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
+
+        stopBtn.disabled = false;
+      } catch (err) {
+        log("[fatal]", err.message ?? String(err));
+        setStatus("error", "err");
+        await teardown();
+        startBtn.disabled = false;
+      }
+    });
+
+    stopBtn.addEventListener("click", async () => {
+      stopBtn.disabled = true;
+      await teardown();
+      startBtn.disabled = false;
+      setStatus("idle", "warn");
+    });
+
+    async function teardown() {
+      if (dc) try { dc.close(); } catch {}
+      if (pc) try { pc.close(); } catch {}
+      if (micStream) micStream.getTracks().forEach((t) => t.stop());
+      pc = null;
+      dc = null;
+      micStream = null;
+    }
+  </script>
+</body>
+</html>

@@ -9,6 +9,20 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late June 2026
 
 **Added**
+- A small new **TT;DR** skill joined the bundle. "TT;DR" stands for "Too Tired; Didn't Read" — a playful flip of the familiar "TL;DR". The idea: when a reply is long or detailed, open it with a one-glance, plain-English summary of what's going on and where things stand, written for someone who's sharp but busy or tired. Unlike a TL;DR, it doesn't assume the reader is lazy, and it never replaces the detail — the full answer still follows right underneath the short lead. The skill teaches the assistant when to add one (status updates, change descriptions, incident notes, long write-ups, hand-offs), how to keep it short and jargon-free, where to place it, and how it's different from a full technical write-up. It comes with a bank of good-and-bad before/after examples to copy from. Why it matters: long answers become far easier to skim — you can read three sentences and stop if that's all you need, or read on for the specifics.
+
+**Improved**
+- **The Codex version of this bundle now works like Emmett's work bundle.** Codex (another AI coding tool) installs add-ons a bit differently from Claude, and ours wasn't quite set up right — it only handed Codex the skills, not the extras. Now Codex installs the bundle the same proven way the work bundle does, and it also gets the same built-in helper connections the Claude version already had: one that searches the Remotion video-framework documentation, and one that reaches a Craft notes document. Why it matters: anyone using the bundle in Codex now gets the full experience, installed the reliable way, instead of a partial one.
+
+**Behind the scenes**
+- The TT;DR skill was copied in exactly as-is (it's plain text, with no code, keys, or moving parts to break). Bumped the version, extended the bundle's descriptions and search keywords so the skill surfaces for "TT;DR", "TTDR", and "summary", and added a row to the README's list of bundled skills.
+- To keep the Codex version honest, a small generator now builds Codex's own self-contained copy of the bundle straight from the main files, so the two can't drift apart, plus a one-command check that flags if that copy ever falls out of date. The maintainer notes were updated to describe this new step, replacing an old "there's nothing to build here" note now that the Codex copy has a tiny build step (the Claude version still has none).
+
+---
+
+## A few days earlier — late June 2026
+
+**Added**
 - A big new **Mistral AI** skill joined the bundle. It teaches the assistant to use Mistral's entire online service, with three headline jobs: pulling the text out of documents and PDFs (OCR), turning recorded speech into written text, and turning written text into spoken audio. It also covers everything else Mistral offers — chat, tool use, structured answers, embeddings, code completion, content moderation, file handling, bulk jobs, custom-model training, and Mistral's agents/conversations. It knows how to find your Mistral access key automatically, and if it can't, it asks you for one and offers to save it — either to your computer (so every future session has it) or just to the current project. It comes with ready-to-run helpers for the three main jobs, and it carries a complete offline copy of Mistral's own API guide so its instructions stay accurate, with a built-in way to check the live version for any changes. It also cleans up after itself: whenever it has to upload a file to Mistral to get a job done, it deletes that file the moment the result comes back, so you're never charged to store leftovers. Why it matters: any machine with the bundle can now read documents, transcribe audio, generate speech, and use the rest of Mistral on request — without hunting for setup steps.
 
 **Behind the scenes**

@@ -1,0 +1,14 @@
+# crystal-upscaler skill - Python dependencies
+#
+# The stdlib fallback path in upscale.py needs NONE of these (it talks to the fal
+# queue REST API with urllib + a base64 data URI). Install these for the best experience.
+
+# Primary path: official fal.ai Python client - clean file upload + queue polling.
+fal-client>=0.5
+
+# Required by fit.py (auto-shrink oversized inputs) and the pre-flight cost estimate.
+pillow>=10.0
+
+# Optional: speeds up fit.py's Stage-5 structural-correlation check.
+# A pure-Python fallback runs if numpy is absent, so this is not required.
+# numpy>=1.24

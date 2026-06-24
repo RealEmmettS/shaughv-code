@@ -1,0 +1,10 @@
+# The runner scripts in this folder are dependency-OPTIONAL — they talk to the
+# Mistral REST API using only the Python standard library (urllib), so they run
+# on any machine with Python 3.8+ without installing anything.
+#
+# Install the official SDK only if you want to run the SDK code samples from the
+# reference docs (../references/*.md) instead of the bundled scripts:
+#
+#   pip install -r requirements.txt
+#
+mistralai>=1.0

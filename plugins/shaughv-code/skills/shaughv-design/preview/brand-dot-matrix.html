@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css">
+<style>
+  .grid-bg { background:
+    radial-gradient(circle at 30% 20%, rgba(91,138,91,0.10), transparent 42%),
+    radial-gradient(circle at 80% 80%, rgba(196,168,118,0.10), transparent 40%);
+  }
+  .dot { width:6px; height:6px; border-radius:50%; background:var(--fg-faint); }
+</style>
+</head>
+<body class="card grid-bg" style="min-height:200px">
+  <div class="section-label">DotMatrix background · the global canvas</div>
+  <div style="height:128px;display:grid;grid-template-columns:repeat(18,1fr);grid-template-rows:repeat(4,1fr);align-items:center;justify-items:center;margin-top:6px;border:1px solid var(--border-hairline);padding:20px;background:var(--bg-raised);position:relative">
+    <!-- Plain dots, with a few near the cursor "pulled" toward the center -->
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot" style="transform:translate(8px,4px);background:var(--accent)"></div><div class="dot" style="transform:translate(2px,8px);background:var(--accent)"></div><div class="dot" style="transform:translate(-4px,8px);background:var(--accent)"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot" style="transform:translate(6px,-4px)"></div><div class="dot" style="transform:translate(0,-2px)"></div><div class="dot" style="transform:translate(-4px,-4px)"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <!-- cursor crosshair -->
+    <div style="position:absolute;left:46%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:var(--accent);border-radius:50%;mix-blend-mode:difference"></div>
+  </div>
+  <div class="label-row" style="margin-top:10px"><span>30px grid · 1.5px dot · 150px influence</span><span>Olive @ 22%</span></div>
+</body></html>

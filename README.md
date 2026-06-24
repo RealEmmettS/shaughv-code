@@ -17,7 +17,7 @@ That's it. All skills below auto-load whenever their description matches the tas
 
 **Optional follow-up:** for the Remotion team's official skill set, run `npx skills add remotion-dev/skills` separately. Those skills aren't bundled here so they stay upstream-controlled.
 
-### Codex install (skills-only)
+### Codex install
 
 For first-time install in Codex, run:
 
@@ -26,7 +26,7 @@ codex plugin marketplace add RealEmmettS/shaughv-code
 codex plugin add shaughv-code@shaughv-code
 ```
 
-Codex currently receives the skills only. The bundled MCP servers and `/shaughv-code:create-video` command remain on the Claude Code marketplace surface until a Codex-compatible MCP/command pass is done.
+Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation + Craft Docs) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
 
 ### Alternative: install skills-only with `npx skills`
 
@@ -60,7 +60,7 @@ codex plugin marketplace upgrade shaughv-code
 codex plugin add shaughv-code@shaughv-code
 ```
 
-Start a fresh Codex thread after reinstalling so new or changed skills are loaded.
+Start a fresh Codex thread after reinstalling so new or changed skills or MCP servers are loaded.
 
 To develop against a local checkout instead of the published marketplace:
 
@@ -99,6 +99,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `shaughv-gcs-storage` | Pre-wired skill for Emmett's personal public bucket at `gs://shaughv`. Bucket facts (uniform IAM, public reads, 7-day soft delete, versioning on, CORS off, US multi-region) baked in so the agent never has to ask. Returns `https://storage.googleapis.com/shaughv/<path>` URLs. Embeds the full cross-platform reference from `gcs-storage` so it stands alone. |
 | `spawn` | Manual-invocation-only `/spawn` orchestration playbook — two-phase Opus subagent pattern (read-only INVESTIGATE, then EXECUTE) for driving one problem to done. Never auto-triggers. |
 | `strategic-thinking` | Turn-based facilitation for any strategic situation — builds a Strategic Picture, pulls four lenses (Art of War, 36 Stratagems, Five Rings, game theory), converges on a recommended line plus alternatives. |
+| `ttdr` | Write a **TT;DR** ("Too Tired; Didn't Read") — a short (1–3 sentence), plain-English, high-level lead that sits *on top of* a detailed answer for a busy or tired reader (the opposite spirit of a TL;DR; it accompanies the detail, never replaces it). Covers what it is, how to write one for the context at hand, format/placement, and how it differs from a TL;DR, technical overview, or tech spec. Bundles a before/after example bank. |
 | `usage-statusline` | Install Emmett's Claude Code usage status line — two rows showing live 5-hour and weekly usage % (color-coded bars), model / context-fill / session cost, plus a local burn-rate "time left" estimate before the 5h limit with a red/green acceleration-trend color. Ships the canonical zero-dependency Node script plus a **cross-platform installer** (`install.mjs`) that resolves paths per machine, merges `settings.json` non-destructively (with backup), and runs `--selftest` — so the identical status line installs cleanly on every machine, nothing hardcoded. |
 | `wb300` | Inspect and supervise Git branches, worktrees, and the coding agents running across them via the `wb300` control tower — `wb300 agent` JSON for answering "what's running / dirty / ready to review / safe to clean up / will collide", plus install/update/uninstall guidance and how to point the human at the live TUI. |
 
@@ -115,21 +116,31 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
 | `craft-docs` | `https://mcp.craft.do/links/.../mcp` (Streamable HTTP) | Connects to a specific Craft Docs link. OAuth-gated — first tool use pops a Craft sign-in flow, so the bundled URL alone is not a credential. Exposes Craft's standard tools (read/write blocks, revert). |
 
+Both surfaces bundle these now: Claude Code reads them from the root `.mcp.json`, and the Codex package ships them too (`plugins/shaughv-code/.mcp.json`). Codex sessions run *inside this repo* also pick them up from `.codex/config.toml` before the plugin is installed.
+
 ## Repo layout
 
 ```
 shaughv-code/
 ├── .agents/
 │   └── plugins/
-│       └── marketplace.json # Codex marketplace entry (skills-only)
+│       └── marketplace.json # Codex marketplace entry (points at plugins/shaughv-code/)
 ├── .claude-plugin/
 │   ├── plugin.json          # plugin manifest
 │   └── marketplace.json     # marketplace entry (single-plugin marketplace)
+├── .codex/
+│   └── config.toml          # repo-local Codex MCP fallback (in-repo sessions)
 ├── .codex-plugin/
-│   └── plugin.json          # Codex plugin manifest (skills-only)
+│   └── plugin.json          # Codex plugin manifest (skills + MCP)
 ├── .mcp.json                # bundled MCP servers (Remotion docs, Craft Docs)
+├── build-codex-plugin.ps1   # regenerates plugins/shaughv-code/ from root
 ├── commands/
 │   └── create-video.md      # /shaughv-code:create-video
+├── plugins/
+│   └── shaughv-code/        # GENERATED Codex package — do not hand-edit
+│       ├── .codex-plugin/plugin.json   # copy of root manifest
+│       ├── .mcp.json                   # root .mcp.json in Codex's wrapped shape
+│       └── skills/                     # copy of root skills/
 └── skills/
     ├── critical-thinking/
     ├── gcs-storage/
@@ -142,10 +153,11 @@ shaughv-code/
     ├── shaughv-animated-brandmark/
     ├── shaughv-cdn/
     ├── shaughv-design/
-    └── shaughv-gcs-storage/
+    ├── shaughv-gcs-storage/
+    └── ttdr/
 ```
 
-Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit in place — there is no separate build step and no `.skill` zip to keep in sync.
+Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit skills in place — there is no build step for the Claude Code surface. The **Codex** surface is the one exception: its `plugins/shaughv-code/` package is generated from root by `build-codex-plugin.ps1` and must be regenerated (not hand-edited) whenever root skills, `.mcp.json`, or the Codex manifest change.
 
 ## Editing a skill (maintainer workflow)
 
@@ -153,10 +165,11 @@ For consumers: see [Update](#update) above — you don't need this section.
 
 For Emmett / anyone editing the plugin's source:
 
-1. Edit files under `skills/<name>/`.
-2. Commit and push.
-3. In any Claude Code instance: `/plugin marketplace update shaughv-code` then `/reload-plugins` (or restart).
-4. In Codex: `codex plugin marketplace upgrade shaughv-code`, then `codex plugin add shaughv-code@shaughv-code`, then start a fresh thread.
+1. Edit files under `skills/<name>/` (or `.mcp.json` / `.codex-plugin/plugin.json`).
+2. Regenerate the Codex package: `pwsh ./build-codex-plugin.ps1` (verify with `pwsh ./build-codex-plugin.ps1 -Check`). Never hand-edit `plugins/shaughv-code/`.
+3. Commit and push — include both the root change and the regenerated `plugins/shaughv-code/`.
+4. In any Claude Code instance: `/plugin marketplace update shaughv-code` then `/reload-plugins` (or restart).
+5. In Codex: `codex plugin marketplace upgrade shaughv-code`, then `codex plugin add shaughv-code@shaughv-code`, then start a fresh thread.
 
 ## Author
 

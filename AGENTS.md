@@ -14,12 +14,13 @@ Don't introduce `agents/`, `hooks/`, additional MCP servers, or additional
 commands unless Emmett explicitly asks to expand scope.
 
 The bundle is consumable three ways: (1) the Claude Code marketplace install
-documented in the README (delivers skills + the bundled MCP + slash command),
-(2) the Codex marketplace install documented in the README (skills-only for
-now), and (3) `npx skills add RealEmmettS/shaughv-code` for a skills-only
-install in any [skills.sh](https://skills.sh)-supported agent. All paths read
-the same source — the `skills/` directory — so editing a skill propagates to
-each surface.
+documented in the README (delivers skills + the bundled MCP servers + slash
+command), (2) the Codex marketplace install documented in the README (skills +
+the same bundled MCP servers), and (3) `npx skills add RealEmmettS/shaughv-code`
+for a skills-only install in any [skills.sh](https://skills.sh)-supported agent.
+Root content — `skills/`, `.mcp.json`, `.codex-plugin/plugin.json` — is the
+authoring source of truth; the Codex surface is a generated copy of it (see
+"Codex plugin surface").
 
 ## Bundled non-skill components
 
@@ -36,20 +37,42 @@ Each of these was added by explicit ask — don't remove them without one:
 
 ## Codex plugin surface
 
-- **`.codex-plugin/plugin.json`** is the Codex manifest. Keep it lowercase.
-- **`.agents/plugins/marketplace.json`** is the Codex marketplace entry. It
-  points `shaughv-code` at this Git repo with a URL source descriptor because
-  Codex does not list plugins whose local source path is the marketplace root.
-- The Codex manifest is intentionally skills-only. Do not add `mcpServers`
-  there unless `.mcp.json` is first converted or mirrored into the Codex
-  `mcpServers` wrapper shape and validated.
-- The Claude marketplace surface remains in `.claude-plugin/`; do not rename
-  or remove it when editing the Codex surface.
+Codex installs a marketplace plugin by snapshotting a self-contained plugin
+**subdirectory** named by the marketplace entry — it cannot consume this repo's
+flat root (which must stay flat for Claude Code). So the Codex surface is a
+tracked, generated package, mirroring how the work `theia-tools` plugin does it:
+
+- **`plugins/shaughv-code/`** is the self-contained Codex package — a generated
+  copy of root `.codex-plugin/plugin.json`, a wrapped copy of `.mcp.json`, and a
+  copy of `skills/`. **Never hand-edit it.** Regenerate from root with
+  `pwsh ./build-codex-plugin.ps1` (validate with `-Check`).
+- **`.agents/plugins/marketplace.json`** is the Codex marketplace entry. Its
+  source is `{ "source": "local", "path": "./plugins/shaughv-code" }` — a
+  subdirectory, not the repo root (Codex does not list a plugin whose local
+  source path is the marketplace root itself).
+- **`.codex-plugin/plugin.json`** is the Codex manifest (source of truth, copied
+  verbatim into the package). Keep it lowercase. It points at `./skills/` and
+  `./.mcp.json` and carries the MCP servers — the Codex surface is **not**
+  skills-only.
+- **`.mcp.json`** at root is the bare Claude-plugin shape (`{ "<name>": {…} }`);
+  the build script wraps it (`{ "mcpServers": {…} }`) in the package, which is
+  the shape Codex expects. Do not change the root file's shape — Claude Code
+  needs the bare form.
+- **`.codex/config.toml`** is a repo-local MCP fallback (TOML) so Codex sessions
+  run *inside this repo* get the servers before the plugin is installed. It is
+  hand-maintained (different format from `.mcp.json`) and the build script does
+  not touch it; keep the two in sync by hand.
+- The Claude marketplace surface remains in `.claude-plugin/`; do not rename or
+  remove it when editing the Codex surface.
 
 ## Editing a skill
 
-- Edit `skills/<name>/SKILL.md` directly. No build step, no `.skill` zip to
-  rebuild — the old zip-bundle workflow was retired.
+- Edit `skills/<name>/SKILL.md` directly. No `.skill` zip to rebuild — the old
+  zip-bundle workflow was retired.
+- Regenerate the Codex package after any change to root `skills/`, `.mcp.json`,
+  or `.codex-plugin/plugin.json`: `pwsh ./build-codex-plugin.ps1` (verify with
+  `-Check`). Commit the regenerated `plugins/shaughv-code/` alongside the root
+  change; never hand-edit the package.
 - Changes propagate to Claude Code via `/plugin marketplace update`. Changes
   propagate to Codex via `codex plugin marketplace upgrade shaughv-code` and
   `codex plugin add shaughv-code@shaughv-code` after the commit is pushed.
@@ -68,7 +91,8 @@ Each of these was added by explicit ask — don't remove them without one:
 3. Bump `version` in `.codex-plugin/plugin.json` if it's a substantive change.
    Bump the same version in `.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` so the plugin surfaces stay aligned.
-4. Add a release entry to both changelogs (see the Changelog rule below).
+4. Regenerate the Codex package: `pwsh ./build-codex-plugin.ps1`.
+5. Add a release entry to both changelogs (see the Changelog rule below).
 
 ## Changelog rule
 
@@ -107,7 +131,9 @@ tone or structure.
 ## What not to do
 
 - Don't recreate `.skill` zip bundles — that workflow was deliberately dropped.
-- Don't add a build script. There's nothing to build.
+- Don't hand-edit `plugins/shaughv-code/` — it's generated. Edit root content
+  and re-run `build-codex-plugin.ps1` (the repo's only build step; it just
+  regenerates the Codex package from root).
 - Don't write tests. The skills are documentation/prompts; the useful checks
-  are plugin manifest validation, Codex marketplace discovery, and seeing the
-  skill trigger on its phrases in a fresh thread.
+  are `build-codex-plugin.ps1 -Check`, plugin manifest validation, Codex
+  marketplace discovery, and seeing the skill trigger on its phrases.

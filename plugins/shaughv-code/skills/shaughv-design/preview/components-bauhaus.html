@@ -1,0 +1,173 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css">
+<style>
+  body.card { min-height: 460px; padding: 24px 28px; }
+
+  .row {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .primitive {
+    position: relative;
+    flex: none;
+  }
+  .primitive-label {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--fg-soft);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* --- organic blobs ------------------------------------------------ */
+  .blob-row {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-hairline);
+    height: 200px;
+  }
+  .blob-tile {
+    position: relative;
+    background: var(--bg-raised);
+    overflow: hidden;
+  }
+  .blob-tile .tag {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-soft);
+    z-index: 2;
+  }
+  .blob {
+    position: absolute;
+    inset: 18% 22%;
+    will-change: border-radius, transform;
+  }
+  /* Three independent organic morph keyframes — different start radii
+     and rotation directions so the trio reads as motion, not in lock-step. */
+  @keyframes blob-morph-a {
+    0%,100% { border-radius: 62% 38% 47% 53% / 56% 44% 56% 44%; transform: rotate(0deg) scale(1); }
+    25%     { border-radius: 38% 62% 56% 44% / 44% 62% 38% 56%; transform: rotate(90deg) scale(1.04); }
+    50%     { border-radius: 56% 44% 38% 62% / 47% 53% 41% 59%; transform: rotate(180deg) scale(0.98); }
+    75%     { border-radius: 47% 53% 65% 35% / 38% 56% 62% 44%; transform: rotate(270deg) scale(1.02); }
+  }
+  @keyframes blob-morph-b {
+    0%,100% { border-radius: 50% 50% 70% 30% / 30% 50% 50% 70%; transform: rotate(0deg) scale(1); }
+    33%     { border-radius: 70% 30% 50% 50% / 50% 30% 70% 50%; transform: rotate(-120deg) scale(1.05); }
+    66%     { border-radius: 30% 70% 50% 50% / 50% 70% 30% 50%; transform: rotate(-240deg) scale(0.96); }
+  }
+  @keyframes blob-morph-c {
+    0%,100% { border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%; transform: rotate(0deg) scale(1); }
+    50%     { border-radius: 60% 40% 55% 45% / 40% 60% 45% 55%; transform: rotate(160deg) scale(1.06); }
+  }
+  .blob.sage   { background: var(--sv-sage);        animation: blob-morph-a 14s ease-in-out infinite; }
+  .blob.bamboo { background: var(--sv-bamboo-dark); animation: blob-morph-b 18s ease-in-out infinite; }
+  .blob.olive  { background: var(--sv-olive);       animation: blob-morph-c 11s ease-in-out infinite; }
+
+  /* Second blob in each tile, offset and slower, builds the layered feel
+     the production hero backdrop uses. */
+  .blob.echo {
+    inset: 32% 12% 8% 38%;
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+    animation-duration: 22s;
+    animation-direction: reverse;
+  }
+
+  /* Reduced-motion path: freeze blobs in their start state. */
+  @media (prefers-reduced-motion: reduce) {
+    .blob { animation: none !important; }
+  }
+
+  .subhead {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 22px 0 8px;
+  }
+  .footnote {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-top: 12px;
+    line-height: 1.55;
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    background: var(--bg-raised);
+    padding: 1px 5px;
+    border: 1px solid var(--border-hairline);
+  }
+</style>
+</head>
+<body class="card">
+  <div class="section-label">Bauhaus primitives · geometric backdrop decoration</div>
+
+  <div class="row">
+    <div>
+      <div class="primitive" style="width:90px;height:90px">
+        <div style="position:absolute;inset:0;background:var(--accent);border-radius:50%"></div>
+      </div>
+      <div class="primitive-label">Circle · filled</div>
+    </div>
+    <div>
+      <div class="primitive" style="width:90px;height:90px">
+        <div style="position:absolute;inset:0;border:2px solid var(--sv-olive);border-radius:50%"></div>
+      </div>
+      <div class="primitive-label">Circle · outline</div>
+    </div>
+    <div>
+      <div class="primitive" style="width:140px;height:90px">
+        <div style="position:absolute;left:0;top:50%;height:2px;width:100%;background:var(--accent)"></div>
+        <div style="position:absolute;left:0;top:calc(50% + 16px);height:2px;width:60%;background:var(--sv-bamboo-dark)"></div>
+      </div>
+      <div class="primitive-label">Line · pair</div>
+    </div>
+    <div>
+      <div class="primitive" style="width:70px;height:70px;background:var(--sv-bauhaus-red)"></div>
+      <div class="primitive-label">Block</div>
+    </div>
+    <div>
+      <div class="primitive" style="width:0;height:0;border-left:42px solid transparent;border-right:42px solid transparent;border-bottom:74px solid var(--sv-bauhaus-yellow)"></div>
+      <div class="primitive-label">Triangle</div>
+    </div>
+  </div>
+
+  <div class="subhead">Organic blobs · low-opacity backdrop motion</div>
+
+  <div class="blob-row">
+    <div class="blob-tile">
+      <div class="blob sage"></div>
+      <div class="blob bamboo echo"></div>
+      <div class="tag">sage + bamboo</div>
+    </div>
+    <div class="blob-tile">
+      <div class="blob olive"></div>
+      <div class="blob sage echo"></div>
+      <div class="tag">olive + sage</div>
+    </div>
+    <div class="blob-tile" style="background:var(--sv-olive)">
+      <div class="blob bamboo" style="background:var(--sv-cream-200);opacity:0.85"></div>
+      <div class="blob sage echo" style="background:var(--sv-bamboo-light);opacity:0.45;mix-blend-mode:screen"></div>
+      <div class="tag" style="color:var(--sv-cream-100)">cream · on olive</div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Geometric primitives (<code>BauhausCircle</code>, <code>BauhausLine</code>, blocks, triangles) sit at <strong>5–20% opacity</strong> behind hero / about sections — never inside content. Organic blobs are an alternate slow-motion backdrop for the same role: morphing <code>border-radius</code> tuples at <strong>11–22 s</strong> per cycle, easing in/out, paired echo blob in <code>mix-blend-mode: multiply</code> for depth. Honors <code>prefers-reduced-motion: reduce</code> by freezing the cycle.
+  </div>
+</body></html>

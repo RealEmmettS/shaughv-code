@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css"></head>
+<body class="card" style="min-height:220px">
+  <div class="section-label">Radii · mostly square, pills for chips</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:6px">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div style="width:80px;height:60px;background:var(--bg-raised);border:1px solid var(--border-strong);border-radius:0"></div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--fg-soft);text-transform:uppercase;letter-spacing:0.1em">0 · none</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div style="width:80px;height:60px;background:var(--bg-raised);border:1px solid var(--border-strong);border-radius:4px"></div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--fg-soft);text-transform:uppercase;letter-spacing:0.1em">4 · sm</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div style="width:80px;height:60px;background:var(--bg-raised);border:1px solid var(--border-strong);border-radius:20px"></div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--fg-soft);text-transform:uppercase;letter-spacing:0.1em">20 · lg</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div style="width:80px;height:60px;background:var(--bg-raised);border:1px solid var(--border-strong);border-radius:32px"></div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--fg-soft);text-transform:uppercase;letter-spacing:0.1em">32 · xl</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div style="width:80px;height:60px;background:var(--bg-raised);border:1px solid var(--border-strong);border-radius:9999px"></div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--fg-soft);text-transform:uppercase;letter-spacing:0.1em">∞ · pill</div>
+    </div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:12px;color:var(--fg-muted);margin-top:14px">
+    Default is square (radius-none). 20–32px reserved for Contact-form outer wrappers; pill for chips, tech tags, and IconButton circles.
+  </div>
+</body></html>

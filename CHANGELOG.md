@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.17.0] — 2026-06-23
+
+### Added
+- `skills/ttdr/` — a skill teaching the **TT;DR ("Too Tired; Didn't Read")** convention: a short (1–3 sentence), plain-English, high-level lead that sits *on top of* a detailed answer for a busy or tired reader. It's the opposite spirit of a TL;DR — it assumes a competent-but-overloaded reader and **accompanies** the detail rather than replacing it. `SKILL.md` (frontmatter `name: ttdr` matching the directory) covers what a TT;DR is, the TL;DR-vs-TT;DR distinction, where to use it (status updates, commit/PR descriptions, incident write-ups, long docs, hand-offs), how to write one for the context at hand, format/placement, how it differs from a technical overview or tech spec, and common mistakes. Ships one reference, `references/examples.md` — a before/after example bank across status updates, commit & PR descriptions, incident write-ups, and edge cases (one-line fields, multi-section reports). Imported verbatim (pure Markdown, no scripts/deps/secrets).
+- `plugins/shaughv-code/` — a tracked, **generated** self-contained Codex plugin package (its own `.codex-plugin/plugin.json`, a wrapped `.mcp.json`, and a copy of `skills/`), so Codex can snapshot a real subdirectory instead of being pointed at the bare repo. Brings the Codex distribution mechanism to parity with the work `theia-tools` plugin. Never hand-edit it — it's regenerated from root.
+- `build-codex-plugin.ps1` — regenerates `plugins/shaughv-code/` from repo root: copies the Codex manifest verbatim, **wraps** the bare root `.mcp.json` into Codex's `{ "mcpServers": { … } }` shape, copies `skills/` verbatim, and guards against Windows `MAX_PATH` overflow. `-Check` rebuilds into a temp dir and SHA-compares (plus a version-lockstep assertion) without touching the worktree.
+- `.codex/config.toml` — a repo-local Codex MCP fallback (native TOML) registering `remotion-documentation` (stdio: `npx @remotion/mcp@latest`) and `craft-docs` (streamable HTTP) for Codex sessions run inside this repo, before the plugin is installed.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.16.0` → `0.17.0` across all three manifests; the Claude and Codex descriptions extended to mention the TT;DR skill, and keywords extended with `ttdr`, `tldr`, and `summary`.
+- `README.md` — "Skills bundled" table extended with a `ttdr` row (kept alphabetical, between `strategic-thinking` and `usage-statusline`).
+- `.agents/plugins/marketplace.json` — Codex marketplace source flipped from a Git-URL descriptor (`source: url`, the repo `.git`) to a local subdirectory (`source: local`, `path: ./plugins/shaughv-code`), so Codex snapshots the self-contained package rather than the flat repo root. Install command is unchanged (`shaughv-code@shaughv-code`).
+- `.codex-plugin/plugin.json` — gained `"mcpServers": "./.mcp.json"`, so the Codex surface now bundles the same MCP servers (Remotion documentation + Craft Docs) as the Claude surface; `interface.longDescription` reworded (the Codex surface is no longer "skills-only"). The root `.mcp.json` is unchanged (it must stay the bare Claude-plugin shape; the build script wraps it for the package).
+- `README.md`, `AGENTS.md`, `CLAUDE.md` — Codex sections rewritten for the packaged-snapshot mechanism and MCP-in-Codex (repo-layout trees updated with `.codex/`, `plugins/shaughv-code/`, and `build-codex-plugin.ps1`; maintainer workflow gains the regen step); the standing "don't add a build script" rule replaced with the Codex-package regen rule (`build-codex-plugin.ps1` is the repo's only build step and the Claude surface still has none).
+
 ## [0.16.0] — 2026-06-19
 
 ### Added

@@ -31,11 +31,20 @@ Each of these was added by explicit ask — don't remove them without one:
   `npx create-video@latest --recorder`, then adds `@remotion/web-renderer`
   inside the new project (`npx remotion add @remotion/web-renderer`). Order
   is fixed because `remotion add` has to run from inside an existing project.
+- **`build-codex-plugin.ps1` + `plugins/shaughv-code/` + `.codex/config.toml`** —
+  the Codex surface. `plugins/shaughv-code/` is a generated, self-contained Codex
+  package (a copy of root `skills/`, a wrapped copy of `.mcp.json`, and the Codex
+  manifest); `build-codex-plugin.ps1` regenerates it from root; `.codex/config.toml`
+  is a repo-local MCP fallback. **Never hand-edit `plugins/shaughv-code/`.** See
+  `AGENTS.md` for the full Codex story.
 
 ## Editing a skill
 
-- Edit `skills/<name>/SKILL.md` directly. No build step, no `.skill` zip to
-  rebuild — the old zip-bundle workflow was retired.
+- Edit `skills/<name>/SKILL.md` directly. No `.skill` zip to rebuild — the old
+  zip-bundle workflow was retired.
+- After editing root skills (or `.mcp.json` / `.codex-plugin/plugin.json`),
+  regenerate the Codex package: `pwsh ./build-codex-plugin.ps1` (verify with
+  `-Check`), and commit the regenerated `plugins/shaughv-code/` too.
 - Changes propagate to every Claude instance via `/plugin marketplace update`.
 
 ## Adding a skill
@@ -50,9 +59,10 @@ Each of these was added by explicit ask — don't remove them without one:
 2. Put supporting docs in `skills/<name>/references/`, code in `examples/`,
    assets in `assets/`.
 3. Bump `version` in `.claude-plugin/plugin.json` if it's a substantive change.
-   Bump the same version in `.claude-plugin/marketplace.json` so the two
-   manifests stay aligned.
-4. Add a release entry to both changelogs (see the Changelog rule below).
+   Bump the same version in `.claude-plugin/marketplace.json` and
+   `.codex-plugin/plugin.json` so the manifests stay aligned.
+4. Regenerate the Codex package: `pwsh ./build-codex-plugin.ps1`.
+5. Add a release entry to both changelogs (see the Changelog rule below).
 
 ## Changelog rule
 
@@ -91,6 +101,9 @@ tone or structure.
 ## What not to do
 
 - Don't recreate `.skill` zip bundles — that workflow was deliberately dropped.
-- Don't add a build script. There's nothing to build.
-- Don't write tests. The skills are documentation/prompts; the only "test" is
-  `claude --plugin-dir <path>` and seeing the skill trigger on its phrases.
+- Don't hand-edit `plugins/shaughv-code/` — it's generated. Edit root content and
+  re-run `build-codex-plugin.ps1` (the repo's one build step, which only
+  regenerates the Codex package; the Claude surface still has no build step).
+- Don't write tests. The skills are documentation/prompts; the only "tests" are
+  `build-codex-plugin.ps1 -Check` and `claude --plugin-dir <path>` + seeing the
+  skill trigger on its phrases.
