@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triage card — dense hand-back</title>
+<style>
+  :root { --bg:#ffffff; --surface:#f4f3ef; --text:#1a1a18; --muted:#5f5e5a; --line:#d9d7cf;
+          --accent:#185fa5; --accent-bg:#e6f1fb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#191917; --surface:#242422; --text:#ece9e2; --muted:#a5a39b; --line:#3a3936;
+            --accent:#85b7eb; --accent-bg:#0c2c47; }
+  }
+  body { margin:0; padding:24px; background:var(--bg); color:var(--text);
+         font:15px/1.55 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .wrap { max-width:760px; margin:0 auto; }
+  .when { color:var(--muted); font-size:13px; margin:0 0 4px; }
+  .note { border:1px dashed var(--line); border-radius:8px; padding:8px 12px; font-size:13px;
+          color:var(--muted); margin:10px 0 18px; }
+  h1 { font-size:19px; font-weight:600; margin:0 0 2px; }
+  .meta { font-size:12.5px; color:var(--muted); margin:0 0 14px; }
+  .decision { border:2px solid var(--accent); border-radius:12px; padding:14px 18px; margin:0 0 14px;
+              background:var(--bg); }
+  .decision .label { color:var(--accent); font-size:12px; font-weight:600; text-transform:uppercase;
+                     letter-spacing:.04em; margin:0 0 6px; }
+  .decision .ask { font-size:16px; margin:0 0 10px; }
+  .decision table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  .decision td { padding:3px 0; vertical-align:top; }
+  .decision td:first-child { color:var(--muted); width:148px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; }
+  .bucket { background:var(--surface); border-radius:10px; padding:12px 14px; }
+  .bucket h2 { font-size:12px; font-weight:600; color:var(--muted); margin:0 0 6px;
+               text-transform:uppercase; letter-spacing:.04em; }
+  .bucket ul { margin:0; padding-left:18px; font-size:13.5px; }
+  .bucket li { margin:3px 0; }
+  .concept { font-size:13.5px; color:var(--muted); margin:14px 0 0; }
+  .concept b { color:var(--text); }
+  .reading { border-top:1px solid var(--line); margin-top:20px; padding-top:12px;
+             font-size:13.5px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="when">When to use: a dense status hand-back (agent or human) needs to become a 30-second read with the buried decision pulled to the front.</p>
+  <div class="note">Template note: replace everything in the <code>DATA</code> object at the top of the script with the real message's content. One card per message; multiple decisions render as stacked decision blocks.</div>
+  <div id="app"></div>
+  <p class="reading" id="reading"></p>
+</div>
+<script>
+const DATA = {
+  title: "Agent hand-back — data sync optimization (#104)",
+  meta: "30-second read · 1 decision · nothing burns overnight",
+  decisions: [{
+    ask: "Throttle the sync polling from hourly to daily now, as a stopgap?",
+    ifYes: "~96% fewer wasted calls; one-line config change, reversible",
+    ifNothing: "Stays hourly (re-pulls ~14k rows to find ~3 changes) until the proper fix — sender will not act without a yes",
+    deadline: "None. Safe to answer tomorrow morning."
+  }],
+  buckets: [
+    { name: "Done — no action", items: [
+      "Tasks 101, 102 done · 103 = PR #8 · 104 = PR #9 green + backend commit",
+      "Nothing merged — all parked for your merge session" ]},
+    { name: "In flight — being handled", items: [
+      "Research agent mapping all 20 entities → webhook / incremental / full-refresh, docs only, no API spend" ]},
+    { name: "Coming later — heads-up only", items: [
+      "Per-entity re-architecture proposal + ADR after research lands; filed as new tasks, not hot-patched" ]},
+    { name: "Constraints", items: [
+      "API budget exhausted until 19:34 UTC — sender is self-throttling; not your problem" ]}
+  ],
+  concept: "Webhooks name the exact record that changed (~1 call per change); the source has no change signal, so hourly polls re-pull ~14,000 rows to find ~3 changes.",
+  reading: "Reading: one reversible yes/no is the only thing being asked; everything else is parked, self-managing, or future work. If you do nothing tonight, the only cost is wasted API calls. Decide the stopgap in the morning."
+};
+const app = document.getElementById('app');
+let html = `<h1>${DATA.title}</h1><p class="meta">${DATA.meta}</p>`;
+for (const d of DATA.decisions) {
+  html += `<div class="decision"><p class="label">Decision needed from you</p>
+    <p class="ask">${d.ask}</p>
+    <table>
+      <tr><td>If you say yes</td><td>${d.ifYes}</td></tr>
+      <tr><td>If you do nothing</td><td>${d.ifNothing}</td></tr>
+      <tr><td>Deadline pressure</td><td>${d.deadline}</td></tr>
+    </table></div>`;
+}
+html += `<div class="grid">`;
+for (const b of DATA.buckets) {
+  html += `<div class="bucket"><h2>${b.name}</h2><ul>${b.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+}
+html += `</div><p class="concept"><b>The concept, one line:</b> ${DATA.concept}</p>`;
+app.innerHTML = html;
+document.getElementById('reading').textContent = DATA.reading;
+</script>
+</body>
+</html>

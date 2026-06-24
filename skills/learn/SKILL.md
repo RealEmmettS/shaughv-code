@@ -353,7 +353,7 @@ The journal is lossless by design. Compressed paraphrase is a reductionist mista
 - `references/learning-loop-session.md` — the 4-phase iteration (Choose Chunk → Plan
   Feedback → Practice → Retain)
 - `references/weekly-review-session.md` — review and adjust procedure
-- `references/proficiency-levels.md` — 8 levels (Unaware → Master) with challenges and
+- `references/proficiency-levels.md` — 8 levels (Unaware → Expert) with challenges and
   objectives per level; used for diagnostics and Course-Correct
 - `references/learning-journal.md` — the journal spec, template, and Before/During/
   After Learning questions

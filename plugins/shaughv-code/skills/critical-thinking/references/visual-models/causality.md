@@ -4,6 +4,11 @@ Tools for tracing causes, mapping cause-and-effect relationships, and testing co
 explanations. Reach for these when you need to understand **why** something is happening,
 not just **what**.
 
+> **Overloaded human?** If a static version of any model below still isn't breaking through —
+> long session, too many moving parts, the same question asked twice — escalate to a built
+> interactive version (node-by-node chain walk, clickable evidence cells). See
+> `references/visual-models/interactive.md`.
+
 This file covers:
 
 - **Causal Flow Diagram** — mapping factors and their cause-effect links, including

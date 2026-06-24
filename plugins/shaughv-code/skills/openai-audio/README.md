@@ -27,13 +27,13 @@ Claude Code looks for skills in `~/.claude/skills/<skill-name>/`. To install thi
 ### macOS / Linux
 
 ```bash
-cp -r /path/to/openai-realtime-skill ~/.claude/skills/openai-audio
+cp -r /path/to/openai-audio ~/.claude/skills/openai-audio
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
-Copy-Item -Recurse ".\openai-realtime-skill" "$env:USERPROFILE\.claude\skills\openai-audio"
+Copy-Item -Recurse ".\openai-audio" "$env:USERPROFILE\.claude\skills\openai-audio"
 ```
 
 After copying, restart `claude` (or start a new session). The skill should fire automatically on prompts that mention OpenAI's audio models, voice agents, transcription, translation, TTS, or any of the trigger phrases in `SKILL.md`'s frontmatter description.

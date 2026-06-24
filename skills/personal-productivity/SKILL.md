@@ -253,3 +253,10 @@ This protects rest, and rest is what makes the next deep-work block possible.
   paralysis, lead with `references/finitude.md` and the reassurance in it
   *before* reaching for ranking machinery. The frameworks land only once the
   pressure is acknowledged.
+
+## Stacking with other skills
+
+- **`critical-thinking`** — when the overwhelm is emotionally fraught or deeply uncertain,
+  route there (its Contemplating framework) before any ranking machinery.
+- **`strategic-thinking`** — when the situation is adversarial or competitive, not just crowded.
+- **`learn`** — when the underlying goal is deliberate skill acquisition.

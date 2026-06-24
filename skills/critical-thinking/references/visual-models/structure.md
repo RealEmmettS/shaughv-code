@@ -4,6 +4,11 @@ Tools for organizing information so its shape becomes visible. Reach for these w
 are accumulating without organization, or when sequence and relationships matter more
 than evaluation.
 
+> **Overloaded human?** If a static version of any model below still isn't breaking through —
+> long session, too many moving parts, the same question asked twice — escalate to a built
+> interactive version (re-sortable lists, expandable trees). See
+> `references/visual-models/interactive.md`.
+
 This file covers:
 
 - **Sorting** — categorizing items into groups

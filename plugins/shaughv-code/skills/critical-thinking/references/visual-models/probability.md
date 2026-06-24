@@ -3,6 +3,11 @@
 Tools for analyzing decisions under uncertainty. Reach for these when **outcomes aren't
 guaranteed** and you need to weigh probability and value together.
 
+> **Overloaded human?** If a static version of any model below still isn't breaking through —
+> long session, too many moving parts, the same question asked twice — escalate to a built
+> interactive version (probability sliders, a live crossover point, a sensitivity tornado). See
+> `references/visual-models/interactive.md`.
+
 This file covers:
 
 - **Probability Tree** — for chained uncertain events

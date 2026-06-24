@@ -1,6 +1,16 @@
 ---
 name: logical-reasoning
-description: "Master toolkit for rigorous deductive and inductive reasoning. Use whenever the task — or your own reasoning toward a conclusion — involves evaluating an argument, checking or building a proof, testing validity, symbolizing language into logical notation, spotting a fallacy (including your own), weighing inductive, statistical, or analogical evidence, or evaluating an explanation. Trigger even when the user never says \"logic\": \"is this valid\", \"does this follow\", \"prove that\", \"symbolize this\", \"what's the fallacy\", \"sound or unsound\", \"how strong is this evidence\", or any request to reason carefully toward a conclusion. Covers Copi-style natural deduction (9 rules of inference + 10 of replacement, conditional and indirect proof), propositional/predicate/categorical/modal logic, definition, fallacies, argument analysis, induction, analogy, statistics, and explanation/inference to the best explanation. When in doubt whether reasoning needs to be made rigorous, trigger."
+description: >-
+  Master toolkit for rigorous deductive and inductive reasoning. Use whenever the task involves
+  evaluating an argument, checking or building a proof, testing validity, symbolizing language
+  into logical notation, spotting a fallacy (including your own), weighing inductive,
+  statistical, or analogical evidence, or evaluating an explanation — or whenever a load-
+  bearing, contested conclusion you are about to assert deserves formal rigor. Trigger even when
+  the user never says "logic": "is this valid", "does this follow", "prove that", "symbolize
+  this", "what’s the fallacy", "sound or unsound", "how strong is this evidence", or any request
+  to reason carefully toward a conclusion. (For open-ended thinking facilitation prefer
+  critical-thinking; this skill is for formal rigor.) When in doubt whether reasoning needs to
+  be made rigorous, trigger.
 ---
 
 # Logical Reasoning
@@ -185,8 +195,3 @@ of non-classical logics (intuitionistic, many-valued, paraconsistent).
 logic, and full Bayesian/probabilistic formalism beyond base rates and basic conditional
 probability. These are flagged as extension points, not gaps to hide.
 
-## Evaluating this skill
-
-Most outputs here are objectively checkable — a proof is valid or it isn't, a fallacy
-label is right or wrong, a symbolization is faithful or not — so this skill is suited to
-test prompts with assertions. See `evals/` once populated.

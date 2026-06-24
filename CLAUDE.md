@@ -45,6 +45,10 @@ Each of these was added by explicit ask — don't remove them without one:
 - After editing root skills (or `.mcp.json` / `.codex-plugin/plugin.json`),
   regenerate the Codex package: `pwsh ./build-codex-plugin.ps1` (verify with
   `-Check`), and commit the regenerated `plugins/shaughv-code/` too.
+- CI (`.github/workflows/validate.yml`) re-runs `build-codex-plugin.ps1 -Check`,
+  validates every JSON manifest, and checks version lockstep on every PR and push
+  to `main` — so a forgotten regeneration or a drifted package can't land on `main`
+  unnoticed. CI **validates**; it does not regenerate the package for you.
 - Changes propagate to every Claude instance via `/plugin marketplace update`.
 
 ## Adding a skill

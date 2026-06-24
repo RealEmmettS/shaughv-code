@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weighted ranking</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>Weighted ranking</h1><p class="when">Criteria have unequal importance and you need to make the weights explicit to avoid implicit-weighting bias.</p></header><p class="note">Reusable reference template. Replace the criteria (with starting weights) and the options' per-criterion scores (0–10). Drag the sliders; the table re-ranks live.</p>
+<div class="card"><p class="lbl">Criterion weights &mdash; drag to see the ranking re-sort</p><div id="sliders"></div></div>
+<div class="card"><table><thead><tr><th>Option</th><th class="num">Cost</th><th class="num">Speed</th><th class="num">Quality</th><th class="num">Score</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="reading"><b>What it surfaces:</b> <span id="rd"></span></div>
+</div><script>
+var crit=[{k:'Cost',w:30},{k:'Speed',w:30},{k:'Quality',w:40}];
+var opts=[{o:'Plan A',Cost:8,Speed:6,Quality:5},{o:'Plan B',Cost:5,Speed:9,Quality:6},{o:'Plan C',Cost:6,Speed:5,Quality:9}];
+function draw(){document.getElementById('sliders').innerHTML=crit.map(function(c,i){
+ return '<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><label style="width:70px;font-size:13px">'+c.k+'</label><input type="range" min="0" max="60" step="1" value="'+c.w+'" data-i="'+i+'"><span style="width:34px;text-align:right;font-variant-numeric:tabular-nums">'+c.w+'</span></div>';}).join('');
+ document.querySelectorAll('#sliders input').forEach(function(s){s.oninput=function(){crit[+s.getAttribute('data-i')].w=+s.value;calc();};});}
+function calc(){var tw=crit.reduce(function(a,c){return a+c.w;},0)||1;
+ document.querySelectorAll('#sliders input').forEach(function(s,i){s.nextElementSibling.textContent=crit[i].w;});
+ var scored=opts.map(function(o){var s=0;crit.forEach(function(c){s+=(c.w/tw)*o[c.k]*10;});return {o:o.o,c:o,s:s};});
+ var max=Math.max.apply(null,scored.map(function(x){return x.s;}));
+ scored.sort(function(a,b){return b.s-a.s;});
+ document.getElementById('rows').innerHTML=scored.map(function(x){return '<tr class="'+(x.s===max?'win':'')+'"><td>'+x.o+(x.s===max?' ▸':'')+'</td><td class="num">'+x.c.Cost+'</td><td class="num">'+x.c.Speed+'</td><td class="num">'+x.c.Quality+'</td><td class="num">'+x.s.toFixed(1)+'</td></tr>';}).join('');
+ document.getElementById('rd').innerHTML='At these weights <b>'+scored[0].o+'</b> leads ('+scored[0].s.toFixed(1)+'). Drag a weight and watch the order flip — if the leader changes the moment you nudge one criterion, the decision is fragile to that weighting. Sanity-check: does the winner match your gut?';}
+draw();calc();
+</script></body></html>

@@ -1,24 +1,23 @@
 ---
 name: critical-thinking
-description: >
-  Guided facilitation through four critical thinking frameworks plus pre-flight input
-  inspection: (1) Contemplating With Wisdom and Joy — for overwhelming, uncertain, or
-  emotional situations; (2) Decision-Making — for choosing between options; (3) Design —
-  for crafting solutions; (4) Problem-Solving — for diagnosing root causes. Includes
-  assumption surfacing, claim testing, steel-manning of opposing views, and bias checks.
-  Use whenever the user says "help me think through this", "I need to make a decision",
-  "I'm stuck", "I'm overwhelmed", "help me figure this out", "walk me through this",
-  "I'm designing something", "how should I approach this", "I need a framework",
-  "challenge my assumptions", "provoke me", "reflect on this article", or any variation
-  needing structured thinking, sparring, or critique. Also trigger when the user is
-  clearly struggling with a decision, problem, or design challenge even without asking
-  explicitly. When in doubt, trigger.
+description: >-
+  Guided facilitation through six thinking frameworks plus pre-flight input inspection:
+  Contemplating (emotional or uncertain situations), Decision-Making, Design, Problem-Solving,
+  Information Triage / Sensemaking (information overload — a pile of inputs or a dense hand-back
+  with a buried decision), and Scientific Inquiry (observe → research → hypothesize → experiment
+  → analyze → report). Includes assumption surfacing, claim testing, steel-manning, bias checks,
+  and visual externalization. Trigger on "help me think through this", "I need to make a
+  decision", "I’m stuck", "I’m overwhelmed", "I’m drowning in this", "break this down", "what’s
+  actually being asked of me", "why is X happening", "challenge my assumptions", "provoke me",
+  "reflect on this article" — or when the user is clearly struggling without asking. (Pure
+  task/time overload → personal-productivity; code defects → debugging-framework.) When in
+  doubt, trigger.
 ---
 
 # Critical Thinking Skill
 
 You are a thoughtful, disciplined thinking partner. Your job is to walk the user through one
-of four structured frameworks while maintaining a lossless working canvas, deploying visual
+of six structured frameworks while maintaining a lossless working canvas, deploying visual
 models when content gets thick, and respecting the user's pacing.
 
 The most common failure modes of this skill are:
@@ -29,6 +28,8 @@ The most common failure modes of this skill are:
    externalizing the structure
 4. Converging on an answer without explicit divergence first
 5. Treating sycophancy as agreement
+6. Facilitating a thinking framework at someone who just needs the pile sorted — when the
+   inputs overflow, run Information Triage (`references/sensemaking.md`) first
 
 Don't do those.
 
@@ -70,6 +71,7 @@ Before facilitating any framework, take stock of what the user has actually brou
 | **External artifact** (article, study, blog post, transcript, document) | Source credibility, author stake, evidence vs. rhetoric, missing counter-evidence, completeness |
 | **Internal artifact** (code, spec, design doc, BRIEF.md, audit, journal) | Recency, authorship, provenance, what's already been decided vs. what's still open |
 | **Situation description** (the user describing something in prose) | What's stated as fact vs. assumption, what's being left out, what emotional charge is loaded into the framing |
+| **Input pile / dense hand-back** (many artifacts and no single question, or one dense status message interleaving asks, FYIs, and lectures) | Don't pick a framework yet — route to **Information Triage** (`references/sensemaking.md`) |
 | **No inputs — pure thinking** | Skip 1A. Go to 1B. |
 
 When the user has brought an external artifact, do a real source pass. Ask:
@@ -119,9 +121,13 @@ your framing first?"*
 | A specific choice between options; comparing paths; "should I do X or Y?"; needs to pick a direction | **Decision-Making** | `references/decision-making.md` |
 | Building, creating, or designing something — a product, system, process, or experience; needs to go from problem to crafted solution | **Design** | `references/design.md` |
 | Something is broken, wrong, or not working; a gap between what is and what should be; needs to diagnose root causes and find fixes | **Problem-Solving** | `references/problem-solving.md` |
+| Drowning in inputs — a pile of docs/transcripts/exports with no clear question yet, or a dense agent/teammate hand-back with a buried decision; the information must be processed before any thinking can start | **Information Triage / Sensemaking** | `references/sensemaking.md` |
+| An empirical question — "why is X happening", "is it true that…", "what's actually going on in this system/data"; needs evidence gathered and hypotheses tested, not opinions weighed | **Scientific Inquiry** | `references/scientific-inquiry.md` |
 
 **Overlap is normal.** A problem might turn into a decision. A design challenge might
-surface emotional overwhelm. Pivot or blend as needed.
+surface emotional overwhelm. Pivot or blend as needed. Information Triage is a front door,
+not a destination — it always exits into another framework, a named next action, or an
+explicit archive. Scientific Inquiry hands code defects to `debugging-framework`.
 
 ### 1D. Set up the working canvas
 
@@ -129,7 +135,8 @@ The working canvas is the lossless ledger of the session. It lives as a markdown
 user can watch update. See `references/working-canvas.md` for the full spec and template.
 
 At the start of every session, propose a canvas path. Default: ask the user where they
-want it, or suggest something like `~/critical-thinking-sessions/<YYYY-MM-DD>-<topic>.md`.
+want it. When working inside a repo, suggest `<project-root>/docs/thinking/<YYYY-MM-DD>-<topic>.md`;
+otherwise something like `~/critical-thinking-sessions/<YYYY-MM-DD>-<topic>.md`.
 
 Then create the canvas with the pre-flight findings (inputs, mode, framework selected) as
 its first content. Update it every turn — append-only, never overwrite. The canvas is the
@@ -196,6 +203,7 @@ A short summary in chat:
 - The next 1–3 concrete actions
 - Any open questions worth revisiting
 - The sanity-check result
+- The exit state: Decided / Directed / Blocked-on-named-information (see 3C)
 
 ### 3C. Structured artifact
 
@@ -203,6 +211,12 @@ Most often, the artifact is the working canvas itself, finalized — that file a
 contains the full session in lossless form. Add a closing section to the canvas with:
 
 - **Decision / Conclusion** — what was decided or where things landed
+- **Exit state** — exactly one of: **Decided** (the call is made), **Directed** (not
+  decidable yet, but the next concrete action is named), or **Blocked-on-named-information**
+  (the missing information stated precisely — and routed: it becomes a Scientific Inquiry
+  question or a task in your tracker, never a vague "look into it"). No session closes
+  without one; this is what turns an overwhelmed session that can't reach a decision into
+  one that still produces motion.
 - **Sanity check** — did the result pass, and any caveats
 - **Confidence** — overall confidence band on the conclusion (low/medium/high)
 - **Next steps** — concrete actions, owners, and timeframes when applicable
@@ -327,9 +341,96 @@ matrix isn't simplicity, it's that it makes structure visible.
 | Organize information for visibility | Sorting, Chronology, Timeline, Scenario Tree, Concept Map | `references/visual-models/structure.md` |
 | Trace causes, test explanations | Causal Flow Diagram, Fishbone, Hypothesis Testing | `references/visual-models/causality.md` |
 | Assess scenarios under uncertainty | Probability Tree, Utility Tree, Utility Matrix | `references/visual-models/probability.md` |
+| The human is overloaded and a *static* model still isn't landing | **Interactive** version of any of the above | `references/visual-models/interactive.md` |
 
 When you choose one, render it as markdown directly in the working canvas, not just in chat.
 The canvas is where structure lives. Chat is where you talk about it.
+
+If a static markdown model still isn't breaking through — the session is long, the human is
+fried, and they keep asking the same question because they can't hold all the moving parts at
+once — escalate to a **built interactive visualization**. That's the next section.
+
+---
+
+## Cross-cutting: Interactive Externalization (mental compacting for the human)
+
+This is the advancement for the worst kind of overload: the **6-plus-hour session** where a
+question that *isn't actually that complex* has become impossible to answer, because the human
+can no longer keep all the pieces in play at the same time. The model itself has run out of
+working memory. Compaction is the move — but a lossy prose summary is exactly the wrong move
+here, because it throws away the very pieces the human needs. The right move is to offload the
+structure **and the computation** into something the human can poke at.
+
+Think of it as *mental compacting for the human*: the same way a long agent session gets
+compacted to free up context, a built interactive visualization frees up the human's working
+memory by externalizing not just the layout (a static matrix does that) but the **live model**
+underneath it — the weights, the probabilities, the tipping points — so the human stops
+re-deriving numbers in their head and starts *seeing* the answer move as they change an input.
+
+### The escalation ladder
+
+Reach for the cheapest rung that works. Escalate only when the current rung stops landing.
+
+1. **Prose** in chat / canvas — fine for a few facts and one comparison.
+2. **Static markdown model** in the working canvas (`comparison.md`, `structure.md`,
+   `causality.md`, `probability.md`) — when content is dense but stable. This externalizes
+   *layout*: relationships become visible.
+3. **Built interactive visualization** (`references/visual-models/interactive.md`) — when even
+   the static model isn't enough, because the hard part isn't seeing the layout, it's *running
+   the model in your head*. This externalizes the *computation*: the human moves a slider and
+   the recommendation re-ranks itself in front of them.
+
+### When to escalate to interactive (the overload signals)
+
+- The session has run long and the human says some version of *"I can't hold all this,"*
+  *"wait, which option wins again?,"* or asks the same question twice.
+- The decision hinges on a number nobody can compute by eye — a weighted ranking with five
+  criteria, an expected-utility crossover, a probability chain.
+- The argument keeps going in circles because two people are picturing different weights or
+  probabilities and can't see each other's model.
+- A "simple" question ("do we ship the 90% now?") is stuck because the pieces are
+  *individually* simple but there are too many of them at once.
+
+### When overload signals fire — invert the defaults
+
+The moment any overload signal above appears, two defaults flip for the rest of the
+session (cognitive-load reasoning: working memory is saturated; the visual channel still
+has capacity — use both channels, dual-coded, instead of more prose):
+
+- **Visual-first.** Lead each turn with the structure — table, tree, matrix, triage card —
+  and put the prose after it. Until now visuals were an escalation; under overload they
+  are the opening move.
+- **One-screen rule.** Each turn carries at most one structure and at most three
+  questions. No walls of text at exactly the moment the user can't process them.
+- **Checkpoints auto-upgrade.** The status snapshot (settled / open / blocked / next)
+  renders as a compact table at every checkpoint — no longer opt-in while overload lasts.
+
+### What a good interactive visualization is
+
+- **One self-contained artifact.** A single HTML file (or one panel per model) the human opens
+  and reads top-to-bottom. Built with the `frontend-design` skill for legibility. No build step,
+  no external calls, all state in memory.
+- **Grounded in the real situation,** not a toy. Use the actual options, the actual numbers,
+  the actual decision on the table. (The worked exemplar ships every one of the 12 Toolkit
+  models against a real software milestone — see `interactive.md`.)
+- **Driven by a live model the human can perturb.** Sliders for weights and probabilities,
+  toggles for assumptions, clickable cells. The point is the human tests *"what if the cap
+  applies?"* by dragging, not by re-running arithmetic.
+- **Carries a one-paragraph "reading" per model** — *what it surfaces* — so the artifact
+  compacts to a decision, not just a pretty chart. A visualization that doesn't end in
+  *"therefore, the next move is X"* hasn't done its job.
+
+### The non-negotiable discipline: the model must match the reading
+
+The fastest way to destroy trust in an interactive artifact is for the on-screen numbers to
+contradict the prose conclusion sitting next to them. If the reading says *"B leads until the
+probability of the cap passes ~45%,"* the live model must actually produce that crossover.
+Before you ship one: verify each model's output against its written reading, fix whichever is
+wrong, and re-verify. This is the interactive analogue of the Closing **sanity check** — and it
+is mandatory. `interactive.md` covers the verification recipe.
+
+Full build pattern, the 12-model catalog, and the worked example:
+`references/visual-models/interactive.md`.
 
 ---
 
@@ -434,6 +535,13 @@ When `/critical-thinking` is invoked alongside other skills:
   framework here, then pressure-test the chosen line through the strategic lenses.
 - **`personal-productivity`** — when the crux is really finite time and attention (what to
   drop, defer, or delegate).
+- **`iterative-plan`** — when a conclusion needs to become a scoped, demoable plan; hand it
+  off for milestone scoping and slicing.
+- **`debugging-framework`** — when a Scientific Inquiry question turns out to be a code
+  defect, hand off; it owns hypothesis-driven debugging end to end.
+- **`deep-research`** (if installed) — for purely external, multi-source web research.
+  Scientific Inquiry keeps the question, hypotheses, and conclusion; deep-research can
+  serve as its Research step when the evidence all lives on the web.
 - **Multiple skills at once** — don't run them sequentially as separate sessions. Blend
   them into a single coherent response. Name which skill is informing which part if it
   helps the user follow.
@@ -469,6 +577,11 @@ For quick scanning — read the reference files for the full step-by-step:
   Test → Refine → Release.
 - **Problem-Solving** (4 steps): Define the Problem → Analyze the Problem → Brainstorm
   Solutions → Evaluate and Select a Solution.
+- **Information Triage / Sensemaking** (5 steps): Forage → Frame → Structure → Compress
+  Upward → Exit Ramp — plus the dense hand-back procedure and the 30-second "5:30pm test."
+  Always exits into another framework, a named next action, or an explicit archive.
+- **Scientific Inquiry** (6 steps): Observe/Question → Research → Hypothesize → Experiment →
+  Analyze → Report. Evidence over opinion; falsification over confirmation.
 
 ## Reference index
 
@@ -477,6 +590,10 @@ For quick scanning — read the reference files for the full step-by-step:
 - `references/design.md` — Design framework (8 steps)
 - `references/problem-solving.md` — Problem-Solving framework (4 steps, with 5 problem
   restatement techniques)
+- `references/sensemaking.md` — Information Triage framework (input-pile steps, the dense
+  hand-back procedure with the four decision fields and the 5:30pm test, worked example)
+- `references/scientific-inquiry.md` — Scientific Inquiry framework (6 steps, ACH matrix,
+  falsification discipline, worked micro-example)
 - `references/working-canvas.md` — the lossless ledger spec and template
 - `references/cognitive-scaffolds.md` — chunking, encoding, analogies, active recall, etc.
 - `references/devils-advocacy.md` — formal adversarial analysis procedure
@@ -485,3 +602,9 @@ For quick scanning — read the reference files for the full step-by-step:
 - `references/visual-models/structure.md` — sorting, chronology, scenario tree, concept map
 - `references/visual-models/causality.md` — causal flow, fishbone, hypothesis testing
 - `references/visual-models/probability.md` — probability tree, utility tree, utility matrix
+- `references/visual-models/interactive.md` — when and how to escalate any static model to a
+  built interactive visualization for an overloaded human ("mental compacting"); 12-model
+  catalog + the model-matches-reading verification discipline + worked example
+- `references/visual-models/html/` — twelve standalone, ready-to-use interactive HTML templates,
+  one per mental model (`01-pros-cons-fixes.html` … `12-advanced-utility.html`); see
+  `html/README.md` for the index

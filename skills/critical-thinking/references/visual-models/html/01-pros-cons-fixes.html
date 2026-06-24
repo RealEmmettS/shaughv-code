@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pros, cons & fixes</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>Pros, cons & fixes</h1><p class="when">Evaluating options — fight default negativity bias by neutralising the fixable cons first, then compare on pros + unfixable cons only.</p></header><p class="note">Reusable reference template. Swap the two option cards (add a third if needed) and edit the pro/con text. Tick a con to mark it fixable; the recommendation recomputes from how many cons survive.</p>
+<style>.con{display:flex;gap:8px;align-items:flex-start;border-top:1px solid var(--line);padding:7px 0;cursor:pointer}
+.con input{margin-top:3px}.con .f{display:none;color:var(--blue);font-size:13px;margin-top:3px}
+.con.fixed .m{text-decoration:line-through;color:var(--faint)}.con.fixed .f{display:block}</style>
+<div class="grid2">
+ <div class="card" data-opt="Build in-house">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b>Option A · build in-house</b><span class="pill" data-badge></span></div>
+  <p class="lbl" style="margin-top:12px;color:var(--teal)">Pros</p>
+  <p style="margin:0;color:var(--muted);font-size:13px">Full control of the roadmap; no per-seat fees; tailored to our workflow.</p>
+  <p class="lbl" style="margin-top:14px;color:var(--red)">Cons &rarr; fixes</p>
+  <label class="con fixed"><input type="checkbox" checked><span><span class="m">Ties up two engineers for a quarter.</span><span class="f">&rarr; Ship a thin v1, defer the rest behind a flag.</span></span></label>
+  <label class="con fixed"><input type="checkbox" checked><span><span class="m">We own maintenance forever.</span><span class="f">&rarr; Budget a standing 10% upkeep line in the plan.</span></span></label>
+ </div>
+ <div class="card" data-opt="Buy a vendor">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b>Option B · buy a vendor</b><span class="pill" data-badge></span></div>
+  <p class="lbl" style="margin-top:12px;color:var(--teal)">Pros</p>
+  <p style="margin:0;color:var(--muted);font-size:13px">Live next week; vendor owns upkeep; proven at scale.</p>
+  <p class="lbl" style="margin-top:14px;color:var(--red)">Cons &rarr; fixes</p>
+  <label class="con fixed"><input type="checkbox" checked><span><span class="m">Recurring per-seat cost.</span><span class="f">&rarr; Negotiate an annual flat rate.</span></span></label>
+  <label class="con"><input type="checkbox"><span><span class="m">Our data leaves our environment.</span><span class="f">&rarr; (no clean fix within constraints)</span></span></label>
+  <label class="con"><input type="checkbox"><span><span class="m">Feature gaps we can't change.</span><span class="f">&rarr; (no clean fix &mdash; not our roadmap)</span></span></label>
+ </div>
+</div>
+<div class="reading"><b>What it surfaces:</b> <span id="rd"></span></div>
+</div><script>
+function recompute(){var best=null,bestN=1e9,tie=false,rows=[];
+document.querySelectorAll('.card[data-opt]').forEach(function(c){
+ var un=0;c.querySelectorAll('.con').forEach(function(r){var cb=r.querySelector('input');r.classList.toggle('fixed',cb.checked);if(!cb.checked)un++;});
+ var b=c.querySelector('[data-badge]');b.textContent=un+' hard con'+(un===1?'':'s');
+ var bad=un>0;b.style.background=bad?'var(--redbg)':'var(--tealbg)';b.style.color=bad?'var(--red)':'var(--teal)';
+ rows.push({o:c.getAttribute('data-opt'),un:un});
+ if(un<bestN){bestN=un;best=c.getAttribute('data-opt');tie=false;}else if(un===bestN){tie=true;}});
+var rd=document.getElementById('rd');
+if(tie){rd.textContent='The options tie on unfixable cons ('+bestN+' each) — the comparison is even, so the decision turns on the pros, not the cons.';}
+else{rd.innerHTML='After neutralising every fixable con, <b>'+best+'</b> carries the fewest unfixable cons ('+bestN+'). Compare the options on their pros plus only those surviving cons — the fixable ones are no longer real differentiators.';}}
+document.querySelectorAll('.con input').forEach(function(cb){cb.addEventListener('change',recompute);});recompute();
+</script></body></html>

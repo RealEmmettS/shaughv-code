@@ -9,6 +9,22 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late June 2026
 
 **Added**
+- Emmett pulled the newest versions of several thinking-and-working skills over from his work bundle and **scrubbed out everything work-specific** — every mention of his employer's tools, systems, projects, and teammates was removed or swapped for a neutral example, so the personal bundle stays clean and general.
+- The **critical-thinking** skill grew from four thinking frameworks to six. The two new ones: a way to handle being **buried in information** — a pile of documents, or one dense message with a decision hidden inside it — that sorts everything down to "what do you actually need to decide, and what can wait until tomorrow"; and a **scientific-inquiry** approach for "why is this happening?" questions, which gathers evidence, lays out competing guesses, and runs the cheapest test that tells them apart. It also gained a set of ready-to-use interactive mini-web-pages — sliders and tables you can poke at — for the moments a long session has too many moving parts to hold in your head at once.
+- Four brand-new skills joined the bundle: one that **maps and improves any process** (it draws the workflow out, reviews it through several well-known improvement lenses, and hands back a ranked list of fixes); one for **planning a piece of work into small, demoable steps** with a clear "are we actually done?" test; one that writes a thorough **hand-off note** so a future session can pick up exactly where you left off without re-asking anything; and one for **security-checking** a codebase — a full audit, a review of just the changed code, a "how risky is this change" read, and an on-request "try to break it" pass.
+
+**Improved**
+- The **productivity** skill now points you toward a sibling skill when a different one fits better. A small inconsistency in the **learning** skill was fixed, and a stale install note in the **audio** skill was corrected.
+
+**Behind the scenes**
+- Most of the shared skills didn't need changing at all — Emmett's personal copies were already ahead of the work versions (cleaner, and tuned to his own machine and projects), so those were left alone. A few had tiny leftover work references that got cleaned up. The work bundle's purely-work files (an employer-specific bug catalog and naming/infrastructure guides) were deliberately left out. Bumped the version everywhere, extended the bundle's descriptions and search keywords for the four new skills, added their rows to the README, and regenerated the Codex copy of the bundle so the two stay in lockstep.
+- Added an automated check (matching the one Emmett's work bundle uses) that runs whenever changes land on the main branch: it confirms the Codex copy of the bundle is always in step with the originals and that every version number matches, so a forgotten rebuild can't slip through. To be clear, it **checks and flags** problems — it doesn't rebuild the copy by itself; that's still done before each change is saved.
+
+---
+
+## A day earlier — late June 2026
+
+**Added**
 - A small new **TT;DR** skill joined the bundle. "TT;DR" stands for "Too Tired; Didn't Read" — a playful flip of the familiar "TL;DR". The idea: when a reply is long or detailed, open it with a one-glance, plain-English summary of what's going on and where things stand, written for someone who's sharp but busy or tired. Unlike a TL;DR, it doesn't assume the reader is lazy, and it never replaces the detail — the full answer still follows right underneath the short lead. The skill teaches the assistant when to add one (status updates, change descriptions, incident notes, long write-ups, hand-offs), how to keep it short and jargon-free, where to place it, and how it's different from a full technical write-up. It comes with a bank of good-and-bad before/after examples to copy from. Why it matters: long answers become far easier to skim — you can read three sentences and stop if that's all you need, or read on for the specifics.
 
 **Improved**

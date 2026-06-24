@@ -4,6 +4,11 @@ Tools for comparing options against criteria, or weighing factors against each o
 Reach for these when you have **3+ options or factors and need to evaluate them
 systematically**.
 
+> **Overloaded human?** If a static version of any model below still isn't breaking through —
+> long session, too many moving parts, the same question asked twice — escalate to a built
+> interactive version (live weight sliders, clickable cells). See
+> `references/visual-models/interactive.md`.
+
 This file covers:
 
 - **The 2×2 Matrix** — when two dimensions dominate
