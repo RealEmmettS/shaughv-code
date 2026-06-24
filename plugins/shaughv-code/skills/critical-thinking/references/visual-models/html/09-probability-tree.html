@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The probability tree</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>The probability tree</h1><p class="when">An outcome depends on a chain of uncertain stages; you need the end-to-end probability, not a gut estimate.</p></header><p class="note">Reusable reference template. Edit the stages array (label + starting probability). Drag any stage; the multiplied end-to-end probability and the weakest-link callout update.</p>
+<div class="card"><p class="lbl">Stage probabilities &mdash; the chain multiplies</p><div id="sl"></div>
+<div style="margin-top:14px;display:flex;align-items:baseline;gap:10px"><span style="color:var(--muted);font-size:14px">End-to-end probability</span><span id="out" style="font-size:26px;font-weight:600"></span></div>
+<div style="height:10px;border-radius:5px;background:var(--bg);margin-top:8px;overflow:hidden"><div id="bar" style="height:100%;background:var(--accent)"></div></div></div>
+<div class="reading"><b>What it surfaces:</b> <span id="rd"></span></div>
+</div><script>
+var stages=[{k:'Edit reaches the hook',p:97},{k:'Hook delivers',p:99},{k:'Worker hydrates',p:92},{k:'Row upserts',p:98},{k:'Card refreshes in time',p:95}];
+function draw(){document.getElementById('sl').innerHTML=stages.map(function(s,i){
+ return '<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><label style="width:190px;font-size:13px">'+s.k+'</label><input type="range" min="50" max="100" step="1" value="'+s.p+'" data-i="'+i+'"><span style="width:42px;text-align:right;font-variant-numeric:tabular-nums">'+s.p+'%</span></div>';}).join('');
+ document.querySelectorAll('#sl input').forEach(function(x){x.oninput=function(){stages[+x.getAttribute('data-i')].p=+x.value;calc();};});}
+function calc(){var prod=1;stages.forEach(function(s){prod*=s.p/100;});var pct=prod*100;
+ document.querySelectorAll('#sl input').forEach(function(x,i){x.nextElementSibling.textContent=stages[i].p+'%';});
+ document.getElementById('out').textContent=pct.toFixed(0)+'%';document.getElementById('bar').style.width=pct.toFixed(0)+'%';
+ var weak=stages.slice().sort(function(a,b){return a.p-b.p;})[0];
+ document.getElementById('rd').innerHTML='Five high-looking stages multiply to <b>'+pct.toFixed(0)+'%</b> — a chain is only as strong as its product, not its average. The biggest lever is the weakest stage (<b>'+weak.k+'</b>, '+weak.p+'%); raise that one first.';}
+draw();calc();
+</script></body></html>

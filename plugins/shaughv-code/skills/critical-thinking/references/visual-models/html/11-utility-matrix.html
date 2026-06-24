@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The utility matrix</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>The utility matrix</h1><p class="when">Outcomes depend on an uncertain state of the world; weigh each option's utility under each state by its probability.</p></header><p class="note">Reusable reference template. Edit the um array (option + utility under each state) and rename the states. Drag P(state 1) to find the crossover where the best option flips.</p>
+<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:14px;color:var(--muted)">P(state 1 — e.g. cap applies)</span><input type="range" id="p" min="0" max="100" step="1" value="30" style="flex:1"><span id="pl" style="width:46px;text-align:right;font-variant-numeric:tabular-nums"></span></div></div>
+<div class="card"><table><thead><tr><th>Option</th><th class="num" id="h1"></th><th class="num" id="h2"></th><th class="num">Expected utility</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="reading"><b>What it surfaces:</b> <span id="rd"></span></div>
+</div><script>
+var um=[{o:'Option A (safe)',s1:68,s2:70},{o:'Option B (bold)',s1:38,s2:95},{o:'Option C (mid)',s1:58,s2:74}];
+function calc(){var p=+document.getElementById('p').value/100;document.getElementById('pl').textContent=(p*100).toFixed(0)+'%';
+ document.getElementById('h1').textContent='State 1 · p='+p.toFixed(2);document.getElementById('h2').textContent='State 2 · p='+(1-p).toFixed(2);
+ var eu=um.map(function(r){return {o:r.o,r:r,eu:r.s1*p+r.s2*(1-p)};});var max=Math.max.apply(null,eu.map(function(x){return x.eu;}));
+ document.getElementById('rows').innerHTML=eu.map(function(x){return '<tr class="'+(x.eu===max?'win':'')+'"><td>'+x.o+(x.eu===max?' ▸':'')+'</td><td class="num">'+x.r.s1+'</td><td class="num">'+x.r.s2+'</td><td class="num">'+x.eu.toFixed(1)+'</td></tr>';}).join('');
+ var lead=eu.find(function(x){return x.eu===max;});
+ document.getElementById('rd').innerHTML='At P(state 1) = <b>'+(p*100).toFixed(0)+'%</b>, <b>'+lead.o+'</b> wins. Drag the slider to find the crossover — the probability where the winner flips. Naming that threshold turns a fuzzy argument into one empirical question: is the real chance above or below it?';}
+document.getElementById('p').oninput=calc;calc();
+</script></body></html>

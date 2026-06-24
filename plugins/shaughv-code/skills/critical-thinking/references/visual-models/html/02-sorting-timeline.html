@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sorting, chronologies & timelines</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>Sorting, chronologies & timelines</h1><p class="when">Information is accumulating without organisation, or sequence and relationships matter more than evaluation.</p></header><p class="note">Reusable reference template. Replace the data array (name, status, owner, priority, day). The sort buttons and timeline lane re-render from it.</p>
+<div class="card">
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+  <span class="lbl" style="margin:0;align-self:center">Sort by</span>
+  <button data-k="d" class="on">Time</button><button data-k="s">Status</button>
+  <button data-k="o">Owner</button><button data-k="p">Priority</button>
+ </div>
+ <table><thead><tr><th>Item</th><th>Status</th><th>Owner</th><th class="num">Priority</th><th class="num">Day</th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+<div class="card"><p class="lbl">Timeline</p><div id="tl" style="position:relative;height:64px"></div></div>
+<div class="reading"><b>What it surfaces:</b> the same items re-sorted by different keys expose different stories — sort by owner to see load, by day to see sequence, by priority to see what matters. Organising for visibility is itself the analysis.</div>
+</div><script>
+var data=[{n:'Spec',s:'done',o:'Mara',p:1,d:1},{n:'API',s:'review',o:'Lee',p:2,d:2},
+{n:'UI',s:'in progress',o:'Mara',p:1,d:3},{n:'Tests',s:'todo',o:'Lee',p:3,d:3},
+{n:'Docs',s:'todo',o:'Sam',p:2,d:4},{n:'Launch',s:'todo',o:'Sam',p:1,d:5}];
+var order={done:0,'review':1,'in progress':2,todo:3};
+function render(k){var d=data.slice();
+ d.sort(function(a,b){if(k==='s')return order[a.s]-order[b.s];if(k==='o')return a.o<b.o?-1:1;return a[k]-b[k];});
+ document.getElementById('rows').innerHTML=d.map(function(t){return '<tr><td>'+t.n+'</td><td>'+t.s+'</td><td>'+t.o+'</td><td class="num">'+t.p+'</td><td class="num">'+t.d+'</td></tr>';}).join('');
+ var max=5;document.getElementById('tl').innerHTML=data.map(function(t){var left=((t.d-1)/(max-1))*92;
+  return '<div style="position:absolute;left:'+left.toFixed(1)+'%;top:0;text-align:center;transform:translateX(-50%)"><div style="width:11px;height:11px;border-radius:50%;background:var(--accent);margin:0 auto"></div><div style="font-size:11px;color:var(--muted);margin-top:4px">'+t.n+'</div><div style="font-size:11px;color:var(--faint)">d'+t.d+'</div></div>';}).join('')+'<div style="position:absolute;top:5px;left:0;right:0;height:1px;background:var(--line2)"></div>';}
+document.querySelectorAll('[data-k]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-k]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');render(b.getAttribute('data-k'));};});
+render('d');
+</script></body></html>

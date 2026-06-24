@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Advanced utility analysis</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>Advanced utility analysis</h1><p class="when">Multi-attribute utility plus a one-way sensitivity sweep — which single uncertainty most changes the recommendation.</p></header><p class="note">Reusable reference template. Edit the mau() function (weights and per-attribute achieve-probabilities per option). Drag P; the MAU table and the sensitivity tornado update.</p>
+<div class="card"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:14px;color:var(--muted)">Driving uncertainty P (hits the bold option)</span><input type="range" id="p" min="0" max="100" step="1" value="25" style="flex:1"><span id="pl" style="width:46px;text-align:right;font-variant-numeric:tabular-nums"></span></div></div>
+<div class="card"><p class="lbl">Multi-attribute utility at the current P</p><table><thead><tr><th>Option</th><th class="num">MAU</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="card"><p class="lbl">One-way sensitivity (tornado) &mdash; P swept 0 &rarr; 1</p><div id="tor"></div></div>
+<div class="reading"><b>What it surfaces:</b> <span id="rd"></span></div>
+</div><script>
+function mau(o,p){
+ if(o==='A')return 0.35*0.95*0.8+0.25*0.45*0.4+0.15*0.95*0.9+0.10*0.97*1.0+0.15*0.95*0.9;
+ if(o==='B')return 0.35*0.95*1.0+0.25*0.95*1.0+0.15*(0.75-0.6*p)*0.4+0.10*(1-p)*0.5+0.15*(0.8-0.5*p)*0.5;
+ return 0.35*0.90*0.7+0.25*0.72*0.6+0.15*0.82*0.7+0.10*0.92*0.8+0.15*0.80*0.7;}
+function S(o,p){return mau(o,p)*100;}
+function calc(){var p=+document.getElementById('p').value/100;document.getElementById('pl').textContent=(p*100).toFixed(0)+'%';
+ var rows=[['A','Option A (safe)'],['B','Option B (bold)'],['C','Option C (mid)']].map(function(x){return {k:x[0],o:x[1],s:S(x[0],p)};});
+ var max=Math.max.apply(null,rows.map(function(r){return r.s;}));var sorted=rows.slice().sort(function(a,b){return b.s-a.s;});
+ document.getElementById('rows').innerHTML=sorted.map(function(r){return '<tr class="'+(r.s===max?'win':'')+'"><td>'+r.o+(r.s===max?' ▸':'')+'</td><td class="num">'+r.s.toFixed(1)+'</td></tr>';}).join('');
+ var tor=rows.map(function(r){var lo=S(r.k,0),hi=S(r.k,1);return {o:r.o,min:Math.min(lo,hi),max:Math.max(lo,hi),range:Math.abs(hi-lo)};});
+ var allmin=Math.min.apply(null,tor.map(function(t){return t.min;})),allmax=Math.max.apply(null,tor.map(function(t){return t.max;}));var span=(allmax-allmin)||1;
+ document.getElementById('tor').innerHTML=tor.map(function(t){var l=((t.min-allmin)/span)*100,w=((t.max-t.min)/span)*100;
+  return '<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="width:120px;font-size:13px">'+t.o+'</span><div style="flex:1;position:relative;height:18px"><div style="position:absolute;left:'+l.toFixed(1)+'%;width:'+Math.max(w,2).toFixed(1)+'%;height:100%;background:var(--accent);border-radius:4px"></div></div><span style="width:78px;text-align:right;font-size:12px;color:var(--muted)">'+t.min.toFixed(0)+'–'+t.max.toFixed(0)+'</span></div>';}).join('');
+ var widest=tor.slice().sort(function(a,b){return b.range-a.range;})[0];
+ document.getElementById('rd').innerHTML='Multi-attribute utility scores every option on weighted attributes; the tornado then sweeps the one uncertainty. <b>'+widest.o+'</b> has the widest bar — its recommendation is the most sensitive to that single unknown, and its low end can dip below a steadier option. That hands you one testable next action: resolve that uncertainty before committing.';}
+document.getElementById('p').oninput=calc;calc();
+</script></body></html>

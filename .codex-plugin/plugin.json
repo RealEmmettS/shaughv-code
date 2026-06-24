@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "0.17.0",
-  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, a comprehensive Mistral AI API skill (OCR, audio transcription, text-to-speech, chat, agents, and the full API surface), brand design, animated brandmark, human changelog, CDN usage, naming conventions, Google Cloud Storage, bug triage, code design patterns, debugging, defensive programming, git workflow, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, spawn orchestration, strategic thinking, the wb300 git branch / worktree / agent control tower, a usage status-line installer, and the TT;DR \"Too Tired; Didn't Read\" summary convention.",
+  "version": "0.18.0",
+  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, a comprehensive Mistral AI API skill (OCR, audio transcription, text-to-speech, chat, agents, and the full API surface), brand design, animated brandmark, human changelog, CDN usage, naming conventions, Google Cloud Storage, bug triage, code design patterns, debugging, defensive programming, git workflow, a security audit & red-team skill, a session handoff document generator, an iterative milestone-planning method, a workflow-optimization facilitator, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, spawn orchestration, strategic thinking, the wb300 git branch / worktree / agent control tower, a usage status-line installer, and the TT;DR \"Too Tired; Didn't Read\" summary convention.",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -53,7 +53,14 @@
     "embeddings",
     "ttdr",
     "tldr",
-    "summary"
+    "summary",
+    "handoff",
+    "iterative-plan",
+    "planning",
+    "security-check",
+    "security",
+    "workflow-optimization",
+    "workflow"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",

@@ -72,7 +72,11 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 - Regenerate the Codex package after any change to root `skills/`, `.mcp.json`,
   or `.codex-plugin/plugin.json`: `pwsh ./build-codex-plugin.ps1` (verify with
   `-Check`). Commit the regenerated `plugins/shaughv-code/` alongside the root
-  change; never hand-edit the package.
+  change; never hand-edit the package. CI (`.github/workflows/validate.yml`)
+  re-runs `build-codex-plugin.ps1 -Check`, validates the JSON manifests, and
+  checks version lockstep on every PR and push to `main`, so a forgotten
+  regeneration can't reach `main` unnoticed — CI validates, it does not
+  regenerate or commit the package itself.
 - Changes propagate to Claude Code via `/plugin marketplace update`. Changes
   propagate to Codex via `codex plugin marketplace upgrade shaughv-code` and
   `codex plugin add shaughv-code@shaughv-code` after the commit is pushed.

@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hypothesis testing</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>Hypothesis testing</h1><p class="when">Several explanations compete; rank them by which has the LEAST inconsistent evidence (falsification, not confirmation).</p></header><p class="note">Reusable reference template. Edit the hyps and ev arrays and the st matrix (0 = N/A, 1 = consistent, 2 = inconsistent). Click cells to cycle; the least-inconsistent survivor updates.</p>
+<div class="card"><p class="lbl">Click a cell to cycle consistent / inconsistent / N-A. Fewest inconsistencies wins (Popper).</p>
+<table><thead><tr><th>Evidence</th><th class="num" id="hh"></th></tr></thead><tbody id="rows"></tbody>
+<tfoot><tr><td style="font-weight:600">Inconsistencies</td></tr></tfoot></table></div>
+<div class="reading"><b>What it surfaces:</b> <span id="rd"></span></div>
+</div><script>
+var hyps=['H1: code bug','H2: bad config','H3: upstream outage'];
+var ev=['Started after deploy','Only one region','Errors are 5xx','Healthcheck still green'];
+var st=[[1,2,0],[1,0,2],[0,1,1],[2,2,0]];
+var sym=['–','C','I'];var cls=['','c-ok','c-bad'];
+function render(){
+ var head=document.querySelector('thead tr');head.innerHTML='<th>Evidence</th>'+hyps.map(function(h){return '<th class="num" style="font-size:11px">'+h+'</th>';}).join('');
+ document.getElementById('rows').innerHTML=ev.map(function(e,r){return '<tr><td>'+e+'</td>'+hyps.map(function(h,c){
+  var v=st[r][c];var col=v===2?'var(--red)':(v===1?'var(--teal)':'var(--faint)');var bg=v===2?'var(--redbg)':(v===1?'var(--tealbg)':'transparent');
+  return '<td class="num"><button data-r="'+r+'" data-c="'+c+'" style="min-width:34px;color:'+col+';background:'+bg+'">'+sym[v]+'</button></td>';}).join('')+'</tr>';}).join('');
+ var inc=hyps.map(function(h,c){var n=0;for(var r=0;r<ev.length;r++)if(st[r][c]===2)n++;return n;});
+ var min=Math.min.apply(null,inc);
+ document.querySelector('tfoot tr').innerHTML='<td style="font-weight:600">Inconsistencies</td>'+inc.map(function(n,c){return '<td class="num" style="font-weight:600;color:'+(n===min?'var(--teal)':'var(--ink)')+'">'+n+(n===min?' ▸':'')+'</td>';}).join('');
+ var winners=hyps.filter(function(h,c){return inc[c]===min;});
+ document.getElementById('rd').innerHTML='The surviving hypothesis is the one with the <b>fewest inconsistencies</b>, not the most confirmations — here <b>'+winners.join(' / ')+'</b> ('+min+' inconsistent). A single piece of inconsistent evidence can kill an otherwise well-supported theory.';
+ document.querySelectorAll('#rows button').forEach(function(b){b.onclick=function(){var r=+b.getAttribute('data-r'),c=+b.getAttribute('data-c');st[r][c]=(st[r][c]+1)%3;render();};});}
+render();
+</script></body></html>

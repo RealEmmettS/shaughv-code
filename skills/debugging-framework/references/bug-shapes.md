@@ -73,7 +73,7 @@ The SKILL.md has a 12-row summary table; this file has the long form. Each arche
 3. Diff. Mismatched entries are the bugs.
 4. Check `git blame` / the data layer's audit log for the most recent edit to each — one was likely edited without the other.
 
-**Real example (composite).** Following an entity rename, a `read_records` tool returned 0 rows for a query that should have matched ~400. Cause: the entity's primary filter column was renamed in the entity config but not in the underlying view. The query's `where` clause referenced the new name, which didn't exist in the data layer, which returned an empty result set with no error (the query engine treated an unknown filter column as a no-match, not an error).
+**Real example (composite).** Following an entity rename, a query returned 0 rows where it should have matched ~400. Cause: the entity's primary filter column was renamed in the entity config but not in the underlying view. The query's `where` clause referenced the new name, which didn't exist in the data layer, which returned an empty result set with no error (the query engine treated an unknown filter column as a no-match, not an error).
 
 **Why this shape is endemic.** The config and the underlying data layer are two separate surfaces, often maintained by different people (or different sessions). A naming change in one without the other is silent. A pre-deploy validator that diffs the two is the prevention side.
 

@@ -134,7 +134,7 @@ The body is a 1–3 paragraph description of what the project is and what the cu
 
 ## The rename-on-save policy for tool exports
 
-Raw exports from tools (Teams, ChatGPT, OneDrive Copy, Outlook attachments, screenshot tools) frequently have meaningless or hostile names. The standard is:
+Raw exports from tools (Teams, ChatGPT, cloud-storage copies, email attachments, screenshot tools) frequently have meaningless or hostile names. The standard is:
 
 **The agent MUST propose a compliant rename for any tool export before treating it as a final artifact. Renaming is not automatic — the agent prompts the user and waits for confirmation.**
 

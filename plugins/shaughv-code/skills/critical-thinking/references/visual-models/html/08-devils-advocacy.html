@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Devil's advocacy</title><style>
+:root{--bg:#f7f6f2;--surface:#fff;--ink:#23221e;--muted:#6b6a64;--faint:#9a988f;
+--line:rgba(0,0,0,.12);--line2:rgba(0,0,0,.24);
+--teal:#0f6e56;--tealbg:#e1f5ee;--amber:#854f0b;--amberbg:#faeeda;
+--red:#a32d2d;--redbg:#fcebeb;--green:#3b6d11;--greenbg:#eaf3de;--blue:#185fa5;--bluebg:#e6f1fb;
+--accent:#534ab7;--accentbg:#eeedfe;--win:#e1f5ee}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--surface:#26251f;--ink:#e9e7df;--muted:#a8a69c;--faint:#76746c;
+--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.28);
+--teal:#5dcaa5;--tealbg:#085041;--amber:#ef9f27;--amberbg:#633806;
+--red:#f09595;--redbg:#791f1f;--green:#97c459;--greenbg:#27500a;--blue:#85b7eb;--bluebg:#0c447c;
+--accent:#afa9ec;--accentbg:#3c3489;--win:#0b3d33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.page{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.when{color:var(--muted);margin:0 0 20px;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:7px}
+button{font:inherit;background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{background:var(--bg)} button.on{background:var(--accentbg);border-color:var(--accent);color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:var(--win)}
+.reading{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:14px;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+svg{max-width:100%;height:auto} code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:13px}
+.note{font-size:12px;color:var(--faint);margin:0 0 16px;border:1px dashed var(--line2);border-radius:8px;padding:8px 10px}
+</style></head><body><div class="page"><header><h1>Devil's advocacy</h1><p class="when">Before accepting a claim, attack its load-bearing assumptions to see which conclusions actually survive.</p></header><p class="note">Reusable reference template. Edit the claim, the asm assumptions, and the con conclusions (each con's dep is the index of the assumption it rests on). Click an assumption to crack it.</p>
+<div class="card"><p style="margin:0 0 4px"><b>Claim under test:</b> "We should retire the nightly batch after one week of parallel running."</p>
+<p class="lbl" style="margin-top:14px">Load-bearing assumptions &mdash; click to challenge (crack) one</p><div id="asm"></div>
+<p class="lbl" style="margin-top:14px">Conclusions that rest on them</p><div id="con"></div></div>
+<div class="reading"><b>What it surfaces:</b> <span id="rd"></span></div>
+</div><script>
+var asm=[{t:'One week is a representative sample',crack:false},
+ {t:'Webhook coverage equals batch coverage',crack:false},
+ {t:'Freshness is driven by the new path',crack:false}];
+var con=[{t:'Parallel run proves parity',dep:0},{t:'Nothing is lost by switching off',dep:1},{t:'The dashboard will stay green',dep:2}];
+function render(){document.getElementById('asm').innerHTML=asm.map(function(a,i){
+  return '<div class="branch" data-i="'+i+'" style="border:1px solid var(--line2);border-radius:9px;padding:8px 10px;margin:6px 0;cursor:pointer;'+(a.crack?'border-color:var(--red);background:var(--redbg)':'')+'"><b style="'+(a.crack?'text-decoration:line-through':'')+'">'+a.t+'</b> <span style="font-size:12px;color:var(--red)">'+(a.crack?'✖ cracked':'')+'</span></div>';}).join('');
+ document.getElementById('con').innerHTML=con.map(function(c){var dead=asm[c.dep].crack;
+  return '<div style="padding:6px 0;border-top:1px solid var(--line);'+(dead?'color:var(--faint);text-decoration:line-through':'')+'">'+c.t+(dead?' <span style="font-size:12px;color:var(--red);text-decoration:none">falls with assumption '+(c.dep+1)+'</span>':'')+'</div>';}).join('');
+ var dead=con.filter(function(c){return asm[c.dep].crack;}).length;var live=con.length-dead;
+ document.getElementById('rd').innerHTML='Challenge each assumption as if you needed the claim to be wrong. '+(dead?('<b>'+dead+' conclusion'+(dead===1?'':'s')+' collapse</b> once the assumption beneath '+(dead===1?'it':'them')+' is cracked — only '+live+' survive. The claim is only as strong as its weakest load-bearing assumption.'):'Nothing is cracked yet — click an assumption to see which conclusions depend on it.');
+ document.querySelectorAll('#asm .branch').forEach(function(d){d.onclick=function(){var i=+d.getAttribute('data-i');asm[i].crack=!asm[i].crack;render();};});}
+render();
+</script></body></html>

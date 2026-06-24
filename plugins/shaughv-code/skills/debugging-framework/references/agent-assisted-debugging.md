@@ -125,7 +125,7 @@ Use this structure when reporting on a complex debug step to the Operator; skip 
 
 ## A worked Agent-assisted Mode 2 example
 
-> **Bug.** `read_records entity=ProjectReport` returns 0 rows for a query that should match ~120.
+> **Bug.** A query against the `ProjectReport` table returns 0 rows for a filter that should match ~120.
 >
 > **Beat 1 — Stabilize.** Operator pastes the exact query into the Agent. Agent: "Can you confirm this query worked yesterday? Can you paste a query against a related entity to confirm the connection is alive?" Operator runs the related-entity query — returns rows. So the connection is fine; the entity-specific query is the failure. Stable.
 >

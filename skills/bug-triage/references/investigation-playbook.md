@@ -47,12 +47,12 @@ Use these when the bug might involve incorrect data, missing records, or data
 integrity issues. Load the relevant data-platform tools via `tool_search`.
 
 **Investigation approach:**
-1. First, use `describe_entities` to understand what data entities are available
-   and what fields they contain.
-2. Use `read_records` to query specific records that the bug report references.
-   Compare what the data shows vs. what the UI shows vs. what the user expected.
-3. If the issue involves data processing or workflows, use `execute_entity` to
-   run any available diagnostic queries or data validation routines.
+1. First, inspect the schema (the tables / collections / entities and their fields)
+   to understand what data is available.
+2. Query the specific records the bug report references. Compare what the data shows
+   vs. what the UI shows vs. what the user expected.
+3. If the issue involves data processing or workflows, run any available diagnostic
+   queries or data-validation routines.
 
 **Common data investigation patterns:**
 
