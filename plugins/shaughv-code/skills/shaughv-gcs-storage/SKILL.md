@@ -2,18 +2,16 @@
 name: shaughv-gcs-storage
 description: >
   How to upload to, download from, and manage Emmett's personal public Google Cloud
-  Storage bucket at `gs://shaughv`, and return shareable URLs of the form
-  `https://storage.googleapis.com/shaughv/<path>`. Use this skill whenever the user
-  mentions the `shaughv` bucket, `gs://shaughv`, `storage.googleapis.com/shaughv`,
-  Emmett's personal GCS bucket, "upload to shaughv", "the shaughv bucket", or asks
-  to share / publish / stage an asset for Emmett that needs a real URL (and is NOT
-  a SHAUGHV brand asset — those live on `cdn.shaughv.com` and are covered by the
-  `shaughv-cdn` skill). Also use when the user says "put this on my bucket" / "put
-  this on GCS" / "put this on Cloud Storage" / "stage this for me" in any SHAUGHV
-  or Emmett-personal context. Bucket name, project, public-read access, soft delete,
-  versioning, and CORS state are pre-wired so the agent never has to ask. For
-  general GCS concepts (auth deep-dive, signed URLs, IAM, lifecycle, HNS folders,
-  any bucket OTHER than `shaughv`) defer to the `gcs-storage` skill.
+  Storage bucket at `gs://shaughv`, returning shareable URLs of the form
+  `https://storage.googleapis.com/shaughv/<path>`. Use whenever the user mentions the
+  `shaughv` bucket, `gs://shaughv`, `storage.googleapis.com/shaughv`, Emmett's personal
+  GCS bucket, "upload to shaughv", or asks to share / publish / stage an asset for
+  Emmett that needs a real URL — and is NOT a SHAUGHV brand asset (those live on
+  cdn.shaughv.com via the `shaughv-cdn` skill). Also when the user says "put this on
+  my bucket / on GCS / on Cloud Storage" or "stage this for me" in a SHAUGHV or
+  Emmett-personal context. Bucket facts are pre-wired so the agent never has to ask.
+  For general GCS concepts or any bucket OTHER than `shaughv`, defer to `gcs-storage`.
+  See the body's "When this skill fires" for the full trigger list.
 ---
 
 # SHAUGHV GCS Bucket — `gs://shaughv`
@@ -28,6 +26,19 @@ ad-hoc file sharing — anything that needs a real URL.
 **This skill is the layer of "what to type for Emmett's bucket".** For
 the layer of "what these commands actually do" or anything involving a
 different bucket, defer to the `gcs-storage` skill.
+
+## When this skill fires
+
+Trigger on any mention of the **`shaughv` bucket**, `gs://shaughv`,
+`storage.googleapis.com/shaughv`, Emmett's personal GCS bucket, "upload to shaughv", or
+"the shaughv bucket" — or when the user asks to share / publish / stage an asset for
+Emmett that needs a real URL and is NOT a SHAUGHV brand asset (those live on
+`cdn.shaughv.com` and are covered by the `shaughv-cdn` skill). Also when the user says
+"put this on my bucket" / "put this on GCS" / "put this on Cloud Storage" / "stage this
+for me" in any SHAUGHV or Emmett-personal context. Bucket name, project, public-read
+access, soft delete, versioning, and CORS state are pre-wired (see Bucket facts below) so
+the agent never has to ask. For general GCS concepts (auth deep-dive, signed URLs, IAM,
+lifecycle, HNS folders, any bucket OTHER than `shaughv`) defer to the `gcs-storage` skill.
 
 ## Bucket facts (pre-wired — don't ask the user)
 

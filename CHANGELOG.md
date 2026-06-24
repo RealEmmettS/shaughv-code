@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.18.2] — 2026-06-24
+
+Patch: bring four skill `description` fields under Claude Code's 1024-char cap so they can't be silently skipped — with **no context removed**, only relocated.
+
+### Fixed
+- `skills/mistral/`, `skills/shaughv-cdn/`, `skills/gcs-storage/`, `skills/shaughv-gcs-storage/` — trimmed each frontmatter `description` from over (or at) the **1024-char** cap to ~800–950 chars. Claude Code silently skips a skill whose description exceeds the cap, so these were at risk of never loading. **Nothing was deleted:** the full trigger-phrase lists, capability enumerations, model-id lists, and the `gcs-storage` "confirm GCP project + bucket before any mutating command" safety rule were moved verbatim into new `## When this skill fires` (and, for `gcs-storage`, `## Before any mutating command`) sections in each skill's body. Closes the cleanup flagged in 0.18.1.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.18.1` → `0.18.2`.
+- `plugins/shaughv-code/` — regenerated (version lockstep); `-Check` passes.
+
 ## [0.18.1] — 2026-06-24
 
 Patch: make the new CI validate gate's `-Check` line-ending-reproducible on Windows runners, and capture two recurring maintainer gotchas in the repo docs.

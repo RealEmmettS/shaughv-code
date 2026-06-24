@@ -1,25 +1,18 @@
 ---
 name: gcs-storage
 description: >
-  How to use Google Cloud Storage (GCS) buckets end-to-end from the command line and
-  from code — uploading, downloading, listing, deleting, "folders", making objects
-  public, signed URLs, CORS, lifecycle, and the URL formats you return to users.
-  Use this skill whenever the user mentions Google Cloud Storage, GCS, a GCS bucket,
-  `gcloud storage`, `gsutil`, `gs://`, `storage.googleapis.com`, `storage.cloud.google.com`,
-  signed URLs for GCS, service-account JSON keys, `GOOGLE_APPLICATION_CREDENTIALS`,
-  Application Default Credentials (ADC), `gcloud auth application-default login`,
-  uniform bucket-level access (UBLA), making a bucket public to `allUsers`, object
-  versioning, soft delete, hierarchical namespace (HNS) folders, or wants to upload
-  an asset to a Google Cloud bucket and get back a shareable URL. Also use when
-  diagnosing 403 errors against a bucket, `SignatureDoesNotMatch` on a signed URL,
-  CORS failures from `fetch()` against a GCS URL, "Could not automatically determine
-  credentials", Python `google-cloud-storage` SDK errors, Node `@google-cloud/storage`
-  errors, `gcloud` install/SSL problems on Windows/macOS/Linux, or "exec: python: not
-  found" after a gcloud update. **Before running any mutating command (`cp`, `rm`,
-  `mb`, IAM edits, CORS edits, lifecycle edits) the agent MUST ask the user for the
-  GCP project ID and the target bucket name.** If the user is operating on the
-  personal `shaughv` bucket, defer to the `shaughv-gcs-storage` skill instead —
-  that one has the bucket facts pre-wired.
+  How to use Google Cloud Storage (GCS) buckets end-to-end from the CLI and from
+  code — upload, download, list, delete, "folders", public objects, signed URLs,
+  CORS, lifecycle, and the URL formats you return to users. Use whenever the user
+  mentions Google Cloud Storage, GCS, a GCS bucket, `gcloud storage`, `gsutil`,
+  `gs://`, storage.googleapis.com, signed URLs for GCS, service-account JSON keys,
+  `GOOGLE_APPLICATION_CREDENTIALS`, Application Default Credentials (ADC), uniform
+  bucket-level access, making a bucket public, versioning, soft delete, or
+  hierarchical-namespace (HNS) folders — or wants to upload an asset to a Google
+  Cloud bucket and get back a shareable URL. Also use when diagnosing GCS 403 /
+  SignatureDoesNotMatch / CORS / credentials / `gcloud` install errors. For the
+  personal `shaughv` bucket, defer to the `shaughv-gcs-storage` skill instead. See
+  the body's "When this skill fires" for the full trigger list and the safety rule.
 ---
 
 # Google Cloud Storage
@@ -46,6 +39,27 @@ interchangeable:
 | `gs://BUCKET/OBJECT` | CLI, SDKs | Not browser-fetchable. CLI/SDK-only. |
 | `https://storage.googleapis.com/BUCKET/OBJECT` | Browsers, `<img>`, `<video>`, `fetch()`, `curl` | The "direct" URL. Works for public objects with no auth UI. Respects bucket CORS config. **This is the URL you return to users.** |
 | `https://storage.cloud.google.com/BUCKET/OBJECT` | Humans clicking a link | Triggers a Google sign-in flow for private objects. **Never allows CORS**, regardless of bucket config. Avoid for embeds and programmatic access. |
+
+## Before any mutating command — confirm project + bucket
+
+**Before running any mutating command (`cp`, `rm`, `mb`, IAM edits, CORS edits,
+lifecycle edits) the agent MUST ask the user for the GCP project ID and the target
+bucket name.** If the user is operating on the personal `shaughv` bucket, defer to the
+`shaughv-gcs-storage` skill instead — that one has the bucket facts pre-wired.
+
+## When this skill fires
+
+Trigger on any mention of **Google Cloud Storage, GCS, a GCS bucket, `gcloud storage`,
+`gsutil`, `gs://`, `storage.googleapis.com`, `storage.cloud.google.com`**, signed URLs
+for GCS, service-account JSON keys, `GOOGLE_APPLICATION_CREDENTIALS`, Application Default
+Credentials (ADC), `gcloud auth application-default login`, uniform bucket-level access
+(UBLA), making a bucket public to `allUsers`, object versioning, soft delete, or
+hierarchical namespace (HNS) folders — or when the user wants to upload an asset to a
+Google Cloud bucket and get back a shareable URL. Also when diagnosing 403 errors against
+a bucket, `SignatureDoesNotMatch` on a signed URL, CORS failures from `fetch()` against a
+GCS URL, "Could not automatically determine credentials", Python `google-cloud-storage`
+SDK errors, Node `@google-cloud/storage` errors, `gcloud` install/SSL problems on
+Windows/macOS/Linux, or "exec: python: not found" after a gcloud update.
 
 ## Installing and verifying the `gcloud` CLI
 

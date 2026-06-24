@@ -1,21 +1,17 @@
 ---
 name: mistral
 description: >
-  Comprehensive, exhaustive guide to using the Mistral AI API end to end — every
-  service in the spec, with OCR, audio transcription, and text-to-speech as the
-  primary use cases. Use this skill whenever the user mentions Mistral, mistral.ai,
-  api.mistral.ai, La Plateforme, console.mistral.ai, MISTRAL_API_KEY, or any Mistral
-  capability: OCR / document understanding / PDF-to-Markdown (mistral-ocr-latest),
-  audio transcription with Voxtral (voxtral-mini-latest), Mistral text-to-speech /
-  speech synthesis / voices, chat completions, function/tool calling, structured
-  JSON outputs, vision, embeddings (mistral-embed), FIM/code completion, moderation
-  & classification, files, batch jobs, fine-tuning, the Agents & Conversations API,
-  libraries/RAG, connectors, observability, or workflows. Also use when wiring a
-  Mistral key into a project, when a request hits api.mistral.ai, or when you see
-  model ids like mistral-large-latest, mistral-small-latest, voxtral-*, or
-  mistral-ocr-*. Covers key discovery/prompt/save, exact request/response schemas,
-  cURL + Python + TypeScript examples, and bundles the full OpenAPI spec for
-  offline reference and freshness diffing.
+  Comprehensive guide to the Mistral AI API end to end, with OCR, audio
+  transcription (Voxtral), and text-to-speech as the primary use cases. Use
+  whenever the user mentions Mistral, mistral.ai, api.mistral.ai, La Plateforme,
+  MISTRAL_API_KEY, or any Mistral capability — OCR / document understanding /
+  PDF-to-Markdown, audio transcription, text-to-speech / voices, chat completions,
+  tool calling, structured JSON, vision, embeddings, FIM / code completion,
+  moderation & classification, files, batch, fine-tuning, or the Agents &
+  Conversations API. Also use when wiring a Mistral key into a project, when a
+  request hits api.mistral.ai, or when you see model ids like mistral-large-latest,
+  mistral-small-latest, voxtral-*, or mistral-ocr-*. See the body's "When this
+  skill fires" for the full trigger surface.
 last_verified_against_mistral_docs: 2026-06-19
 ---
 
@@ -33,6 +29,21 @@ libraries/RAG, connectors, observability, workflows).
 - **Console / keys:** https://console.mistral.ai
 - **SDKs:** Python `mistralai` (`from mistralai import Mistral`), TypeScript
   `@mistralai/mistralai`, plus raw cURL.
+
+## When this skill fires
+
+Trigger on any mention of **Mistral / mistral.ai / api.mistral.ai / La Plateforme /
+console.mistral.ai / `MISTRAL_API_KEY`**, or any Mistral capability: OCR / document
+understanding / PDF-to-Markdown (`mistral-ocr-latest`), audio transcription with
+Voxtral (`voxtral-mini-latest`), text-to-speech / speech synthesis / voices, chat
+completions, function/tool calling, structured JSON outputs, vision, embeddings
+(`mistral-embed`), FIM / code completion, moderation & classification, files, batch
+jobs, fine-tuning, the Agents & Conversations API, libraries/RAG, connectors,
+observability, or workflows. Also when wiring a Mistral key into a project, when a
+request hits `api.mistral.ai`, or when you see model ids like `mistral-large-latest`,
+`mistral-small-latest`, `voxtral-*`, or `mistral-ocr-*`. This skill covers key
+discovery → prompt → save, exact request/response schemas, cURL + Python + TypeScript
+examples, and bundles the full OpenAPI spec for offline reference and freshness diffing.
 
 ## 1. API key — discover → prompt → save (do this first)
 

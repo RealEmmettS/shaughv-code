@@ -9,6 +9,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late June 2026
 
 **Fixed**
+- Four skills had activation blurbs long enough that the assistant could silently skip them (a hidden length limit). Shortened those blurbs to a safe length and moved the extra detail — the full list of trigger phrases, and the Google-Cloud-Storage "always confirm the project and bucket before changing anything" safety rule — into the body of each skill. Nothing was lost; it just moved somewhere it still reads well, and those skills will now reliably switch on when they should.
+
+**Behind the scenes**
+- Nudged the version up a notch.
+
+---
+
+## Just before that — late June 2026
+
+**Fixed**
 - Tightened the automated check added in the previous release so it passes reliably. A line-ending quirk was making it flag a false mismatch in the Codex copy of the bundle on the Windows test machine; that's now pinned so the check behaves the same everywhere.
 
 **Behind the scenes**
