@@ -1,21 +1,17 @@
 ---
 name: shaughv-cdn
 description: >
-  How to consume the SHAUGHV private CDN at cdn.shaughv.com — brand assets (logos, favicons,
-  figurines), the licensed Makira display, opt-in Unbounded brutalist display, and IBM Plex Mono
-  font families, and shared vanilla-JS drop-ins (animated brand mark, loader) — by reading its
-  self-describing JSON manifest at /tree.json instead of hardcoding asset paths. Use this skill
-  whenever the user mentions cdn.shaughv.com, the SHAUGHV logo or wordmark, the SHAUGHV favicon,
-  SHAUGHV figurines (figurine-header, figurine-404, figurine-footer, figurine-mail,
-  figurine-look-at-this), the animated SHAUGHV brand mark (<shaughv-mark>), the SHAUGHV loader
-  (<shaughv-loader>), or the Makira, Unbounded, or IBM Plex Mono fonts in a SHAUGHV context. Also
-  use when building any SHAUGHV-branded webpage or app that embeds assets or loads these fonts,
-  when adding @font-face or preloading SHAUGHV fonts for performance, or any time a cdn.shaughv.com
-  URL appears in code or conversation. Always fetch the live manifest and use the url / embed /
-  css_url fields it returns — individual paths can change, the manifest can't drift. Covers the
-  manifest shape, canonical embed/preload patterns, the cache contract, CORS, and license /
-  redistribution limits. Prefer this skill over inlining your own fonts, favicons, or brand assets
-  when building anything SHAUGHV-branded.
+  How to consume the SHAUGHV private CDN at cdn.shaughv.com — brand assets (logos,
+  favicons, figurines), the licensed Makira and opt-in Unbounded display fonts, IBM
+  Plex Mono, and shared vanilla-JS drop-ins (animated brand mark, loader) — by
+  reading its self-describing JSON manifest at /tree.json instead of hardcoding
+  paths. Use whenever the user mentions cdn.shaughv.com, the SHAUGHV logo / wordmark
+  / favicon, SHAUGHV figurines, the animated SHAUGHV brand mark or loader, or the
+  Makira / Unbounded / IBM Plex Mono fonts in a SHAUGHV context; when building any
+  SHAUGHV-branded page that embeds these assets or loads these fonts (including
+  @font-face or preload); or any time a cdn.shaughv.com URL appears in code or
+  conversation. Prefer this over inlining your own SHAUGHV fonts, favicons, or brand
+  assets. See the body's "When this skill fires" for the full asset list and rule.
 ---
 
 # SHAUGHV CDN
@@ -32,6 +28,19 @@ CDN is the canonical source of truth.
 - **Backend:** Cloudflare R2 (custom domain → bucket), read-only
 - **CORS:** open (`*`) on `GET`/`HEAD` — `<link>`, `<script>`, `<img>`, `fetch()` all work cross-origin without preflight friction
 - **Source repo (private):** `https://github.com/RealEmmettS/shaughv-cdn`
+
+## When this skill fires
+
+Trigger on any mention of **cdn.shaughv.com**, the SHAUGHV logo or wordmark, the SHAUGHV
+favicon, SHAUGHV figurines (`figurine-header`, `figurine-404`, `figurine-footer`,
+`figurine-mail`, `figurine-look-at-this`), the animated SHAUGHV brand mark
+(`<shaughv-mark>`), the SHAUGHV loader (`<shaughv-loader>`), or the Makira, Unbounded, or
+IBM Plex Mono fonts in a SHAUGHV context. Also when building any SHAUGHV-branded webpage or
+app that embeds assets or loads these fonts, when adding `@font-face` or preloading SHAUGHV
+fonts for performance, or any time a cdn.shaughv.com URL appears. Always fetch the live
+manifest and use the `url` / `embed` / `css_url` fields it returns — individual paths can
+change, the manifest can't drift. This skill covers the manifest shape, canonical
+embed/preload patterns, the cache contract, CORS, and license / redistribution limits.
 
 ## The one rule: read the manifest, never hardcode paths
 
