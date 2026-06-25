@@ -55,7 +55,7 @@ Review Active tasks and flag, leading with the most urgent:
 - Tasks in Active 30+ days with no movement.
 - Tasks with no context (no person, no project).
 
-For each: mark done? reschedule? move to Someday? break down (hand to `iterative-plan`)?
+For each: mark done? reschedule? move to Backlog? break down (hand to `iterative-plan`)?
 
 ### 4. Decode tasks for memory gaps
 

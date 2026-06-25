@@ -81,9 +81,9 @@ repo-level memory skill), target that instead — match the repo, don't impose `
 Tasks aren't "memory", so by default they don't survive teardown — but don't silently drop
 open work:
 
-- **Default:** summarize remaining **Active** and **Waiting On** items into an `## Open
+- **Default:** summarize remaining **Active** and **To-Do** items into an `## Open
   threads` list at the bottom of the repo's `CLAUDE.md` (or a short `TODO` note), so nothing
-  in flight is lost. Drop the `Done`/`Someday` archive unless asked to keep it.
+  in flight is lost. Drop the `Done`/`Backlog` archive unless asked to keep it.
 - **`--keep-tasks`:** instead, move `.tasks/TASKS.md` to the repo root as `TASKS.md` (or
   append to an existing one) and leave it tracked.
 

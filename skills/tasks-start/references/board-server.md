@@ -117,13 +117,25 @@ The dashboard parses/serializes this exact shape; the server only moves the byte
 ```markdown
 # Tasks
 
-## Section Name
-- [ ] **Task title** - optional note
+## Backlog
+
+## To-Do
+- [ ] **Task title** - optional note (needs #b2c) #a3f
   - [x] subtask
-- [x] **Done task**
+
+## Active
+- [ ] **Other task** #b2c
+
+## Done
+- [x] **Done task** #x9z
 ```
 
 - `## Section` headers (optional `**bold**`); section id = lowercased, non-alnum → `-`.
-- Task lines: `- [ ]` / `- [x]` then a **bold** title, optional ` - note`.
+  Default columns are **Backlog → To-Do → Active → Done** (file order = column order).
+- Task lines: `- [ ]` / `- [x]`, a **bold** title, optional ` - note`, optional
+  ` (needs #id, #id)` prerequisites, then the task's own short base-36 ` #id` LAST.
+- A task with an unfinished prerequisite is **blocked** (badge + can't move into Active).
+  Every task gets an id automatically; missing ids are backfilled on load.
 - Subtasks: 2-space-indented `  - [ ]` lines, plain text.
-- Serialize always emits `[x]`/`[ ]`, bold titles, and `## Section` headers without bold.
+- Serialize always emits `[x]`/`[ ]`, bold titles, `(needs …)` before the trailing `#id`,
+  and `## Section` headers without bold.
