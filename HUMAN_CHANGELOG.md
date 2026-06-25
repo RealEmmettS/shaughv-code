@@ -9,6 +9,19 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late June 2026
 
 **Added**
+- Your task board is now **live**. Setting up the task system launches the board as a little local web page that opens by itself in your browser — no more hunting for a file and clicking "open this folder." You and the assistant can both work on it at once: when it updates your task list, the board changes in front of you instantly, and when you drag a card, the underlying notes update too. If you and the assistant happen to edit at the very same moment, it reloads rather than quietly overwriting one of the changes.
+- The assistant now gets gentle reminders to keep your board honest — when it starts a session, right after it saves or ships code, and whenever it hands work off to a helper — so the board stays a true picture of what's going on and you keep full visibility. These reminders are opt-in (it asks once) and are removed cleanly when you tear the system down.
+- The board also quietly restarts itself if it ever stops, so it's there whenever you come back to it.
+
+**Improved**
+- The "set up my tasks" command is now also your "open my board" command — run it again any time to relaunch the board. And if you run it somewhere inside a project that already has a board higher up, it asks whether you meant that existing one or want a brand-new separate board, instead of guessing.
+
+**Behind the scenes**
+- The whole live board runs on a tiny self-contained helper that needs nothing installed. Wrote down how it all fits together, kept the bundle's version numbers in step, refreshed the Codex copy, and noted that these reminders live inside your own project rather than the shared bundle.
+
+## The release before — late June 2026
+
+**Added**
 - A full task + memory system you can drop into any project. One command sets it up, another keeps it in sync with your other tools, and a third tears it back down — folding everything it learned about your people, projects, and shorthand into the project itself so nothing is lost.
   - It keeps everything tidy inside a single dedicated folder in the project, so it never clutters things up — and when you're done, one command flattens its memory back into the project's own notes and removes itself.
   - It comes with a visual board — your tasks on one side, everything Claude knows about your work on the other — restyled head-to-toe in the SHAUGHV look, with a switch to flip between a warm cream theme and a dark "mission-control" theme. It's adapted and expanded from Anthropic's own productivity add-on.

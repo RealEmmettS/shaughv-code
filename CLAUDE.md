@@ -13,6 +13,15 @@ Claude Code instances.
 Don't introduce `agents/`, `hooks/`, additional MCP servers, or additional
 commands unless Emmett explicitly asks to expand scope.
 
+> Note: that rule is about **bundling those things in the plugin itself**. It is
+> NOT violated by a skill that writes hooks into a *target* repo when run. The
+> `tasks-*` skills do exactly this: `/tasks-start` ships a zero-dependency Node
+> board server (`skills/tasks-start/assets/board-server.mjs`) and offers to wire
+> board-maintenance hooks into the **target repo's** `.claude/settings*.json`;
+> `/tasks-remove` tears both back down. Those hooks live in whatever repo the
+> skill is run in — never in this plugin — so the no-bundled-hooks rule still
+> holds. (Added by explicit ask; see CHANGELOG 0.20.0.)
+
 The bundle is consumable two ways: (1) the Claude Code marketplace install
 documented in the README (delivers skills + the bundled MCP + slash command),
 and (2) `npx skills add RealEmmettS/shaughv-code` for a skills-only install

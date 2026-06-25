@@ -1338,6 +1338,13 @@
     // ===== SHARED STATE =====
     let activeMainTab = 'tasks'; // 'tasks' or 'memory'
 
+    // When this page is served by board-server.mjs over http(s), we talk to its REST + SSE
+    // API and the files live server-side (clean, reliable, auto-loading). When it's opened
+    // as a file:// page, we fall back to the File System Access API (the legacy flow with
+    // manual "Select TASKS.md" / "Select Folder" pickers + 1s polling). Everything below
+    // branches on this one flag.
+    const SERVER_MODE = location.protocol === 'http:' || location.protocol === 'https:';
+
     const statusEl = document.getElementById('status');
     const filePathEl = document.getElementById('filePath');
 
@@ -1376,9 +1383,13 @@
 
       // Update file path display
       if (tab === 'tasks') {
-        filePathEl.textContent = taskFileHandle ? taskFileName : '';
+        filePathEl.textContent = SERVER_MODE
+          ? (taskFileName ? 'TASKS.md · live' : '')
+          : (taskFileHandle ? taskFileName : '');
       } else {
-        filePathEl.textContent = memoryDirHandle ? memoryDirHandle.name : '';
+        filePathEl.textContent = SERVER_MODE
+          ? '.tasks/ memory · live'
+          : (memoryDirHandle ? memoryDirHandle.name : '');
       }
     }
 
@@ -1922,7 +1933,9 @@
     }
 
     async function autoSave() {
-      if (!taskFileHandle || !hasChanges || isSaving) return;
+      if (!hasChanges) return;
+      if (SERVER_MODE) { await saveTasksToServer(); return; }
+      if (!taskFileHandle || isSaving) return;
       isSaving = true;
       try {
         const writable = await taskFileHandle.createWritable();
@@ -1938,6 +1951,73 @@
         showStatus('Save failed: ' + e.message);
       }
       isSaving = false;
+    }
+
+    // ===== SERVER MODE: live task I/O via board-server.mjs (fetch + SSE) =====
+    let evtSource = null;
+
+    async function loadTasksFromServer(initial) {
+      try {
+        const res = await fetch('/api/tasks');
+        const content = await res.text();
+        lastModified = Number(res.headers.get('X-Board-Mtime')) || 0;
+        const result = parseTaskMarkdown(content);
+        sections = result.sections;
+        tasks = result.tasks;
+        taskFileName = 'TASKS.md';
+        if (activeMainTab === 'tasks') filePathEl.textContent = 'TASKS.md · live';
+        if (initial) switchTaskView('board'); else renderTasks();
+        showStatus(initial ? 'Live board connected' : 'Reloaded');
+      } catch (e) { showStatus('Board load failed: ' + e.message); }
+    }
+
+    async function saveTasksToServer() {
+      if (isSaving) return;
+      isSaving = true;
+      try {
+        const res = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/markdown', 'X-Base-Mtime': String(lastModified) },
+          body: toMarkdown(),
+        });
+        if (res.status === 409) {
+          // An agent changed TASKS.md under us — reload latest rather than stomp its write.
+          const latest = await res.text();
+          lastModified = Number(res.headers.get('X-Board-Mtime')) || lastModified;
+          const result = parseTaskMarkdown(latest);
+          sections = result.sections;
+          tasks = result.tasks;
+          hasChanges = false;
+          saveBtn.disabled = true;
+          renderTasks();
+          showStatus('Board changed on disk — reloaded. Re-apply your edit.');
+          return;
+        }
+        lastModified = Number(res.headers.get('X-Board-Mtime')) || lastModified;
+        hasChanges = false;
+        saveBtn.disabled = true;
+        showStatus('Saved');
+      } catch (e) {
+        showStatus('Save failed: ' + e.message);
+      } finally {
+        isSaving = false;
+      }
+    }
+
+    function startServerWatch() {
+      if (evtSource) evtSource.close();
+      try {
+        evtSource = new EventSource('/api/events');
+        evtSource.addEventListener('change', (e) => {
+          let kind = 'tasks';
+          try { kind = (JSON.parse(e.data) || {}).kind || 'tasks'; } catch (_) {}
+          if (kind === 'tasks') {
+            if (!hasChanges && !isSaving) loadTasksFromServer(false);
+          } else if (kind === 'memory' && activeMainTab === 'memory') {
+            loadMemoryFromServer();
+          }
+        });
+      } catch (e) { /* SSE unavailable — board still works, just not live */ }
     }
 
     async function checkForExternalChanges() {
@@ -1957,6 +2037,7 @@
     }
 
     function startWatching() {
+      if (SERVER_MODE) { startServerWatch(); return; }
       if (watchInterval) clearInterval(watchInterval);
       watchInterval = setInterval(checkForExternalChanges, 1000);
     }
@@ -2506,6 +2587,7 @@
     }
 
     async function openTaskFile() {
+      if (SERVER_MODE) { await loadTasksFromServer(true); return; }
       try {
         [taskFileHandle] = await window.showOpenFilePicker({
           types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }]
@@ -2530,6 +2612,7 @@
     document.getElementById('openBtnLarge')?.addEventListener('click', openTaskFile);
 
     saveBtn.addEventListener('click', async () => {
+      if (SERVER_MODE) { await saveTasksToServer(); return; }
       if (!taskFileHandle) return;
       try {
         const writable = await taskFileHandle.createWritable();
@@ -2640,7 +2723,46 @@
         .join(' ');
     }
 
+    // ===== SERVER MODE: live memory I/O via board-server.mjs =====
+    async function loadMemoryFromServer() {
+      try {
+        const tree = await (await fetch('/api/memory/tree')).json();
+        memoryData = { claudeMd: null, memoryFiles: [], memoryDirs: {} };
+        const fetchFile = async (sp) =>
+          (await fetch('/api/memory/file?path=' + encodeURIComponent(sp))).text();
+
+        if (tree.claudeMd) {
+          memoryData.claudeMd = { content: await fetchFile('CLAUDE.md'), serverPath: 'CLAUDE.md' };
+        }
+        for (const name of (tree.files || [])) {
+          memoryData.memoryFiles.push({ name, content: await fetchFile('memory/' + name), serverPath: 'memory/' + name });
+        }
+        for (const [dir, files] of Object.entries(tree.dirs || {})) {
+          memoryData.memoryDirs[dir] = [];
+          for (const fname of files) {
+            const sp = 'memory/' + dir + '/' + fname;
+            const content = await fetchFile(sp);
+            memoryData.memoryDirs[dir].push({ name: fname, content, serverPath: sp, parsed: parseMemoryMarkdown(content) });
+          }
+        }
+
+        const hasAny = memoryData.claudeMd || memoryData.memoryFiles.length || Object.keys(memoryData.memoryDirs).length;
+        if (!hasAny) return; // nothing yet — leave the empty state until memory exists
+        renderMemory();
+        memoryEmptyState.style.display = 'none';
+        memoryMainContent.style.display = 'flex';
+        if (activeMainTab === 'memory') filePathEl.textContent = '.tasks/ memory · live';
+      } catch (e) { showStatus('Memory load failed: ' + e.message); }
+    }
+
+    async function saveMemoryToServer(serverPath, content) {
+      await fetch('/api/memory/file?path=' + encodeURIComponent(serverPath), {
+        method: 'POST', headers: { 'Content-Type': 'text/markdown' }, body: content,
+      });
+    }
+
     async function loadMemoryDirectory() {
+      if (SERVER_MODE) { await loadMemoryFromServer(); return; }
       try {
         memoryDirHandle = await window.showDirectoryPicker();
 
@@ -3082,9 +3204,13 @@
       try {
         if (type === 'claudeMd') {
           memoryData.claudeMd.content = content;
-          const writable = await memoryData.claudeMd.fileHandle.createWritable();
-          await writable.write(content);
-          await writable.close();
+          if (SERVER_MODE) {
+            await saveMemoryToServer(memoryData.claudeMd.serverPath, content);
+          } else {
+            const writable = await memoryData.claudeMd.fileHandle.createWritable();
+            await writable.write(content);
+            await writable.close();
+          }
           showStatus('Saved CLAUDE.md');
 
         } else if (type === 'memoryFile') {
@@ -3092,9 +3218,13 @@
           const file = memoryData.memoryFiles.find(f => f.name === fileName);
           if (file) {
             file.content = content;
-            const writable = await file.fileHandle.createWritable();
-            await writable.write(content);
-            await writable.close();
+            if (SERVER_MODE) {
+              await saveMemoryToServer(file.serverPath, content);
+            } else {
+              const writable = await file.fileHandle.createWritable();
+              await writable.write(content);
+              await writable.close();
+            }
             showStatus('Saved ' + fileName);
           }
 
@@ -3106,9 +3236,13 @@
           if (file) {
             file.content = content;
             file.parsed = parseMemoryMarkdown(content);
-            const writable = await file.fileHandle.createWritable();
-            await writable.write(content);
-            await writable.close();
+            if (SERVER_MODE) {
+              await saveMemoryToServer(file.serverPath, content);
+            } else {
+              const writable = await file.fileHandle.createWritable();
+              await writable.write(content);
+              await writable.close();
+            }
             showStatus('Saved ' + fileName);
           }
 
@@ -3118,21 +3252,32 @@
           if (!fileName) { showStatus('Please enter a filename'); return; }
           if (!fileName.endsWith('.md')) fileName += '.md';
 
-          const memoryDir = await memoryDirHandle.getDirectoryHandle('memory');
-          const subDir = await memoryDir.getDirectoryHandle(dirName, { create: true });
-          const fileHandle = await subDir.getFileHandle(fileName, { create: true });
+          if (SERVER_MODE) {
+            const sp = 'memory/' + dirName + '/' + fileName;
+            await saveMemoryToServer(sp, content);
+            memoryData.memoryDirs[dirName].push({
+              name: fileName,
+              content: content,
+              serverPath: sp,
+              parsed: parseMemoryMarkdown(content)
+            });
+          } else {
+            const memoryDir = await memoryDirHandle.getDirectoryHandle('memory');
+            const subDir = await memoryDir.getDirectoryHandle(dirName, { create: true });
+            const fileHandle = await subDir.getFileHandle(fileName, { create: true });
 
-          const writable = await fileHandle.createWritable();
-          await writable.write(content);
-          await writable.close();
+            const writable = await fileHandle.createWritable();
+            await writable.write(content);
+            await writable.close();
 
-          memoryData.memoryDirs[dirName].push({
-            name: fileName,
-            content: content,
-            fileHandle: fileHandle,
-            dirHandle: subDir,
-            parsed: parseMemoryMarkdown(content)
-          });
+            memoryData.memoryDirs[dirName].push({
+              name: fileName,
+              content: content,
+              fileHandle: fileHandle,
+              dirHandle: subDir,
+              parsed: parseMemoryMarkdown(content)
+            });
+          }
 
           showStatus('Created ' + fileName);
         }
@@ -3165,6 +3310,17 @@
     window.openNewFileModal = openNewFileModal;
     window.openEditModal = openEditModal;
     window.filterMemoryDirectory = filterMemoryDirectory;
+
+    // ===== SERVER MODE: boot the live board automatically =====
+    // Served by board-server.mjs → no manual file pickers: auto-load tasks + memory and
+    // open the live (SSE) connection. The pickers become "Reload" buttons.
+    if (SERVER_MODE) {
+      openTaskBtn.textContent = 'Reload';
+      openMemoryBtn.textContent = 'Reload';
+      loadTasksFromServer(true);
+      startWatching();
+      loadMemoryFromServer();
+    }
   </script>
 </body>
 </html>

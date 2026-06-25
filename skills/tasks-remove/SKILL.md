@@ -35,11 +35,13 @@ Show the user exactly what will happen before touching anything:
 ```
 /tasks-remove plan for <repo>:
 
-  .tasks/CLAUDE.md     →  merge into ./CLAUDE.md  (## Memory section)
-  .tasks/memory/       →  merge into ./memory/    (glossary.md, people/, projects/, context/)
-  .tasks/TASKS.md      →  3 open items → ## Open threads in ./CLAUDE.md; Done items archived
-  .tasks/dashboard.html → deleted
-  .tasks/              → deleted after migration
+  board server          →  stopped (node .tasks/board-server.mjs stop)
+  .claude/settings*.json →  board-maintenance hooks removed (other hooks/keys kept)
+  .tasks/CLAUDE.md      →  merge into ./CLAUDE.md  (## Memory section)
+  .tasks/memory/        →  merge into ./memory/    (glossary.md, people/, projects/, context/)
+  .tasks/TASKS.md       →  3 open items → ## Open threads in ./CLAUDE.md; Done items archived
+  .tasks/dashboard.html, board-server.mjs → deleted
+  .tasks/               →  deleted after migration
 
 Proceed? (or /tasks-remove --keep-tasks to leave a TASKS.md at the repo root)
 ```
@@ -85,12 +87,23 @@ open work:
 - **`--keep-tasks`:** instead, move `.tasks/TASKS.md` to the repo root as `TASKS.md` (or
   append to an existing one) and leave it tracked.
 
-## 6. Delete `.tasks/`
+## 6. Stop the board, remove the hooks, delete `.tasks/`
 
-Once migration is written and confirmed, delete the `.tasks/` folder, including
-`dashboard.html`. Deleting files from a Cowork workspace requires permission — if a delete
-fails with "Operation not permitted", request it (the `allow_cowork_file_delete` flow) rather
-than telling the user it's impossible.
+Before deleting, tear down what `/tasks-start` set up **outside** `.tasks/`:
+
+- **Stop the live server:** run `node .tasks/board-server.mjs stop` (kills the server via its
+  recorded PID and clears its state files). Harmless if it isn't running.
+- **Remove the board-maintenance hooks:** open `.claude/settings.local.json` (and
+  `.claude/settings.json` — check both). In each, delete ONLY the hook entries whose
+  `command` contains the marker **`board-server.mjs hook`** (across `SessionStart`,
+  `PostToolUse`, `SubagentStart`, `SubagentStop`). Prune any hook array that becomes empty,
+  then `hooks` if it empties, then the file itself if it becomes `{}`. **Never remove a hook
+  you can't positively identify by that marker** — every other hook and key stays untouched.
+
+Then delete the `.tasks/` folder, including `dashboard.html` and `board-server.mjs`. Deleting
+files from a Cowork workspace requires permission — if a delete fails with "Operation not
+permitted", request it (the `allow_cowork_file_delete` flow) rather than telling the user it's
+impossible.
 
 Remove any `.tasks/` line you added to `.gitignore` during `/tasks-start`.
 
@@ -100,10 +113,11 @@ Remove any `.tasks/` line you added to `.gitignore` during `/tasks-start`.
 Task system removed. Migrated into <repo>:
 - ./CLAUDE.md      ← working memory (X people, X terms, X projects) + 3 open threads
 - ./memory/        ← glossary, X people, X projects, company context
-- .tasks/          ← deleted (dashboard included)
+- board server     ← stopped; board-maintenance hooks removed from .claude/settings*.json
+- .tasks/          ← deleted (dashboard + board-server.mjs included)
 
 Your repo now carries the context directly. Re-run /tasks-start anytime to spin the
-dashboard back up.
+live board back up.
 ```
 
 ## Safety
@@ -112,6 +126,9 @@ dashboard back up.
   `CLAUDE.md` / `memory/` to confirm the content landed, then delete `.tasks/`.
 - **Merge, don't overwrite.** The repo's existing memory always wins on conflict; surface
   conflicts instead of silently resolving them.
+- **Remove hooks by marker, never by position.** The board hooks are identified by the
+  `board-server.mjs hook` string in their command — an unrelated `SessionStart` /
+  `PostToolUse` / subagent hook in the same settings file is never touched.
 - If anything is ambiguous (where repo-level memory should live, whether to keep tasks), ask
   once rather than guessing — this step is hard to undo.
 - If the repo is version-controlled, this is a natural commit point — defer to the
