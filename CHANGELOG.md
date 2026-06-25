@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.20.0] — 2026-06-25
+
+Minor: the task board goes **live**. `/tasks-start` now serves the dashboard from a zero-dependency local Node server on `localhost` (two-way live sync between the agent's file edits and the operator's UI), auto-opens it, and — opt-in — wires **board-maintenance hooks** into the target repo so every Claude session is nudged to keep `.tasks/TASKS.md` current. `/tasks-start` is now idempotent (re-running relaunches/repairs the board, with nesting-aware detection) and `/tasks-remove` tears the server + hooks back down.
+
+### Added
+- `skills/tasks-start/assets/board-server.mjs` — zero-dependency (`node` built-ins only; no `npm install`, no build) live board server. Subcommands `serve` / `ensure` / `hook` / `stop` / `status`. Serves `dashboard.html` on `localhost:4317` (next free port if busy), exposes `GET|POST /api/tasks` (atomic write with an `X-Base-Mtime` optimistic-concurrency guard → **409** on conflict, so an agent's write is never silently stomped), an SSE `/api/events` stream (`fs.watchFile` + best-effort recursive `fs.watch`) for live reload, and a path-guarded `/api/memory/*` API. Records `{port,pid}` in `.tasks/.board-server.json`; liveness is verified via an `/api/ping` health check, not just PID-alive.
+- `skills/tasks-start/references/board-server.md` — single source of truth for the server API, the exact hooks JSON block, the merge/teardown rules (stable `board-server.mjs hook` marker), the Node-absent fallback, and the `TASKS.md` format contract; linked from both `tasks-start` and `tasks-remove`.
+- Board-maintenance hooks, written into the **target repo's** `.claude/settings.local.json` by default (`settings.json` if `.tasks/` is committed): `SessionStart` (revive the board + standing reminder; re-fires on resume/clear/compact), `PostToolUse` on `Bash|ExitPlanMode` (nudge on `git commit`/`git push` and plan approval — inspects `tool_input.command`), and `SubagentStart` / `SubagentStop`. Nudges inject agent-visible `additionalContext` and are de-duped **per semantic type** (commit/push/plan/subagent) on a 30s cooldown.
+
+### Changed
+- `skills/tasks-start/assets/dashboard.html` — now dual-mode: served over `http(s)` it talks to the board server (auto-load, `fetch`/`POST`, SSE live updates, server-side memory I/O); opened as `file://` it keeps the legacy File System Access API flow verbatim as a fallback. All parsing / serialization / drag-drop / theming reused unchanged.
+- `skills/tasks-start/SKILL.md` — step 1 is now directory-aware (detects an existing `.tasks/` in cwd or an ancestor; prompts use-parent-vs-create-nested on ambiguity); step 3 launches the localhost board (`ensure --open`; Node-absent → `file://` fallback); a new step 4 wires the hooks (ask once); steps renumbered; report updated.
+- `skills/tasks-remove/SKILL.md` — teardown now stops the board server (`board-server.mjs stop`) and removes the board hooks from `.claude/settings*.json` by the `board-server.mjs hook` marker (never by position), shown in the migration plan and final report.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.19.0` → `0.20.0`; tasks descriptions note the live localhost board + maintenance hooks.
+- `CLAUDE.md`, `AGENTS.md` — clarified that the tasks-* skills configure hooks in *target* repos and ship a Node board asset, which is distinct from (and not a violation of) the "no bundled hooks/MCP in the plugin" rule.
+- `plugins/shaughv-code/` — regenerated for version lockstep and the new board server + reference (`pwsh ./build-codex-plugin.ps1 -Check` confirms the gate).
+
 ## [0.19.0] — 2026-06-24
 
 Minor: add a native **task + workplace-memory system** — five `tasks-*` skills plus a SHAUGHV-branded dashboard — adapted and expanded from Anthropic's Productivity plugin. Everything the system owns lives in a self-contained `.tasks/` folder, and a new `/tasks-remove` flattens it back into the host repo.
