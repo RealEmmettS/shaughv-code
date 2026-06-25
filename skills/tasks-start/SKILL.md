@@ -79,12 +79,58 @@ Create the `.tasks/` folder and populate it:
   `${CLAUDE_PLUGIN_ROOT}/skills/tasks-start/assets/` into `.tasks/`. The `.mjs` is the
   zero-dependency Node server that serves the dashboard on localhost and live-syncs the
   board (see [`references/board-server.md`](references/board-server.md)).
+- **Provision the board's display dependencies (tiered).** Immediately after copying the
+  assets — and **before** launching the server in step 3 — run the internal installer once:
+
+  ```
+  node .tasks/board-server.mjs install
+  ```
+
+  This is an **internal subcommand, not a user-facing command** — never tell the user to run
+  it. It provisions the board's optional enhancement assets (the anime.js motion driver, the
+  vendored brand fonts, the animated brand mark) into `.tasks/vendor/` using a
+  **try-everything chain** — npm → pinned CDN fetch → the plugin's shipped copies → a fully
+  offline floor — and writes `.tasks/.install-manifest.json` recording exactly what it did
+  (so `/tasks-remove` can fully undo it). **It always succeeds**: the board looks and behaves
+  identically at every tier; lower tiers just source fewer bytes externally (Makira, a
+  commercial font, is never bundled and falls back to the system stack offline). It prints a
+  one-line `tier=…` summary you can surface in step 9. Re-running it is safe and idempotent.
 - **`.tasks/CLAUDE.md` + `.tasks/memory/`** — if absent, this is a fresh setup. After
   launching the board, run the memory bootstrap in step 6.
 
 Use `.tasks/.gitignore` judgment: by default the system is local scaffolding. If the user
 wants the task list and memory committed, leave it tracked; if they want it ephemeral, add
 a `.tasks/` line to the repo's `.gitignore`. Ask once if it isn't obvious.
+
+#### Node dependency (detect → bootstrap → offline fallback)
+
+Both the installer above and the live board in step 3 need **`node` on PATH**. Decide once,
+here, before running `install`:
+
+- **Node present** (`node --version` succeeds) → run `install`, then step 3 launches the
+  server normally. This is the common case.
+- **Node absent** → the board can't run as a server at all, so try to provision Node, in
+  this order, non-interactively, and pick whatever the platform offers:
+  - **Windows:** `winget install --id OpenJS.NodeJS.LTS -e --silent --accept-package-agreements --accept-source-agreements`
+  - **macOS:** `brew install node`
+  - **Linux:** `nvm install --lts` if nvm is present, else `sudo -n apt-get install -y nodejs npm` only if passwordless sudo works.
+
+  Installing Node is a **global, out-of-tree change** — it can affect the whole machine.
+  Mention it before doing it ("Node isn't installed; the live board needs it — want me to
+  install the Node LTS via winget?") unless the user has already said to just make it work.
+  If you do install it, tell `install` to record the change so it can be cleanly reversed
+  later:
+
+  ```
+  node .tasks/board-server.mjs install --node-bootstrap "winget:OpenJS.NodeJS.LTS"
+  ```
+
+  (Use `brew:node`, `apt:nodejs`, or `nvm:lts` for the other managers; the installer writes
+  the matching reverse command into the manifest so `/tasks-remove` can offer to undo it.)
+- **Node still unavailable** (no installer, or it failed/needs UAC) → fall back to the
+  **static `file://` flow** in step 3. The board works fully without Node — it just loses
+  the live two-way sync and runs from the bundled offline assets + system fonts. Never block
+  setup on Node.
 
 ### 3. Launch the live board (localhost)
 
@@ -202,6 +248,7 @@ Task system ready in .tasks/:
 - Tasks:   .tasks/TASKS.md (X items)
 - Memory:  X people, X terms, X projects
 - Board:   live at http://localhost:4317 (node .tasks/board-server.mjs)
+- Assets:  tier=<full|vendor|shipped|offline> (from the install summary)
 - Hooks:   board-maintenance hooks added to .claude/settings.local.json (or skipped)
 
 Use /tasks-update to keep it current (add --comprehensive for a deep scan), or
