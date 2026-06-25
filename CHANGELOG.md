@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.19.0] — 2026-06-24
+
+Minor: add a native **task + workplace-memory system** — five `tasks-*` skills plus a SHAUGHV-branded dashboard — adapted and expanded from Anthropic's Productivity plugin. Everything the system owns lives in a self-contained `.tasks/` folder, and a new `/tasks-remove` flattens it back into the host repo.
+
+### Added
+- `skills/tasks-start/` — `/tasks-start`. Scaffolds a self-contained `.tasks/` folder (`TASKS.md`, `CLAUDE.md` working memory, `memory/` deep store, `dashboard.html`) in the current repo/folder, opens the dashboard, and bootstraps workplace memory from the user's real task list and (optionally) connected tools.
+- `skills/tasks-update/` — `/tasks-update [--comprehensive]`. Syncs tasks from a connected tracker (Asana/Linear/Jira/GitHub Issues), triages overdue/stale items, and fills memory gaps; `--comprehensive` deep-scans chat/email/calendar/docs for missed todos and new memories.
+- `skills/tasks-management/` — reference skill (`user-invocable: false`) for the `.tasks/TASKS.md` markdown contract and overdue/priority surfacing.
+- `skills/tasks-memory/` — reference skill (`user-invocable: false`) for the two-tier memory model (`.tasks/CLAUDE.md` hot cache + `.tasks/memory/` deep store).
+- `skills/tasks-remove/` — `/tasks-remove [--keep-tasks] [--dry-run]`. Decommissions the system: merges working memory into the repo's root `CLAUDE.md`, moves deep memory into a repo-level `memory/`, preserves open tasks, then deletes `.tasks/`. The inverse of `/tasks-start`.
+- `skills/tasks-start/assets/dashboard.html` — the Productivity dashboard rebuilt on the SHAUGHV design system: vintage-cream (sage `#5B8A5B`) and brutalist-dark (brand-orange `#FF5E1A`) themes with a persisted toggle, Makira / Unbounded / IBM Plex Mono served from `cdn.shaughv.com`, the animated `<shaughv-mark>` on empty states, and SHAUGHV favicons. The board/list task views and the File System Access API memory browser are preserved verbatim from the original.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.18.2` → `0.19.0`; descriptions and keywords now note the tasks system.
+- `README.md` — Skills table (+5 rows) and Commands table (+3 rows) document the tasks-* system.
+- `plugins/shaughv-code/` — regenerated for version lockstep and the five new skills (mirrored byte-for-byte from root; PowerShell was unavailable in this environment, so run `pwsh ./build-codex-plugin.ps1 -Check` on Windows to confirm the gate before pushing).
+
 ## [0.18.2] — 2026-06-24
 
 Patch: bring four skill `description` fields under Claude Code's 1024-char cap so they can't be silently skipped — with **no context removed**, only relocated.

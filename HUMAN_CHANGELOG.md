@@ -8,6 +8,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — late June 2026
 
+**Added**
+- A full task + memory system you can drop into any project. One command sets it up, another keeps it in sync with your other tools, and a third tears it back down — folding everything it learned about your people, projects, and shorthand into the project itself so nothing is lost.
+  - It keeps everything tidy inside a single dedicated folder in the project, so it never clutters things up — and when you're done, one command flattens its memory back into the project's own notes and removes itself.
+  - It comes with a visual board — your tasks on one side, everything Claude knows about your work on the other — restyled head-to-toe in the SHAUGHV look, with a switch to flip between a warm cream theme and a dark "mission-control" theme. It's adapted and expanded from Anthropic's own productivity add-on.
+
+**Behind the scenes**
+- Listed the new pieces in the read-me, kept all the bundle's version numbers in step, and refreshed the Codex copy of the bundle.
+
+## A little before that — late June 2026
+
 **Fixed**
 - Four skills had activation blurbs long enough that the assistant could silently skip them (a hidden length limit). Shortened those blurbs to a safe length and moved the extra detail — the full list of trigger phrases, and the Google-Cloud-Storage "always confirm the project and bucket before changing anything" safety rule — into the body of each skill. Nothing was lost; it just moved somewhere it still reads well, and those skills will now reliably switch on when they should.
 
