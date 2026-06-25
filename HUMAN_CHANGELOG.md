@@ -8,6 +8,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — late June 2026
 
+**Improved**
+- The task board is now a proper drag-left-to-right Kanban flow: **Backlog → To-Do → Active → Done** — what you might do someday, what's queued up next, what you're working on right now, and what's already finished. It's the exact same board, just laid out the way work actually moves, so it's clearer for you and for the assistant.
+- Tasks can now depend on each other. Every task gets a little ID, and a task can be marked as "needing" another one. A task that's still waiting on something shows a 🔒 lock and can't be dragged into "doing it now" until the things it depends on are done — so nothing gets started before it's actually ready. This replaces the old "waiting on" list with something that works across the whole board.
+- When the assistant adds a task that depends on other work, it can create those prerequisite tasks too and wire up the links automatically.
+
+**Behind the scenes**
+- Reworked how the board saves and reloads its file so the new IDs and dependencies stick reliably, and fixed a small drag-and-drop quirk while in there. Kept the version numbers in step and refreshed the Codex copy.
+
+## Earlier today — late June 2026
+
 **Added**
 - Your task board is now **live**. Setting up the task system launches the board as a little local web page that opens by itself in your browser — no more hunting for a file and clicking "open this folder." You and the assistant can both work on it at once: when it updates your task list, the board changes in front of you instantly, and when you drag a card, the underlying notes update too. If you and the assistant happen to edit at the very same moment, it reloads rather than quietly overwriting one of the changes.
 - The assistant now gets gentle reminders to keep your board honest — when it starts a session, right after it saves or ships code, and whenever it hands work off to a helper — so the board stays a true picture of what's going on and you keep full visibility. These reminders are opt-in (it asks once) and are removed cleanly when you tear the system down.

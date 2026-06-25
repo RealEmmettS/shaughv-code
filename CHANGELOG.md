@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.21.0] — 2026-06-25
+
+Minor: reshape the task board into a proper **Kanban flow with dependencies**. Columns are now **Backlog → To-Do → Active → Done**, every task carries a stable short **id**, and tasks can declare **prerequisites** — a task with an unfinished prerequisite is "blocked" (🔒 badge + the board refuses to move it into Active until its prerequisites are checked off). This replaces the old "Waiting On" column: a task now waits on whatever it depends on, anywhere on the board.
+
+### Changed
+- `skills/tasks-management/SKILL.md` — default template columns reordered/renamed to `Backlog`, `To-Do`, `Active`, `Done`; added a "Columns (Kanban flow)" guide and an "IDs & prerequisites" section (line format `**Title** - note (needs #b2c, #d4e) #a3f`); "add a task" now queues into To-Do, assigns an id, and creates+links any missing prerequisite tasks.
+- `skills/tasks-start/assets/dashboard.html` — tasks now carry **persistent base-36 ids** (parsed, serialized, backfilled on load, de-duped) and **`(needs #…)` prerequisites**. Board and list cards show an id chip and a `🔒 needs #…` badge and dim when blocked; the drag handler **gates the Active column** (refuses a blocked card with a status message and snaps it back). Drag matching switched from numeric to string ids (also fixes a latent number-vs-string id-coercion mismatch in the drop handlers).
+- `skills/tasks-start/references/board-server.md` — TASKS.md format contract updated for the new columns, ids, and `(needs …)` notation.
+- `skills/tasks-update/SKILL.md`, `skills/tasks-remove/SKILL.md` — prose updated for the new column names (`Someday`→`Backlog`, `Waiting On`→`To-Do`).
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.20.0` → `0.21.0`.
+- `plugins/shaughv-code/` — regenerated for version lockstep (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.20.0] — 2026-06-25
 
 Minor: the task board goes **live**. `/tasks-start` now serves the dashboard from a zero-dependency local Node server on `localhost` (two-way live sync between the agent's file edits and the operator's UI), auto-opens it, and — opt-in — wires **board-maintenance hooks** into the target repo so every Claude session is nudged to keep `.tasks/TASKS.md` current. `/tasks-start` is now idempotent (re-running relaunches/repairs the board, with nesting-aware detection) and `/tasks-remove` tears the server + hooks back down.

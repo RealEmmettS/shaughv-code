@@ -1417,6 +1417,33 @@
       return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     }
 
+    // ===== Task IDs + prerequisites =====
+    // Every task carries a short, stable, random base-36 id (e.g. "a3f") so it can be
+    // referenced as a prerequisite by another task. A task is "blocked" while any of its
+    // prerequisites is not yet done.
+    function genTaskId(used) {
+      let id;
+      do { id = (Math.random().toString(36) + '000').slice(2, 5); } while (!id || used.has(id));
+      used.add(id);
+      return id;
+    }
+    function currentTaskIds() {
+      const s = new Set();
+      for (const sec of sections) for (const t of (tasks[sec.id] || [])) if (t.id) s.add(t.id);
+      return s;
+    }
+    function taskById(id) {
+      for (const sec of sections) for (const t of (tasks[sec.id] || [])) if (t.id === id) return t;
+      return null;
+    }
+    function unmetNeeds(task) {
+      if (!task.needs || !task.needs.length) return [];
+      // A prerequisite is "unmet" only if it exists and isn't done. Unknown/dangling ids
+      // are treated as satisfied so a card can never get permanently stuck.
+      return task.needs.filter(nid => { const t = taskById(nid); return t && !t.checked; });
+    }
+    function isBlocked(task) { return unmetNeeds(task).length > 0; }
+
     function parseTaskMarkdown(content) {
       const resultSections = [];
       const resultTasks = {};
@@ -1448,9 +1475,22 @@
           }
           const checked = line.match(/\[[xX]\]/) !== null;
           let text = line.replace(/^- \[[ xX]\]\s*/, '');
+
+          // Pull out the prerequisite list "(needs #a3f, #k2p)" and the task's own
+          // trailing id "#a3f" before parsing title/note. Order matters: needs first
+          // (it also contains #ids), then the trailing id.
+          let needs = [];
+          const needsMatch = text.match(/\(needs\s+([^)]*)\)/i);
+          if (needsMatch) {
+            needs = (needsMatch[1].match(/[0-9a-z]{2,}/gi) || []).map(s => s.toLowerCase());
+            text = text.replace(needsMatch[0], '').trim();
+          }
+          let id = null;
+          const idMatch = text.match(/#([0-9a-z]{2,})\s*$/i);
+          if (idMatch) { id = idMatch[1].toLowerCase(); text = text.replace(/\s*#[0-9a-z]{2,}\s*$/i, '').trim(); }
+
           let title = text;
           let note = '';
-
           const boldMatch = text.match(/^\*\*(.+?)\*\*(.*)$/);
           if (boldMatch) {
             title = boldMatch[1];
@@ -1458,7 +1498,8 @@
           }
 
           currentTask = {
-            id: Date.now() + Math.random(),
+            id,
+            needs,
             title,
             note,
             checked,
@@ -1476,6 +1517,14 @@
         resultTasks[currentSectionId].push(currentTask);
       }
 
+      // Backfill stable short ids for any task missing one and de-dupe collisions, so
+      // every task can be referenced as a prerequisite. (Backfilled ids persist on next save.)
+      const used = new Set();
+      const flat = [];
+      for (const sid in resultTasks) for (const t of resultTasks[sid]) flat.push(t);
+      for (const t of flat) { if (t.id && !used.has(t.id)) used.add(t.id); else if (t.id) t.id = null; }
+      for (const t of flat) { if (!t.id) t.id = genTaskId(used); }
+
       return { sections: resultSections, tasks: resultTasks };
     }
 
@@ -1488,7 +1537,9 @@
         sectionTasks.forEach(t => {
           const checkbox = t.checked ? '[x]' : '[ ]';
           const note = t.note ? ` - ${t.note}` : '';
-          md += `- ${checkbox} **${t.title}**${note}\n`;
+          const needs = (t.needs && t.needs.length) ? ` (needs ${t.needs.map(n => '#' + n).join(', ')})` : '';
+          const idTag = t.id ? ` #${t.id}` : '';
+          md += `- ${checkbox} **${t.title}**${note}${needs}${idTag}\n`;
           t.subtasks.forEach(st => {
             const stCheckbox = st.checked ? '[x]' : '[ ]';
             md += `  - ${stCheckbox} ${st.text}\n`;
@@ -1505,13 +1556,22 @@
       card.draggable = true;
       card.dataset.id = task.id;
 
+      const unmet = unmetNeeds(task);
+      const blocked = unmet.length > 0;
+      if (blocked) card.style.opacity = '0.6';
+
       let html = `
         <div style="display: flex; align-items: flex-start; gap: 12px;">
           <button class="delete-btn" data-action="delete" title="Delete task">&times;</button>
           <span class="checkbox ${task.checked ? 'checked' : ''}" data-action="toggle"></span>
           <div class="card-title" data-action="edit-title">${task.title}</div>
+          <span title="task id" style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-muted); opacity: 0.75; white-space: nowrap;">#${task.id}</span>
         </div>
       `;
+
+      if (blocked) {
+        html += `<div title="Blocked until prerequisites are done" style="margin-left: 30px; margin-top: 4px; font-size: 12px; color: var(--accent); font-family: ui-monospace, monospace;">🔒 needs ${unmet.map(id => '#' + id).join(', ')}</div>`;
+      }
 
       if (task.note) {
         html += `<div class="card-note" data-action="edit-note" style="cursor: pointer; margin-left: 30px;">${task.note}</div>`;
@@ -1829,7 +1889,7 @@
         e.preventDefault();
         cardsContainer.classList.remove('drag-over');
         col.querySelectorAll('.drop-indicator').forEach(el => el.remove());
-        const taskId = parseFloat(e.dataTransfer.getData('text/plain'));
+        const taskId = e.dataTransfer.getData('text/plain');
         const { dropIndex } = getDropPosition(e);
         moveTask(taskId, id, dropIndex);
       });
@@ -1859,7 +1919,8 @@
           if (title) {
             if (!tasks[sectionId]) tasks[sectionId] = [];
             tasks[sectionId].push({
-              id: Date.now() + Math.random(),
+              id: genTaskId(currentTaskIds()),
+              needs: [],
               title,
               note: '',
               checked: false,
@@ -1888,16 +1949,25 @@
     }
 
     function moveTask(taskId, toSectionId, dropIndex = -1) {
-      let task = null;
+      // Locate the task first WITHOUT removing it, so a blocked move can be refused cleanly.
+      let task = null, fromSectionId = null, fromIdx = -1;
       for (const section of sections) {
         const sectionTasks = tasks[section.id] || [];
         const idx = sectionTasks.findIndex(t => t.id === taskId);
-        if (idx !== -1) {
-          task = sectionTasks.splice(idx, 1)[0];
-          break;
-        }
+        if (idx !== -1) { task = sectionTasks[idx]; fromSectionId = section.id; fromIdx = idx; break; }
       }
       if (!task) return;
+
+      // Gate: a blocked task can't be moved INTO the Active column until its prerequisites
+      // are done. (Reordering within a column, or moving elsewhere, is always allowed.)
+      if (toSectionId === 'active' && fromSectionId !== toSectionId && isBlocked(task)) {
+        const unmet = unmetNeeds(task).map(id => '#' + id).join(', ');
+        showStatus(`Blocked — finish ${unmet} before moving this to Active`);
+        renderTasks(); // snap the card back
+        return;
+      }
+
+      tasks[fromSectionId].splice(fromIdx, 1);
       task.section = toSectionId;
       if (!tasks[toSectionId]) tasks[toSectionId] = [];
       if (dropIndex >= 0 && dropIndex <= tasks[toSectionId].length) {
@@ -2094,7 +2164,8 @@
           const title = quickInput.value.trim();
           if (!tasks[quickAddSection]) tasks[quickAddSection] = [];
           tasks[quickAddSection].unshift({
-            id: Date.now() + Math.random(),
+            id: genTaskId(currentTaskIds()),
+            needs: [],
             title,
             note: '',
             checked: false,
@@ -2182,7 +2253,7 @@
           e.preventDefault();
           sectionEl.classList.remove('drag-over');
           tasksContainer.querySelectorAll('.list-drop-indicator').forEach(el => el.remove());
-          const taskId = parseFloat(e.dataTransfer.getData('text/plain'));
+          const taskId = e.dataTransfer.getData('text/plain');
           if (!taskId) return;
           const { dropIndex } = getDropPosition(e, tasksContainer);
           moveTask(taskId, section.id, dropIndex);
@@ -2309,6 +2380,14 @@
         startEditingListItem(title, task);
       });
       content.appendChild(title);
+
+      // id + (if any) blocked-by-prerequisites meta row
+      const unmet = unmetNeeds(task);
+      const metaRow = document.createElement('div');
+      metaRow.style.cssText = 'font-size: 11px; font-family: ui-monospace, monospace; color: var(--text-muted); margin-top: 2px;';
+      metaRow.textContent = '#' + task.id + (unmet.length ? '   🔒 needs ' + unmet.map(id => '#' + id).join(', ') : '');
+      if (unmet.length) { metaRow.style.color = 'var(--accent)'; item.style.opacity = '0.6'; }
+      content.appendChild(metaRow);
 
       if (task.note) {
         const note = document.createElement('div');
