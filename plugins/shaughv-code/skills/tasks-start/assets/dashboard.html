@@ -1136,6 +1136,65 @@
       gap: 10px;
     }
 
+    /* ===== Task modal (rich view + edit) ===== */
+    .modal.task-modal { max-width: 960px; max-height: 88vh; width: 92%; }
+    @media (max-width: 640px) { .modal.task-modal { width: 96%; max-height: 94vh; } }
+    .tm-id { font-family: var(--font-mono, ui-monospace, monospace); font-size: 12px; color: var(--text-muted); }
+    .tm-title-input { width: 100%; font-size: 19px; font-weight: 600; font-family: var(--font-display, inherit); background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-primary); outline: none; padding: 2px 0; }
+    .tm-title-input:focus { border-bottom-color: var(--accent); }
+    .tm-section-label { font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 18px 0 6px; }
+    .tm-section-label:first-child { margin-top: 0; }
+    .tm-note-input { width: 100%; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; color: var(--text-primary); font-family: inherit; font-size: 14px; outline: none; }
+    .tm-note-input:focus { border-color: var(--accent); }
+    .tm-row-between { display: flex; align-items: center; justify-content: space-between; }
+    .tm-btn { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 12px; padding: 4px 12px; cursor: pointer; font-family: inherit; }
+    .tm-btn:hover { border-color: var(--accent); }
+    .tm-desc-rendered { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 14px; }
+    .tm-desc-rendered h2 { font-size: 17px; margin: 12px 0 6px; }
+    .tm-desc-rendered h3 { font-size: 15px; margin: 10px 0 4px; }
+    .tm-desc-rendered h4 { font-size: 13px; margin: 8px 0 4px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .tm-desc-rendered p { margin: 6px 0; line-height: 1.55; }
+    .tm-desc-rendered ul, .tm-desc-rendered ol { margin: 6px 0 6px 22px; }
+    .tm-desc-rendered li { margin: 3px 0; line-height: 1.5; }
+    .tm-desc-rendered code { font-family: ui-monospace, monospace; font-size: 12px; background: var(--bg-card); padding: 1px 5px; border-radius: 4px; }
+    .tm-desc-rendered pre { background: var(--bg-card); padding: 10px 12px; border-radius: 6px; overflow-x: auto; }
+    .tm-desc-rendered pre code { background: none; padding: 0; }
+    .tm-desc-rendered a { color: var(--accent); }
+    .tm-ttdr { border-left: 3px solid var(--accent); background: var(--bg-card); padding: 8px 12px; border-radius: 0 6px 6px 0; margin: 0 0 10px; line-height: 1.5; }
+    .tm-desc-edit { width: 100%; min-height: 260px; resize: vertical; background: var(--bg-card); border: 1px solid var(--accent); border-radius: 8px; padding: 12px; color: var(--text-primary); font-family: ui-monospace, monospace; font-size: 13px; line-height: 1.55; outline: none; box-sizing: border-box; }
+    .tm-sub { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
+    .tm-sub .tm-sub-text { flex: 1; background: transparent; border: none; border-bottom: 1px solid transparent; color: var(--text-primary); font-family: inherit; font-size: 14px; outline: none; padding: 2px 0; }
+    .tm-sub .tm-sub-text:focus { border-bottom-color: var(--accent); }
+    .tm-sub .tm-sub-text.checked { text-decoration: line-through; color: var(--text-muted); }
+    .tm-sub-del { color: var(--text-muted); cursor: pointer; background: none; border: none; font-size: 16px; line-height: 1; }
+    .tm-sub-del:hover { color: var(--accent); }
+    .tm-add { color: var(--text-muted); cursor: pointer; font-style: italic; font-size: 13px; padding: 6px 0; }
+    .tm-add:hover { color: var(--accent); }
+    .tm-activity { list-style: none; padding: 0; margin: 0; }
+    .tm-activity li { font-size: 12.5px; color: var(--text-muted); padding: 5px 0; border-bottom: 1px dashed var(--border); font-family: ui-monospace, monospace; }
+    .tm-activity li:last-child { border-bottom: none; }
+    .tm-activity .tm-empty { font-style: italic; }
+    .tm-blocked { color: var(--accent); font-size: 13px; margin-top: 6px; font-family: ui-monospace, monospace; }
+    .task-card { cursor: pointer; }
+
+    /* ===== Freshness / staleness indicator ===== */
+    #freshness { font-family: ui-monospace, monospace; font-size: 11px; padding: 2px 9px; border-radius: 999px; white-space: nowrap; letter-spacing: 0.02em; }
+    #freshness.fresh { color: #fff; background: var(--accent); }
+    #freshness.aging { color: var(--text-muted); background: var(--bg-primary); border: 1px solid var(--border); }
+    #freshness.stale { color: #fff; background: #b3261e; }
+
+    /* Card "just changed" pulse + the FLIP ghost that glides between columns. */
+    @keyframes task-pulse {
+      0%   { box-shadow: 0 0 0 0 var(--accent); }
+      15%  { box-shadow: 0 0 0 3px var(--accent); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+    }
+    .task-card.just-changed { animation: task-pulse 1.05s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .task-card.flip-ghost { box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.45); }
+    @media (prefers-reduced-motion: reduce) {
+      .task-card.just-changed { animation: none; }
+    }
+
     .form-group {
       margin-bottom: 16px;
     }
@@ -1314,6 +1373,27 @@
     </div>
   </div>
 
+  <!-- TASK MODAL (rich view + edit for a single task: description, notes, subtasks, activity) -->
+  <div class="modal-overlay" id="taskModalOverlay">
+    <div class="modal task-modal">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
+          <span class="checkbox" id="tmCheckbox" title="Toggle done" style="flex-shrink:0;"></span>
+          <input type="text" class="tm-title-input" id="tmTitle" placeholder="Task title">
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; flex-shrink:0;">
+          <span class="tm-id" id="tmId"></span>
+          <button class="modal-close" id="tmClose">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" id="tmBody"></div>
+      <div class="modal-footer">
+        <button class="tm-btn" id="tmDelete" style="margin-right:auto; color:#b3261e; border-color:#b3261e;">Delete task</button>
+        <button id="tmDoneBtn" class="primary">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="status-bar" id="status"></div>
 
   <script>
@@ -1384,11 +1464,11 @@
       // Update file path display
       if (tab === 'tasks') {
         filePathEl.textContent = SERVER_MODE
-          ? (taskFileName ? 'TASKS.md · live' : '')
+          ? (taskFileName ? 'TASKS.md' : '')
           : (taskFileHandle ? taskFileName : '');
       } else {
         filePathEl.textContent = SERVER_MODE
-          ? '.tasks/ memory · live'
+          ? '.tasks/ memory'
           : (memoryDirHandle ? memoryDirHandle.name : '');
       }
     }
@@ -1550,6 +1630,10 @@
       return md.trimEnd() + '\n';
     }
 
+    // Cards are READ-ONLY surfaces: a click anywhere opens the rich task modal where ALL
+    // editing happens (title, note, description, subtasks, prerequisites, done, delete).
+    // The card itself only displays state + supports drag-to-move. (A real drag is
+    // distinguished from a click so dropping a card never also opens the modal.)
     function createCard(task) {
       const card = document.createElement('div');
       card.className = 'task-card';
@@ -1560,76 +1644,44 @@
       const blocked = unmet.length > 0;
       if (blocked) card.style.opacity = '0.6';
 
+      const subDone = task.subtasks.filter(s => s.checked).length;
+      const subTotal = task.subtasks.length;
+
       let html = `
-        <div style="display: flex; align-items: flex-start; gap: 12px;">
-          <button class="delete-btn" data-action="delete" title="Delete task">&times;</button>
-          <span class="checkbox ${task.checked ? 'checked' : ''}" data-action="toggle"></span>
-          <div class="card-title" data-action="edit-title">${task.title}</div>
-          <span title="task id" style="margin-left: auto; font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-muted); opacity: 0.75; white-space: nowrap;">#${task.id}</span>
+        <div style="display: flex; align-items: flex-start; gap: 10px;">
+          <span class="checkbox ${task.checked ? 'checked' : ''}" style="pointer-events: none; flex-shrink: 0; margin-top: 1px;"></span>
+          <div class="card-title" style="flex: 1; min-width: 0; ${task.checked ? 'text-decoration: line-through; opacity: 0.55;' : ''}">${escapeHtml(task.title)}</div>
+          <span title="task id" style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-muted); opacity: 0.75; white-space: nowrap;">#${task.id}</span>
         </div>
       `;
 
-      if (blocked) {
-        html += `<div title="Blocked until prerequisites are done" style="margin-left: 30px; margin-top: 4px; font-size: 12px; color: var(--accent); font-family: ui-monospace, monospace;">🔒 needs ${unmet.map(id => '#' + id).join(', ')}</div>`;
-      }
-
       if (task.note) {
-        html += `<div class="card-note" data-action="edit-note" style="cursor: pointer; margin-left: 30px;">${task.note}</div>`;
-      } else {
-        html += `<div class="card-note add-on-hover" data-action="edit-note" style="cursor: pointer; margin-left: 30px; font-style: italic;">+ Add note</div>`;
+        html += `<div class="card-note" style="margin-left: 26px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(task.note)}</div>`;
       }
 
-      if (task.subtasks.length > 0) {
-        html += '<div class="card-subtasks" style="margin-left: 30px;">';
-        task.subtasks.forEach((st, idx) => {
-          html += `<div class="subtask">
-            <span class="checkbox ${st.checked ? 'checked' : ''}" data-action="toggle-sub" data-idx="${idx}" style="width: 16px; height: 16px; min-width: 16px; min-height: 16px;"></span>
-            <span data-action="edit-subtask" data-idx="${idx}" style="cursor: pointer;">${st.text}</span>
-          </div>`;
-        });
-        html += `<div class="subtask add-on-hover" data-action="add-subtask" style="color: var(--text-muted); cursor: pointer; font-style: italic; padding-left: 24px;">+ Add subtask</div>`;
-        html += '</div>';
-      } else {
-        html += `<div class="card-subtasks add-on-hover" style="margin-left: 30px;">
-          <div class="subtask" data-action="add-subtask" style="color: var(--text-muted); cursor: pointer; font-style: italic;">+ Add subtask</div>
-        </div>`;
+      const metaBits = [];
+      if (subTotal) metaBits.push(`<span title="subtasks done">☑ ${subDone}/${subTotal}</span>`);
+      if (blocked) metaBits.push(`<span style="color: var(--accent);" title="Blocked until prerequisites are done">🔒 needs ${unmet.map(id => '#' + id).join(', ')}</span>`);
+      if (metaBits.length) {
+        html += `<div style="margin-left: 26px; margin-top: 6px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); font-family: ui-monospace, monospace;">${metaBits.join('')}</div>`;
       }
 
       card.innerHTML = html;
 
+      // Distinguish a genuine drag from a click: only open the modal if the pointer didn't
+      // move far between mousedown and click (a drag sets `dragged`).
+      let dragged = false;
       card.addEventListener('dragstart', (e) => {
+        dragged = true;
         card.classList.add('dragging');
         e.dataTransfer.setData('text/plain', task.id);
+        e.dataTransfer.effectAllowed = 'move';
       });
-
       card.addEventListener('dragend', () => {
         card.classList.remove('dragging');
+        setTimeout(() => { dragged = false; }, 60);
       });
-
-      card.addEventListener('click', (e) => {
-        const action = e.target.dataset.action;
-        if (action === 'toggle') {
-          task.checked = !task.checked;
-          markChanged();
-          renderTasks();
-        } else if (action === 'toggle-sub') {
-          const idx = parseInt(e.target.dataset.idx);
-          task.subtasks[idx].checked = !task.subtasks[idx].checked;
-          markChanged();
-          renderTasks();
-        } else if (action === 'edit-title') {
-          startEditingTitle(e.target, task);
-        } else if (action === 'edit-note') {
-          startEditingNote(e.target, task);
-        } else if (action === 'edit-subtask') {
-          const idx = parseInt(e.target.dataset.idx);
-          startEditingSubtask(e.target, task, idx);
-        } else if (action === 'add-subtask') {
-          startAddingSubtask(e.target, task);
-        } else if (action === 'delete') {
-          deleteTask(task);
-        }
-      });
+      card.addEventListener('click', () => { if (!dragged) openTaskModal(task); });
 
       return card;
     }
@@ -1788,7 +1840,7 @@
       col.innerHTML = `
         <div class="column-header">
           <span class="column-title" data-section-id="${id}" style="cursor: pointer;">${title}</span>
-          <span class="count">${items.length}</span>
+          <span class="count" data-count-for="${id}">${items.length}</span>
         </div>
         <div class="cards" data-column="${id}"></div>
         <div class="add-card">
@@ -1986,6 +2038,11 @@
         const idx = sectionTasks.findIndex(t => t.id === task.id);
         if (idx !== -1) { sectionTasks.splice(idx, 1); break; }
       }
+      // Drop the per-task detail file so it can't outlive the task (or bleed into a future
+      // task that reuses the id). Fire-and-forget; server mode only.
+      if (SERVER_MODE && task.id) {
+        fetch('/api/task?id=' + encodeURIComponent(task.id), { method: 'DELETE' }).catch(() => {});
+      }
       markChanged();
       renderTasks();
     }
@@ -1998,6 +2055,7 @@
     function markChanged() {
       hasChanges = true;
       saveBtn.disabled = false;
+      markBoardUpdated();              // any edit resets the freshness clock to "live"
       if (saveTimeout) clearTimeout(saveTimeout);
       saveTimeout = setTimeout(autoSave, 500);
     }
@@ -2035,8 +2093,9 @@
         sections = result.sections;
         tasks = result.tasks;
         taskFileName = 'TASKS.md';
-        if (activeMainTab === 'tasks') filePathEl.textContent = 'TASKS.md · live';
+        if (activeMainTab === 'tasks') filePathEl.textContent = 'TASKS.md';
         if (initial) switchTaskView('board'); else renderTasks();
+        markBoardUpdated();             // an agent (or reload) just refreshed the board
         showStatus(initial ? 'Live board connected' : 'Reloaded');
       } catch (e) { showStatus('Board load failed: ' + e.message); }
     }
@@ -2101,6 +2160,7 @@
           sections = result.sections;
           tasks = result.tasks;
           renderTasks();
+          markBoardUpdated();
           showStatus('Reloaded');
         }
       } catch (e) { console.log('Watch error:', e); }
@@ -2117,8 +2177,16 @@
     }
 
     function renderTasks() {
-      if (currentView === 'board') { renderBoard(); }
-      else { renderList(); }
+      if (currentView === 'board') {
+        // FLIP: snapshot card positions BEFORE the DOM is rebuilt, then animate the deltas.
+        const prevRects = (board && board.children.length > 0) ? captureCardRects() : null;
+        renderBoard();
+        playBoardAnimations(prevRects);
+        rollCounts(board);
+      } else {
+        renderList();
+        rollCounts(listView);
+      }
     }
 
     function renderBoard() {
@@ -2192,7 +2260,7 @@
         header.className = 'list-section-header';
         header.innerHTML = `
           <span class="section-title" data-section-id="${section.id}">${section.name}</span>
-          <span class="count">${sectionTasks.length}</span>
+          <span class="count" data-count-for="${section.id}">${sectionTasks.length}</span>
         `;
 
         header.querySelector('.section-title').addEventListener('click', (e) => {
@@ -2342,32 +2410,32 @@
       input.addEventListener('blur', saveSection);
     }
 
+    // Like the board card, the list row is READ-ONLY + click-to-open-modal + drag. All
+    // editing lives in the task modal.
     function createListItem(task, section) {
       const item = document.createElement('div');
       item.className = 'list-item';
       item.draggable = true;
       item.dataset.taskId = task.id;
 
+      let dragged = false;
       item.addEventListener('dragstart', (e) => {
+        dragged = true;
         item.classList.add('dragging');
         e.dataTransfer.setData('text/plain', task.id);
         e.dataTransfer.effectAllowed = 'move';
       });
-
       item.addEventListener('dragend', () => {
         item.classList.remove('dragging');
         document.querySelectorAll('.list-drop-indicator').forEach(el => el.remove());
         document.querySelectorAll('.list-section.drag-over').forEach(el => el.classList.remove('drag-over'));
+        setTimeout(() => { dragged = false; }, 60);
       });
+      item.addEventListener('click', () => { if (!dragged) openTaskModal(task); });
 
       const checkbox = document.createElement('span');
       checkbox.className = `checkbox ${task.checked ? 'checked' : ''}`;
-      checkbox.addEventListener('click', (e) => {
-        e.stopPropagation();
-        task.checked = !task.checked;
-        markChanged();
-        renderTasks();
-      });
+      checkbox.style.pointerEvents = 'none';
 
       const content = document.createElement('div');
       content.className = 'list-item-content';
@@ -2375,96 +2443,28 @@
       const title = document.createElement('div');
       title.className = `list-item-title ${task.checked ? 'checked' : ''}`;
       title.textContent = task.title;
-      title.addEventListener('click', (e) => {
-        e.stopPropagation();
-        startEditingListItem(title, task);
-      });
       content.appendChild(title);
-
-      // id + (if any) blocked-by-prerequisites meta row
-      const unmet = unmetNeeds(task);
-      const metaRow = document.createElement('div');
-      metaRow.style.cssText = 'font-size: 11px; font-family: ui-monospace, monospace; color: var(--text-muted); margin-top: 2px;';
-      metaRow.textContent = '#' + task.id + (unmet.length ? '   🔒 needs ' + unmet.map(id => '#' + id).join(', ') : '');
-      if (unmet.length) { metaRow.style.color = 'var(--accent)'; item.style.opacity = '0.6'; }
-      content.appendChild(metaRow);
 
       if (task.note) {
         const note = document.createElement('div');
         note.className = 'list-item-note';
         note.textContent = task.note;
-        note.addEventListener('click', (e) => {
-          e.stopPropagation();
-          startEditingListNote(note, task);
-        });
         content.appendChild(note);
-      } else {
-        const addNote = document.createElement('div');
-        addNote.className = 'list-item-note add-note';
-        addNote.textContent = '+ Add note';
-        addNote.addEventListener('click', (e) => {
-          e.stopPropagation();
-          startEditingListNote(addNote, task);
-        });
-        content.appendChild(addNote);
       }
 
-      if (task.subtasks && task.subtasks.length > 0) {
-        const subtasksContainer = document.createElement('div');
-        subtasksContainer.className = 'list-item-subtasks';
-
-        task.subtasks.forEach((st, idx) => {
-          const subtaskEl = document.createElement('div');
-          subtaskEl.className = 'list-item-subtask';
-
-          const stCheckbox = document.createElement('span');
-          stCheckbox.className = `checkbox ${st.checked ? 'checked' : ''}`;
-          stCheckbox.addEventListener('click', (e) => {
-            e.stopPropagation();
-            st.checked = !st.checked;
-            markChanged();
-            renderTasks();
-          });
-
-          const stText = document.createElement('span');
-          stText.textContent = st.text;
-          if (st.checked) {
-            stText.style.textDecoration = 'line-through';
-            stText.style.color = 'var(--text-muted)';
-          }
-          stText.addEventListener('click', (e) => {
-            e.stopPropagation();
-            startEditingListSubtask(stText, task, idx);
-          });
-
-          subtaskEl.appendChild(stCheckbox);
-          subtaskEl.appendChild(stText);
-          subtasksContainer.appendChild(subtaskEl);
-        });
-
-        content.appendChild(subtasksContainer);
-      }
-
-      const addSubtask = document.createElement('div');
-      addSubtask.className = 'list-item-add-subtask';
-      addSubtask.textContent = '+ Add subtask';
-      addSubtask.addEventListener('click', (e) => {
-        e.stopPropagation();
-        startAddingListSubtask(addSubtask, task);
-      });
-      content.appendChild(addSubtask);
-
-      const actions = document.createElement('div');
-      actions.className = 'list-item-actions';
-      actions.innerHTML = '<button title="Delete task">&times;</button>';
-      actions.querySelector('button').addEventListener('click', (e) => {
-        e.stopPropagation();
-        deleteTask(task);
-      });
+      // id + subtask progress + (if any) blocked-by-prerequisites meta row
+      const unmet = unmetNeeds(task);
+      const subDone = task.subtasks.filter(s => s.checked).length;
+      const metaRow = document.createElement('div');
+      metaRow.style.cssText = 'font-size: 11px; font-family: ui-monospace, monospace; color: var(--text-muted); margin-top: 2px;';
+      metaRow.textContent = '#' + task.id
+        + (task.subtasks.length ? '   ☑ ' + subDone + '/' + task.subtasks.length : '')
+        + (unmet.length ? '   🔒 needs ' + unmet.map(id => '#' + id).join(', ') : '');
+      if (unmet.length) { metaRow.style.color = 'var(--accent)'; item.style.opacity = '0.6'; }
+      content.appendChild(metaRow);
 
       item.appendChild(checkbox);
       item.appendChild(content);
-      item.appendChild(actions);
 
       return item;
     }
@@ -3381,8 +3381,686 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        if (taskModalOverlay.classList.contains('visible')) closeTaskModal();
+        else closeModal();
+      }
     });
+
+    // ============================================================
+    // ===== TASK MODAL (rich view + edit) — v0.22.0 =====
+    // ============================================================
+    // Clicking a card opens this modal; ALL task editing happens here (title, note,
+    // description, subtasks, prerequisites, column, done, delete). The rich per-task
+    // description + activity log live in a server-side file (.tasks/tasks/<id>.md) fetched
+    // on open and saved via /api/task — server mode only (file:// has nowhere to write it).
+    const taskModalOverlay = document.getElementById('taskModalOverlay');
+    const tmTitleEl = document.getElementById('tmTitle');
+    const tmIdEl = document.getElementById('tmId');
+    const tmCheckboxEl = document.getElementById('tmCheckbox');
+    const tmBodyEl = document.getElementById('tmBody');
+
+    let tmTask = null;                       // live ref into `tasks` for the open card
+    let tmDetail = { description: '', activity: [] };
+    let tmDescEditing = false;
+    let tmDescDirty = false;
+
+    function nowStamp() {
+      const d = new Date();
+      const p = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+    }
+
+    // A detail file = a TT;DR-led markdown description, optionally followed by a
+    // "## Activity" section the agent appends one-line entries to.
+    function splitDetail(text) {
+      const m = (text || '').match(/^##\s+Activity\s*$/im);
+      if (!m) return { description: (text || '').trim(), activity: [] };
+      const description = text.slice(0, m.index).trim();
+      const activity = text.slice(m.index + m[0].length)
+        .split('\n').map(l => l.trim())
+        .filter(l => l.startsWith('- ')).map(l => l.replace(/^-\s+/, ''));
+      return { description, activity };
+    }
+    function joinDetail(description, activity) {
+      let out = (description || '').trim();
+      if (activity && activity.length) out += '\n\n## Activity\n' + activity.map(a => '- ' + a).join('\n');
+      return out.trim() + '\n';
+    }
+
+    // Minimal, dependency-free markdown → HTML for the description pane: TT;DR callout,
+    // #/##/### headings, -, * and 1. lists, **bold**, _italic_, `code`, ```fences```,
+    // [links](url). Everything is escaped before any tag is introduced.
+    function renderTaskMarkdown(md) {
+      if (!md || !md.trim()) {
+        return '<p style="color: var(--text-muted); font-style: italic;">No description yet. Click <strong>Edit</strong> to add a plan — lead with a one-glance <code>TT;DR:</code> summary.</p>';
+      }
+      const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const inline = (s) => esc(s)
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+        .replace(/(^|[^_\w])_([^_\n]+)_/g, '$1<em>$2</em>')
+        .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      const lines = md.replace(/\r\n/g, '\n').split('\n');
+      let html = '', inList = false, listTag = 'ul', inCode = false, code = '';
+      const closeList = () => { if (inList) { html += `</${listTag}>`; inList = false; } };
+      for (const raw of lines) {
+        if (/^\s*```/.test(raw)) {
+          if (inCode) { html += `<pre><code>${esc(code)}</code></pre>`; inCode = false; code = ''; }
+          else { closeList(); inCode = true; code = ''; }
+          continue;
+        }
+        if (inCode) { code += raw + '\n'; continue; }
+        const ttdr = raw.match(/^\s*TT;DR:\s*(.*)$/i);
+        if (ttdr) { closeList(); html += `<div class="tm-ttdr"><strong>TT;DR:</strong> ${inline(ttdr[1])}</div>`; continue; }
+        let m;
+        if (m = raw.match(/^###\s+(.*)$/)) { closeList(); html += `<h4>${inline(m[1])}</h4>`; }
+        else if (m = raw.match(/^##\s+(.*)$/)) { closeList(); html += `<h3>${inline(m[1])}</h3>`; }
+        else if (m = raw.match(/^#\s+(.*)$/)) { closeList(); html += `<h2>${inline(m[1])}</h2>`; }
+        else if (m = raw.match(/^\s*[-*]\s+(.*)$/)) {
+          if (!inList || listTag !== 'ul') { closeList(); html += '<ul>'; inList = true; listTag = 'ul'; }
+          html += `<li>${inline(m[1])}</li>`;
+        } else if (m = raw.match(/^\s*\d+\.\s+(.*)$/)) {
+          if (!inList || listTag !== 'ol') { closeList(); html += '<ol>'; inList = true; listTag = 'ol'; }
+          html += `<li>${inline(m[1])}</li>`;
+        } else if (/^\s*$/.test(raw)) { closeList(); }
+        else { closeList(); html += `<p>${inline(raw)}</p>`; }
+      }
+      if (inCode) html += `<pre><code>${esc(code)}</code></pre>`;
+      closeList();
+      return html;
+    }
+
+    async function openTaskModal(task) {
+      tmTask = task;
+      tmDescEditing = false;
+      tmDescDirty = false;
+      tmDetail = { description: '', activity: [] };
+      tmTitleEl.value = task.title;
+      tmIdEl.textContent = '#' + task.id;
+      tmCheckboxEl.className = 'checkbox ' + (task.checked ? 'checked' : '');
+      taskModalOverlay.classList.add('visible');
+      renderTaskModalBody();
+      if (SERVER_MODE) {
+        try {
+          const res = await fetch('/api/task?id=' + encodeURIComponent(task.id));
+          tmDetail = splitDetail(await res.text());
+        } catch (_) { tmDetail = { description: '', activity: [] }; }
+        if (tmTask === task) renderTaskModalBody();
+      }
+    }
+
+    function closeTaskModal() {
+      if (tmDescEditing && tmDescDirty && !confirm('Discard unsaved description edits?')) return;
+      taskModalOverlay.classList.remove('visible');
+      tmTask = null;
+      tmDescEditing = false;
+      tmDescDirty = false;
+    }
+
+    // Persist the per-task detail file (description + activity). Server mode only.
+    async function saveTaskDetail(activityNote) {
+      if (!SERVER_MODE || !tmTask) return;
+      if (activityNote) tmDetail.activity.push(`${nowStamp()} — ${activityNote}`);
+      try {
+        await fetch('/api/task?id=' + encodeURIComponent(tmTask.id), {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/markdown' },
+          body: joinDetail(tmDetail.description, tmDetail.activity),
+        });
+        markBoardUpdated();
+      } catch (e) { showStatus('Detail save failed: ' + e.message); }
+    }
+
+    function renderTaskModalBody() {
+      const task = tmTask;
+      if (!task) return;
+
+      const sectionOptions = sections.map(s =>
+        `<option value="${s.id}"${s.id === task.section ? ' selected' : ''}>${escapeHtml(s.name)}</option>`).join('');
+      const unmet = unmetNeeds(task);
+      const blockedLine = unmet.length
+        ? `<div class="tm-blocked">🔒 Blocked — waiting on ${unmet.map(id => {
+            const t = taskById(id);
+            return '#' + id + (t ? ' (' + escapeHtml(t.title) + ')' : '');
+          }).join(', ')}</div>`
+        : '';
+      const needsStr = (task.needs || []).map(n => '#' + n).join(', ');
+      const liveOnly = ' <span style="text-transform:none; letter-spacing:0; color:var(--text-muted); font-weight:normal;">— live board only</span>';
+
+      tmBodyEl.innerHTML = `
+        <div class="tm-section-label">Column</div>
+        <select id="tmSection" class="tm-note-input">${sectionOptions}</select>
+
+        <div class="tm-section-label">Note <span style="text-transform:none; letter-spacing:0; color:var(--text-muted); font-weight:normal;">— one-line context</span></div>
+        <input type="text" id="tmNote" class="tm-note-input" placeholder="Short context (one line)" value="${escapeHtml(task.note || '')}">
+
+        <div class="tm-section-label">Prerequisites <span style="text-transform:none; letter-spacing:0; color:var(--text-muted); font-weight:normal;">— task ids, comma-separated</span></div>
+        <input type="text" id="tmNeeds" class="tm-note-input" placeholder="#a3f, #k2p" value="${escapeHtml(needsStr)}">
+        ${blockedLine}
+
+        <div class="tm-section-label tm-row-between"><span>Description${SERVER_MODE ? '' : liveOnly}</span>${SERVER_MODE ? `<button class="tm-btn" id="tmDescToggle">${tmDescEditing ? 'Preview' : 'Edit'}</button>` : ''}</div>
+        <div id="tmDescArea"></div>
+
+        <div class="tm-section-label">Subtasks</div>
+        <div id="tmSubtasks"></div>
+
+        <div class="tm-section-label">Activity</div>
+        <ul class="tm-activity" id="tmActivity"></ul>
+      `;
+
+      renderTmDesc();
+      renderTmSubtasks();
+      renderTmActivity();
+
+      const secSel = document.getElementById('tmSection');
+      secSel.addEventListener('change', () => {
+        const to = secSel.value;
+        if (to !== task.section) {
+          moveTask(task.id, to);            // honours the Active-block gate; sets task.section on success
+          secSel.value = task.section;      // reflect reality (revert if the move was refused)
+          tmCheckboxEl.className = 'checkbox ' + (task.checked ? 'checked' : '');
+        }
+      });
+
+      const noteInput = document.getElementById('tmNote');
+      noteInput.addEventListener('change', () => {
+        const v = noteInput.value.trim();
+        if (v !== (task.note || '')) { task.note = v; commitBoard(); }
+      });
+
+      const needsInput = document.getElementById('tmNeeds');
+      needsInput.addEventListener('change', () => {
+        const ids = [...new Set((needsInput.value.match(/[0-9a-z]{2,}/gi) || [])
+          .map(s => s.toLowerCase()).filter(id => id !== task.id))];   // no self-dependency
+        if (JSON.stringify(ids) !== JSON.stringify(task.needs || [])) {
+          task.needs = ids;
+          commitBoard();
+          renderTaskModalBody();             // refresh the blocked-line
+        }
+      });
+    }
+
+    function renderTmDesc() {
+      const area = document.getElementById('tmDescArea');
+      if (!area) return;
+      // The header Edit/Preview toggle only governs entry into edit mode; while editing, the
+      // in-area Cancel/Save buttons govern exit, so hide the header toggle to avoid a dead,
+      // mislabeled control.
+      const toggle = document.getElementById('tmDescToggle');
+      if (toggle) toggle.style.display = tmDescEditing ? 'none' : '';
+      if (tmDescEditing) {
+        area.innerHTML = '';
+        const ta = document.createElement('textarea');
+        ta.className = 'tm-desc-edit';
+        ta.value = tmDetail.description || '';
+        ta.placeholder = 'TT;DR: one or two plain-English sentences on what this task is and where it stands.\n\nThen the full plan: what to build, which files/areas to touch, edge cases, acceptance criteria…';
+        ta.addEventListener('input', () => { tmDescDirty = true; });
+        area.appendChild(ta);
+        const actions = document.createElement('div');
+        actions.style.cssText = 'display:flex; gap:8px; margin-top:8px; justify-content:flex-end;';
+        actions.innerHTML = '<button class="tm-btn" id="tmDescCancel">Cancel</button><button class="tm-btn" id="tmDescSave" style="border-color:var(--accent); color:var(--accent);">Save description</button>';
+        area.appendChild(actions);
+        ta.focus();
+        document.getElementById('tmDescCancel').addEventListener('click', () => {
+          tmDescEditing = false; tmDescDirty = false; renderTaskModalBody();
+        });
+        document.getElementById('tmDescSave').addEventListener('click', async () => {
+          tmDetail.description = ta.value;
+          tmDescEditing = false; tmDescDirty = false;
+          await saveTaskDetail('description edited (operator)');
+          renderTaskModalBody();
+          showStatus('Description saved');
+        });
+      } else {
+        area.innerHTML = '';
+        const div = document.createElement('div');
+        div.className = 'tm-desc-rendered';
+        div.innerHTML = renderTaskMarkdown(tmDetail.description);
+        area.appendChild(div);
+        if (toggle) toggle.onclick = () => { tmDescEditing = true; renderTmDesc(); };
+      }
+    }
+
+    function renderTmSubtasks() {
+      const wrap = document.getElementById('tmSubtasks');
+      if (!wrap || !tmTask) return;
+      wrap.innerHTML = '';
+      (tmTask.subtasks || []).forEach((st, idx) => {
+        const row = document.createElement('div');
+        row.className = 'tm-sub';
+        const cb = document.createElement('span');
+        cb.className = 'checkbox ' + (st.checked ? 'checked' : '');
+        cb.style.flexShrink = '0';
+        cb.addEventListener('click', () => { st.checked = !st.checked; commitBoard(); renderTmSubtasks(); });
+        const txt = document.createElement('input');
+        txt.type = 'text';
+        txt.className = 'tm-sub-text' + (st.checked ? ' checked' : '');
+        txt.value = st.text;
+        txt.addEventListener('change', () => {
+          const v = txt.value.trim();
+          if (!v) { tmTask.subtasks.splice(idx, 1); commitBoard(); renderTmSubtasks(); }
+          else if (v !== st.text) { st.text = v; commitBoard(); }
+        });
+        const del = document.createElement('button');
+        del.className = 'tm-sub-del';
+        del.title = 'Remove subtask';
+        del.textContent = '×';
+        del.addEventListener('click', () => { tmTask.subtasks.splice(idx, 1); commitBoard(); renderTmSubtasks(); });
+        row.appendChild(cb); row.appendChild(txt); row.appendChild(del);
+        wrap.appendChild(row);
+      });
+      const add = document.createElement('div');
+      add.className = 'tm-add';
+      add.textContent = '+ Add subtask';
+      add.addEventListener('click', () => {
+        const row = document.createElement('div');
+        row.className = 'tm-sub';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'tm-sub-text';
+        input.placeholder = 'New subtask…';
+        let committed = false;
+        const commit = () => {
+          if (committed) return; committed = true;
+          const v = input.value.trim();
+          if (v) { if (!tmTask.subtasks) tmTask.subtasks = []; tmTask.subtasks.push({ text: v, checked: false }); commitBoard(); }
+          renderTmSubtasks();
+        };
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); commit(); }
+          else if (e.key === 'Escape') { committed = true; renderTmSubtasks(); }
+        });
+        input.addEventListener('blur', commit);
+        row.appendChild(input);
+        wrap.insertBefore(row, add);
+        input.focus();
+      });
+      wrap.appendChild(add);
+    }
+
+    function renderTmActivity() {
+      const ul = document.getElementById('tmActivity');
+      if (!ul) return;
+      ul.innerHTML = '';
+      if (!tmDetail.activity || !tmDetail.activity.length) {
+        const li = document.createElement('li');
+        li.className = 'tm-empty';
+        li.textContent = SERVER_MODE
+          ? 'No recorded activity yet — agents append a line here as they work.'
+          : 'Activity log is available on the live board.';
+        ul.appendChild(li);
+        return;
+      }
+      [...tmDetail.activity].reverse().forEach(a => {   // newest first
+        const li = document.createElement('li');
+        li.textContent = a;
+        ul.appendChild(li);
+      });
+    }
+
+    // A board mutation made inside the modal: autosave TASKS.md + re-render (with FLIP),
+    // and keep the modal header checkbox in sync.
+    function commitBoard() {
+      markChanged();
+      renderTasks();
+      if (tmTask) tmCheckboxEl.className = 'checkbox ' + (tmTask.checked ? 'checked' : '');
+    }
+
+    tmCheckboxEl.addEventListener('click', () => {
+      if (!tmTask) return;
+      tmTask.checked = !tmTask.checked;
+      commitBoard();
+    });
+    tmTitleEl.addEventListener('change', () => {
+      if (!tmTask) return;
+      const v = tmTitleEl.value.trim();
+      if (v && v !== tmTask.title) { tmTask.title = v; commitBoard(); }
+      else tmTitleEl.value = tmTask.title;
+    });
+    document.getElementById('tmClose').addEventListener('click', closeTaskModal);
+    document.getElementById('tmDoneBtn').addEventListener('click', closeTaskModal);
+    document.getElementById('tmDelete').addEventListener('click', () => {
+      if (!tmTask) return;
+      const t = tmTask;
+      taskModalOverlay.classList.remove('visible');
+      tmTask = null;
+      deleteTask(t);
+    });
+    taskModalOverlay.addEventListener('click', (e) => { if (e.target === taskModalOverlay) closeTaskModal(); });
+
+    // ============================================================
+    // ===== FRESHNESS INDICATOR ("live" → seconds → "stale") =====
+    // ============================================================
+    // One 1/sec interval compares now against the last board update. < 2min → "live";
+    // 2min..45min → counts up in seconds; ≥ 45min → "stale". Cheap: a single timer plus a
+    // couple of class swaps — nothing per-card.
+    let lastBoardUpdate = Date.now();
+    let freshnessEl = null;
+    let freshSlot = null;
+    let lastFreshText = '';
+    const FRESH_WINDOW_MS = 120000;        // 2 min "live"
+    const STALE_AFTER_MS = 45 * 60000;     // 45 min → stale
+
+    function markBoardUpdated() { lastBoardUpdate = Date.now(); updateFreshness(); }
+
+    function updateFreshness() {
+      if (!freshnessEl) return;
+      const elapsed = Date.now() - lastBoardUpdate;
+      let text, cls, title;
+      if (elapsed < FRESH_WINDOW_MS) {
+        text = 'live'; cls = 'fresh'; title = 'Board updated within the last 2 minutes';
+      } else if (elapsed < STALE_AFTER_MS) {
+        text = Math.floor(elapsed / 1000) + 's'; cls = 'aging'; title = 'Seconds since the last board change';
+      } else {
+        text = 'stale'; cls = 'stale'; title = 'No board changes in 45+ minutes — may be out of sync';
+      }
+      freshnessEl.classList.remove('fresh', 'aging', 'stale');
+      freshnessEl.classList.add(cls);
+      freshnessEl.title = title;
+      if (text !== lastFreshText) {
+        lastFreshText = text;
+        if (freshSlot) freshSlot.set(text, { color: null });   // quiet odometer roll (no arrival flash)
+        else freshnessEl.textContent = text;
+      }
+    }
+
+    function startFreshnessClock() {
+      if (!freshnessEl) {
+        freshnessEl = document.createElement('span');
+        freshnessEl.id = 'freshness';
+        freshnessEl.style.marginLeft = '8px';
+        freshnessEl.classList.add('fresh');
+        if (filePathEl && filePathEl.parentElement) {
+          filePathEl.parentElement.insertBefore(freshnessEl, filePathEl.nextSibling);
+        } else {
+          document.body.appendChild(freshnessEl);
+        }
+        freshSlot = attachSlotText(freshnessEl, 'live', { color: null });
+        lastFreshText = 'live';
+      }
+      updateFreshness();
+      setInterval(updateFreshness, 1000);
+    }
+
+    // ============================================================
+    // ===== SLOT ROLL — short labels that change in place =====
+    // ============================================================
+    // Vanilla port of the QubeTX "slot roll" (DESIGN_SYSTEM § Slot roll), itself adapted
+    // from slot-text v0.2.2 (MIT · textmotion.dev). Each character sits in its own clipped
+    // cell; the new glyph rolls in while the old rolls out, landing with a small spring.
+    // Pure CSS transforms + timers — no anime.js, no deps. Themed for SHAUGHV: arrival flash
+    // is var(--accent) settling to ink (pass color:null for a quiet odometer roll). Used on
+    // the column count badges (accent flash when a task moves) and the freshness counter
+    // (quiet ticks). Respects prefers-reduced-motion — it snaps to the final value.
+    const SLOT_EASE = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+    const SLOT_DEFAULTS = {
+      direction: 'down', stagger: 40, duration: 240, exitOffset: 50, easing: SLOT_EASE,
+      bounce: 0.3, color: 'var(--accent)', colorFade: 280, skipUnchanged: true, interrupt: true,
+    };
+    const SLOT_NBSP = ' ';
+    const slotGlyph = (c) => (c === ' ' ? SLOT_NBSP : c);
+    const slotStates = new WeakMap();
+
+    function slotStyleContainer(el) {
+      el.setAttribute('data-slot-text', '');
+      el.style.display = 'inline-flex';
+      el.style.whiteSpace = 'pre';
+    }
+    function slotMakeSr(text) {
+      const sr = document.createElement('span');
+      sr.setAttribute('data-slot-sr', '');
+      Object.assign(sr.style, { position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0 0 0 0)', clipPath: 'inset(50%)', whiteSpace: 'nowrap' });
+      sr.textContent = text;
+      return sr;
+    }
+    function slotMakeFace(char) {
+      const face = document.createElement('span');
+      face.setAttribute('data-slot-face', '');
+      Object.assign(face.style, { position: 'absolute', inset: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'pre' });
+      face.textContent = slotGlyph(char);
+      return face;
+    }
+    function slotBuildCell(char) {
+      const slot = document.createElement('span');
+      slot.setAttribute('data-slot-cell', '');
+      slot.dataset.char = char;
+      Object.assign(slot.style, { position: 'relative', display: 'inline-flex', flex: 'none', justifyContent: 'center', overflowX: 'visible', overflowY: 'clip', verticalAlign: 'bottom' });
+      const sizer = document.createElement('span');
+      sizer.setAttribute('data-slot-sizer', '');
+      Object.assign(sizer.style, { visibility: 'hidden', whiteSpace: 'pre' });
+      sizer.textContent = slotGlyph(char);
+      slot.append(sizer, slotMakeFace(char));
+      return slot;
+    }
+    function slotSettle(container) {
+      const state = slotStates.get(container);
+      if (!state) return;
+      state.timers.forEach((t) => clearTimeout(t));
+      slotStates.delete(container);
+      buildSlotText(container, state.target);
+    }
+    function buildSlotText(container, text) {
+      slotStyleContainer(container);
+      const cells = Array.from(text, slotBuildCell);
+      cells.forEach((c) => c.setAttribute('aria-hidden', 'true'));
+      container.replaceChildren(slotMakeSr(text), ...cells);
+    }
+    function animateSlotText(container, toText, options = {}) {
+      const { direction, stagger, duration, exitOffset, easing, bounce, color, colorFade, skipUnchanged, interrupt } = { ...SLOT_DEFAULTS, ...options };
+      if (prefersReducedMotion) { slotSettle(container); buildSlotText(container, toText); return; }
+      const running = slotStates.get(container);
+      if (running && !interrupt) {
+        if (toText !== running.target) running.pending = { text: toText, options };
+        return;
+      }
+      slotSettle(container);
+      if (!container.querySelector('[data-slot-cell]')) { buildSlotText(container, toText); return; }
+      slotStyleContainer(container);
+      const sr = container.querySelector('[data-slot-sr]');
+      if (sr) sr.textContent = toText;
+      const slots = Array.from(container.querySelectorAll('[data-slot-cell]'));
+      const fromText = slots.map((s) => s.dataset.char || '').join('');
+      if (!interrupt && fromText === toText) return;
+      const maxLen = Math.max(fromText.length, toText.length);
+      const sample = slots.find((s) => (s.dataset.char || '') !== '') || slots[0];
+      const cs = getComputedStyle(container);
+      const H = Math.ceil(
+        (sample && sample.getBoundingClientRect().height) || (sample && sample.offsetHeight) ||
+        container.getBoundingClientRect().height || parseFloat(cs.lineHeight) || 0
+      ) || Math.ceil(parseFloat(cs.fontSize) * 1.3) || 18;
+      const restColor = color ? cs.color : '';
+      for (let i = slots.length; i < maxLen; i++) {
+        const slot = slotBuildCell('');
+        slot.setAttribute('aria-hidden', 'true');
+        container.appendChild(slot);
+        slots.push(slot);
+      }
+      const timers = [];
+      const state = { timers, target: toText };
+      slotStates.set(container, state);
+      const outY = direction === 'down' ? H : -H;
+      const inStart = direction === 'down' ? -H : H;
+      const wobble = (i, salt) => {
+        const n = Math.sin((i + 1) * 12.9898 + salt * 78.233) * 43758.5453;
+        return (n - Math.floor(n)) * 2 - 1;
+      };
+      let maxEnd = 0;
+      for (let i = 0; i < maxLen; i++) {
+        const fromChar = fromText[i] || '';
+        const toChar = toText[i] || '';
+        if (fromChar === toChar && (skipUnchanged || fromChar === '')) continue;
+        const slot = slots[i];
+        const sizer = slot.querySelector('[data-slot-sizer]');
+        const oldFace = slot.querySelector('[data-slot-face]');
+        const oldW = slot.getBoundingClientRect().width;
+        sizer.textContent = slotGlyph(toChar);
+        const newW = sizer.getBoundingClientRect().width;
+        const widthChanges = Math.abs(newW - oldW) > 0.5;
+        if (widthChanges) slot.style.width = `${oldW}px`;
+        if (fromChar === '' || toChar === '') slot.style.overflowX = 'clip';
+        const tint = typeof color === 'function' ? color(i, maxLen) : color;
+        const isTail = toChar === '';
+        const d = Math.round(duration * (isTail ? 0.75 : 1) * (1 + bounce * 0.45 * wobble(i, 1)));
+        const staggerIndex = isTail ? toText.length * 0.5 + (i - toText.length) * 0.25 : i;
+        const base = Math.round(staggerIndex * stagger * (1 + bounce * 0.25 * wobble(i, 2)));
+        const tilt = (bounce * 5 * wobble(i, 3)).toFixed(2);
+        const rollTrans = `transform ${d}ms ${easing}`;
+        const trans = color ? `${rollTrans}, color ${colorFade}ms linear ${d}ms` : rollTrans;
+        const newFace = slotMakeFace(toChar);
+        newFace.style.willChange = 'transform';
+        newFace.style.transformOrigin = '50% 50%';
+        newFace.style.transform = `translateY(${inStart}px) rotate(${tilt}deg)`;
+        if (tint) newFace.style.color = tint;
+        slot.appendChild(newFace);
+        void slot.offsetWidth;
+        if (widthChanges) {
+          let wDelay = base, wDur = d;
+          if (isTail) { wDelay = base + Math.round(d * 0.55); wDur = Math.max(140, Math.round(d * 0.6)); }
+          else if (fromChar === '') { wDur = Math.max(140, Math.round(d * 0.45)); }
+          timers.push(setTimeout(() => {
+            slot.style.transition = `width ${wDur}ms cubic-bezier(0.2, 0, 0, 1)`;
+            slot.style.width = `${newW}px`;
+          }, wDelay));
+          maxEnd = Math.max(maxEnd, wDelay + wDur);
+        }
+        maxEnd = Math.max(maxEnd, base + exitOffset + d + (color ? colorFade : 0));
+        if (oldFace) {
+          timers.push(setTimeout(() => {
+            oldFace.style.willChange = 'transform';
+            oldFace.style.transition = rollTrans;
+            oldFace.style.transform = `translateY(${outY}px) rotate(${-Number(tilt)}deg)`;
+          }, base));
+        }
+        timers.push(setTimeout(() => {
+          newFace.style.transition = trans;
+          newFace.style.transform = 'translateY(0) rotate(0deg)';
+          if (color) newFace.style.color = restColor;
+          const done = (e) => {
+            if (e.propertyName !== 'transform') return;
+            newFace.removeEventListener('transitionend', done);
+            slot.dataset.char = toChar;
+            slot.style.removeProperty('transition');
+            slot.style.removeProperty('width');
+            slot.style.overflowX = 'visible';
+            slot.querySelectorAll('[data-slot-face]').forEach((f) => { if (f !== newFace) f.remove(); });
+          };
+          newFace.addEventListener('transitionend', done);
+        }, base + exitOffset));
+      }
+      const total = maxEnd + 80;
+      timers.push(setTimeout(() => {
+        const pending = state.pending;
+        slotStates.delete(container);
+        buildSlotText(container, toText);
+        if (pending) animateSlotText(container, pending.text, pending.options);
+      }, total));
+    }
+    function attachSlotText(element, initialText, options = {}) {
+      let value = initialText;
+      buildSlotText(element, initialText);
+      return {
+        element,
+        get value() { return value; },
+        set(text, nextOptions = {}) { value = text; animateSlotText(element, text, { ...options, ...nextOptions }); },
+      };
+    }
+
+    // Roll the column / section count badges from their previous value to the current one
+    // whenever a task move changes a count. Persisted map (like the card signatures) so we
+    // know the "before" value without a pre-render snapshot.
+    let lastSectionCounts = {};
+    function rollCounts(container) {
+      const seen = {};
+      sections.forEach((s) => {
+        const cur = (tasks[s.id] || []).length;
+        seen[s.id] = cur;
+        const el = container && container.querySelector(`[data-count-for="${s.id}"]`);
+        if (!el) return;
+        const prev = lastSectionCounts[s.id];
+        if (!prefersReducedMotion && prev !== undefined && prev !== cur) {
+          buildSlotText(el, String(prev));
+          animateSlotText(el, String(cur), { color: 'var(--accent)' });
+        }
+      });
+      lastSectionCounts = seen;
+    }
+
+    // ============================================================
+    // ===== CARD MOVE / CHANGE ANIMATIONS (FLIP, dependency-free) =====
+    // ============================================================
+    // Native Web Animations API — framer-motion is React-only and anime.js would add a CDN
+    // runtime dep; WAAPI gives the same board-quality motion while keeping this a single
+    // self-contained file. A card that changes column glides via a position:fixed ghost
+    // clone on a top-level overlay, so it isn't clipped by the column's own scroll box.
+    const prefersReducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    let lastCardSignatures = new Map();
+
+    function taskSignature(t) {
+      const subs = (t.subtasks || []).map(s => (s.checked ? '1' : '0') + s.text).join('|');
+      return [t.checked ? 1 : 0, t.section, t.title, t.note, (t.needs || []).join(','), subs].join('¦');
+    }
+    function captureCardRects() {
+      const map = new Map();
+      document.querySelectorAll('#board .task-card[data-id]').forEach(c => {
+        map.set(c.dataset.id, c.getBoundingClientRect());
+      });
+      return map;
+    }
+    function playBoardAnimations(prevRects) {
+      const cards = document.querySelectorAll('#board .task-card[data-id]');
+      // Skip motion while the task modal is open — the board is behind it, and a fixed
+      // ghost (z-index 9000) would otherwise fly OVER the z-100 modal. Still refresh the
+      // signature map so the next visible render diffs correctly.
+      const modalOpen = !!(taskModalOverlay && taskModalOverlay.classList.contains('visible'));
+      const nextSignatures = new Map();
+      cards.forEach(card => {
+        const id = card.dataset.id;
+        const task = taskById(id);
+        const newSig = task ? taskSignature(task) : undefined;
+        if (newSig !== undefined) nextSignatures.set(id, newSig);
+        if (prefersReducedMotion || modalOpen) return;
+
+        const prev = prevRects && prevRects.get(id);
+        const next = card.getBoundingClientRect();
+
+        if (!prev) {
+          // new (or first-paint) card — gentle fade/pop in place
+          card.animate(
+            [{ opacity: 0, transform: 'translateY(8px) scale(0.97)' }, { opacity: 1, transform: 'none' }],
+            { duration: 240, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' });
+          return;
+        }
+
+        const dx = prev.left - next.left, dy = prev.top - next.top;
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+          // moved (column change or reorder): fly a ghost clone on a fixed overlay so it
+          // glides over the gap between columns without being clipped by overflow.
+          const ghost = card.cloneNode(true);
+          ghost.classList.add('flip-ghost');
+          ghost.style.cssText += `position:fixed; margin:0; left:${prev.left}px; top:${prev.top}px; width:${prev.width}px; height:${prev.height}px; z-index:9000; pointer-events:none;`;
+          document.body.appendChild(ghost);
+          card.style.visibility = 'hidden';
+          const anim = ghost.animate(
+            [{ transform: 'translate(0, 0)' }, { transform: `translate(${next.left - prev.left}px, ${next.top - prev.top}px)` }],
+            { duration: 380, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' });
+          const cleanup = () => { ghost.remove(); if (card.isConnected) card.style.visibility = ''; };
+          anim.addEventListener('finish', cleanup);
+          anim.addEventListener('cancel', cleanup);
+        } else {
+          // same place but content changed (e.g. an agent ticked it done) — brief pulse
+          const prevSig = lastCardSignatures.get(id);
+          if (prevSig !== undefined && newSig !== undefined && prevSig !== newSig) {
+            card.classList.remove('just-changed');
+            void card.offsetWidth;             // restart the keyframe animation
+            card.classList.add('just-changed');
+            card.addEventListener('animationend', () => card.classList.remove('just-changed'), { once: true });
+          }
+        }
+      });
+      lastCardSignatures = nextSignatures;
+    }
 
     // Expose functions to onclick handlers
     window.openFileModal = openFileModal;
@@ -3393,6 +4071,8 @@
     // ===== SERVER MODE: boot the live board automatically =====
     // Served by board-server.mjs → no manual file pickers: auto-load tasks + memory and
     // open the live (SSE) connection. The pickers become "Reload" buttons.
+    startFreshnessClock();              // live/seconds/stale badge (both modes)
+
     if (SERVER_MODE) {
       openTaskBtn.textContent = 'Reload';
       openMemoryBtn.textContent = 'Reload';

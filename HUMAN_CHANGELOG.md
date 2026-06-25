@@ -8,6 +8,19 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — late June 2026
 
+**Added**
+- Every task can now hold a full write-up, not just a one-line title. Click any task card and a big panel opens where you (or the assistant) can see and edit everything about it: a plain-English summary up top, the detailed plan underneath, its notes, its sub-steps, what it depends on, and a running log of what's been done to it. The idea is that a task carries its *whole story* — what it is, why it was decided, what it'll affect, and where it stands — so if a different assistant picks it up later, half-finished, it has everything it needs to continue without you re-explaining.
+- A little **"live" indicator** in the corner tells you how fresh the board is: it says "live" right after any change, then quietly starts counting the seconds since the last change, and eventually flips to "stale" if nothing's happened for a long while — so you can tell at a glance whether work is actively moving.
+- The board now **animates**: when the assistant moves a task from one column to another it glides across instead of snapping, and the little count numbers and the "live" indicator roll over like a flip-clock. It's subtle, on-brand, and automatically turns itself off if you've asked your system to reduce motion.
+
+**Improved**
+- All editing now happens in that one panel. The cards on the board are now just clean, read-only tiles you click to open or drag to move — no more fiddly clicking on a card to edit a single field.
+
+**Behind the scenes**
+- The rich write-ups are saved as their own little files, one per task, and tidied up automatically when a task is deleted. The animations and the flip-clock effect are all home-grown (nothing extra to install). Smoke-tested the whole thing in a real browser before shipping, kept the version numbers in step, and refreshed the Codex copy.
+
+## Just before that — late June 2026
+
 **Improved**
 - The task board is now a proper drag-left-to-right Kanban flow: **Backlog → To-Do → Active → Done** — what you might do someday, what's queued up next, what you're working on right now, and what's already finished. It's the exact same board, just laid out the way work actually moves, so it's clearer for you and for the assistant.
 - Tasks can now depend on each other. Every task gets a little ID, and a task can be marked as "needing" another one. A task that's still waiting on something shows a 🔒 lock and can't be dragged into "doing it now" until the things it depends on are done — so nothing gets started before it's actually ready. This replaces the old "waiting on" list with something that works across the whole board.

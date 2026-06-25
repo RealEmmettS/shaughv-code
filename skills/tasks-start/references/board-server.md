@@ -42,6 +42,13 @@ To launch + open the board (what `/tasks-start` does): `node .tasks/board-server
   - `GET|POST /api/memory/tree`, `/api/memory/file?path=` → memory tab; writes are
     path-guarded to `CLAUDE.md` or `*.md` under `memory/` (traversal / absolute / non-`.md`
     / symlink-escape all rejected).
+  - `GET|POST|DELETE /api/task?id=<id>` → a task's rich detail file at `.tasks/tasks/<id>.md`
+    (the description + activity log behind the dashboard's task modal). `id` is validated
+    `^[0-9a-z]{2,8}$` (the task's trailing `#id`). GET returns the raw markdown (empty string
+    if the file doesn't exist yet — detail files are lazy/optional); POST atomically writes it;
+    **DELETE removes it** (the dashboard calls DELETE when a task is deleted, so a reused id
+    can't inherit stale detail). All three set `lastSelfWrite` so the write doesn't echo back
+    over SSE.
 - `dashboard.html` auto-detects: over `http(s)` it uses this API + SSE; over `file://` it
   uses the legacy File System Access API. One file, both modes.
 - Auto-open is **only** on the explicit `/tasks-start` launch (`ensure --open`). Hooks call
@@ -139,3 +146,27 @@ The dashboard parses/serializes this exact shape; the server only moves the byte
 - Subtasks: 2-space-indented `  - [ ]` lines, plain text.
 - Serialize always emits `[x]`/`[ ]`, bold titles, `(needs …)` before the trailing `#id`,
   and `## Section` headers without bold.
+
+## Per-task detail files (`.tasks/tasks/<id>.md`)
+
+`TASKS.md` is the one-line-per-task index; a task's **rich detail** lives in
+`.tasks/tasks/<id>.md` (keyed by the task's trailing `#id`), served via `/api/task`. The
+dashboard's task modal reads/writes it. Format = a TT;DR-led markdown description, optionally
+followed by a `## Activity` section of `- ` log lines:
+
+```markdown
+TT;DR: plain-English one-or-two-sentence summary (rendered as a callout).
+
+Full plan — markdown is rendered (headings, lists, code, **bold**, _italic_, `code`, links).
+
+## Activity
+- 2026-06-25 14:02 — created
+- 2026-06-25 15:10 — moved To-Do → Active
+```
+
+- The browser splits on the first `^## Activity$` (case-insensitive): everything above is the
+  description, the `- ` lines below are the activity log (rendered newest-first in the modal).
+- Files are **lazy/optional** — a task with no detail file shows an empty description. They're
+  created on first write and **deleted when the task is deleted** (the modal's delete fires
+  `DELETE /api/task?id=`). Agents editing `TASKS.md` by hand should mirror that: remove
+  `.tasks/tasks/<id>.md` when they remove a task.
