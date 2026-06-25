@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.22.0] — 2026-06-25
+
+Minor: **rich task cards.** Each task now carries an exhaustive, TT;DR-led **description** plus an **activity log** (stored per-task at `.tasks/tasks/<id>.md`), surfaced through a **click-to-open task detail modal** where *all* editing now happens — so a task is a self-contained handoff document any agent can pick up cold. Adds a **freshness indicator** and subtle, on-brand **motion** (QubeTX Slot Roll + FLIP card-glide), with the cards themselves becoming read-only display surfaces.
+
+### Added
+- `skills/tasks-start/assets/dashboard.html` — **task detail modal** (opens on a click anywhere on a card or list row): edit title, note, column, prerequisites, **subtasks** (add/toggle/rename/delete), **done**, **delete**, and a **rendered-markdown description with an Edit toggle**; an **activity log** (newest-first); closes via X / backdrop / ESC with an unsaved-edit guard. **All editing moved into the modal** — board cards and list rows are now read-only display + drag only (no inline field editing, no card checkbox).
+- **Freshness indicator** in the header: shows `live` for 2 minutes after any board change, then counts up in seconds, then `stale` after 45 minutes (single 1/s timer; resets to `live` on every change).
+- **Motion (dependency-free):** a vendored, themed port of the QubeTX **Slot Roll** (per-character roll) drives the column **count badges** (accent arrival flash) and the **freshness odometer** (quiet ink roll); a **FLIP** glide animates a card moving between columns (via a `position:fixed` ghost clone so it isn't clipped by a column's scroll box) with a Web-Animations-API pop-in for new cards and a `just-changed` pulse for in-place changes. All respect `prefers-reduced-motion`.
+- `skills/tasks-start/assets/board-server.mjs` — `GET|POST|DELETE /api/task?id=<id>` for the per-task detail file `.tasks/tasks/<id>.md` (id-validated `^[0-9a-z]{2,8}$`, atomic writes, self-write echo-suppression); DELETE fires on task deletion so a reused id can't inherit stale detail.
+- `renderTaskMarkdown` — a minimal, dependency-free markdown renderer for the description pane (TT;DR callout, headings, lists, **bold**/_italic_/`code`/fences/links).
+
+### Changed
+- `skills/tasks-management/SKILL.md` — documents the per-task description + activity model and storage (`.tasks/tasks/<id>.md`); mandates the **description be a self-contained handoff document** (TT;DR lead, then *what & why*, origin/decision-trail or operator order, intended-vs-unintended **system impact**, full plan/context/acceptance, and what's done vs. left) so any independent agent can resume cold; "add/finish a task" verbs now seed/append detail.
+- `skills/tasks-start/assets/board-server.mjs` — the `SessionStart` nudge now also asks agents to keep a rich, handoff-complete description per task.
+- `skills/tasks-start/references/board-server.md` — documents `/api/task` (GET/POST/DELETE) and the `.tasks/tasks/<id>.md` detail-file format.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.21.0` → `0.22.0`; tasks descriptions note the rich cards, detail modal, freshness, and animations.
+- `plugins/shaughv-code/` — regenerated for version lockstep (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
+### Fixed
+- FLIP card animation is now suppressed while the task modal is open (the `z-index:9000` ghost would otherwise glide over the `z-index:100` modal).
+- Deleting a task now removes its `.tasks/tasks/<id>.md` detail file, so a future task that reuses the id can't inherit stale content.
+- Description Edit/Preview toggle no longer desyncs (the header toggle is hidden during edit, where the in-area Cancel/Save govern exit).
+
+### Verification
+- Live browser smoke test (Playwright MCP) against a scratch board: modal open/edit/save (persisted to `.tasks/tasks/<id>.md` with an auto activity entry), subtasks, read-only cards (`pointer-events:none`), Active-column block gate, column move (FLIP + count Slot Roll), ESC close — **0 console errors** throughout. Server `/api/task` GET/POST/DELETE + bad-id 400 verified via curl; detail split/join round-trips unit-tested.
+
 ## [0.21.0] — 2026-06-25
 
 Minor: reshape the task board into a proper **Kanban flow with dependencies**. Columns are now **Backlog → To-Do → Active → Done**, every task carries a stable short **id**, and tasks can declare **prerequisites** — a task with an unfinished prerequisite is "blocked" (🔒 badge + the board refuses to move it into Active until its prerequisites are checked off). This replaces the old "Waiting On" column: a task now waits on whatever it depends on, anywhere on the board.

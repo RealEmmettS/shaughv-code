@@ -28,6 +28,7 @@ const TASKS_DIR = path.dirname(fileURLToPath(import.meta.url));
 const TASKS_MD = path.join(TASKS_DIR, 'TASKS.md');
 const CLAUDE_MD = path.join(TASKS_DIR, 'CLAUDE.md');
 const MEMORY_DIR = path.join(TASKS_DIR, 'memory');
+const TASK_DETAIL_DIR = path.join(TASKS_DIR, 'tasks'); // per-task detail files: tasks/<id>.md
 const DASHBOARD = path.join(TASKS_DIR, 'dashboard.html');
 const STATE_FILE = path.join(TASKS_DIR, '.board-server.json');     // {port, pid, startedAt} — written by the server
 const NUDGE_FILE = path.join(TASKS_DIR, '.board-nudge.json');      // {<event>: epochMs} — written by hook, separate to avoid contention
@@ -230,6 +231,33 @@ async function serve({ open = false, port: requested } = {}) {
         }
       }
 
+      // Per-task detail file (rich description + activity log): .tasks/tasks/<id>.md
+      if (pathname === '/api/task') {
+        const id = (url.searchParams.get('id') || '').toLowerCase();
+        if (!/^[0-9a-z]{2,8}$/.test(id)) return send(res, 400, 'application/json', JSON.stringify({ error: 'bad id' }));
+        const target = path.join(TASK_DETAIL_DIR, id + '.md');
+        if (req.method === 'GET') {
+          const content = await fsp.readFile(target, 'utf8').catch(() => '');
+          return send(res, 200, 'text/markdown; charset=utf-8', content);
+        }
+        if (req.method === 'POST') {
+          const body = await readBody(req);
+          await fsp.mkdir(TASK_DETAIL_DIR, { recursive: true });
+          const tmp = target + '.tmp';
+          await fsp.writeFile(tmp, body, 'utf8');
+          await fsp.rename(tmp, target);
+          lastSelfWrite = Date.now();
+          return send(res, 200, 'application/json', JSON.stringify({ ok: true }));
+        }
+        if (req.method === 'DELETE') {
+          // Called when a task is deleted, so its detail file can't outlive it (and a
+          // future task that happens to reuse the id never inherits stale content).
+          await fsp.unlink(target).catch(() => {});
+          lastSelfWrite = Date.now();
+          return send(res, 200, 'application/json', JSON.stringify({ ok: true }));
+        }
+      }
+
       if (pathname === '/api/events' && req.method === 'GET') {
         res.writeHead(200, {
           'Content-Type': 'text/event-stream',
@@ -323,7 +351,7 @@ function reminderFor(event, hookInput, url) {
   const tail = ` — the live board at ${url} (.tasks/TASKS.md).`;
   switch (event) {
     case 'SessionStart':
-      return { key: 'session', text: `[task board] This repo uses a live SHAUGHV task board${tail} Keep it current so the operator has full visibility: as you start, finish, or discover work — and around commits, pushes, and subagents — update .tasks/TASKS.md (move items between sections, check off completed work, add new ones). The board auto-syncs; you just edit the file.` };
+      return { key: 'session', text: `[task board] This repo uses a live SHAUGHV task board${tail} Keep it current so the operator has full visibility: as you start, finish, or discover work — and around commits, pushes, and subagents — update .tasks/TASKS.md (move items between sections, check off completed work, add new ones). The board auto-syncs; you just edit the file. For each task, keep a rich, self-contained description in .tasks/tasks/<id>.md (lead with a plain-English TT;DR, then exhaustive context — goal, plan, files, decisions, what's done vs. left) so ANY agent that picks the task up later, at any stage, has everything it needs to continue. Log meaningful changes under its ## Activity section.` };
     case 'PostToolUse': {
       const cmd = (hookInput?.tool_input?.command || '').toString();
       if (/\bgit\s+push\b/.test(cmd)) return { key: 'push', text: `[task board] You just pushed. Make sure .tasks/TASKS.md reflects what landed — check off completed items and add any follow-ups — so the operator's board stays accurate.` };

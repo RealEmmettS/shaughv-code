@@ -73,6 +73,70 @@ keep titles bold and one task per line. Keep the `#id` LAST on the line.
   yet, create them first (each gets an id), then reference their ids in the new task's
   `(needs …)`. Link by id, not by title.
 
+### Task descriptions & activity log (rich detail)
+
+`TASKS.md` stays a one-line-per-task index. Each task's **rich detail** lives in its own file
+at **`.tasks/tasks/<id>.md`** (same `<id>` as the trailing `#id` on the task line). The live
+board reads/writes these through the server; the modal that opens when you click a card shows
+and edits them. The file has two parts:
+
+```markdown
+TT;DR: One or two plain-English sentences on what this task is and where it stands.
+
+## Why
+What this task is for; the problem/goal it serves. Whether it came from a **direct operator
+order** ("operator asked for X") or was **derived** — and if derived, the reasoning/decisions
+that led here (options considered, what was chosen and rejected, and why).
+
+## Plan
+The full approach: steps, files/areas/commands involved, the design, constraints, edge cases.
+
+## Impact
+What completing this changes in the system — **intended** effects, and **possible unintended**
+ones (side-effects, risks, blast radius, things to watch / not break).
+
+## Acceptance
+How we'll know it's done (criteria, tests). Links to specs / PRs / threads.
+
+## Status
+What's already done vs. what's left, and exactly where to resume.
+
+## Activity
+- 2026-06-25 14:02 — created (operator order)
+- 2026-06-25 15:10 — moved To-Do → Active
+- 2026-06-25 16:30 — finished the parser; tests green; AST wiring still TODO
+```
+
+- **Lead the description with a `TT;DR:` line** (per the `ttdr` skill): a short, plain-English,
+  jargon-free summary so a tired operator grasps the task at a glance. The exhaustive detail
+  follows underneath. The board renders the `TT;DR:` line as a highlighted callout.
+- **Write the description as a self-contained handoff document — be exhaustively comprehensive.**
+  Assume a *different*, independent agent (or you, much later) will pick this task up cold, at
+  whatever stage it's currently in, with **none** of the context in your head right now, and
+  must be able to investigate, analyze, plan, and finish it from the description alone. There is
+  no length limit — err on the side of too much. The headings above are a guide, not a
+  straitjacket; below the TT;DR, cover at least:
+  - **What & why** — exactly what the task is and what it's for.
+  - **Origin / decisions** — *why we decided on it*: the decisions and reasoning that led here,
+    the alternatives weighed and rejected — **or** an explicit note that it was a **direct order
+    from the operator** (so the next agent doesn't relitigate a settled call).
+  - **System impact** — what it changes, separating **intended** impact from **possible
+    unintended** impact (side-effects, risks, what it must not break).
+  - **Plan & context** — the approach, files/areas/commands, constraints, edge cases, acceptance
+    criteria, and links — everything an independent agent needs to act without re-deriving it.
+  - **Where it stands** — what's done vs. left, so the handoff is seamless.
+  `TASKS.md` is just the one-line index; the description is where the thinking lives.
+- **Append a one-line `## Activity` entry** as you make meaningful changes to a task (start,
+  finish, move, key decisions, what you modified, where you left off). This is the operator's
+  window into what the agent actually did, and the breadcrumb trail the next agent reads first.
+  Keep entries short and timestamped (`YYYY-MM-DD HH:MM — what happened`); keep the description
+  body itself current as the plan evolves so a resumed task is never working from a stale plan.
+- **The detail file is optional** — a task with no `.tasks/tasks/<id>.md` is fine (the board
+  shows an empty description). Create it lazily the first time a task earns a real description.
+- **When you delete a task, delete its `.tasks/tasks/<id>.md` too** so a future task that
+  happens to reuse the id never inherits stale detail. (The board's delete does this for you;
+  if you remove a task by hand-editing `TASKS.md`, remove the detail file as well.)
+
 ## How to interact
 
 **"What's on my plate" / "my tasks":** read `.tasks/TASKS.md`, summarize Active and To-Do,
@@ -80,11 +144,12 @@ and **lead with anything overdue or due today** before the rest.
 
 **"Add a task" / "remind me to":** add to To-Do as `- [ ] **Task** … #id` with a fresh id
 and context (who it's for, due date). If it depends on other tasks, add `(needs #…)` —
-creating any missing prerequisite tasks first so you can reference their ids. Move it to
-Active when work actually starts.
+creating any missing prerequisite tasks first so you can reference their ids. For anything
+non-trivial, seed `.tasks/tasks/<id>.md` with a `TT;DR:`-led description (see above). Move it
+to Active when work actually starts — and add an `## Activity` line when you do.
 
 **"Done with X" / "finished X":** find it, flip `[ ]`→`[x]`, append `(done YYYY-MM-DD)`,
-move to Done.
+move to Done, and append a closing `## Activity` line to its detail file noting what landed.
 
 **"What's next" / "my queue":** read To-Do (queued-up work) and surface the next items to
 pull into Active. Park not-now ideas in Backlog.
