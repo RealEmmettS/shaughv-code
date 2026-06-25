@@ -25,6 +25,60 @@
       } catch (e) {}
     })();
   </script>
+  <!-- Tiered asset loader (progressive enhancement; see references/board-server.md "Tiered dependencies").
+       The static CDN stylesheet + script tags above are the file:// + online path. When the board is served
+       over http (SERVER_MODE), this prefers the locally-provisioned /vendor/* copies first so the board
+       renders fully offline, self-healing to the CDN, and finally to system fonts / the built-in motion
+       engine. Behaviour is IDENTICAL at every tier — only the byte source changes. -->
+  <script>
+    (function () {
+      try {
+        var SERVER = location.protocol === 'http:' || location.protocol === 'https:';
+        var head = document.head || document.getElementsByTagName('head')[0];
+        function css(href) { var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; head.appendChild(l); }
+        function js(src, onerror) { var s = document.createElement('script'); s.src = src; if (onerror) s.onerror = onerror; head.appendChild(s); }
+
+        // Fonts — inject the locally-vendored stylesheet AFTER the CDN <link>s already in <head>.
+        // fonts.css is itself local-first → CDN-fallback per @font-face, so the vendored weights win
+        // when present and self-heal to the CDN otherwise; Makira (never bundled) + the system stack
+        // still cover the rest. file:// keeps the CDN links only.
+        if (SERVER) css('/vendor/fonts.css');
+
+        // anime.js — optional alternate driver for the Slot Roll. Local → CDN → leave window.anime
+        // undefined (the built-in CSS driver then runs, with identical motion). Loaded async; the
+        // Slot Roll checks window.anime per-call, so whenever it lands it's picked up — no race.
+        var ANIME_CDN = 'https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js';
+        if (SERVER) js('/vendor/anime.min.js', function () { js(ANIME_CDN); });
+        else js(ANIME_CDN);
+
+        // Brand mark — prefer the vendored drop-in in SERVER_MODE. The CDN <script defer> in <head>
+        // remains for file:// / online; animated-brand-mark.js self-guards customElements.define, so
+        // loading both is safe (first wins). If <shaughv-mark> is still undefined a moment after load
+        // (the true offline floor), register a tiny dependency-free text fallback so the mark/header
+        // still read "SHAUGHV" instead of rendering empty.
+        if (SERVER) js('/vendor/animated-brand-mark.js');
+        setTimeout(function () {
+          if (typeof customElements === 'undefined' || customElements.get('shaughv-mark')) return;
+          try {
+            customElements.define('shaughv-mark', class extends HTMLElement {
+              connectedCallback() {
+                var icon = this.hasAttribute('data-icon-only');
+                this.style.display = 'inline-flex';
+                this.style.alignItems = 'center';
+                this.style.justifyContent = 'center';
+                this.style.fontFamily = 'var(--font-display)';
+                this.style.fontWeight = '700';
+                this.style.lineHeight = '1';
+                this.style.fontSize = icon ? '0.82em' : '0.5em';
+                this.style.letterSpacing = icon ? '0' : '0.04em';
+                if (!this.textContent.trim()) this.textContent = icon ? 'S' : 'SHAUGHV';
+              }
+            });
+          } catch (e) {}
+        }, 1500);
+      } catch (e) {}
+    })();
+  </script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -3790,10 +3844,12 @@
     // Vanilla port of the QubeTX "slot roll" (DESIGN_SYSTEM § Slot roll), itself adapted
     // from slot-text v0.2.2 (MIT · textmotion.dev). Each character sits in its own clipped
     // cell; the new glyph rolls in while the old rolls out, landing with a small spring.
-    // Pure CSS transforms + timers — no anime.js, no deps. Themed for SHAUGHV: arrival flash
-    // is var(--accent) settling to ink (pass color:null for a quiet odometer roll). Used on
-    // the column count badges (accent flash when a task moves) and the freshness counter
-    // (quiet ticks). Respects prefers-reduced-motion — it snaps to the final value.
+    // Themed for SHAUGHV: arrival flash is var(--accent) settling to ink (pass color:null for a
+    // quiet odometer roll). Used on the column count badges (accent flash when a task moves) and
+    // the freshness counter (quiet ticks). Respects prefers-reduced-motion — it snaps to the final
+    // value. The per-glyph roll runs through a driver seam: when anime.js has loaded (full/vendor
+    // tier) it drives the transform/rotate/color from the SAME computed tuple; otherwise the
+    // built-in CSS-transition driver runs — identical motion, zero deps. FLIP stays on WAAPI.
     const SLOT_EASE = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
     const SLOT_DEFAULTS = {
       direction: 'down', stagger: 40, duration: 240, exitOffset: 50, easing: SLOT_EASE,
@@ -3846,6 +3902,58 @@
       const cells = Array.from(text, slotBuildCell);
       cells.forEach((c) => c.setAttribute('aria-hidden', 'true'));
       container.replaceChildren(slotMakeSr(text), ...cells);
+    }
+    // Driver seam — the per-glyph roll is computed into a backend-agnostic tuple, then APPLIED by
+    // one of two drivers. anime.js (when loaded) and the built-in CSS-transition driver receive the
+    // exact same numbers, so the motion is identical and "which library loaded" is invisible. We
+    // re-check window.anime per call so a late-arriving anime.js is picked up without a reload.
+    function slotUseAnime() { return typeof window !== 'undefined' && typeof window.anime === 'function'; }
+    function animeEase(cssEasing) {
+      const m = /cubic-bezier\(\s*([\d.+-]+)\s*,\s*([\d.+-]+)\s*,\s*([\d.+-]+)\s*,\s*([\d.+-]+)\s*\)/.exec(cssEasing || '');
+      return m ? `cubicBezier(${m[1]}, ${m[2]}, ${m[3]}, ${m[4]})` : 'easeOutQuad';
+    }
+    // CSS driver: the original transform/rotate transitions + color fade, completion via
+    // transitionend. This is the reference behaviour and the always-correct default.
+    function slotDriveCss(roll, ctx) {
+      const { oldFace, newFace, finishGlyph, timers } = ctx;
+      const rollTrans = `transform ${roll.duration}ms ${roll.easing}`;
+      const trans = roll.restColor != null ? `${rollTrans}, color ${roll.colorFade}ms linear ${roll.duration}ms` : rollTrans;
+      if (oldFace) {
+        timers.push(setTimeout(() => {
+          oldFace.style.willChange = 'transform';
+          oldFace.style.transition = rollTrans;
+          oldFace.style.transform = `translateY(${roll.outY}px) rotate(${-Number(roll.tilt)}deg)`;
+        }, roll.outDelay));
+      }
+      timers.push(setTimeout(() => {
+        newFace.style.transition = trans;
+        newFace.style.transform = 'translateY(0) rotate(0deg)';
+        if (roll.restColor != null) newFace.style.color = roll.restColor;
+        const done = (e) => {
+          if (e.propertyName !== 'transform') return;
+          newFace.removeEventListener('transitionend', done);
+          finishGlyph();
+        };
+        newFace.addEventListener('transitionend', done);
+      }, roll.inDelay));
+    }
+    // anime.js driver: same translateY/rotate endpoints, duration, delay and easing curve, fed to
+    // anime() instead of CSS transitions. Completion fires finishGlyph (parity with transitionend).
+    function slotDriveAnime(roll, ctx) {
+      const { oldFace, newFace, finishGlyph, timers } = ctx;
+      const ease = animeEase(roll.easing);
+      if (oldFace) {
+        oldFace.style.willChange = 'transform';
+        window.anime({ targets: oldFace, translateY: [0, roll.outY], rotate: [0, -Number(roll.tilt)],
+          duration: roll.duration, delay: roll.outDelay, easing: ease });
+      }
+      newFace.style.willChange = 'transform';
+      window.anime({ targets: newFace, translateY: [roll.inStart, 0], rotate: [Number(roll.tilt), 0],
+        duration: roll.duration, delay: roll.inDelay, easing: ease, complete: finishGlyph });
+      if (roll.restColor != null && roll.tint != null) {
+        window.anime({ targets: newFace, color: [roll.tint, roll.restColor],
+          duration: roll.colorFade, delay: roll.inDelay + roll.duration, easing: 'linear' });
+      }
     }
     function animateSlotText(container, toText, options = {}) {
       const { direction, stagger, duration, exitOffset, easing, bounce, color, colorFade, skipUnchanged, interrupt } = { ...SLOT_DEFAULTS, ...options };
@@ -3906,8 +4014,6 @@
         const staggerIndex = isTail ? toText.length * 0.5 + (i - toText.length) * 0.25 : i;
         const base = Math.round(staggerIndex * stagger * (1 + bounce * 0.25 * wobble(i, 2)));
         const tilt = (bounce * 5 * wobble(i, 3)).toFixed(2);
-        const rollTrans = `transform ${d}ms ${easing}`;
-        const trans = color ? `${rollTrans}, color ${colorFade}ms linear ${d}ms` : rollTrans;
         const newFace = slotMakeFace(toChar);
         newFace.style.willChange = 'transform';
         newFace.style.transformOrigin = '50% 50%';
@@ -3926,28 +4032,25 @@
           maxEnd = Math.max(maxEnd, wDelay + wDur);
         }
         maxEnd = Math.max(maxEnd, base + exitOffset + d + (color ? colorFade : 0));
-        if (oldFace) {
-          timers.push(setTimeout(() => {
-            oldFace.style.willChange = 'transform';
-            oldFace.style.transition = rollTrans;
-            oldFace.style.transform = `translateY(${outY}px) rotate(${-Number(tilt)}deg)`;
-          }, base));
-        }
-        timers.push(setTimeout(() => {
-          newFace.style.transition = trans;
-          newFace.style.transform = 'translateY(0) rotate(0deg)';
-          if (color) newFace.style.color = restColor;
-          const done = (e) => {
-            if (e.propertyName !== 'transform') return;
-            newFace.removeEventListener('transitionend', done);
-            slot.dataset.char = toChar;
-            slot.style.removeProperty('transition');
-            slot.style.removeProperty('width');
-            slot.style.overflowX = 'visible';
-            slot.querySelectorAll('[data-slot-face]').forEach((f) => { if (f !== newFace) f.remove(); });
-          };
-          newFace.addEventListener('transitionend', done);
-        }, base + exitOffset));
+        // Backend-agnostic per-glyph roll tuple — IDENTICAL whether anime.js drives it or the
+        // built-in CSS driver does (window.__slotTuples lets a test assert the parity). The driver
+        // only chooses HOW to apply these numbers; cleanup (finishGlyph) is shared.
+        const roll = {
+          duration: d, outDelay: base, inDelay: base + exitOffset, easing,
+          inStart, outY, tilt, colorFade,
+          tint: color ? tint : null, restColor: color ? restColor : null,
+        };
+        if (typeof window !== 'undefined' && window.__slotTuples) window.__slotTuples.push(roll);
+        const finishGlyph = () => {
+          slot.dataset.char = toChar;
+          slot.style.removeProperty('transition');
+          slot.style.removeProperty('width');
+          slot.style.overflowX = 'visible';
+          slot.querySelectorAll('[data-slot-face]').forEach((f) => { if (f !== newFace) f.remove(); });
+        };
+        const driverCtx = { slot, oldFace, newFace, finishGlyph, timers };
+        if (slotUseAnime()) slotDriveAnime(roll, driverCtx);
+        else slotDriveCss(roll, driverCtx);
       }
       const total = maxEnd + 80;
       timers.push(setTimeout(() => {

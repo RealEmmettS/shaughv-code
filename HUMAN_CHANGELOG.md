@@ -9,6 +9,18 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late June 2026
 
 **Added**
+- The task board now **works completely offline — and looks and behaves exactly the same whether you're connected or not.** When the system sets itself up it tries hard to fetch the nicest version of the board's polish (its smooth animations, the brand fonts, the animated logo); but if your machine is offline or locked down, it quietly falls back to copies bundled right inside the plugin, and if even those can't be reached, it uses built-in basics. You never see a broken or half-styled board — the only thing that changes behind the scenes is where the pieces came from.
+- If your computer doesn't have the software the board needs to run, setup can now offer to install it for you — and it carefully writes down that it did, so it can be cleanly removed later if you ever want.
+
+**Improved**
+- Tearing the system down is now a **true, complete uninstall.** Setup keeps a detailed record of everything it added — every file, and especially anything it installed for the whole computer — so removal can undo all of it and leave nothing behind. If it had to install that one computer-wide piece of software for you, it asks before removing it, and defaults to leaving it alone (since other things on your machine might rely on it).
+
+**Behind the scenes**
+- Every downloaded or bundled piece is checked against a known fingerprint before it's trusted, so a corrupted or tampered file is rejected and re-fetched automatically. The fancy animations can run on a well-known animation library when it's available, but they're tuned to look identical to the built-in version, so you genuinely can't tell which one is running. The brand's main body font isn't bundled (its license doesn't allow that), so offline it falls back to a standard system font — which doesn't change how anything moves or behaves. The whole online-to-offline range was tested in a real browser, the version numbers were kept in step, and the Codex copy was refreshed.
+
+## Just before that — late June 2026
+
+**Added**
 - Every task can now hold a full write-up, not just a one-line title. Click any task card and a big panel opens where you (or the assistant) can see and edit everything about it: a plain-English summary up top, the detailed plan underneath, its notes, its sub-steps, what it depends on, and a running log of what's been done to it. The idea is that a task carries its *whole story* — what it is, why it was decided, what it'll affect, and where it stands — so if a different assistant picks it up later, half-finished, it has everything it needs to continue without you re-explaining.
 - A little **"live" indicator** in the corner tells you how fresh the board is: it says "live" right after any change, then quietly starts counting the seconds since the last change, and eventually flips to "stale" if nothing's happened for a long while — so you can tell at a glance whether work is actively moving.
 - The board now **animates**: when the assistant moves a task from one column to another it glides across instead of snapping, and the little count numbers and the "live" indicator roll over like a flip-clock. It's subtle, on-brand, and automatically turns itself off if you've asked your system to reduce motion.
@@ -19,7 +31,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 **Behind the scenes**
 - The rich write-ups are saved as their own little files, one per task, and tidied up automatically when a task is deleted. The animations and the flip-clock effect are all home-grown (nothing extra to install). Smoke-tested the whole thing in a real browser before shipping, kept the version numbers in step, and refreshed the Codex copy.
 
-## Just before that — late June 2026
+## Before that — late June 2026
 
 **Improved**
 - The task board is now a proper drag-left-to-right Kanban flow: **Backlog → To-Do → Active → Done** — what you might do someday, what's queued up next, what you're working on right now, and what's already finished. It's the exact same board, just laid out the way work actually moves, so it's clearer for you and for the assistant.
@@ -29,7 +41,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 **Behind the scenes**
 - Reworked how the board saves and reloads its file so the new IDs and dependencies stick reliably, and fixed a small drag-and-drop quirk while in there. Kept the version numbers in step and refreshed the Codex copy.
 
-## Earlier today — late June 2026
+## And before that — late June 2026
 
 **Added**
 - Your task board is now **live**. Setting up the task system launches the board as a little local web page that opens by itself in your browser — no more hunting for a file and clicking "open this folder." You and the assistant can both work on it at once: when it updates your task list, the board changes in front of you instantly, and when you drag a card, the underlying notes update too. If you and the assistant happen to edit at the very same moment, it reloads rather than quietly overwriting one of the changes.

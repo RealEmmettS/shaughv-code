@@ -21,6 +21,7 @@ Run from the repo root (the `.tasks/` folder is a child of it):
 | `node .tasks/board-server.mjs hook <EVENT>` | Ensure the server is up, then print the right board-maintenance nudge for `<EVENT>`. Reads the hook's JSON payload from stdin. |
 | `node .tasks/board-server.mjs stop` | Stop a running server and clear its state files. |
 | `node .tasks/board-server.mjs status` | Print `{port,pid,...}` if running, else `{"running":false}`. |
+| `node .tasks/board-server.mjs install [--tier T] [--offline] [--no-global] [--json] [--node-bootstrap M:id]` | **Internal, NOT user-invocable.** Provision the tiered display assets into `.tasks/vendor/` and write `.install-manifest.json`. Run by `/tasks-start` after copying assets, before `serve`. See [Tiered dependencies](#tiered-dependencies). |
 
 To launch + open the board (what `/tasks-start` does): `node .tasks/board-server.mjs ensure --open`.
 
@@ -49,6 +50,13 @@ To launch + open the board (what `/tasks-start` does): `node .tasks/board-server
     **DELETE removes it** (the dashboard calls DELETE when a task is deleted, so a reused id
     can't inherit stale detail). All three set `lastSelfWrite` so the write doesn't echo back
     over SSE.
+  - `GET /vendor/*` → static read of a provisioned display asset from `.tasks/vendor/`
+    (anime.js, the brand woff2s, the brand mark, `fonts.css`). Same path confinement as the
+    memory API (`path.resolve` under `vendor/`, traversal / NUL / drive-escape → 403; encoded
+    `..` is also neutralised by URL normalisation). Binary-safe (`res.end(buffer)`), correct
+    MIME per extension, `Cache-Control: public, max-age=3600`. A missing file 404s so the
+    dashboard's runtime loader falls through to its CDN / inline fallback. See
+    [Tiered dependencies](#tiered-dependencies).
 - `dashboard.html` auto-detects: over `http(s)` it uses this API + SSE; over `file://` it
   uses the legacy File System Access API. One file, both modes.
 - Auto-open is **only** on the explicit `/tasks-start` launch (`ensure --open`). Hooks call
@@ -170,3 +178,117 @@ Full plan — markdown is rendered (headings, lists, code, **bold**, _italic_, `
   created on first write and **deleted when the task is deleted** (the modal's delete fires
   `DELETE /api/task?id=`). Agents editing `TASKS.md` by hand should mirror that: remove
   `.tasks/tasks/<id>.md` when they remove a task.
+
+## Tiered dependencies
+
+The board **progressively enhances**. Its core (the Kanban board, live sync, the Slot Roll and
+FLIP motion) is built from Node + browser built-ins and works with **zero** external assets. On
+top of that it can layer optional enhancements — the **anime.js** motion driver, the vendored
+**brand fonts** (IBM Plex Mono + Unbounded), the **animated brand mark**, and `fonts.css`. The
+board looks and behaves **identically at every tier**; tiers differ only in *where the bytes
+come from*, never in *what the board does*. Makira (the SHAUGHV body face) is a **commercial
+license** and is **never bundled or mirrored** — it loads from the CDN when reachable and
+otherwise falls back to the system font stack (the motion is glyph-agnostic, so it's invisible).
+
+### The `install` chain (server side)
+
+`board-server.mjs install` provisions those assets into `.tasks/vendor/` with a
+**try-everything chain, first success wins**, and each candidate is verified against a pinned
+**sha256** (so version drift, corruption, or a tampered CDN response is rejected and falls
+through):
+
+| Tier | Source | How |
+|---|---|---|
+| **full** | npm | `npm install` the pinned `animejs` into a **transient** `.tasks/node_modules`, verify, copy the artefact into `vendor/`, then **prune `node_modules`** (nothing npm-related persists). |
+| **vendor** | pinned CDN fetch | `https` GET each asset (anime.js, woff2s, brand mark) straight into `vendor/`. |
+| **shipped** | the plugin bundle | copy from `${CLAUDE_PLUGIN_ROOT}/skills/tasks-start/assets/vendor/` — the offline-capable floor-with-assets. |
+| **offline** | nothing | provision nothing; the dashboard inlines its built-in engine + system fonts. Cannot fail. |
+
+Per-asset, the chain walks the allowed tiers high→low; the first sha-valid source wins. `--tier`
+caps the highest tier tried; `--offline` means "no network, no npm" (caps at **shipped**, the
+right behaviour for a disconnected machine); `--tier offline` forces the true floor. `install`
+**always exits 0** — the offline floor is a valid outcome — and is **idempotent**: an
+already-valid asset is reused (its provenance preserved), and a re-run rebuilds the manifest
+from actual on-disk state, so a deleted asset is re-provisioned (integrity self-heal).
+
+The achieved `tier` recorded is that of `anime.min.js` (the marquee enhancement); fonts and the
+brand mark degrade independently and are recorded per-asset.
+
+### Global Node bootstrap
+
+`install` runs *under* Node, so Node is normally already present. Two seams cover the rest:
+
+- If npm is missing and the full tier is requested (and not `--no-global`/`--offline`), `install`
+  makes a **best-effort, non-interactive** global Node install (winget / brew / apt-gated-on-`sudo -n`),
+  then retries npm. Any UAC prompt / timeout / non-zero exit is treated as failure → fall through.
+- When Node is **wholly absent**, `/tasks-start` installs it *before* it can run this script and
+  passes `--node-bootstrap "<manager>:<id>"` so `install` records it.
+
+**Every** global change — attempted or successful — is written to the manifest's `global[]` with
+`wasPreexisting:false`, the exact `reverseCommand`, and `reverseRisk:"high"`. This is the only
+out-of-`.tasks/` residue the system can create, and it's what makes `/tasks-remove` able to offer
+a complete, opt-in reversal.
+
+### The static route
+
+The server serves provisioned assets at `GET /vendor/*` from `.tasks/vendor/` (confined,
+binary-safe, correct MIME — see the HTTP API list above). The recursive `fs.watch` ignores
+`vendor/`, `node_modules/`, `package.json`/lock, the manifest, and `*.tmp` so provisioning never
+spams SSE.
+
+### The dashboard's runtime loader (browser side)
+
+Over `http(s)` (SERVER_MODE) the dashboard prefers the local `/vendor/*` copies, self-heals to the
+CDN, and finally to system fonts / its built-in engine — per resource, resolving (never
+rejecting), so degradation is automatic and silent:
+
+- **fonts** — inject `/vendor/fonts.css` (itself local-first → CDN per `@font-face`) after the CDN
+  `<link>`s; Makira + anything unvendored still resolves from the CDN / system stack.
+- **anime.js** — `/vendor/anime.min.js` → CDN → leave `window.anime` undefined. The Slot Roll
+  checks `window.anime` **per call**, so a late load is picked up with no reload; when present it
+  drives the per-glyph roll from the **same computed tuple** as the built-in CSS driver (identical
+  motion — asserted via `window.__slotTuples` parity). **FLIP stays on WAAPI at every tier.**
+- **brand mark** — `/vendor/animated-brand-mark.js` (self-guards `customElements.define`, so it's
+  safe alongside the CDN `<script>`); if `<shaughv-mark>` is still undefined shortly after, a tiny
+  dependency-free text fallback registers so the mark still reads "SHAUGHV" offline.
+
+`prefers-reduced-motion` is honoured above the driver check, so reduced-motion snaps regardless of
+tier. Over `file://` the static CDN tags are used as before (no `/vendor/` to reach).
+
+### The install manifest (`.tasks/.install-manifest.json`)
+
+Written **eagerly** (`status:"in-progress"`) and updated after each asset, then finalized
+(`status:"complete"`) — so a crash mid-install still leaves a valid, exhaustive record.
+`/tasks-remove` reads it for a complete uninstall. Shape:
+
+```jsonc
+{
+  "schemaVersion": 1,
+  "pluginVersion": "0.23.0",        // read from CLAUDE_PLUGIN_ROOT/.claude-plugin/plugin.json, else "unknown"
+  "status": "complete",             // "in-progress" while running; a partial crash leaves this
+  "requestedTier": "full",
+  "tier": "vendor",                 // achieved (tracks anime.min.js)
+  "options": { "offline": false, "noGlobal": false },
+  "node": { "version": "v24.x", "execPath": "…", "platform": "win32" },
+  "assets": [                        // one per PINNED entry
+    { "path": "anime.min.js", "source": "npm|cdn|shipped|absent", "sha256": "…", "bytes": 17384, "ok": true }
+  ],
+  "created": { "dirs": ["vendor", …], "files": [ { "path": "vendor/…", "sha256": "…", "bytes": …, "source": "…" } ] },
+  "npm": [],                         // intentionally empty — node_modules is transient (pruned)
+  "global": [                        // OUT-OF-TREE changes — the only thing not under .tasks/
+    { "kind": "node", "manager": "winget", "id": "OpenJS.NodeJS.LTS", "wasPreexisting": false,
+      "succeeded": true, "reverseCommand": "winget uninstall --id OpenJS.NodeJS.LTS -e",
+      "reverseRisk": "high", "note": "…" }
+  ],
+  "notes": ["Makira … never bundled …"]
+}
+```
+
+### Teardown contract (`/tasks-remove`)
+
+`.tasks/vendor/`, any transient `node_modules`/`package.json`, and the manifest all live **under
+`.tasks/`**, so deleting the folder removes them wholesale (the `created` lists are a cross-check,
+not a separate pass). The manifest's `global[]` is the exception: for each `wasPreexisting:false`,
+`succeeded:true` entry, `/tasks-remove` **offers** the recorded `reverseCommand` (default **keep**,
+never auto-run, high-risk caveat surfaced). No manifest → legacy marker-only teardown, no global
+reversal. Unknown `schemaVersion` → delete `.tasks/` and print the raw `global[]` for manual cleanup.
