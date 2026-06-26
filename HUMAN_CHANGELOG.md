@@ -9,6 +9,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 ## Most recent release — late June 2026
 
 **Removed**
+- The **Perplexity web-search skill** has been removed from this bundle. If you used it for quick web searches with cited, AI-written answers, that particular tool is no longer part of this plugin.
+
+## Earlier today — late June 2026
+
+**Removed**
 - The whole **task board and workplace-memory system** has moved out of this all-in-one bundle into its **own standalone plugin** — so you can install just the task system, by itself, in whatever assistant you use, without pulling in everything else. Nothing about how it works changed; it just lives on its own now. If you use the task board, install the new "shaughv-tasks" plugin to keep it — and any task boards you've already set up in your projects keep working, untouched.
 
 ## The release just before — late June 2026

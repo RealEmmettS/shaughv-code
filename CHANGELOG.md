@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.25.0] — 2026-06-26
+
+Removed: the **`perplexity-search`** skill (web search and AI-grounded answers via the Perplexity Agent, Search, and Sonar APIs).
+
+### Removed
+- `skills/perplexity-search` — the Perplexity web-search / AI-grounded-answers skill.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.24.0` → `0.25.0`; dropped the `perplexity` keyword and the Perplexity mention from the descriptions / Codex `longDescription`.
+- `README.md` — removed the `perplexity-search` skill row and its entry in the repo-layout tree.
+- `plugins/shaughv-code/` — regenerated; the Codex package no longer carries `perplexity-search` (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.24.0] — 2026-06-26
 
 Removed: the **task + workplace-memory system** (the `tasks-*` skills) has moved to its own standalone plugin, **[shaughv-tasks](https://github.com/RealEmmettS/shaughv-tasks)**, so it can be installed independently in any agent and stay focused. Nothing else in this bundle changed.

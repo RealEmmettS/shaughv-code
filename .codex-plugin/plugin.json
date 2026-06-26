@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "0.24.0",
-  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for critical thinking, OpenAI audio, Perplexity, PreText, Quiver AI, a comprehensive Mistral AI API skill (OCR, audio transcription, text-to-speech, chat, agents, and the full API surface), brand design, animated brandmark, human changelog, CDN usage, naming conventions, Google Cloud Storage, bug triage, code design patterns, debugging, defensive programming, git workflow, a security audit & red-team skill, a session handoff document generator, an iterative milestone-planning method, a workflow-optimization facilitator, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, spawn orchestration, strategic thinking, the wb300 git branch / worktree / agent control tower, a usage status-line installer, and the TT;DR \"Too Tired; Didn't Read\" summary convention. (The task + workplace-memory system now lives in the standalone shaughv-tasks plugin.)",
+  "version": "0.25.0",
+  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for critical thinking, OpenAI audio, PreText, Quiver AI, a comprehensive Mistral AI API skill (OCR, audio transcription, text-to-speech, chat, agents, and the full API surface), brand design, animated brandmark, human changelog, CDN usage, naming conventions, Google Cloud Storage, bug triage, code design patterns, debugging, defensive programming, git workflow, a security audit & red-team skill, a session handoff document generator, an iterative milestone-planning method, a workflow-optimization facilitator, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, spawn orchestration, strategic thinking, the wb300 git branch / worktree / agent control tower, a usage status-line installer, and the TT;DR \"Too Tired; Didn't Read\" summary convention. (The task + workplace-memory system now lives in the standalone shaughv-tasks plugin.)",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -18,7 +18,6 @@
     "brand",
     "design",
     "openai-audio",
-    "perplexity",
     "quiver",
     "critical-thinking",
     "human-changelog",
@@ -67,7 +66,7 @@
   "interface": {
     "displayName": "shaughv-code",
     "shortDescription": "Emmett's personal Codex skill bundle.",
-    "longDescription": "Use Emmett Shaughnessy's personal skills in Codex for SHAUGHV brand work, OpenAI audio, web search with Perplexity, Quiver AI vector generation, naming conventions, human changelogs, CDN usage, and Google Cloud Storage workflows. The Codex surface bundles the same MCP servers as the Claude surface (Remotion documentation and Craft Docs); the /create-video slash command remains Claude-only. Codex installs from a tracked, self-contained package under plugins/shaughv-code/, regenerated from repo root by build-codex-plugin.ps1.",
+    "longDescription": "Use Emmett Shaughnessy's personal skills in Codex for SHAUGHV brand work, OpenAI audio, Quiver AI vector generation, naming conventions, human changelogs, CDN usage, and Google Cloud Storage workflows. The Codex surface bundles the same MCP servers as the Claude surface (Remotion documentation and Craft Docs); the /create-video slash command remains Claude-only. Codex installs from a tracked, self-contained package under plugins/shaughv-code/, regenerated from repo root by build-codex-plugin.ps1.",
     "developerName": "Emmett Shaughnessy",
     "category": "Coding",
     "capabilities": [

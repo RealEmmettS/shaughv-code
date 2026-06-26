@@ -91,7 +91,6 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `mistral` | Comprehensive Mistral AI API skill — every endpoint in the spec, with **OCR**, **audio transcription** (Voxtral), and **text-to-speech** as the headline jobs, plus chat/tools/structured-output, embeddings, FIM, classifiers, files, batch, fine-tuning, and the Agents & Conversations API. Bundles the full OpenAPI spec for offline/diff use, dependency-optional runner scripts (`mistral_ocr.py` / `mistral_transcribe.py` / `mistral_speech.py`), and a key discover→prompt→save flow. Uploaded files are auto-deleted after use. Reads `$env:MISTRAL_API_KEY`. |
 | `naming-conventions` | SHAUGHV + general naming rules for any identifier — variables, files, folders, repos, branches, commits, PRs, columns, flags. Carries Code Complete 2 and DevOps Handbook principles plus SHAUGHV-specific conventions. |
 | `openai-audio` | OpenAI audio stack — Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports. Includes 13 runnable examples (py/js/ts). |
-| `perplexity-search` | Web search and AI-grounded answers via the Perplexity Agent, Search, and Sonar APIs. |
 | `personal-productivity` | Productivity toolbox distilled from five books (Burkeman, Newport, Vaden) — prioritizing a task list, planning the week, deciding what to drop, defer, or delegate. |
 | `pretext` | DOM-free text measurement and line layout using `@chenglou/pretext`. |
 | `quiver-ai` | SVG generation and raster→vector via Quiver AI's Arrow model. Reads `$env:QUIVERAI_API_KEY`. |
@@ -151,7 +150,6 @@ shaughv-code/
     ├── human-changelog/
     ├── naming-conventions/
     ├── openai-audio/
-    ├── perplexity-search/
     ├── pretext/
     ├── quiver-ai/
     ├── shaughv-animated-brandmark/
