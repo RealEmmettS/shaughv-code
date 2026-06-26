@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.24.0] — 2026-06-26
+
+Removed: the **task + workplace-memory system** (the `tasks-*` skills) has moved to its own standalone plugin, **[shaughv-tasks](https://github.com/RealEmmettS/shaughv-tasks)**, so it can be installed independently in any agent and stay focused. Nothing else in this bundle changed.
+
+### Removed
+- `skills/tasks-start`, `skills/tasks-update`, `skills/tasks-management`, `skills/tasks-memory`, `skills/tasks-remove` — the entire `.tasks/` task board + workplace-memory system, including `tasks-start`'s bundled `board-server.mjs`, `dashboard.html`, and the sha256-pinned `assets/vendor/**` board assets. They now live in the `shaughv-tasks` plugin (`RealEmmettS/shaughv-tasks`), which carries the same skills plus a guaranteed-on-init memory scaffold and a resume-where-you-left-off flow.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.23.0` → `0.24.0`; descriptions and keywords no longer mention the tasks system (now in `shaughv-tasks`).
+- `.gitattributes` — dropped the `skills/tasks-start/assets/vendor/**` (root + Codex mirror) `binary` pins; those assets are gone.
+- `README.md`, `CLAUDE.md`, `AGENTS.md` — removed the `tasks-*` skill/command rows and the tasks-as-example note; point to the `shaughv-tasks` plugin instead.
+- `plugins/shaughv-code/` — regenerated; the Codex package no longer carries the 5 `tasks-*` skills (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
+### Migration
+- To keep using the task board, install the new plugin: `/plugin marketplace add RealEmmettS/shaughv-tasks` then `/plugin install shaughv-tasks@shaughv-tasks` (Claude Code); `codex plugin marketplace add RealEmmettS/shaughv-tasks` then `codex plugin add shaughv-tasks@shaughv-tasks` (Codex); or `npx skills add RealEmmettS/shaughv-tasks` (other agents). Existing `.tasks/` folders in your repos are unaffected — the new plugin reads them as-is.
+
 ## [0.23.0] — 2026-06-25
 
 Minor: **tiered, offline-capable dependencies** for the live board. The board now *progressively enhances* — it tries the full external libraries/assets, falls back to minimal, then to fully bundled/offline copies, with **byte-identical behavior at every tier**. `/tasks-start` runs an internal **try-everything installer** (npm → pinned CDN → plugin-bundled → offline floor) that records an **install manifest**, and `/tasks-remove` reads that manifest for a **complete, reversible uninstall** — including an opt-in offer to undo a global Node install if setup had to add one.

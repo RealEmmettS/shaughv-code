@@ -14,13 +14,11 @@ Don't introduce `agents/`, `hooks/`, additional MCP servers, or additional
 commands unless Emmett explicitly asks to expand scope.
 
 > Note: that rule is about **bundling those things in the plugin itself**. It is
-> NOT violated by a skill that writes hooks into a *target* repo when run. The
-> `tasks-*` skills do exactly this: `/tasks-start` ships a zero-dependency Node
-> board server (`skills/tasks-start/assets/board-server.mjs`) and offers to wire
-> board-maintenance hooks into the **target repo's** `.claude/settings*.json`;
-> `/tasks-remove` tears both back down. Those hooks live in whatever repo the
-> skill is run in — never in this plugin — so the no-bundled-hooks rule still
-> holds. (Added by explicit ask; see CHANGELOG 0.20.0.)
+> NOT violated by a skill that writes hooks into a *target* repo when run — those
+> hooks live in whatever repo the skill is run in, never in this plugin, so the
+> no-bundled-hooks rule still holds. (The task + workplace-memory system that used
+> to demonstrate this — the `tasks-*` skills — now lives in the standalone
+> `shaughv-tasks` plugin; see CHANGELOG 0.24.0.)
 
 The bundle is consumable two ways: (1) the Claude Code marketplace install
 documented in the README (delivers skills + the bundled MCP + slash command),

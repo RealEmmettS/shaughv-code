@@ -8,6 +8,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — late June 2026
 
+**Removed**
+- The whole **task board and workplace-memory system** has moved out of this all-in-one bundle into its **own standalone plugin** — so you can install just the task system, by itself, in whatever assistant you use, without pulling in everything else. Nothing about how it works changed; it just lives on its own now. If you use the task board, install the new "shaughv-tasks" plugin to keep it — and any task boards you've already set up in your projects keep working, untouched.
+
+## The release just before — late June 2026
+
 **Added**
 - The task board now **works completely offline — and looks and behaves exactly the same whether you're connected or not.** When the system sets itself up it tries hard to fetch the nicest version of the board's polish (its smooth animations, the brand fonts, the animated logo); but if your machine is offline or locked down, it quietly falls back to copies bundled right inside the plugin, and if even those can't be reached, it uses built-in basics. You never see a broken or half-styled board — the only thing that changes behind the scenes is where the pieces came from.
 - If your computer doesn't have the software the board needs to run, setup can now offer to install it for you — and it carefully writes down that it did, so it can be cleanly removed later if you ever want.
