@@ -8,6 +8,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — early July 2026
 
+**Removed**
+- The **pace mark inside the usage bars is gone** — by request. It turned out to add more visual noise than insight. The bars now show just two things: the colored fill (what you've used) and the dotted track (what's left). Everything else from today's improvements stays — the up/down trend arrows, the color-shifting memory readout, the extra decimal near the limit, the git branch display, the fine-grained fill on its tinted track, and the smarter usage history that keeps the trend colors trustworthy.
+
+## Just before that — early July 2026
+
 **Improved**
 - The usage bars got their **fine-grained fill back — without bringing back the black gap**. An earlier fix today made the bars fill only in whole blocks so the dotted texture could sit flush against the color; this release restores the finer detail (each block can fill in eight small steps) and solves the gap the right way instead: the whole track behind the bar now has a **soft dark tint**, so the unfilled sliver of a partly-filled block blends into the track rather than reading as a black hole. You get the precise bar and the continuous look at the same time. (For anyone running a light-colored terminal, the tint can be switched off with one setting.)
 

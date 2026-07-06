@@ -14,13 +14,12 @@ Installs a Claude Code status line that renders two rows:
 
 ```
 Opus · ctx 12% · $1.84 session · ⎇ main
-5h ▕██▎░░░▓░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▓░░░░░▏ 41% · resets Mon
+5h ▕██▎░░░░░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▏░░░░░▏ 41% · resets Mon
 ```
 
 | Field | Meaning |
 |---|---|
 | `5h … %` | % of the **5-hour rolling limit** used (ground truth from `rate_limits.five_hour` on stdin — same number `/usage` shows). Integer normally; **one decimal at ≥90%** so movement near the cap stays visible. |
-| `▓` inside a bar | **Pace tick** (a full-cell silver marker — full-cell so no background shows through as black bars around it) — how far through the window you are right now (derived from `resets_at` and the fixed window length). Fill **past** the tick = consuming faster than time is passing (running hot); fill **short** of the tick = running cool. On both bars. |
 | `~Xh Ym left ↗/↘` | Locally computed burn-rate projection of when the 5h window hits 100% at the current pace. Color **and arrow** = trend: red `↗` = usage accelerating, green `↘` = easing off, plain (no arrow) = steady; **bold red <30 min** (urgency overrides the color, the arrow stays). Hidden when idle. |
 | `resets 3:45p` / `resets Mon` | When each window resets. |
 | `7d … %` | % of the **weekly (7-day) limit** used (same decimal rule ≥90%). |
@@ -95,7 +94,7 @@ Every path below is a **placeholder to resolve on the target machine** — none 
 
 ## Customize
 
-Tunables are constants at the top of the script (`BAR_WIDTH`, `RED_SECONDS`, `refreshInterval` in settings, the `colorFor` thresholds, burn-rate half-lives, trend ratios, `THIN_AFTER` / `MAX_SAMPLES` for the sample-history depth that keeps the trend indicator honest under heavy load, `PCT_DECIMAL_AT` for the high-usage decimal, the `TICK` glyph and its `TICK_COLOR`, `TRACK_BG` for the tinted track under the bars — set it to `""` on light terminal themes — etc.). The shipped values *are* the standardized build — change them only for a deliberate personal variant, and note that editing the installed copy diverges it from the canonical one. See [`references/build-guide.md`](references/build-guide.md) §0 and §8 for the meaning of each.
+Tunables are constants at the top of the script (`BAR_WIDTH`, `RED_SECONDS`, `refreshInterval` in settings, the `colorFor` thresholds, burn-rate half-lives, trend ratios, `THIN_AFTER` / `MAX_SAMPLES` for the sample-history depth that keeps the trend indicator honest under heavy load, `PCT_DECIMAL_AT` for the high-usage decimal, `TRACK_BG` for the tinted track under the bars — set it to `""` on light terminal themes — etc.). The shipped values *are* the standardized build — change them only for a deliberate personal variant, and note that editing the installed copy diverges it from the canonical one. See [`references/build-guide.md`](references/build-guide.md) §0 and §8 for the meaning of each.
 
 ## Runtime artifacts (leave them alone)
 

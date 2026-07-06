@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.30.0] — 2026-07-06
+
+Removed: the **`usage-statusline`** pace tick, by request. Everything else from the 0.27.0–0.29.0 run stays — trend arrows, colored ctx %, high-usage decimals, eighth-precision fill on the tinted track, the deeper thinned sample history, and the git-branch segment.
+
+### Removed
+- `skills/usage-statusline/scripts/statusline-usage.mjs` — the `▓` pace-tick overlay and everything that existed only to support it: `TICK`, `TICK_COLOR`, `elapsedFrac()`, the `FIVE_HOUR_SECS`/`SEVEN_DAY_SECS` window-length constants, and `bar()`'s `tickFrac` parameter. Bars render fill + dotted tinted track only. Selftest 66 → 55 assertions (tick and elapsed-fraction tests dropped; all other coverage intact).
+- `skills/usage-statusline/SKILL.md` + `references/build-guide.md` — pace-tick table rows, §0 bullet, and tunable mentions removed; example renders updated; §5 verbatim script re-spliced byte-identical.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.29.0` → `0.30.0`.
+- `plugins/shaughv-code/` — regenerated (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.29.0] — 2026-07-06
 
 Changed: **`usage-statusline`** gets its eighth-block sub-cell precision back — on a tinted track, so the continuous look from 0.28.0 is kept too.

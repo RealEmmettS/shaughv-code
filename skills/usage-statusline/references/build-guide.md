@@ -6,7 +6,7 @@ of how much time is left** before the 5-hour limit is hit at the current pace.
 
 ```
 Opus · ctx 12% · $1.84 session · ⎇ main
-5h ▕██▎░░░▓░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▓░░░░░▏ 41% · resets Mon
+5h ▕██▎░░░░░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▏░░░░░▏ 41% · resets Mon
 ```
 
 Nothing in this document is specific to one machine — every path is written as a placeholder
@@ -39,13 +39,7 @@ piece works and how to adapt it; this section is just "make exactly this."
   The direction is **dual-encoded as an `↗`/`↘` arrow** next to the text, so it survives theme
   quirks and color-blindness (steady = no arrow).
 - **Layout: Detailed, two rows.** Row 1 = `model · ctx% · $cost session · ⎇ branch`; row 2 =
-  `5h <bar▓> <%> <time-left ↗/↘> · resets <clock>   ·   7d <bar▓> <%> · resets <day>`.
-- **Pace ticks:** each bar overlays a full-cell silver `▓` at the elapsed-time position of its
-  window — full-cell on purpose: a thin glyph (`┃`) leaves the rest of its character cell as
-  bare background, which reads as black bars flanking the tick. `▓` in bright white stays
-  distinct from the solid `█` fill (every fill color) and the dim `░` empties.
-  The window start = `resets_at` − window length, so no extra data is needed. Fill past the tick =
-  consuming faster than the window is elapsing (running hot); short of it = running cool.
+  `5h <bar> <%> <time-left ↗/↘> · resets <clock>   ·   7d <bar> <%> · resets <day>`.
 - **Sub-cell fill on a tinted track:** the fill keeps eighth-block precision (1/80 of the
   bar), and every inner cell carries a subtle dark background (`TRACK_BG`, 256-color 236). A
   partial cell's unpainted remainder therefore shows as tinted track — not terminal-black —
@@ -125,7 +119,6 @@ That's the entire build. The sections below generalize it.
 |---|---|---|
 | `5h … %` | % of the **5-hour rolling limit** used (one decimal at ≥90%) | `rate_limits.five_hour.used_percentage` (stdin) — ground truth |
 | `~Xh Ym left ↗/↘` | Estimated time until the 5-hour limit hits 100% at the current burn rate. **Its color and `↗`/`↘` arrow are a trend indicator**: red = usage accelerating vs ~10 min ago (time left shrinking faster), green = usage easing off (time left stretching out), plain = steady. Bold red when <30 min remain (urgency outranks trend). | computed locally from a rolling history of the 5h % |
-| `▓` in a bar | Pace tick (full-cell silver marker) — the elapsed-time position inside the window. Fill past the tick = running hot; short of it = cool. | computed from `resets_at` − the fixed window length (5h / 7d) |
 | `resets 3:45p` | When the 5-hour window resets | `rate_limits.five_hour.resets_at` (epoch s) |
 | `7d … %` | % of the **weekly (7-day) limit** used (one decimal at ≥90%) | `rate_limits.seven_day.used_percentage` (stdin) |
 | `resets Mon` | When the weekly window resets | `rate_limits.seven_day.resets_at` (epoch s) |
@@ -324,10 +317,7 @@ next to itself (via `import.meta.url`, so it's path-portable), and never throws 
 //
 // Reads the status-line JSON on stdin, renders two rows:
 //   row 1:  <model> · ctx <n>% · $<cost> session · ⎇ <git branch>
-//   row 2:  5h <bar▓> <n>% [~time left ↗/↘] · resets <clock>   ·   7d <bar▓> <n>% · resets <day>
-//
-// Each bar carries a silver ▓ pace tick at the elapsed-time position of its window (start =
-// resets_at − window length): fill past the tick = consuming faster than time is passing.
+//   row 2:  5h <bar> <n>% [~time left ↗/↘] · resets <clock>   ·   7d <bar> <n>% · resets <day>
 //
 // The 5h/7d percentages come straight from `rate_limits` in the stdin payload (ground truth,
 // same numbers /usage shows). "Time left" is computed locally: each invocation appends the
@@ -371,8 +361,6 @@ const TREND_UP_RATIO = 1.25; // now/then burn ratio above this -> accelerating (
 const TREND_DOWN_RATIO = 0.8; // now/then burn ratio below this -> decelerating (green)
 const TREND_EPS = 0.5 / 3600; // %/s noise floor (0.5 %/hour) below which a rate counts as idle
 const PCT_DECIMAL_AT = 90; // show one decimal on usage % at/above this (integer below)
-const FIVE_HOUR_SECS = 5 * 3600; // window lengths, for the pace ticks
-const SEVEN_DAY_SECS = 7 * 24 * 3600;
 
 // ---- ANSI -----------------------------------------------------------------
 const RESET = "\x1b[0m";
@@ -392,11 +380,6 @@ function colorFor(pct) {
 
 // ---- Pure helpers ---------------------------------------------------------
 const EIGHTHS = ["", "▏", "▎", "▍", "▌", "▋", "▊", "▉"]; // 1/8..7/8 left blocks
-// Pace tick: a FULL-CELL glyph on purpose — a thin glyph (┃) leaves the rest of its cell as
-// bare background, which reads as black bars flanking the tick. ▓ fills the cell while staying
-// distinct from the solid █ fill and the dim ░ empties, even in monochrome.
-const TICK = "▓";
-const TICK_COLOR = "\x1b[97m"; // bright white ("silver") — never collides with a fill color
 // Subtle dark track painted under every inner bar cell. This is what lets the bar keep its
 // eighth-block sub-cell precision WITHOUT a black hole: a partial cell's unpainted remainder
 // shows as tinted track instead of terminal-black. Set to "" to disable (e.g. light themes).
@@ -404,10 +387,8 @@ const TRACK_BG = "\x1b[48;5;236m";
 
 // Sub-cell progress bar on a tinted track. Filled part takes the threshold color at
 // eighth-block precision; empty part is dim ░ dots; every inner cell carries TRACK_BG so the
-// track reads continuous from fill edge to bar end. tickFrac (0..1, optional) overlays a pace
-// tick at that fraction of the bar — where "now" sits inside the window. Fill past the tick =
-// consuming faster than the window is elapsing (running hot); short of it = running cool.
-function bar(pct, width = BAR_WIDTH, tickFrac = null) {
+// track reads continuous from fill edge to bar end.
+function bar(pct, width = BAR_WIDTH) {
   const p = Math.max(0, Math.min(100, Number(pct) || 0));
   const totalEighths = Math.round((p / 100) * width * 8);
   const cells = Math.min(Math.floor(totalEighths / 8), width);
@@ -416,15 +397,10 @@ function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   for (let i = 0; i < cells; i++) chars.push("█");
   if (rem > 0 && chars.length < width) chars.push(EIGHTHS[rem]);
   while (chars.length < width) chars.push("░");
-  let tickIdx = -1;
-  if (typeof tickFrac === "number" && isFinite(tickFrac)) {
-    tickIdx = Math.min(width - 1, Math.max(0, Math.floor(tickFrac * width)));
-  }
   const c = colorFor(p);
   let out = `${DIM}▕${RESET}`;
   for (let i = 0; i < width; i++) {
-    if (i === tickIdx) out += `${TRACK_BG}${TICK_COLOR}${TICK}${RESET}`; // silver — visible anywhere
-    else if (chars[i] === "░") out += `${TRACK_BG}${DIM}░${RESET}`;
+    if (chars[i] === "░") out += `${TRACK_BG}${DIM}░${RESET}`;
     else out += `${TRACK_BG}${c}${chars[i]}${RESET}`;
   }
   return `${out}${DIM}▏${RESET}`;
@@ -438,14 +414,6 @@ function fmtPct(p) {
     return s.endsWith(".0") ? s.slice(0, -2) : s;
   }
   return String(Math.round(p));
-}
-
-// Fraction of a window already elapsed (0..1), from its reset time and fixed length.
-function elapsedFrac(resetsAt, winSecs, now) {
-  if (typeof resetsAt !== "number") return null;
-  const f = 1 - (resetsAt - now) / winSecs;
-  if (!isFinite(f)) return null;
-  return Math.max(0, Math.min(1, f));
 }
 
 // Parse the content of a git HEAD file -> branch name, short SHA (detached), or null.
@@ -699,7 +667,7 @@ function fiveHourSegment(fh, proj, now) {
   if (fh && typeof fh.used_percentage === "number") {
     const p = fh.used_percentage;
     const c = colorFor(p);
-    let seg = `5h ${bar(p, BAR_WIDTH, elapsedFrac(fh.resets_at, FIVE_HOUR_SECS, now))} ${c}${fmtPct(p)}%${RESET}`;
+    let seg = `5h ${bar(p)} ${c}${fmtPct(p)}%${RESET}`;
     const secsToReset = typeof fh.resets_at === "number" ? Math.max(0, fh.resets_at - now) : Infinity;
     if (proj.burning && proj.timeLeftSecs != null && proj.timeLeftSecs < secsToReset) {
       // urgency (<30m) wins the color; the trend keeps its arrow either way (color is also
@@ -719,7 +687,7 @@ function fiveHourSegment(fh, proj, now) {
   // fallback: reuse a recent sample if the live value is briefly missing
   if (proj.lastP != null && proj.lastSampleAge < 600) {
     const c = colorFor(proj.lastP);
-    let seg = `5h ${bar(proj.lastP, BAR_WIDTH, elapsedFrac(proj.lastResets, FIVE_HOUR_SECS, now))} ${DIM}~${RESET}${c}${fmtPct(proj.lastP)}%${RESET}`;
+    let seg = `5h ${bar(proj.lastP)} ${DIM}~${RESET}${c}${fmtPct(proj.lastP)}%${RESET}`;
     if (proj.lastResets != null) seg += ` ${DIM}· resets ${clock(proj.lastResets)}${RESET}`;
     return seg;
   }
@@ -731,7 +699,7 @@ function sevenDaySegment(sd, now) {
   if (sd && typeof sd.used_percentage === "number") {
     const p = sd.used_percentage;
     const c = colorFor(p);
-    let seg = `7d ${bar(p, BAR_WIDTH, elapsedFrac(sd.resets_at, SEVEN_DAY_SECS, now))} ${c}${fmtPct(p)}%${RESET}`;
+    let seg = `7d ${bar(p)} ${c}${fmtPct(p)}%${RESET}`;
     if (typeof sd.resets_at === "number") seg += ` ${DIM}· resets ${resetLabel(sd.resets_at, now)}${RESET}`;
     return seg;
   }
@@ -783,14 +751,6 @@ function selftest() {
   ok(strip(bar(23)) === "▕██▎░░░░░░░▏", "23% -> 2 cells + a 2/8 sliver");
   ok(bar(44).includes(TRACK_BG), "tinted track under the bar (no black remainder)");
 
-  // pace tick: overlaid at the elapsed fraction, width preserved, absent by default
-  ok(strip(bar(50, BAR_WIDTH, 0.25))[3] === TICK, "tick at cell 2 for 25% elapsed");
-  ok(strip(bar(50, BAR_WIDTH, 0)).indexOf(TICK) === 1, "tick clamps to first cell");
-  ok(strip(bar(50, BAR_WIDTH, 1)).indexOf(TICK) === BAR_WIDTH, "tick clamps to last cell");
-  ok(strip(bar(50, BAR_WIDTH, 0.25)).length === BAR_WIDTH + 2, "tick keeps bar width");
-  ok(!strip(bar(50)).includes(TICK), "no tick without a fraction");
-  ok(bar(50, BAR_WIDTH, 0.25).includes(`${TICK_COLOR}${TICK}`), "tick painted silver");
-
   // fmtPct: integer below the threshold, one decimal above (trailing .0 trimmed)
   ok(fmtPct(23.4) === "23", `fmtPct(23.4), got ${fmtPct(23.4)}`);
   ok(fmtPct(89.6) === "90", `fmtPct(89.6), got ${fmtPct(89.6)}`);
@@ -835,12 +795,6 @@ function selftest() {
   // dur + clock
   ok(dur(2 * 3600 + 45 * 60) === "2h45m", `dur 2h45m, got ${dur(2 * 3600 + 45 * 60)}`);
   ok(dur(8 * 60) === "8m", `dur 8m, got ${dur(8 * 60)}`);
-
-  // elapsedFrac: halfway through a 5h window; clamps; null-safe
-  ok(Math.abs(elapsedFrac(now + 2.5 * 3600, FIVE_HOUR_SECS, now) - 0.5) < 1e-9, "elapsedFrac halfway");
-  ok(elapsedFrac(now + 10 * 3600, FIVE_HOUR_SECS, now) === 0, "elapsedFrac clamps at 0");
-  ok(elapsedFrac(now - 10, FIVE_HOUR_SECS, now) === 1, "elapsedFrac clamps at 1");
-  ok(elapsedFrac(null, FIVE_HOUR_SECS, now) === null, "elapsedFrac null resets");
 
   // parseGitHead: branch ref, nested branch, detached SHA, junk
   ok(parseGitHead("ref: refs/heads/main\n") === "main", "HEAD branch ref");
@@ -943,7 +897,6 @@ function selftest() {
   ok(r.out.split("\n").length === 2, "render -> 2 rows");
   ok(strip(r.out).includes("23%") && strip(r.out).includes("41%"), "render shows both %");
   ok(r.out.includes(`ctx \x1b[32m12%`), "ctx % colored by threshold");
-  ok(strip(r.out).includes(TICK), "render carries pace ticks");
 
   console.log(`${fail === 0 ? "ALL PASS" : "HAD FAILURES"} — ${pass} passed, ${fail} failed`);
   console.log("--- sample render ---");
@@ -1043,8 +996,8 @@ Add to `settings.json` (user settings `~/.claude/settings.json`, or project `.cl
 
 - **Tunables** (top of the script): `RETAIN_SECONDS`, `MAX_SAMPLES`/`THIN_AFTER` (history
   depth + the age-thinning that keeps the trend look-back populated under heavy load),
-  `PCT_DECIMAL_AT` (high-usage decimal), the `TICK` glyph + `TICK_COLOR`, `TRACK_BG` (tinted
-  track — set `""` on light themes), `HL_FAST`/`HL_SLOW` (regression
+  `PCT_DECIMAL_AT` (high-usage decimal), `TRACK_BG` (tinted track — set `""` on light
+  themes), `HL_FAST`/`HL_SLOW` (regression
   half-lives), `W_FAST`/`W_SLOW` (fallback blend), `MIN_SAMPLES`/`MIN_SPAN` (confidence gate),
   `TAU_EMA` (display smoothing time constant), `TREND_LAG` (recent window + trend look-back),
   `TREND_UP_RATIO`/`TREND_DOWN_RATIO` (trend dead-band), `TREND_EPS` (idle noise floor),
