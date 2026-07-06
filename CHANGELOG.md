@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.27.0] — 2026-07-06
+
+Changed: the **`usage-statusline`** canonical script advances — pace ticks on both bars, `↗`/`↘` trend arrows, colored context %, one-decimal precision near the cap, a git-branch segment, and a deeper, age-thinned sample history that keeps the burn-rate trend accurate under heavy multi-agent load. Also trimmed a work-only cross-reference from `subagent-model-preference`.
+
+### Changed
+- `skills/usage-statusline/scripts/statusline-usage.mjs` — the standardized build advances:
+  - **Pace ticks:** each bar overlays a `┃` at the elapsed-time position of its window (start = `resets_at` − window length; no extra data needed) — fill past the tick = running hot, short of it = cool. Zero added width.
+  - **Trend arrows:** the `~time left` text carries `↗`/`↘` alongside its red/green trend color (dual-encoded for theme quirks and color-blindness; steady = no arrow; the <30 min bold-red urgency keeps the arrow).
+  - **Colored `ctx %`** using the same `colorFor` thresholds as the bars.
+  - **High-usage precision:** 5h/7d percentages show one decimal at ≥ `PCT_DECIMAL_AT` (90); integer below, trailing `.0` trimmed.
+  - **Trend accuracy under load:** `MAX_SAMPLES` `512` → `4096` (backstop) plus new age-based thinning (`THIN_AFTER = 15 min`) — samples newer than 15 min keep full density, older ones are decimated to the `MIN_SAMPLE_GAP` (20 s) cadence, so burst traffic (e.g. several concurrent sessions changing the percentage every second) can never crowd the 10-min trend look-back or the slow slope out of the retained series. Previously a sustained burst could shrink retained history below the look-back and silently flatten the trend signal during exactly the periods it matters.
+  - **Git branch in row 1** (`⎇ <branch>`): resolved by pure file reads of `.git/HEAD` — worktree-aware (`gitdir:` files parsed), detached HEAD → 7-char SHA, omitted outside a repo. Never spawns a process, so it is safe at `refreshInterval: 1`.
+  - Selftest grown 42 → 62 assertions (ticks, `fmtPct`, `elapsedFrac`, `parseGitHead`, arrows incl. the urgency+arrow interaction, thinning, colored ctx, render ticks).
+- `skills/usage-statusline/SKILL.md` + `references/build-guide.md` — sample renders, field tables, §0 as-built decisions and constants, §4 retention/thinning, §5 verbatim script (re-spliced byte-identical), and §8 tunables updated in lockstep with the script.
+- `skills/subagent-model-preference/SKILL.md` — dropped the `create-mission-control-task` cross-reference (work-only skill with no counterpart in this bundle); the `iterative-plan` cross-reference remains.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.26.0` → `0.27.0`.
+- `plugins/shaughv-code/` — regenerated (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.26.0] — 2026-07-06
 
 Added: the **`subagent-model-preference`** skill — the operator's standing model/effort convention for every subagent (the Agent tool including Explore/Plan agents, Workflow `agent()` calls, custom agent types), the plugin's canonical copy of the user-global preference set 2026-07-01.

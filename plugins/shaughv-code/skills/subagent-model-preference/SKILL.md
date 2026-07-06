@@ -101,5 +101,5 @@ Keep installs in lockstep with this skill when the mapping advances.
 
 - **`spawn`** — the /spawn two-phase orchestration playbook; its dispatches follow this convention
   for model/effort choices.
-- **`iterative-plan`** / **`create-mission-control-task`** — when planning fans work out to agents,
-  the fan-out's model choices follow this convention.
+- **`iterative-plan`** — when planning fans work out to agents, the fan-out's model choices follow
+  this convention.

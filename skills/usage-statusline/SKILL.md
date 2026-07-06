@@ -13,17 +13,19 @@ metadata:
 Installs a Claude Code status line that renders two rows:
 
 ```
-Opus · ctx 12% · $1.84 session
-5h ▕██▎░░░░░░░▏ 23% ~2h45m left · resets 3:45p   ·   7d ▕████▏░░░░░▏ 41% · resets Mon
+Opus · ctx 12% · $1.84 session · ⎇ main
+5h ▕██▎░░░┃░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████┃░░░░░▏ 41% · resets Mon
 ```
 
 | Field | Meaning |
 |---|---|
-| `5h … %` | % of the **5-hour rolling limit** used (ground truth from `rate_limits.five_hour` on stdin — same number `/usage` shows). |
-| `~Xh Ym left` | Locally computed burn-rate projection of when the 5h window hits 100% at the current pace. Color = **trend**: red = usage accelerating, green = easing off, plain = steady; **bold red <30 min** (urgency overrides trend). Hidden when idle. |
+| `5h … %` | % of the **5-hour rolling limit** used (ground truth from `rate_limits.five_hour` on stdin — same number `/usage` shows). Integer normally; **one decimal at ≥90%** so movement near the cap stays visible. |
+| `┃` inside a bar | **Pace tick** — how far through the window you are right now (derived from `resets_at` and the fixed window length). Fill **past** the tick = consuming faster than time is passing (running hot); fill **short** of the tick = running cool. On both bars. |
+| `~Xh Ym left ↗/↘` | Locally computed burn-rate projection of when the 5h window hits 100% at the current pace. Color **and arrow** = trend: red `↗` = usage accelerating, green `↘` = easing off, plain (no arrow) = steady; **bold red <30 min** (urgency overrides the color, the arrow stays). Hidden when idle. |
 | `resets 3:45p` / `resets Mon` | When each window resets. |
-| `7d … %` | % of the **weekly (7-day) limit** used. |
-| `ctx 12%` · `$1.84 session` | Context-window fill and session cost. |
+| `7d … %` | % of the **weekly (7-day) limit** used (same decimal rule ≥90%). |
+| `ctx 12%` · `$1.84 session` | Context-window fill (colored with the same thresholds as the bars — it escalates as auto-compact approaches) and session cost. |
+| `⎇ main` | Current git branch of the session's directory — pure file reads of `.git/HEAD` (never a spawned process), worktree-aware (`gitdir:` files parsed). Detached HEAD shows the short SHA; hidden outside a repo. |
 
 Bars shift color as a window fills: green `<50` → yellow `50–75` → orange `75–90` → red `90–95` → bold red `≥95`.
 
@@ -93,7 +95,7 @@ Every path below is a **placeholder to resolve on the target machine** — none 
 
 ## Customize
 
-Tunables are constants at the top of the script (`BAR_WIDTH`, `RED_SECONDS`, `refreshInterval` in settings, the `colorFor` thresholds, burn-rate half-lives, trend ratios, etc.). The shipped values *are* the standardized build — change them only for a deliberate personal variant, and note that editing the installed copy diverges it from the canonical one. See [`references/build-guide.md`](references/build-guide.md) §0 and §8 for the meaning of each.
+Tunables are constants at the top of the script (`BAR_WIDTH`, `RED_SECONDS`, `refreshInterval` in settings, the `colorFor` thresholds, burn-rate half-lives, trend ratios, `THIN_AFTER` / `MAX_SAMPLES` for the sample-history depth that keeps the trend indicator honest under heavy load, `PCT_DECIMAL_AT` for the high-usage decimal, the `TICK` glyph, etc.). The shipped values *are* the standardized build — change them only for a deliberate personal variant, and note that editing the installed copy diverges it from the canonical one. See [`references/build-guide.md`](references/build-guide.md) §0 and §8 for the meaning of each.
 
 ## Runtime artifacts (leave them alone)
 

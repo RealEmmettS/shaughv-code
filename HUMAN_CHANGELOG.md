@@ -8,6 +8,20 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — early July 2026
 
+**Improved**
+- The usage meter in the status bar got smarter and easier to read at a glance:
+  - Each usage bar now has a small **pace mark** showing how far through the current time window you are. If the filled part of the bar has passed the mark, you're burning through your allowance faster than time is passing; if it hasn't, you're cruising. Works on both the short-term bar and the weekly one — the weekly bar previously gave you no way to judge whether its number was good or bad.
+  - The "time left" estimate now shows **little up/down arrows** in addition to its red/green coloring, so the direction reads clearly even where the colors are hard to tell apart.
+  - The **memory-fullness readout** now changes color as it fills, the same way the usage bars do — an almost-full session catches your eye before it becomes a problem.
+  - Close to the limit, percentages show **an extra decimal place** so you can see them creeping instead of sitting frozen on one number.
+  - The top row now also shows **which git branch you're working on** — checked in a way that adds no measurable overhead, and it understands the multi-folder branch setups used on this machine.
+  - Under the hood, the meter keeps a **deeper, smarter history** of your usage so the speeding-up / slowing-down signal stays accurate even during the heaviest work stretches — which are exactly the moments you'd want to trust it. Before this, a long intense burst could quietly starve that signal and the colors would stop meaning anything.
+
+**Behind the scenes**
+- A leftover mention of a work-only tool was removed from the new helper-agent rule described below.
+
+## Earlier today — early July 2026
+
 **Added**
 - A new skill that records the house rule for **which AI model — and how much thinking effort — every helper agent should use**. Whenever the assistant hands work off to helper agents, they all now follow one standard: the deepest-reasoning model for hard analysis and planning, the fast workhorse model for parallel busywork, and never anything weaker or shallower than the set floor. Why it matters: helper agents behave consistently everywhere this bundle is installed, instead of each machine quietly picking its own (sometimes weaker) defaults. The skill also explains how to carry the rule forward when new model generations come out, and includes ready-to-paste copies for setting up the same rule on machines or in projects that don't have this bundle.
 

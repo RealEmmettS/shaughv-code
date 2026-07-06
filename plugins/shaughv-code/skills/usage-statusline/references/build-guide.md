@@ -5,8 +5,8 @@ status line that shows **live 5-hour and weekly usage percentages** plus a **bur
 of how much time is left** before the 5-hour limit is hit at the current pace.
 
 ```
-Opus · ctx 12% · $1.84 session
-5h ▕██▎░░░░░░░▏ 23% ~2h45m left · resets 3:45p   ·   7d ▕████▏░░░░░▏ 41% · resets Mon
+Opus · ctx 12% · $1.84 session · ⎇ main
+5h ▕██▎░░░┃░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████┃░░░░░▏ 41% · resets Mon
 ```
 
 Nothing in this document is specific to one machine — every path is written as a placeholder
@@ -36,22 +36,34 @@ piece works and how to adapt it; this section is just "make exactly this."
 - **The time-left text is also a trend indicator:** it compares your burn rate now against the
   rate ~10 minutes ago — **red** when usage is accelerating (time left shrinking faster and
   faster), **green** when usage is easing off (time left stretching out), plain when steady.
-- **Layout: Detailed, two rows.** Row 1 = `model · ctx% · $cost session`; row 2 =
-  `5h <bar> <%> <time-left> · resets <clock>   ·   7d <bar> <%> · resets <day>`.
+  The direction is **dual-encoded as an `↗`/`↘` arrow** next to the text, so it survives theme
+  quirks and color-blindness (steady = no arrow).
+- **Layout: Detailed, two rows.** Row 1 = `model · ctx% · $cost session · ⎇ branch`; row 2 =
+  `5h <bar┃> <%> <time-left ↗/↘> · resets <clock>   ·   7d <bar┃> <%> · resets <day>`.
+- **Pace ticks:** each bar overlays a thin `┃` at the elapsed-time position of its window
+  (start = `resets_at` − window length, so no extra data is needed). Fill past the tick =
+  consuming faster than the window is elapsing (running hot); short of it = running cool.
+- **High-usage precision:** usage percentages show one decimal at ≥90% (integer below) —
+  near the cap, integer rounding would hide real movement between refreshes.
+- **Git branch, without spawning:** row 1 ends with `⎇ <branch>` resolved by *reading*
+  `.git/HEAD` (worktree-aware via `gitdir:` files) — pure file reads, safe at a 1 s refresh.
+  Detached HEAD shows the 7-char SHA; outside a repo the segment is omitted.
+- **The context % is colored** with the same thresholds as the bars — context exhaustion
+  (auto-compact) is the mid-session constraint, so it escalates visually the same way.
 - **Color stages (bars + %):** green `<50` → yellow `50–75` → orange `75–90` → red `90–95` →
   bold red `≥95`. The time-left turns **bold red under 30 minutes** regardless of trend
-  (urgency outranks trend).
+  (urgency outranks the trend color; the `↗`/`↘` arrow stays).
 
 **Steps:**
 
 1. **Create the script.** Save the complete program from **§5** *verbatim* as
    `<CLAUDE_DIR>/statusline-usage.mjs` (e.g. `~/.claude/statusline-usage.mjs`). That is exactly
    the file this build uses — including its `--selftest` mode, the debug-capture hook, and the
-   tunable constants at the top (`RETAIN_SECONDS = 90m`, `MIN_SAMPLE_GAP = 20s`,
+   tunable constants at the top (`RETAIN_SECONDS = 90m`, `MAX_SAMPLES = 4096`, `MIN_SAMPLE_GAP = 20s`, `THIN_AFTER = 15m`,
    `HL_FAST = 7.5m` / `HL_SLOW = 30m`, `W_FAST = 0.65` / `W_SLOW = 0.35`, `MIN_SAMPLES = 3` /
    `MIN_SPAN = 180s`, `TAU_EMA = 60s`, `BAR_WIDTH = 10`, `RED_SECONDS = 30m`,
    `TREND_LAG = 10m`, `TREND_UP_RATIO = 1.25` / `TREND_DOWN_RATIO = 0.8`,
-   `TREND_EPS = 0.5 %/hour`, and the `colorFor` thresholds). Those exact values *are* the
+   `TREND_EPS = 0.5 %/hour`, `PCT_DECIMAL_AT = 90`, and the `colorFor` thresholds). Those exact values *are* the
    build — don't change them to reproduce it.
 
 2. **Wire it into settings.** Merge this exact block into `<CLAUDE_DIR>/settings.json`
@@ -103,13 +115,15 @@ That's the entire build. The sections below generalize it.
 
 | Element | Meaning | Source |
 |---|---|---|
-| `5h … %` | % of the **5-hour rolling limit** used | `rate_limits.five_hour.used_percentage` (stdin) — ground truth |
-| `~Xh Ym left` | Estimated time until the 5-hour limit hits 100% at the current burn rate. **Its color is a trend indicator**: red = usage accelerating vs ~10 min ago (time left shrinking faster), green = usage easing off (time left stretching out), plain = steady. Bold red when <30 min remain (urgency outranks trend). | computed locally from a rolling history of the 5h % |
+| `5h … %` | % of the **5-hour rolling limit** used (one decimal at ≥90%) | `rate_limits.five_hour.used_percentage` (stdin) — ground truth |
+| `~Xh Ym left ↗/↘` | Estimated time until the 5-hour limit hits 100% at the current burn rate. **Its color and `↗`/`↘` arrow are a trend indicator**: red = usage accelerating vs ~10 min ago (time left shrinking faster), green = usage easing off (time left stretching out), plain = steady. Bold red when <30 min remain (urgency outranks trend). | computed locally from a rolling history of the 5h % |
+| `┃` in a bar | Pace tick — the elapsed-time position inside the window. Fill past the tick = running hot; short of it = cool. | computed from `resets_at` − the fixed window length (5h / 7d) |
 | `resets 3:45p` | When the 5-hour window resets | `rate_limits.five_hour.resets_at` (epoch s) |
-| `7d … %` | % of the **weekly (7-day) limit** used | `rate_limits.seven_day.used_percentage` (stdin) |
+| `7d … %` | % of the **weekly (7-day) limit** used (one decimal at ≥90%) | `rate_limits.seven_day.used_percentage` (stdin) |
 | `resets Mon` | When the weekly window resets | `rate_limits.seven_day.resets_at` (epoch s) |
-| `ctx 12%` | Context-window fill of the current session | `context_window.used_percentage` (stdin) |
+| `ctx 12%` | Context-window fill of the current session (colored with the same thresholds as the bars) | `context_window.used_percentage` (stdin) |
 | `$1.84 session` | Session cost so far | `cost.total_cost_usd` (stdin) |
+| `⎇ main` | Current git branch (worktree-aware; detached HEAD → short SHA; omitted outside a repo) | pure file reads of `.git/HEAD` — never a spawned process |
 
 Bars **shift color toward red** as a window fills: green `<50%` → yellow `50–75%` →
 orange `75–90%` → red `90–95%` → **bold red `≥95%`**.
@@ -214,6 +228,11 @@ Each invocation:
 2. **Scope to the current window.** Keep only samples whose `r` equals the current `resets_at`
    **and** that are within the retention window (90 min). This means a window **reset**
    (new `resets_at`) automatically discards the old series — you never fit a slope across a reset.
+   Then **thin by age**: samples newer than `THIN_AFTER` (15 min) are kept at full density (the
+   recent-primary estimator feeds on them); older ones are decimated to the `MIN_SAMPLE_GAP`
+   (20 s) cadence. A heavy burst — e.g. several concurrent sessions changing the percentage
+   every second — can therefore never crowd the 10-min trend look-back or the slow slope out of
+   the retained series (`MAX_SAMPLES = 4096` stays a distant backstop).
 3. **Burn rate — the recent window is primary.**
    - `slope_recent` — exponentially-weighted least-squares slope (half-life **7.5 min**) over
      samples in the **last `TREND_LAG` = 10 min only**. Computed when that window has ≥ 3
@@ -296,8 +315,11 @@ next to itself (via `import.meta.url`, so it's path-portable), and never throws 
 // Claude Code status line: live 5-hour + weekly usage with a burn-rate "time left" estimate.
 //
 // Reads the status-line JSON on stdin, renders two rows:
-//   row 1:  <model> · ctx <n>% · $<cost> session
-//   row 2:  5h <bar> <n>% [~time left] · resets <clock>   ·   7d <bar> <n>% · resets <day>
+//   row 1:  <model> · ctx <n>% · $<cost> session · ⎇ <git branch>
+//   row 2:  5h <bar┃> <n>% [~time left ↗/↘] · resets <clock>   ·   7d <bar┃> <n>% · resets <day>
+//
+// Each bar carries a thin ┃ pace tick at the elapsed-time position of its window (start =
+// resets_at − window length): fill past the tick = consuming faster than time is passing.
 //
 // The 5h/7d percentages come straight from `rate_limits` in the stdin payload (ground truth,
 // same numbers /usage shows). "Time left" is computed locally: each invocation appends the
@@ -313,8 +335,8 @@ next to itself (via `import.meta.url`, so it's path-portable), and never throws 
 // Debug: set env STATUSLINE_DEBUG=1 (or create a file `statusline-debug` next to this script)
 // to dump the raw stdin payload to `statusline-stdin-sample.json` for inspection.
 
-import { readFileSync, writeFileSync, renameSync, existsSync, unlinkSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { readFileSync, writeFileSync, renameSync, existsSync, unlinkSync, statSync } from "node:fs";
+import { dirname, join, resolve, isAbsolute } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
@@ -322,8 +344,11 @@ const STATE_FILE = join(SCRIPT_DIR, "statusline-usage-state.json");
 
 // ---- Tunables -------------------------------------------------------------
 const RETAIN_SECONDS = 90 * 60; // keep at most ~90 min of samples
-const MAX_SAMPLES = 512; // hard cap on stored samples
+const MAX_SAMPLES = 4096; // hard backstop on stored samples (thinning keeps real counts far below)
 const MIN_SAMPLE_GAP = 20; // don't add a flat sample more often than this (s)
+const THIN_AFTER = 15 * 60; // keep full density this recent (s); decimate older samples to
+//                             MIN_SAMPLE_GAP spacing so heavy burst traffic can never crowd the
+//                             10-min trend look-back or the slow slope out of the retained series
 const HL_FAST = 7.5 * 60; // fast trend half-life (s) — "what active sessions are doing now"
 const HL_SLOW = 30 * 60; // slow trend half-life (s) — "the past hour or so"
 const W_FAST = 0.65; // blend weights for the two trends
@@ -337,6 +362,9 @@ const TREND_LAG = 10 * 60; // s — compare today's burn rate vs the rate this l
 const TREND_UP_RATIO = 1.25; // now/then burn ratio above this -> accelerating (red)
 const TREND_DOWN_RATIO = 0.8; // now/then burn ratio below this -> decelerating (green)
 const TREND_EPS = 0.5 / 3600; // %/s noise floor (0.5 %/hour) below which a rate counts as idle
+const PCT_DECIMAL_AT = 90; // show one decimal on usage % at/above this (integer below)
+const FIVE_HOUR_SECS = 5 * 3600; // window lengths, for the pace ticks
+const SEVEN_DAY_SECS = 7 * 24 * 3600;
 
 // ---- ANSI -----------------------------------------------------------------
 const RESET = "\x1b[0m";
@@ -356,20 +384,87 @@ function colorFor(pct) {
 
 // ---- Pure helpers ---------------------------------------------------------
 const EIGHTHS = ["", "▏", "▎", "▍", "▌", "▋", "▊", "▉"]; // 1/8..7/8 left blocks
+const TICK = "┃"; // pace-tick glyph overlaid on the bar
 
 // Smooth sub-cell progress bar. Filled part takes the threshold color; empty part is dim.
-function bar(pct, width = BAR_WIDTH) {
+// tickFrac (0..1, optional) overlays a pace tick at that fraction of the bar — where "now"
+// sits inside the window. Fill past the tick = consuming faster than the window is elapsing
+// (running hot); fill short of the tick = running cool.
+function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   const p = Math.max(0, Math.min(100, Number(pct) || 0));
   const totalEighths = Math.round((p / 100) * width * 8);
-  let cells = Math.min(Math.floor(totalEighths / 8), width);
+  const cells = Math.min(Math.floor(totalEighths / 8), width);
   const rem = totalEighths % 8;
-  let filled = "█".repeat(cells);
-  if (rem > 0 && cells < width) {
-    filled += EIGHTHS[rem];
-    cells += 1;
+  const chars = [];
+  for (let i = 0; i < cells; i++) chars.push("█");
+  if (rem > 0 && chars.length < width) chars.push(EIGHTHS[rem]);
+  while (chars.length < width) chars.push("░");
+  let tickIdx = -1;
+  if (typeof tickFrac === "number" && isFinite(tickFrac)) {
+    tickIdx = Math.min(width - 1, Math.max(0, Math.floor(tickFrac * width)));
   }
-  const empty = "░".repeat(Math.max(0, width - cells));
-  return `${DIM}▕${RESET}${colorFor(p)}${filled}${RESET}${DIM}${empty}▏${RESET}`;
+  const c = colorFor(p);
+  let out = `${DIM}▕${RESET}`;
+  for (let i = 0; i < width; i++) {
+    if (i === tickIdx) out += `${TICK}`; // default foreground — visible on fill and empty alike
+    else if (chars[i] === "░") out += `${DIM}░${RESET}`;
+    else out += `${c}${chars[i]}${RESET}`;
+  }
+  return `${out}${DIM}▏${RESET}`;
+}
+
+// Usage % for display: integer normally, one decimal at/above PCT_DECIMAL_AT (trailing .0
+// trimmed) — near the cap the integer rounding would hide real movement between refreshes.
+function fmtPct(p) {
+  if (p >= PCT_DECIMAL_AT) {
+    const s = (Math.round(p * 10) / 10).toFixed(1);
+    return s.endsWith(".0") ? s.slice(0, -2) : s;
+  }
+  return String(Math.round(p));
+}
+
+// Fraction of a window already elapsed (0..1), from its reset time and fixed length.
+function elapsedFrac(resetsAt, winSecs, now) {
+  if (typeof resetsAt !== "number") return null;
+  const f = 1 - (resetsAt - now) / winSecs;
+  if (!isFinite(f)) return null;
+  return Math.max(0, Math.min(1, f));
+}
+
+// Parse the content of a git HEAD file -> branch name, short SHA (detached), or null.
+function parseGitHead(s) {
+  const m = /^ref:\s*refs\/heads\/(.+)$/m.exec(s.trim());
+  if (m) return m[1].trim();
+  const sha = s.trim();
+  return /^[0-9a-f]{40}$/i.test(sha) ? sha.slice(0, 7) : null;
+}
+
+// Current git branch for a directory — pure file reads (never spawns a process, so it's safe
+// at a 1 s refresh). Walks up to the repo root; handles worktrees, where `.git` is a FILE
+// containing `gitdir: <path>` and HEAD lives at that path.
+function gitBranch(startDir) {
+  try {
+    let dir = resolve(startDir);
+    for (let i = 0; i < 24; i++) {
+      const dotGit = join(dir, ".git");
+      if (existsSync(dotGit)) {
+        let headPath;
+        if (statSync(dotGit).isDirectory()) {
+          headPath = join(dotGit, "HEAD");
+        } else {
+          const m = /^gitdir:\s*(.+)$/m.exec(readFileSync(dotGit, "utf8"));
+          if (!m) return null;
+          const gd = m[1].trim();
+          headPath = join(isAbsolute(gd) ? gd : join(dir, gd), "HEAD");
+        }
+        return parseGitHead(readFileSync(headPath, "utf8"));
+      }
+      const up = dirname(dir);
+      if (up === dir) return null;
+      dir = up;
+    }
+  } catch {}
+  return null;
 }
 
 // Weighted least-squares slope of p vs t (returns %/second), shift-invariant & numerically safe.
@@ -487,6 +582,24 @@ function updateAndProject(fh, state, now) {
   // 2. determine the current window and prune to it (drops samples from a prior window)
   const curResets = havePct ? fh.resets_at : samples.length ? samples[samples.length - 1].r : null;
   samples = samples.filter((s) => s.r === curResets && now - s.t <= RETAIN_SECONDS);
+
+  // 2b. age-based thinning: keep everything from the last THIN_AFTER at full density (the
+  // recent-primary estimator feeds on it), decimate older samples to MIN_SAMPLE_GAP spacing.
+  // This guarantees a heavy burst (many changed samples/sec, e.g. several concurrent agent
+  // sessions) can never crowd the TREND_LAG look-back or the slow slope out of the series —
+  // which is what keeps the trend color/arrow meaningful during exactly those bursts.
+  const thinCut = now - THIN_AFTER;
+  const thinned = [];
+  let lastKept = -Infinity;
+  for (const s of samples) {
+    if (s.t > thinCut) {
+      thinned.push(s);
+    } else if (s.t - lastKept >= MIN_SAMPLE_GAP) {
+      thinned.push(s);
+      lastKept = s.t;
+    }
+  }
+  samples = thinned;
   if (samples.length > MAX_SAMPLES) samples = samples.slice(samples.length - MAX_SAMPLES);
 
   // 3. window change -> reset smoothing
@@ -569,15 +682,19 @@ function fiveHourSegment(fh, proj, now) {
   if (fh && typeof fh.used_percentage === "number") {
     const p = fh.used_percentage;
     const c = colorFor(p);
-    let seg = `5h ${bar(p)} ${c}${Math.round(p)}%${RESET}`;
+    let seg = `5h ${bar(p, BAR_WIDTH, elapsedFrac(fh.resets_at, FIVE_HOUR_SECS, now))} ${c}${fmtPct(p)}%${RESET}`;
     const secsToReset = typeof fh.resets_at === "number" ? Math.max(0, fh.resets_at - now) : Infinity;
     if (proj.burning && proj.timeLeftSecs != null && proj.timeLeftSecs < secsToReset) {
-      // urgency (<30m) wins; otherwise color by trend: accelerating red, decelerating green
+      // urgency (<30m) wins the color; the trend keeps its arrow either way (color is also
+      // dual-encoded as ↗/↘ so the direction survives theme quirks and color-blindness)
       let lc = "";
+      let arrow = "";
+      if (proj.trend === "up") arrow = " ↗";
+      else if (proj.trend === "down") arrow = " ↘";
       if (proj.timeLeftSecs < RED_SECONDS) lc = REDB;
       else if (proj.trend === "up") lc = RED;
       else if (proj.trend === "down") lc = GREEN;
-      seg += ` ${lc}~${dur(proj.timeLeftSecs)} left${RESET}`;
+      seg += ` ${lc}~${dur(proj.timeLeftSecs)} left${arrow}${RESET}`;
     }
     if (typeof fh.resets_at === "number") seg += ` ${DIM}· resets ${clock(fh.resets_at)}${RESET}`;
     return seg;
@@ -585,7 +702,7 @@ function fiveHourSegment(fh, proj, now) {
   // fallback: reuse a recent sample if the live value is briefly missing
   if (proj.lastP != null && proj.lastSampleAge < 600) {
     const c = colorFor(proj.lastP);
-    let seg = `5h ${bar(proj.lastP)} ${DIM}~${RESET}${c}${Math.round(proj.lastP)}%${RESET}`;
+    let seg = `5h ${bar(proj.lastP, BAR_WIDTH, elapsedFrac(proj.lastResets, FIVE_HOUR_SECS, now))} ${DIM}~${RESET}${c}${fmtPct(proj.lastP)}%${RESET}`;
     if (proj.lastResets != null) seg += ` ${DIM}· resets ${clock(proj.lastResets)}${RESET}`;
     return seg;
   }
@@ -597,7 +714,7 @@ function sevenDaySegment(sd, now) {
   if (sd && typeof sd.used_percentage === "number") {
     const p = sd.used_percentage;
     const c = colorFor(p);
-    let seg = `7d ${bar(p)} ${c}${Math.round(p)}%${RESET}`;
+    let seg = `7d ${bar(p, BAR_WIDTH, elapsedFrac(sd.resets_at, SEVEN_DAY_SECS, now))} ${c}${fmtPct(p)}%${RESET}`;
     if (typeof sd.resets_at === "number") seg += ` ${DIM}· resets ${resetLabel(sd.resets_at, now)}${RESET}`;
     return seg;
   }
@@ -611,13 +728,20 @@ function render(data, state, now) {
 
   const proj = updateAndProject(fh, state, now);
 
-  // row 1: model · ctx · cost
+  // row 1: model · ctx · cost · git branch
   const p1 = [];
   if (data.model && data.model.display_name) p1.push(data.model.display_name);
   const ctx = data.context_window && data.context_window.used_percentage;
-  if (typeof ctx === "number") p1.push(`ctx ${Math.round(ctx)}%`);
+  // ctx takes the same thresholds as the bars — context exhaustion (auto-compact) is the
+  // mid-session constraint, so it should escalate visually the same way
+  if (typeof ctx === "number") p1.push(`ctx ${colorFor(ctx)}${Math.round(ctx)}%${RESET}`);
   const cost = data.cost && data.cost.total_cost_usd;
   if (typeof cost === "number") p1.push(`$${cost.toFixed(2)} session`);
+  const wsDir = (data.workspace && data.workspace.current_dir) || data.cwd;
+  if (wsDir) {
+    const branch = gitBranch(wsDir);
+    if (branch) p1.push(`${DIM}⎇ ${RESET}${branch}`);
+  }
   const row1 = p1.join(`${DIM} · ${RESET}`);
 
   // row 2: 5h ... · 7d ...
@@ -638,6 +762,20 @@ function selftest() {
   ok(strip(bar(0)).length === BAR_WIDTH + 2, "bar(0) width");
   ok(strip(bar(100)).includes("█".repeat(BAR_WIDTH)), "bar(100) full");
   ok(strip(bar(23)).startsWith("▕██"), "bar(23) two full cells");
+
+  // pace tick: overlaid at the elapsed fraction, width preserved, absent by default
+  ok(strip(bar(50, BAR_WIDTH, 0.25))[3] === TICK, "tick at cell 2 for 25% elapsed");
+  ok(strip(bar(50, BAR_WIDTH, 0)).indexOf(TICK) === 1, "tick clamps to first cell");
+  ok(strip(bar(50, BAR_WIDTH, 1)).indexOf(TICK) === BAR_WIDTH, "tick clamps to last cell");
+  ok(strip(bar(50, BAR_WIDTH, 0.25)).length === BAR_WIDTH + 2, "tick keeps bar width");
+  ok(!strip(bar(50)).includes(TICK), "no tick without a fraction");
+
+  // fmtPct: integer below the threshold, one decimal above (trailing .0 trimmed)
+  ok(fmtPct(23.4) === "23", `fmtPct(23.4), got ${fmtPct(23.4)}`);
+  ok(fmtPct(89.6) === "90", `fmtPct(89.6), got ${fmtPct(89.6)}`);
+  ok(fmtPct(97.46) === "97.5", `fmtPct(97.46), got ${fmtPct(97.46)}`);
+  ok(fmtPct(97.04) === "97", `fmtPct(97.04), got ${fmtPct(97.04)}`);
+  ok(fmtPct(100) === "100", `fmtPct(100), got ${fmtPct(100)}`);
 
   // colorFor thresholds
   ok(colorFor(10) === "\x1b[32m", "green <50");
@@ -676,6 +814,18 @@ function selftest() {
   // dur + clock
   ok(dur(2 * 3600 + 45 * 60) === "2h45m", `dur 2h45m, got ${dur(2 * 3600 + 45 * 60)}`);
   ok(dur(8 * 60) === "8m", `dur 8m, got ${dur(8 * 60)}`);
+
+  // elapsedFrac: halfway through a 5h window; clamps; null-safe
+  ok(Math.abs(elapsedFrac(now + 2.5 * 3600, FIVE_HOUR_SECS, now) - 0.5) < 1e-9, "elapsedFrac halfway");
+  ok(elapsedFrac(now + 10 * 3600, FIVE_HOUR_SECS, now) === 0, "elapsedFrac clamps at 0");
+  ok(elapsedFrac(now - 10, FIVE_HOUR_SECS, now) === 1, "elapsedFrac clamps at 1");
+  ok(elapsedFrac(null, FIVE_HOUR_SECS, now) === null, "elapsedFrac null resets");
+
+  // parseGitHead: branch ref, nested branch, detached SHA, junk
+  ok(parseGitHead("ref: refs/heads/main\n") === "main", "HEAD branch ref");
+  ok(parseGitHead("ref: refs/heads/emmett/wb-2026-07-06\n") === "emmett/wb-2026-07-06", "HEAD nested branch");
+  ok(parseGitHead("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3\n") === "a94a8fe", "HEAD detached sha7");
+  ok(parseGitHead("garbage") === null, "HEAD junk -> null");
 
   // burnTrend: ratio of fast vs slow slope drives the trend label
   const u = 1 / 60; // 1 %/min in %/s
@@ -735,6 +885,29 @@ function selftest() {
     `stale EMA washed out, got ${Math.round(projE.timeLeftSecs / 60)}m vs raw ${Math.round(proj.timeLeftSecs / 60)}m`,
   );
 
+  // trend arrows: dual-encode the time-left color; urgency keeps the arrow
+  const mkProj = (trend, secs) => ({ burning: true, timeLeftSecs: secs, trend, lastSampleAge: 0, lastP: null, lastResets: null });
+  const farReset = { used_percentage: 50, resets_at: now + 4 * 3600 };
+  ok(fiveHourSegment(farReset, mkProj("up", 3600), now).includes("↗"), "accelerating shows ↗");
+  ok(fiveHourSegment(farReset, mkProj("down", 3600), now).includes("↘"), "decelerating shows ↘");
+  const segFlat = fiveHourSegment(farReset, mkProj("flat", 3600), now);
+  ok(!segFlat.includes("↗") && !segFlat.includes("↘"), "steady shows no arrow");
+  const segUrgent = fiveHourSegment(farReset, mkProj("up", 10 * 60), now);
+  ok(segUrgent.includes(REDB) && segUrgent.includes("↗"), "urgency bold-red keeps the arrow");
+
+  // thinning: dense 1/s history -> recent THIN_AFTER kept whole, older decimated to the
+  // MIN_SAMPLE_GAP cadence, and the TREND_LAG look-back stays populated
+  const dense = [];
+  for (let i = 0; i < 2000; i++) dense.push({ t: now - 1999 + i, p: 10 + i * 0.01, r: R });
+  const stTh = { samples: dense, emaSecsLeft: null, emaAt: null, window: R };
+  updateAndProject({ used_percentage: 30, resets_at: R }, stTh, now);
+  const oldOnes = stTh.samples.filter((s) => s.t <= now - THIN_AFTER);
+  let spaced = oldOnes.length > 0;
+  for (let i = 1; i < oldOnes.length; i++) if (oldOnes[i].t - oldOnes[i - 1].t < MIN_SAMPLE_GAP) spaced = false;
+  ok(spaced, "old samples decimated to >=MIN_SAMPLE_GAP spacing");
+  ok(stTh.samples.filter((s) => s.t > now - THIN_AFTER).length >= 890, "recent samples kept at full density");
+  ok(stTh.samples.filter((s) => s.t <= now - TREND_LAG).length >= 2, "trend look-back still populated");
+
   // full render with a realistic payload doesn't throw and has 2 rows
   const data = {
     model: { display_name: "Opus" },
@@ -748,6 +921,8 @@ function selftest() {
   const r = render(data, { samples: [], emaSecsLeft: null, window: null }, now);
   ok(r.out.split("\n").length === 2, "render -> 2 rows");
   ok(strip(r.out).includes("23%") && strip(r.out).includes("41%"), "render shows both %");
+  ok(r.out.includes(`ctx \x1b[32m12%`), "ctx % colored by threshold");
+  ok(strip(r.out).includes(TICK), "render carries pace ticks");
 
   console.log(`${fail === 0 ? "ALL PASS" : "HAD FAILURES"} — ${pass} passed, ${fail} failed`);
   console.log("--- sample render ---");
@@ -845,7 +1020,9 @@ Add to `settings.json` (user settings `~/.claude/settings.json`, or project `.cl
 
 ## 8. Tuning, edge cases & limits
 
-- **Tunables** (top of the script): `RETAIN_SECONDS`, `HL_FAST`/`HL_SLOW` (regression
+- **Tunables** (top of the script): `RETAIN_SECONDS`, `MAX_SAMPLES`/`THIN_AFTER` (history
+  depth + the age-thinning that keeps the trend look-back populated under heavy load),
+  `PCT_DECIMAL_AT` (high-usage decimal), the `TICK` glyph, `HL_FAST`/`HL_SLOW` (regression
   half-lives), `W_FAST`/`W_SLOW` (fallback blend), `MIN_SAMPLES`/`MIN_SPAN` (confidence gate),
   `TAU_EMA` (display smoothing time constant), `TREND_LAG` (recent window + trend look-back),
   `TREND_UP_RATIO`/`TREND_DOWN_RATIO` (trend dead-band), `TREND_EPS` (idle noise floor),
