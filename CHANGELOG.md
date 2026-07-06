@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.26.0] — 2026-07-06
+
+Added: the **`subagent-model-preference`** skill — the operator's standing model/effort convention for every subagent (the Agent tool including Explore/Plan agents, Workflow `agent()` calls, custom agent types), the plugin's canonical copy of the user-global preference set 2026-07-01.
+
+### Added
+- `skills/subagent-model-preference/` — SKILL.md carrying the convention (Opus 4.8 [1m] at `xhigh`, `max` when needed, for deep synthesis/planning/verification; Sonnet 5 at `max`, `xhigh` when lighter, for high-parallelism fan-out; never Haiku/budget classes, never auto-substitute the Fable/mythos class, never below `xhigh` effort), the forward-mapping procedure for advancing the Opus/Sonnet classes when new Anthropic lineups ship, and cross-references to `spawn` / `iterative-plan`.
+- `skills/subagent-model-preference/references/user-global-snippet.md` and `references/repo-snippet.md` — paste-able installs of the convention for `~/.claude/CLAUDE.md` (any machine) and repo-level `CLAUDE.md` / `AGENTS.md` (any harness), for surfaces that don't load the plugin.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.25.0` → `0.26.0`; descriptions mention the new convention skill; added `subagent` / `model-preference` (and `opus` / `sonnet` / `effort` where the manifest carries the longer keyword list) keywords.
+- `README.md` — added the `subagent-model-preference` skill row.
+- `plugins/shaughv-code/` — regenerated to include the new skill (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.25.0] — 2026-06-26
 
 Removed: the **`perplexity-search`** skill (web search and AI-grounded answers via the Perplexity Agent, Search, and Sonar APIs).

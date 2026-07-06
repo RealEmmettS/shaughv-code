@@ -6,7 +6,12 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — late June 2026
+## Most recent release — early July 2026
+
+**Added**
+- A new skill that records the house rule for **which AI model — and how much thinking effort — every helper agent should use**. Whenever the assistant hands work off to helper agents, they all now follow one standard: the deepest-reasoning model for hard analysis and planning, the fast workhorse model for parallel busywork, and never anything weaker or shallower than the set floor. Why it matters: helper agents behave consistently everywhere this bundle is installed, instead of each machine quietly picking its own (sometimes weaker) defaults. The skill also explains how to carry the rule forward when new model generations come out, and includes ready-to-paste copies for setting up the same rule on machines or in projects that don't have this bundle.
+
+## Late June 2026
 
 **Removed**
 - The **Perplexity web-search skill** has been removed from this bundle. If you used it for quick web searches with cited, AI-written answers, that particular tool is no longer part of this plugin.

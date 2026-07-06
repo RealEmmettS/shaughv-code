@@ -10,7 +10,7 @@
       "name": "shaughv-code",
       "source": "./",
       "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills so they are available across every Claude Code instance from a single source.",
-      "version": "0.25.0",
+      "version": "0.26.0",
       "homepage": "https://github.com/RealEmmettS/shaughv-code",
       "keywords": [
         "shaughv",
@@ -36,6 +36,8 @@
         "productivity",
         "spawn",
         "strategy",
+        "subagent",
+        "model-preference",
         "wb300",
         "worktree",
         "workbranch",
