@@ -8,6 +8,12 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — early July 2026
 
+**Fixed**
+- The little **pace mark** inside the usage bars no longer looks like a thin silver line squeezed between two black bars. That black-bar effect was an accident of how the old symbol drew — it only painted a sliver of its slot and let the dark background show through on either side. The mark now fills its whole slot as a solid silver block, so it reads as one clean marker at a glance. (Yellow was considered, but the bars themselves turn yellow in their middle range — the mark would have disappeared right when you'd want it.)
+- The **black gap at the end of the colored fill is gone too**: the dotted "unused" texture now runs right up to where the color ends, so the whole bar reads as one continuous track. (The old bar tried to draw fractions of a slot, and the unpainted fraction showed as black. The bar now fills whole slots only — the exact number printed next to the bar still carries the precision.)
+
+## Earlier today — early July 2026
+
 **Improved**
 - The usage meter in the status bar got smarter and easier to read at a glance:
   - Each usage bar now has a small **pace mark** showing how far through the current time window you are. If the filled part of the bar has passed the mark, you're burning through your allowance faster than time is passing; if it hasn't, you're cruising. Works on both the short-term bar and the weekly one — the weekly bar previously gave you no way to judge whether its number was good or bad.

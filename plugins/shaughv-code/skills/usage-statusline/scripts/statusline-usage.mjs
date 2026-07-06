@@ -3,9 +3,9 @@
 //
 // Reads the status-line JSON on stdin, renders two rows:
 //   row 1:  <model> · ctx <n>% · $<cost> session · ⎇ <git branch>
-//   row 2:  5h <bar┃> <n>% [~time left ↗/↘] · resets <clock>   ·   7d <bar┃> <n>% · resets <day>
+//   row 2:  5h <bar▓> <n>% [~time left ↗/↘] · resets <clock>   ·   7d <bar▓> <n>% · resets <day>
 //
-// Each bar carries a thin ┃ pace tick at the elapsed-time position of its window (start =
+// Each bar carries a silver ▓ pace tick at the elapsed-time position of its window (start =
 // resets_at − window length): fill past the tick = consuming faster than time is passing.
 //
 // The 5h/7d percentages come straight from `rate_limits` in the stdin payload (ground truth,
@@ -70,22 +70,25 @@ function colorFor(pct) {
 }
 
 // ---- Pure helpers ---------------------------------------------------------
-const EIGHTHS = ["", "▏", "▎", "▍", "▌", "▋", "▊", "▉"]; // 1/8..7/8 left blocks
-const TICK = "┃"; // pace-tick glyph overlaid on the bar
+// Pace tick: a FULL-CELL glyph on purpose — a thin glyph (┃) leaves the rest of its cell as
+// bare background, which reads as black bars flanking the tick. ▓ fills the cell while staying
+// distinct from the solid █ fill and the dim ░ empties, even in monochrome.
+const TICK = "▓";
+const TICK_COLOR = "\x1b[97m"; // bright white ("silver") — never collides with a fill color
 
-// Smooth sub-cell progress bar. Filled part takes the threshold color; empty part is dim.
+// Whole-cell progress bar. Filled part takes the threshold color; empty part is dim ░ dots.
+// The fill is rounded to WHOLE cells on purpose: a sub-cell (eighth-block) boundary paints
+// only part of its cell and leaves the rest as bare background — a black hole in the track.
+// Rounding lets the dotted texture run right up to the fill edge; the precise percentage is
+// printed beside the bar, so the bar trades sub-cell resolution for a continuous texture.
 // tickFrac (0..1, optional) overlays a pace tick at that fraction of the bar — where "now"
 // sits inside the window. Fill past the tick = consuming faster than the window is elapsing
 // (running hot); fill short of the tick = running cool.
 function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   const p = Math.max(0, Math.min(100, Number(pct) || 0));
-  const totalEighths = Math.round((p / 100) * width * 8);
-  const cells = Math.min(Math.floor(totalEighths / 8), width);
-  const rem = totalEighths % 8;
+  const cells = Math.min(width, Math.round((p / 100) * width));
   const chars = [];
-  for (let i = 0; i < cells; i++) chars.push("█");
-  if (rem > 0 && chars.length < width) chars.push(EIGHTHS[rem]);
-  while (chars.length < width) chars.push("░");
+  for (let i = 0; i < width; i++) chars.push(i < cells ? "█" : "░");
   let tickIdx = -1;
   if (typeof tickFrac === "number" && isFinite(tickFrac)) {
     tickIdx = Math.min(width - 1, Math.max(0, Math.floor(tickFrac * width)));
@@ -93,7 +96,7 @@ function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   const c = colorFor(p);
   let out = `${DIM}▕${RESET}`;
   for (let i = 0; i < width; i++) {
-    if (i === tickIdx) out += `${TICK}`; // default foreground — visible on fill and empty alike
+    if (i === tickIdx) out += `${TICK_COLOR}${TICK}${RESET}`; // silver — visible on fill and empty alike
     else if (chars[i] === "░") out += `${DIM}░${RESET}`;
     else out += `${c}${chars[i]}${RESET}`;
   }
@@ -449,6 +452,8 @@ function selftest() {
   ok(strip(bar(0)).length === BAR_WIDTH + 2, "bar(0) width");
   ok(strip(bar(100)).includes("█".repeat(BAR_WIDTH)), "bar(100) full");
   ok(strip(bar(23)).startsWith("▕██"), "bar(23) two full cells");
+  ok(strip(bar(44)) === "▕████░░░░░░▏", "44% -> whole cells, dots run to the fill edge");
+  ok(strip(bar(23)) === "▕██░░░░░░░░▏", "no partial-cell glyph leaves a background gap");
 
   // pace tick: overlaid at the elapsed fraction, width preserved, absent by default
   ok(strip(bar(50, BAR_WIDTH, 0.25))[3] === TICK, "tick at cell 2 for 25% elapsed");
@@ -456,6 +461,7 @@ function selftest() {
   ok(strip(bar(50, BAR_WIDTH, 1)).indexOf(TICK) === BAR_WIDTH, "tick clamps to last cell");
   ok(strip(bar(50, BAR_WIDTH, 0.25)).length === BAR_WIDTH + 2, "tick keeps bar width");
   ok(!strip(bar(50)).includes(TICK), "no tick without a fraction");
+  ok(bar(50, BAR_WIDTH, 0.25).includes(`${TICK_COLOR}${TICK}`), "tick painted silver");
 
   // fmtPct: integer below the threshold, one decimal above (trailing .0 trimmed)
   ok(fmtPct(23.4) === "23", `fmtPct(23.4), got ${fmtPct(23.4)}`);

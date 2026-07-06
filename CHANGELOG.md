@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.28.0] — 2026-07-06
+
+Fixed: the **`usage-statusline`** bars no longer show bare-background "black holes" — the pace tick is now a full-cell bright-white (silver) `▓` marker, and the fill rounds to whole cells so the dotted empty texture runs right up to the fill edge.
+
+### Fixed
+- `skills/usage-statusline/scripts/statusline-usage.mjs` — the pace tick was a thin `┃` glyph, which left the rest of its character cell as bare terminal background: on screen that read as black bars surrounding a thin silver line. The tick is now `TICK = "▓"` painted `TICK_COLOR` (bright white, `\x1b[97m`): it fills its entire cell (no background shows through) while staying visually distinct from the solid `█` fill and the dim `░` empties, including in monochrome. Both are tunables. Yellow was considered for the tick and rejected — it collides with the 50–75% fill color, which would hide the tick exactly mid-range.
+- `skills/usage-statusline/scripts/statusline-usage.mjs` — the bar fill now rounds to **whole cells** (the sub-cell eighth-block boundary is gone). A partial-cell glyph painted only its left fraction and left the rest as bare background — a black gap between the fill edge and the dotted empty cells. Rounding lets the `░` texture start immediately where the fill ends; per-cell resolution is 10%, and the precise value remains the printed percentage beside the bar.
+- Selftest 62 → 65 assertions (new: tick painted in `TICK_COLOR`; whole-cell fill leaves no background gap ×2; the glyph-position assertions carry over since `▓` stays unique within a bar).
+
+### Changed
+- `skills/usage-statusline/SKILL.md` + `references/build-guide.md` — sample renders, field-table row, §0 pace-tick rationale, §8 tunables updated; §5 verbatim script re-spliced byte-identical.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.27.0` → `0.28.0`.
+- `plugins/shaughv-code/` — regenerated (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.27.0] — 2026-07-06
 
 Changed: the **`usage-statusline`** canonical script advances — pace ticks on both bars, `↗`/`↘` trend arrows, colored context %, one-decimal precision near the cap, a git-branch segment, and a deeper, age-thinned sample history that keeps the burn-rate trend accurate under heavy multi-agent load. Also trimmed a work-only cross-reference from `subagent-model-preference`.
