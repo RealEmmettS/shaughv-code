@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.29.0] — 2026-07-06
+
+Changed: **`usage-statusline`** gets its eighth-block sub-cell precision back — on a tinted track, so the continuous look from 0.28.0 is kept too.
+
+### Changed
+- `skills/usage-statusline/scripts/statusline-usage.mjs` — 0.28.0 removed the eighth-block partial cell to kill the black gap at the fill edge; this restores it and solves the gap properly: every inner bar cell now carries a subtle dark background (`TRACK_BG`, 256-color 236), so a partial cell's unpainted remainder renders as tinted track instead of terminal-black. Result: 1/80-bar fill precision AND a continuous track. `TRACK_BG` is a tunable — set it to `""` on light terminal themes.
+- Selftest 65 → 66 assertions (eighth-sliver renders for 44%/23%, tinted track present).
+- `skills/usage-statusline/SKILL.md` + `references/build-guide.md` — example renders, §0 as-built decision (whole-cell fill → sub-cell fill on a tinted track), constants list, §8 tunables; §5 verbatim script re-spliced byte-identical.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.28.0` → `0.29.0`.
+- `plugins/shaughv-code/` — regenerated (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.28.0] — 2026-07-06
 
 Fixed: the **`usage-statusline`** bars no longer show bare-background "black holes" — the pace tick is now a full-cell bright-white (silver) `▓` marker, and the fill rounds to whole cells so the dotted empty texture runs right up to the fill edge.

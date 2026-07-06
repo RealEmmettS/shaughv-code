@@ -70,25 +70,31 @@ function colorFor(pct) {
 }
 
 // ---- Pure helpers ---------------------------------------------------------
+const EIGHTHS = ["", "▏", "▎", "▍", "▌", "▋", "▊", "▉"]; // 1/8..7/8 left blocks
 // Pace tick: a FULL-CELL glyph on purpose — a thin glyph (┃) leaves the rest of its cell as
 // bare background, which reads as black bars flanking the tick. ▓ fills the cell while staying
 // distinct from the solid █ fill and the dim ░ empties, even in monochrome.
 const TICK = "▓";
 const TICK_COLOR = "\x1b[97m"; // bright white ("silver") — never collides with a fill color
+// Subtle dark track painted under every inner bar cell. This is what lets the bar keep its
+// eighth-block sub-cell precision WITHOUT a black hole: a partial cell's unpainted remainder
+// shows as tinted track instead of terminal-black. Set to "" to disable (e.g. light themes).
+const TRACK_BG = "\x1b[48;5;236m";
 
-// Whole-cell progress bar. Filled part takes the threshold color; empty part is dim ░ dots.
-// The fill is rounded to WHOLE cells on purpose: a sub-cell (eighth-block) boundary paints
-// only part of its cell and leaves the rest as bare background — a black hole in the track.
-// Rounding lets the dotted texture run right up to the fill edge; the precise percentage is
-// printed beside the bar, so the bar trades sub-cell resolution for a continuous texture.
-// tickFrac (0..1, optional) overlays a pace tick at that fraction of the bar — where "now"
-// sits inside the window. Fill past the tick = consuming faster than the window is elapsing
-// (running hot); fill short of the tick = running cool.
+// Sub-cell progress bar on a tinted track. Filled part takes the threshold color at
+// eighth-block precision; empty part is dim ░ dots; every inner cell carries TRACK_BG so the
+// track reads continuous from fill edge to bar end. tickFrac (0..1, optional) overlays a pace
+// tick at that fraction of the bar — where "now" sits inside the window. Fill past the tick =
+// consuming faster than the window is elapsing (running hot); short of it = running cool.
 function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   const p = Math.max(0, Math.min(100, Number(pct) || 0));
-  const cells = Math.min(width, Math.round((p / 100) * width));
+  const totalEighths = Math.round((p / 100) * width * 8);
+  const cells = Math.min(Math.floor(totalEighths / 8), width);
+  const rem = totalEighths % 8;
   const chars = [];
-  for (let i = 0; i < width; i++) chars.push(i < cells ? "█" : "░");
+  for (let i = 0; i < cells; i++) chars.push("█");
+  if (rem > 0 && chars.length < width) chars.push(EIGHTHS[rem]);
+  while (chars.length < width) chars.push("░");
   let tickIdx = -1;
   if (typeof tickFrac === "number" && isFinite(tickFrac)) {
     tickIdx = Math.min(width - 1, Math.max(0, Math.floor(tickFrac * width)));
@@ -96,9 +102,9 @@ function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   const c = colorFor(p);
   let out = `${DIM}▕${RESET}`;
   for (let i = 0; i < width; i++) {
-    if (i === tickIdx) out += `${TICK_COLOR}${TICK}${RESET}`; // silver — visible on fill and empty alike
-    else if (chars[i] === "░") out += `${DIM}░${RESET}`;
-    else out += `${c}${chars[i]}${RESET}`;
+    if (i === tickIdx) out += `${TRACK_BG}${TICK_COLOR}${TICK}${RESET}`; // silver — visible anywhere
+    else if (chars[i] === "░") out += `${TRACK_BG}${DIM}░${RESET}`;
+    else out += `${TRACK_BG}${c}${chars[i]}${RESET}`;
   }
   return `${out}${DIM}▏${RESET}`;
 }
@@ -452,8 +458,9 @@ function selftest() {
   ok(strip(bar(0)).length === BAR_WIDTH + 2, "bar(0) width");
   ok(strip(bar(100)).includes("█".repeat(BAR_WIDTH)), "bar(100) full");
   ok(strip(bar(23)).startsWith("▕██"), "bar(23) two full cells");
-  ok(strip(bar(44)) === "▕████░░░░░░▏", "44% -> whole cells, dots run to the fill edge");
-  ok(strip(bar(23)) === "▕██░░░░░░░░▏", "no partial-cell glyph leaves a background gap");
+  ok(strip(bar(44)) === "▕████▍░░░░░▏", "44% -> 4 cells + a 3/8 sliver (eighth precision)");
+  ok(strip(bar(23)) === "▕██▎░░░░░░░▏", "23% -> 2 cells + a 2/8 sliver");
+  ok(bar(44).includes(TRACK_BG), "tinted track under the bar (no black remainder)");
 
   // pace tick: overlaid at the elapsed fraction, width preserved, absent by default
   ok(strip(bar(50, BAR_WIDTH, 0.25))[3] === TICK, "tick at cell 2 for 25% elapsed");

@@ -14,7 +14,7 @@ Installs a Claude Code status line that renders two rows:
 
 ```
 Opus · ctx 12% · $1.84 session · ⎇ main
-5h ▕██░░░░▓░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▓░░░░░▏ 41% · resets Mon
+5h ▕██▎░░░▓░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▓░░░░░▏ 41% · resets Mon
 ```
 
 | Field | Meaning |
@@ -95,7 +95,7 @@ Every path below is a **placeholder to resolve on the target machine** — none 
 
 ## Customize
 
-Tunables are constants at the top of the script (`BAR_WIDTH`, `RED_SECONDS`, `refreshInterval` in settings, the `colorFor` thresholds, burn-rate half-lives, trend ratios, `THIN_AFTER` / `MAX_SAMPLES` for the sample-history depth that keeps the trend indicator honest under heavy load, `PCT_DECIMAL_AT` for the high-usage decimal, the `TICK` glyph and its `TICK_COLOR`, etc.). The shipped values *are* the standardized build — change them only for a deliberate personal variant, and note that editing the installed copy diverges it from the canonical one. See [`references/build-guide.md`](references/build-guide.md) §0 and §8 for the meaning of each.
+Tunables are constants at the top of the script (`BAR_WIDTH`, `RED_SECONDS`, `refreshInterval` in settings, the `colorFor` thresholds, burn-rate half-lives, trend ratios, `THIN_AFTER` / `MAX_SAMPLES` for the sample-history depth that keeps the trend indicator honest under heavy load, `PCT_DECIMAL_AT` for the high-usage decimal, the `TICK` glyph and its `TICK_COLOR`, `TRACK_BG` for the tinted track under the bars — set it to `""` on light terminal themes — etc.). The shipped values *are* the standardized build — change them only for a deliberate personal variant, and note that editing the installed copy diverges it from the canonical one. See [`references/build-guide.md`](references/build-guide.md) §0 and §8 for the meaning of each.
 
 ## Runtime artifacts (leave them alone)
 

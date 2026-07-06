@@ -8,11 +8,16 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — early July 2026
 
+**Improved**
+- The usage bars got their **fine-grained fill back — without bringing back the black gap**. An earlier fix today made the bars fill only in whole blocks so the dotted texture could sit flush against the color; this release restores the finer detail (each block can fill in eight small steps) and solves the gap the right way instead: the whole track behind the bar now has a **soft dark tint**, so the unfilled sliver of a partly-filled block blends into the track rather than reading as a black hole. You get the precise bar and the continuous look at the same time. (For anyone running a light-colored terminal, the tint can be switched off with one setting.)
+
+## Earlier today — early July 2026
+
 **Fixed**
 - The little **pace mark** inside the usage bars no longer looks like a thin silver line squeezed between two black bars. That black-bar effect was an accident of how the old symbol drew — it only painted a sliver of its slot and let the dark background show through on either side. The mark now fills its whole slot as a solid silver block, so it reads as one clean marker at a glance. (Yellow was considered, but the bars themselves turn yellow in their middle range — the mark would have disappeared right when you'd want it.)
 - The **black gap at the end of the colored fill is gone too**: the dotted "unused" texture now runs right up to where the color ends, so the whole bar reads as one continuous track. (The old bar tried to draw fractions of a slot, and the unpainted fraction showed as black. The bar now fills whole slots only — the exact number printed next to the bar still carries the precision.)
 
-## Earlier today — early July 2026
+## Also today — early July 2026
 
 **Improved**
 - The usage meter in the status bar got smarter and easier to read at a glance:
@@ -26,7 +31,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 **Behind the scenes**
 - A leftover mention of a work-only tool was removed from the new helper-agent rule described below.
 
-## Earlier today — early July 2026
+## And earlier that day — early July 2026
 
 **Added**
 - A new skill that records the house rule for **which AI model — and how much thinking effort — every helper agent should use**. Whenever the assistant hands work off to helper agents, they all now follow one standard: the deepest-reasoning model for hard analysis and planning, the fast workhorse model for parallel busywork, and never anything weaker or shallower than the set floor. Why it matters: helper agents behave consistently everywhere this bundle is installed, instead of each machine quietly picking its own (sometimes weaker) defaults. The skill also explains how to carry the rule forward when new model generations come out, and includes ready-to-paste copies for setting up the same rule on machines or in projects that don't have this bundle.

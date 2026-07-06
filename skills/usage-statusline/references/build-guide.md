@@ -6,7 +6,7 @@ of how much time is left** before the 5-hour limit is hit at the current pace.
 
 ```
 Opus · ctx 12% · $1.84 session · ⎇ main
-5h ▕██░░░░▓░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▓░░░░░▏ 41% · resets Mon
+5h ▕██▎░░░▓░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▓░░░░░▏ 41% · resets Mon
 ```
 
 Nothing in this document is specific to one machine — every path is written as a placeholder
@@ -46,10 +46,11 @@ piece works and how to adapt it; this section is just "make exactly this."
   distinct from the solid `█` fill (every fill color) and the dim `░` empties.
   The window start = `resets_at` − window length, so no extra data is needed. Fill past the tick =
   consuming faster than the window is elapsing (running hot); short of it = running cool.
-- **Whole-cell fill, continuous track:** the fill rounds to whole cells so the dotted `░`
-  texture runs right up to the fill edge. A sub-cell (eighth-block) boundary would paint only
-  part of its cell and leave the rest as bare background — a black hole in the track. The
-  precise value is the printed percentage; the bar is the picture.
+- **Sub-cell fill on a tinted track:** the fill keeps eighth-block precision (1/80 of the
+  bar), and every inner cell carries a subtle dark background (`TRACK_BG`, 256-color 236). A
+  partial cell's unpainted remainder therefore shows as tinted track — not terminal-black —
+  so the track reads continuous from fill edge to bar end while staying precise. On a light
+  terminal theme set `TRACK_BG = ""` to disable the tint.
 - **High-usage precision:** usage percentages show one decimal at ≥90% (integer below) —
   near the cap, integer rounding would hide real movement between refreshes.
 - **Git branch, without spawning:** row 1 ends with `⎇ <branch>` resolved by *reading*
@@ -70,7 +71,7 @@ piece works and how to adapt it; this section is just "make exactly this."
    `HL_FAST = 7.5m` / `HL_SLOW = 30m`, `W_FAST = 0.65` / `W_SLOW = 0.35`, `MIN_SAMPLES = 3` /
    `MIN_SPAN = 180s`, `TAU_EMA = 60s`, `BAR_WIDTH = 10`, `RED_SECONDS = 30m`,
    `TREND_LAG = 10m`, `TREND_UP_RATIO = 1.25` / `TREND_DOWN_RATIO = 0.8`,
-   `TREND_EPS = 0.5 %/hour`, `PCT_DECIMAL_AT = 90`, and the `colorFor` thresholds). Those exact values *are* the
+   `TREND_EPS = 0.5 %/hour`, `PCT_DECIMAL_AT = 90`, `TRACK_BG` = 256-color 236, and the `colorFor` thresholds). Those exact values *are* the
    build — don't change them to reproduce it.
 
 2. **Wire it into settings.** Merge this exact block into `<CLAUDE_DIR>/settings.json`
@@ -390,25 +391,31 @@ function colorFor(pct) {
 }
 
 // ---- Pure helpers ---------------------------------------------------------
+const EIGHTHS = ["", "▏", "▎", "▍", "▌", "▋", "▊", "▉"]; // 1/8..7/8 left blocks
 // Pace tick: a FULL-CELL glyph on purpose — a thin glyph (┃) leaves the rest of its cell as
 // bare background, which reads as black bars flanking the tick. ▓ fills the cell while staying
 // distinct from the solid █ fill and the dim ░ empties, even in monochrome.
 const TICK = "▓";
 const TICK_COLOR = "\x1b[97m"; // bright white ("silver") — never collides with a fill color
+// Subtle dark track painted under every inner bar cell. This is what lets the bar keep its
+// eighth-block sub-cell precision WITHOUT a black hole: a partial cell's unpainted remainder
+// shows as tinted track instead of terminal-black. Set to "" to disable (e.g. light themes).
+const TRACK_BG = "\x1b[48;5;236m";
 
-// Whole-cell progress bar. Filled part takes the threshold color; empty part is dim ░ dots.
-// The fill is rounded to WHOLE cells on purpose: a sub-cell (eighth-block) boundary paints
-// only part of its cell and leaves the rest as bare background — a black hole in the track.
-// Rounding lets the dotted texture run right up to the fill edge; the precise percentage is
-// printed beside the bar, so the bar trades sub-cell resolution for a continuous texture.
-// tickFrac (0..1, optional) overlays a pace tick at that fraction of the bar — where "now"
-// sits inside the window. Fill past the tick = consuming faster than the window is elapsing
-// (running hot); fill short of the tick = running cool.
+// Sub-cell progress bar on a tinted track. Filled part takes the threshold color at
+// eighth-block precision; empty part is dim ░ dots; every inner cell carries TRACK_BG so the
+// track reads continuous from fill edge to bar end. tickFrac (0..1, optional) overlays a pace
+// tick at that fraction of the bar — where "now" sits inside the window. Fill past the tick =
+// consuming faster than the window is elapsing (running hot); short of it = running cool.
 function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   const p = Math.max(0, Math.min(100, Number(pct) || 0));
-  const cells = Math.min(width, Math.round((p / 100) * width));
+  const totalEighths = Math.round((p / 100) * width * 8);
+  const cells = Math.min(Math.floor(totalEighths / 8), width);
+  const rem = totalEighths % 8;
   const chars = [];
-  for (let i = 0; i < width; i++) chars.push(i < cells ? "█" : "░");
+  for (let i = 0; i < cells; i++) chars.push("█");
+  if (rem > 0 && chars.length < width) chars.push(EIGHTHS[rem]);
+  while (chars.length < width) chars.push("░");
   let tickIdx = -1;
   if (typeof tickFrac === "number" && isFinite(tickFrac)) {
     tickIdx = Math.min(width - 1, Math.max(0, Math.floor(tickFrac * width)));
@@ -416,9 +423,9 @@ function bar(pct, width = BAR_WIDTH, tickFrac = null) {
   const c = colorFor(p);
   let out = `${DIM}▕${RESET}`;
   for (let i = 0; i < width; i++) {
-    if (i === tickIdx) out += `${TICK_COLOR}${TICK}${RESET}`; // silver — visible on fill and empty alike
-    else if (chars[i] === "░") out += `${DIM}░${RESET}`;
-    else out += `${c}${chars[i]}${RESET}`;
+    if (i === tickIdx) out += `${TRACK_BG}${TICK_COLOR}${TICK}${RESET}`; // silver — visible anywhere
+    else if (chars[i] === "░") out += `${TRACK_BG}${DIM}░${RESET}`;
+    else out += `${TRACK_BG}${c}${chars[i]}${RESET}`;
   }
   return `${out}${DIM}▏${RESET}`;
 }
@@ -772,8 +779,9 @@ function selftest() {
   ok(strip(bar(0)).length === BAR_WIDTH + 2, "bar(0) width");
   ok(strip(bar(100)).includes("█".repeat(BAR_WIDTH)), "bar(100) full");
   ok(strip(bar(23)).startsWith("▕██"), "bar(23) two full cells");
-  ok(strip(bar(44)) === "▕████░░░░░░▏", "44% -> whole cells, dots run to the fill edge");
-  ok(strip(bar(23)) === "▕██░░░░░░░░▏", "no partial-cell glyph leaves a background gap");
+  ok(strip(bar(44)) === "▕████▍░░░░░▏", "44% -> 4 cells + a 3/8 sliver (eighth precision)");
+  ok(strip(bar(23)) === "▕██▎░░░░░░░▏", "23% -> 2 cells + a 2/8 sliver");
+  ok(bar(44).includes(TRACK_BG), "tinted track under the bar (no black remainder)");
 
   // pace tick: overlaid at the elapsed fraction, width preserved, absent by default
   ok(strip(bar(50, BAR_WIDTH, 0.25))[3] === TICK, "tick at cell 2 for 25% elapsed");
@@ -1035,7 +1043,8 @@ Add to `settings.json` (user settings `~/.claude/settings.json`, or project `.cl
 
 - **Tunables** (top of the script): `RETAIN_SECONDS`, `MAX_SAMPLES`/`THIN_AFTER` (history
   depth + the age-thinning that keeps the trend look-back populated under heavy load),
-  `PCT_DECIMAL_AT` (high-usage decimal), the `TICK` glyph + `TICK_COLOR`, `HL_FAST`/`HL_SLOW` (regression
+  `PCT_DECIMAL_AT` (high-usage decimal), the `TICK` glyph + `TICK_COLOR`, `TRACK_BG` (tinted
+  track — set `""` on light themes), `HL_FAST`/`HL_SLOW` (regression
   half-lives), `W_FAST`/`W_SLOW` (fallback blend), `MIN_SAMPLES`/`MIN_SPAN` (confidence gate),
   `TAU_EMA` (display smoothing time constant), `TREND_LAG` (recent window + trend look-back),
   `TREND_UP_RATIO`/`TREND_DOWN_RATIO` (trend dead-band), `TREND_EPS` (idle noise floor),
