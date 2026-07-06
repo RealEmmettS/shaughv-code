@@ -5,7 +5,7 @@ status line that shows **live 5-hour and weekly usage percentages** plus a **bur
 of how much time is left** before the 5-hour limit is hit at the current pace.
 
 ```
-Opus · ctx 12% · $1.84 session · ⎇ main
+Opus xhigh · ctx 12% · $1.84 session · my-repo ⎇ main
 5h ▕██▎░░░░░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▏░░░░░▏ 41% · resets Mon
 ```
 
@@ -38,7 +38,8 @@ piece works and how to adapt it; this section is just "make exactly this."
   faster), **green** when usage is easing off (time left stretching out), plain when steady.
   The direction is **dual-encoded as an `↗`/`↘` arrow** next to the text, so it survives theme
   quirks and color-blindness (steady = no arrow).
-- **Layout: Detailed, two rows.** Row 1 = `model · ctx% · $cost session · ⎇ branch`; row 2 =
+- **Layout: Detailed, two rows.** Row 1 = `model <effort> · ctx% · $cost session · <dir> ⎇ branch`;
+  row 2 =
   `5h <bar> <%> <time-left ↗/↘> · resets <clock>   ·   7d <bar> <%> · resets <day>`.
 - **Sub-cell fill on a tinted track:** the fill keeps eighth-block precision (1/80 of the
   bar), and every inner cell carries a subtle dark background (`TRACK_BG`, 256-color 236). A
@@ -47,9 +48,13 @@ piece works and how to adapt it; this section is just "make exactly this."
   terminal theme set `TRACK_BG = ""` to disable the tint.
 - **High-usage precision:** usage percentages show one decimal at ≥90% (integer below) —
   near the cap, integer rounding would hide real movement between refreshes.
-- **Git branch, without spawning:** row 1 ends with `⎇ <branch>` resolved by *reading*
+- **Model + thinking level:** the model name carries the active effort level (`effort.level`
+  from stdin) dim beside it; when extended thinking is disabled (`thinking.enabled === false`)
+  it shows `no-think` instead — the effort level is inert in that state.
+- **Session location, without spawning:** row 1 ends with `<dir> ⎇ <branch>` — the basename of
+  the launch directory (`workspace.project_dir`) plus the git branch resolved by *reading*
   `.git/HEAD` (worktree-aware via `gitdir:` files) — pure file reads, safe at a 1 s refresh.
-  Detached HEAD shows the 7-char SHA; outside a repo the segment is omitted.
+  Detached HEAD shows the 7-char SHA; outside a repo only the directory name shows.
 - **The context % is colored** with the same thresholds as the bars — context exhaustion
   (auto-compact) is the mid-session constraint, so it escalates visually the same way.
 - **Color stages (bars + %):** green `<50` → yellow `50–75` → orange `75–90` → red `90–95` →
@@ -117,6 +122,7 @@ That's the entire build. The sections below generalize it.
 
 | Element | Meaning | Source |
 |---|---|---|
+| `Opus xhigh` | Model + the active thinking/effort level (dim); `no-think` when extended thinking is disabled | `model.display_name`, `effort.level`, `thinking.enabled` (stdin) |
 | `5h … %` | % of the **5-hour rolling limit** used (one decimal at ≥90%) | `rate_limits.five_hour.used_percentage` (stdin) — ground truth |
 | `~Xh Ym left ↗/↘` | Estimated time until the 5-hour limit hits 100% at the current burn rate. **Its color and `↗`/`↘` arrow are a trend indicator**: red = usage accelerating vs ~10 min ago (time left shrinking faster), green = usage easing off (time left stretching out), plain = steady. Bold red when <30 min remain (urgency outranks trend). | computed locally from a rolling history of the 5h % |
 | `resets 3:45p` | When the 5-hour window resets | `rate_limits.five_hour.resets_at` (epoch s) |
@@ -124,7 +130,7 @@ That's the entire build. The sections below generalize it.
 | `resets Mon` | When the weekly window resets | `rate_limits.seven_day.resets_at` (epoch s) |
 | `ctx 12%` | Context-window fill of the current session (colored with the same thresholds as the bars) | `context_window.used_percentage` (stdin) |
 | `$1.84 session` | Session cost so far | `cost.total_cost_usd` (stdin) |
-| `⎇ main` | Current git branch (worktree-aware; detached HEAD → short SHA; omitted outside a repo) | pure file reads of `.git/HEAD` — never a spawned process |
+| `my-repo ⎇ main` | Launch-directory basename + current git branch (worktree-aware; detached HEAD → short SHA; outside a repo only the dir shows) | `workspace.project_dir` (stdin) + pure file reads of `.git/HEAD` — never a spawned process |
 
 Bars **shift color toward red** as a window fills: green `<50%` → yellow `50–75%` →
 orange `75–90%` → red `90–95%` → **bold red `≥95%`**.
@@ -155,6 +161,8 @@ supported).
   "session_id": "…",
   "transcript_path": "…/<session>.jsonl",
   "model":   { "id": "…", "display_name": "Opus" },
+  "effort":   { "level": "xhigh" },          // active thinking/effort level (confirmed on 2.1.201)
+  "thinking": { "enabled": true },           // extended-thinking toggle
   "workspace": { "current_dir": "…", "project_dir": "…" },
   "version": "2.1.x",
   "output_style": { "name": "default" },
@@ -316,7 +324,7 @@ next to itself (via `import.meta.url`, so it's path-portable), and never throws 
 // Claude Code status line: live 5-hour + weekly usage with a burn-rate "time left" estimate.
 //
 // Reads the status-line JSON on stdin, renders two rows:
-//   row 1:  <model> · ctx <n>% · $<cost> session · ⎇ <git branch>
+//   row 1:  <model> <effort> · ctx <n>% · $<cost> session · <dir> ⎇ <git branch>
 //   row 2:  5h <bar> <n>% [~time left ↗/↘] · resets <clock>   ·   7d <bar> <n>% · resets <day>
 //
 // The 5h/7d percentages come straight from `rate_limits` in the stdin payload (ground truth,
@@ -414,6 +422,12 @@ function fmtPct(p) {
     return s.endsWith(".0") ? s.slice(0, -2) : s;
   }
   return String(Math.round(p));
+}
+
+// Last path segment, tolerant of / and \ separators and trailing separators.
+function baseName(p) {
+  const parts = String(p).replace(/[\\/]+$/, "").split(/[\\/]/);
+  return parts[parts.length - 1] || "";
 }
 
 // Parse the content of a git HEAD file -> branch name, short SHA (detached), or null.
@@ -713,20 +727,32 @@ function render(data, state, now) {
 
   const proj = updateAndProject(fh, state, now);
 
-  // row 1: model · ctx · cost · git branch
+  // row 1: model+effort · ctx · cost · dir ⎇ branch
   const p1 = [];
-  if (data.model && data.model.display_name) p1.push(data.model.display_name);
+  if (data.model && data.model.display_name) {
+    let m = data.model.display_name;
+    // active thinking/effort level, dim, right after the model; "no-think" when thinking is
+    // explicitly disabled (the effort level is inert in that state)
+    if (data.thinking && data.thinking.enabled === false) m += ` ${DIM}no-think${RESET}`;
+    else if (data.effort && typeof data.effort.level === "string") m += ` ${DIM}${data.effort.level}${RESET}`;
+    p1.push(m);
+  }
   const ctx = data.context_window && data.context_window.used_percentage;
   // ctx takes the same thresholds as the bars — context exhaustion (auto-compact) is the
   // mid-session constraint, so it should escalate visually the same way
   if (typeof ctx === "number") p1.push(`ctx ${colorFor(ctx)}${Math.round(ctx)}%${RESET}`);
   const cost = data.cost && data.cost.total_cost_usd;
   if (typeof cost === "number") p1.push(`$${cost.toFixed(2)} session`);
-  const wsDir = (data.workspace && data.workspace.current_dir) || data.cwd;
-  if (wsDir) {
-    const branch = gitBranch(wsDir);
-    if (branch) p1.push(`${DIM}⎇ ${RESET}${branch}`);
-  }
+  // where this session lives: basename of the launch dir (project_dir), plus the git branch
+  // of the session's current dir (worktree-aware) — "shaughv-code ⎇ main"
+  const ws = data.workspace || {};
+  const launchDir = ws.project_dir || ws.current_dir || data.cwd;
+  const loc = launchDir ? baseName(launchDir) : "";
+  const branchDir = ws.current_dir || data.cwd || launchDir;
+  const branch = branchDir ? gitBranch(branchDir) : null;
+  if (loc && branch) p1.push(`${loc} ${DIM}⎇ ${RESET}${branch}`);
+  else if (branch) p1.push(`${DIM}⎇ ${RESET}${branch}`);
+  else if (loc) p1.push(loc);
   const row1 = p1.join(`${DIM} · ${RESET}`);
 
   // row 2: 5h ... · 7d ...
@@ -795,6 +821,11 @@ function selftest() {
   // dur + clock
   ok(dur(2 * 3600 + 45 * 60) === "2h45m", `dur 2h45m, got ${dur(2 * 3600 + 45 * 60)}`);
   ok(dur(8 * 60) === "8m", `dur 8m, got ${dur(8 * 60)}`);
+
+  // baseName: both separator styles, trailing separators, bare names
+  ok(baseName("C:\\Users\\x\\git\\my-repo\\") === "my-repo", "baseName windows + trailing");
+  ok(baseName("/home/x/git/my-repo") === "my-repo", "baseName posix");
+  ok(baseName("my-repo") === "my-repo", "baseName bare");
 
   // parseGitHead: branch ref, nested branch, detached SHA, junk
   ok(parseGitHead("ref: refs/heads/main\n") === "main", "HEAD branch ref");
@@ -886,6 +917,9 @@ function selftest() {
   // full render with a realistic payload doesn't throw and has 2 rows
   const data = {
     model: { display_name: "Opus" },
+    effort: { level: "xhigh" },
+    thinking: { enabled: true },
+    workspace: { project_dir: "Z:\\nowhere\\demo-repo", current_dir: "Z:\\nowhere\\demo-repo" },
     context_window: { used_percentage: 12 },
     cost: { total_cost_usd: 1.84 },
     rate_limits: {
@@ -897,6 +931,17 @@ function selftest() {
   ok(r.out.split("\n").length === 2, "render -> 2 rows");
   ok(strip(r.out).includes("23%") && strip(r.out).includes("41%"), "render shows both %");
   ok(r.out.includes(`ctx \x1b[32m12%`), "ctx % colored by threshold");
+  ok(strip(r.out).includes("Opus xhigh"), "effort level shown after the model");
+  ok(strip(r.out).includes("demo-repo"), "launch-dir basename shown");
+
+  // thinking disabled -> "no-think" replaces the (inert) effort level
+  const rOff = render(
+    { model: { display_name: "Opus" }, effort: { level: "xhigh" }, thinking: { enabled: false } },
+    { samples: [], emaSecsLeft: null, window: null },
+    now,
+  );
+  ok(strip(rOff.out).includes("Opus no-think"), "thinking off -> no-think");
+  ok(!strip(rOff.out).includes("xhigh"), "inert effort level hidden when thinking is off");
 
   console.log(`${fail === 0 ? "ALL PASS" : "HAD FAILURES"} — ${pass} passed, ${fail} failed`);
   console.log("--- sample render ---");

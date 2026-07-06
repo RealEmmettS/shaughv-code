@@ -1,6 +1,6 @@
 {
   "name": "shaughv-code",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (critical thinking, OpenAI audio, PreText, Quiver AI, a comprehensive Mistral AI API skill covering OCR, audio transcription, text-to-speech, chat, agents, and the full API surface, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions, generic Google Cloud Storage reference, a pre-wired SHAUGHV-bucket GCS skill, bug triage, GoF code design patterns, a debugging framework, defensive programming, git workflow, a security audit & red-team skill, a session handoff document generator, an iterative milestone-planning method, a workflow-optimization facilitator, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, the /spawn orchestration playbook, strategic thinking, the standing subagent model/effort preference convention, the wb300 git branch / worktree / agent control tower, a usage status-line installer, and the TT;DR \"Too Tired; Didn't Read\" summary convention), the Remotion documentation and Craft Docs MCP servers, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source. (The task + workplace-memory system now lives in the standalone shaughv-tasks plugin.)",
   "author": {
     "name": "Emmett Shaughnessy",

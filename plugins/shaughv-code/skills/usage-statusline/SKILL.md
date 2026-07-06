@@ -13,18 +13,19 @@ metadata:
 Installs a Claude Code status line that renders two rows:
 
 ```
-Opus · ctx 12% · $1.84 session · ⎇ main
+Opus xhigh · ctx 12% · $1.84 session · my-repo ⎇ main
 5h ▕██▎░░░░░░░▏ 23% ~2h45m left ↘ · resets 3:45p   ·   7d ▕████▏░░░░░▏ 41% · resets Mon
 ```
 
 | Field | Meaning |
 |---|---|
+| `Opus xhigh` | Model name + the **active thinking/effort level** (dim, from `effort.level` on stdin). Shows `no-think` when extended thinking is disabled — the effort level is inert in that state. |
 | `5h … %` | % of the **5-hour rolling limit** used (ground truth from `rate_limits.five_hour` on stdin — same number `/usage` shows). Integer normally; **one decimal at ≥90%** so movement near the cap stays visible. |
 | `~Xh Ym left ↗/↘` | Locally computed burn-rate projection of when the 5h window hits 100% at the current pace. Color **and arrow** = trend: red `↗` = usage accelerating, green `↘` = easing off, plain (no arrow) = steady; **bold red <30 min** (urgency overrides the color, the arrow stays). Hidden when idle. |
 | `resets 3:45p` / `resets Mon` | When each window resets. |
 | `7d … %` | % of the **weekly (7-day) limit** used (same decimal rule ≥90%). |
 | `ctx 12%` · `$1.84 session` | Context-window fill (colored with the same thresholds as the bars — it escalates as auto-compact approaches) and session cost. |
-| `⎇ main` | Current git branch of the session's directory — pure file reads of `.git/HEAD` (never a spawned process), worktree-aware (`gitdir:` files parsed). Detached HEAD shows the short SHA; hidden outside a repo. |
+| `my-repo ⎇ main` | Where the session lives: the basename of the directory Claude Code was launched in (`workspace.project_dir`), plus the current git branch — pure file reads of `.git/HEAD` (never a spawned process), worktree-aware (`gitdir:` files parsed). Detached HEAD shows the short SHA; outside a repo only the directory name shows. |
 
 Bars shift color as a window fills: green `<50` → yellow `50–75` → orange `75–90` → red `90–95` → bold red `≥95`.
 

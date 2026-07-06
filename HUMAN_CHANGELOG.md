@@ -8,6 +8,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — early July 2026
 
+**Added**
+- The status bar's top row now tells you two more things at a glance: **how hard the assistant is currently thinking** (the reasoning level shown right next to the model's name — and a clear "no-think" note if deep thinking is switched off entirely), and **which project folder this session was launched in**, shown right beside the branch name. Together the top row now reads like a full "where am I and what am I running" line: model, thinking depth, memory fill, session cost, folder, and branch.
+
+## Shortly before that — early July 2026
+
 **Removed**
 - The **pace mark inside the usage bars is gone** — by request. It turned out to add more visual noise than insight. The bars now show just two things: the colored fill (what you've used) and the dotted track (what's left). Everything else from today's improvements stays — the up/down trend arrows, the color-shifting memory readout, the extra decimal near the limit, the git branch display, the fine-grained fill on its tinted track, and the smarter usage history that keeps the trend colors trustworthy.
 

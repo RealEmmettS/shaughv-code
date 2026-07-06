@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.31.0] — 2026-07-06
+
+Added: **`usage-statusline`** row 1 now shows the active thinking/effort level beside the model, and the session's launch-directory name beside the git branch.
+
+### Added
+- `skills/usage-statusline/scripts/statusline-usage.mjs` —
+  - **Thinking level:** `effort.level` from the stdin payload renders dim right after the model name (`Fable 5 xhigh`); when `thinking.enabled === false` it shows `no-think` instead (the effort level is inert in that state). Field availability confirmed with a live payload capture on Claude Code 2.1.201.
+  - **Launch directory:** the basename of `workspace.project_dir` joins the branch segment (`shaughv-code ⎇ main`) via a new separator-tolerant `baseName()` helper; outside a git repo only the directory name shows.
+  - Selftest 55 → 62 assertions (`baseName` ×3, effort shown, launch-dir shown, `no-think` behavior ×2).
+
+### Changed
+- `skills/usage-statusline/SKILL.md` + `references/build-guide.md` — example renders, field tables, §0 as-built decisions, and the §2 stdin schema (now documents `effort` / `thinking`); §5 verbatim script re-spliced byte-identical.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.30.0` → `0.31.0`.
+- `plugins/shaughv-code/` — regenerated (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.30.0] — 2026-07-06
 
 Removed: the **`usage-statusline`** pace tick, by request. Everything else from the 0.27.0–0.29.0 run stays — trend arrows, colored ctx %, high-usage decimals, eighth-precision fill on the tinted track, the deeper thinned sample history, and the git-branch segment.

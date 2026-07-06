@@ -2,7 +2,7 @@
 // Claude Code status line: live 5-hour + weekly usage with a burn-rate "time left" estimate.
 //
 // Reads the status-line JSON on stdin, renders two rows:
-//   row 1:  <model> · ctx <n>% · $<cost> session · ⎇ <git branch>
+//   row 1:  <model> <effort> · ctx <n>% · $<cost> session · <dir> ⎇ <git branch>
 //   row 2:  5h <bar> <n>% [~time left ↗/↘] · resets <clock>   ·   7d <bar> <n>% · resets <day>
 //
 // The 5h/7d percentages come straight from `rate_limits` in the stdin payload (ground truth,
@@ -100,6 +100,12 @@ function fmtPct(p) {
     return s.endsWith(".0") ? s.slice(0, -2) : s;
   }
   return String(Math.round(p));
+}
+
+// Last path segment, tolerant of / and \ separators and trailing separators.
+function baseName(p) {
+  const parts = String(p).replace(/[\\/]+$/, "").split(/[\\/]/);
+  return parts[parts.length - 1] || "";
 }
 
 // Parse the content of a git HEAD file -> branch name, short SHA (detached), or null.
@@ -399,20 +405,32 @@ function render(data, state, now) {
 
   const proj = updateAndProject(fh, state, now);
 
-  // row 1: model · ctx · cost · git branch
+  // row 1: model+effort · ctx · cost · dir ⎇ branch
   const p1 = [];
-  if (data.model && data.model.display_name) p1.push(data.model.display_name);
+  if (data.model && data.model.display_name) {
+    let m = data.model.display_name;
+    // active thinking/effort level, dim, right after the model; "no-think" when thinking is
+    // explicitly disabled (the effort level is inert in that state)
+    if (data.thinking && data.thinking.enabled === false) m += ` ${DIM}no-think${RESET}`;
+    else if (data.effort && typeof data.effort.level === "string") m += ` ${DIM}${data.effort.level}${RESET}`;
+    p1.push(m);
+  }
   const ctx = data.context_window && data.context_window.used_percentage;
   // ctx takes the same thresholds as the bars — context exhaustion (auto-compact) is the
   // mid-session constraint, so it should escalate visually the same way
   if (typeof ctx === "number") p1.push(`ctx ${colorFor(ctx)}${Math.round(ctx)}%${RESET}`);
   const cost = data.cost && data.cost.total_cost_usd;
   if (typeof cost === "number") p1.push(`$${cost.toFixed(2)} session`);
-  const wsDir = (data.workspace && data.workspace.current_dir) || data.cwd;
-  if (wsDir) {
-    const branch = gitBranch(wsDir);
-    if (branch) p1.push(`${DIM}⎇ ${RESET}${branch}`);
-  }
+  // where this session lives: basename of the launch dir (project_dir), plus the git branch
+  // of the session's current dir (worktree-aware) — "shaughv-code ⎇ main"
+  const ws = data.workspace || {};
+  const launchDir = ws.project_dir || ws.current_dir || data.cwd;
+  const loc = launchDir ? baseName(launchDir) : "";
+  const branchDir = ws.current_dir || data.cwd || launchDir;
+  const branch = branchDir ? gitBranch(branchDir) : null;
+  if (loc && branch) p1.push(`${loc} ${DIM}⎇ ${RESET}${branch}`);
+  else if (branch) p1.push(`${DIM}⎇ ${RESET}${branch}`);
+  else if (loc) p1.push(loc);
   const row1 = p1.join(`${DIM} · ${RESET}`);
 
   // row 2: 5h ... · 7d ...
@@ -481,6 +499,11 @@ function selftest() {
   // dur + clock
   ok(dur(2 * 3600 + 45 * 60) === "2h45m", `dur 2h45m, got ${dur(2 * 3600 + 45 * 60)}`);
   ok(dur(8 * 60) === "8m", `dur 8m, got ${dur(8 * 60)}`);
+
+  // baseName: both separator styles, trailing separators, bare names
+  ok(baseName("C:\\Users\\x\\git\\my-repo\\") === "my-repo", "baseName windows + trailing");
+  ok(baseName("/home/x/git/my-repo") === "my-repo", "baseName posix");
+  ok(baseName("my-repo") === "my-repo", "baseName bare");
 
   // parseGitHead: branch ref, nested branch, detached SHA, junk
   ok(parseGitHead("ref: refs/heads/main\n") === "main", "HEAD branch ref");
@@ -572,6 +595,9 @@ function selftest() {
   // full render with a realistic payload doesn't throw and has 2 rows
   const data = {
     model: { display_name: "Opus" },
+    effort: { level: "xhigh" },
+    thinking: { enabled: true },
+    workspace: { project_dir: "Z:\\nowhere\\demo-repo", current_dir: "Z:\\nowhere\\demo-repo" },
     context_window: { used_percentage: 12 },
     cost: { total_cost_usd: 1.84 },
     rate_limits: {
@@ -583,6 +609,17 @@ function selftest() {
   ok(r.out.split("\n").length === 2, "render -> 2 rows");
   ok(strip(r.out).includes("23%") && strip(r.out).includes("41%"), "render shows both %");
   ok(r.out.includes(`ctx \x1b[32m12%`), "ctx % colored by threshold");
+  ok(strip(r.out).includes("Opus xhigh"), "effort level shown after the model");
+  ok(strip(r.out).includes("demo-repo"), "launch-dir basename shown");
+
+  // thinking disabled -> "no-think" replaces the (inert) effort level
+  const rOff = render(
+    { model: { display_name: "Opus" }, effort: { level: "xhigh" }, thinking: { enabled: false } },
+    { samples: [], emaSecsLeft: null, window: null },
+    now,
+  );
+  ok(strip(rOff.out).includes("Opus no-think"), "thinking off -> no-think");
+  ok(!strip(rOff.out).includes("xhigh"), "inert effort level hidden when thinking is off");
 
   console.log(`${fail === 0 ? "ALL PASS" : "HAD FAILURES"} — ${pass} passed, ${fail} failed`);
   console.log("--- sample render ---");
