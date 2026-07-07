@@ -20,7 +20,10 @@
         |                                { "mcpServers": { ... } }: the root file
         |                                is the bare Claude-plugin shape, and the
         |                                Codex package wants the wrapped shape)
-        \-- skills/...                  (copied verbatim from root skills/)
+        \-- skills/...                  (copied verbatim from root skills/, EXCEPT
+                                         the Claude-only skills listed in
+                                         $ExcludeSkills below, which are omitted
+                                         from the Codex package)
 
     Run without switches to regenerate the tracked package after root content
     changes. Run with -Check (validation/CI) to prove the tracked package is
@@ -52,6 +55,17 @@ $mirror    = Join-Path $repoRoot 'plugins\shaughv-code'
 $srcSkills = Join-Path $repoRoot 'skills'
 $srcManif  = Join-Path $repoRoot '.codex-plugin\plugin.json'
 $srcMcp    = Join-Path $repoRoot '.mcp.json'
+
+# --- Claude-only skills excluded from the Codex package ------------------------
+# Root skills whose entire purpose is Claude Code / Anthropic-harness specific and
+# therefore must NOT ship in the Codex surface. `subagent-model-preference` selects
+# between Anthropic model classes (Opus/Sonnet) and Claude's xhigh/max effort levels,
+# none of which exist on Codex/GPT, so carrying it there would be meaningless. (The
+# skill still self-documents "ignore me on non-Anthropic agents" for the skills.sh
+# install path — see its SKILL.md scope note.) Both the real build and the -Check
+# validation call Build-Package, so this exclusion stays consistent across regenerate
+# and validate. Match is by top-level skill directory name (case-insensitive).
+$ExcludeSkills = @('subagent-model-preference')
 
 # --- Windows MAX_PATH safety ---------------------------------------------------
 # On install, Codex clones the whole marketplace repo; on Windows git's working-
@@ -123,10 +137,14 @@ function Build-Package {
     Copy-Item -LiteralPath $srcManif -Destination (Join-Path $Destination '.codex-plugin\plugin.json')
     Write-WrappedMcp -Destination (Join-Path $Destination '.mcp.json')
 
-    # Copy skills verbatim, file-by-file (preserves bytes and structure).
+    # Copy skills verbatim, file-by-file (preserves bytes and structure), except
+    # the Claude-only skills named in $ExcludeSkills (matched by top-level skill
+    # directory), which are omitted from the Codex package entirely.
     $skillFiles = Get-ChildItem -LiteralPath $srcSkills -Recurse -File -Force
     foreach ($file in $skillFiles) {
         $rel      = Get-RelativePath -Base $srcSkills -Path $file.FullName
+        $topDir   = ($rel -split '[\\/]', 2)[0]
+        if ($ExcludeSkills -contains $topDir) { continue }
         $destPath = Join-Path $Destination (Join-Path 'skills' $rel)
         $destDir  = [System.IO.Path]::GetDirectoryName($destPath)
         if (-not (Test-Path -LiteralPath $destDir)) {

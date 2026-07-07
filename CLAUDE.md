@@ -40,7 +40,9 @@ Each of these was added by explicit ask — don't remove them without one:
   is fixed because `remotion add` has to run from inside an existing project.
 - **`build-codex-plugin.ps1` + `plugins/shaughv-code/` + `.codex/config.toml`** —
   the Codex surface. `plugins/shaughv-code/` is a generated, self-contained Codex
-  package (a copy of root `skills/`, a wrapped copy of `.mcp.json`, and the Codex
+  package (a copy of root `skills/` — minus the Claude-only skills in the build
+  script's `$ExcludeSkills`, currently `subagent-model-preference` — a wrapped copy
+  of `.mcp.json`, and the Codex
   manifest); `build-codex-plugin.ps1` regenerates it from root; `.codex/config.toml`
   is a repo-local MCP fallback. **Never hand-edit `plugins/shaughv-code/`.** See
   `AGENTS.md` for the full Codex story.

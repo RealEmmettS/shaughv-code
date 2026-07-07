@@ -1,10 +1,10 @@
 # Subagent Model Preference — repo-level convention
 
-> **Where this goes:** paste the section below into this repository's agent-instructions file —
-> `CLAUDE.md` (Claude Code), `AGENTS.md` (Codex and others), or the equivalent — or hand it to any
-> repo-scoped agent. It sets the model/effort standard for **every subagent spawned while working in
-> this repo**. It mirrors the operator's user-global preference; repo agents should follow it so their
-> fan-out matches the operator's standing default. Set 2026-07-01 per Emmett.
+> **Where this goes:** paste the section below into this repository's Claude Code agent-instructions
+> file (`CLAUDE.md`) — or hand it to any repo-scoped Claude Code agent. It sets the model/effort
+> standard for **every subagent spawned while working in this repo**. It mirrors the operator's
+> user-global preference; repo agents should follow it so their fan-out matches the operator's standing
+> default. Set 2026-07-01 per Emmett.
 
 ---
 

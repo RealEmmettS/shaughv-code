@@ -50,8 +50,13 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 
 - **`plugins/shaughv-code/`** is the self-contained Codex package — a generated
   copy of root `.codex-plugin/plugin.json`, a wrapped copy of `.mcp.json`, and a
-  copy of `skills/`. **Never hand-edit it.** Regenerate from root with
-  `pwsh ./build-codex-plugin.ps1` (validate with `-Check`).
+  copy of `skills/` **minus the Claude-only skills excluded by
+  `build-codex-plugin.ps1` (`$ExcludeSkills`)** — currently
+  `subagent-model-preference`, whose Opus/Sonnet model-class and `xhigh`/`max`
+  effort convention has no valid mapping on Codex/GPT. **Never hand-edit it.**
+  Regenerate from root with `pwsh ./build-codex-plugin.ps1` (validate with
+  `-Check`). To keep a future Claude-only skill out of the Codex surface, add its
+  directory name to `$ExcludeSkills` and regenerate.
 - **`.agents/plugins/marketplace.json`** is the Codex marketplace entry. Its
   source is `{ "source": "local", "path": "./plugins/shaughv-code" }` — a
   subdirectory, not the repo root (Codex does not list a plugin whose local

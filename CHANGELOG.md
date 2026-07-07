@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.32.0] — 2026-07-06
+
+Changed: the **`subagent-model-preference`** skill is now scoped to Claude Code / Anthropic harnesses only, and is excluded from the Codex package — its Opus/Sonnet model classes and `xhigh`/`max` effort levels have no valid mapping on Codex/GPT.
+
+### Added
+- `build-codex-plugin.ps1` — a `$ExcludeSkills` list (currently `subagent-model-preference`) that the copy loop skips by top-level skill directory. Both the real build and `-Check` call `Build-Package`, so the exclusion is enforced identically on regenerate and validate. Header comment + inline comment document the exclusion and how to extend it.
+
+### Changed
+- `skills/subagent-model-preference/SKILL.md` + `references/repo-snippet.md` — added a **Scope** blockquote and a frontmatter `description` clause marking the skill Claude Code / Anthropic-harness only (any non-Anthropic agent should ignore it — its Opus/Sonnet model classes and `xhigh`/`max` effort levels have no mapping elsewhere), and stripped the skill body + repo-install snippet of every Codex / `AGENTS.md` / other-harness reference so the convention reads as Claude-only throughout. The in-skill scope note is the safety net for the skills.sh install path, which delivers the skill file directly and can't be reached by the Codex-package exclusion.
+- `.codex-plugin/plugin.json` — dropped the "standing subagent model/effort preference convention" clause from the `description` (added a note that the skill is intentionally omitted from the Codex surface) and removed the now-orphaned `model-preference`, `opus`, `sonnet`, `effort` keywords (kept `subagent`, still relevant to `spawn`).
+- `AGENTS.md` + `CLAUDE.md` — the Codex-surface descriptions now note the package is a copy of root `skills/` **minus** the `$ExcludeSkills` Claude-only skills, and how to exclude a future one.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.31.0` → `0.32.0`.
+- `plugins/shaughv-code/` — regenerated; `skills/subagent-model-preference/` no longer present in the Codex package (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
+### Removed
+- `plugins/shaughv-code/skills/subagent-model-preference/` — the Claude-only skill is dropped from the tracked Codex package. It remains fully present in the Claude surface (root `skills/`).
+
 ## [0.31.0] — 2026-07-06
 
 Added: **`usage-statusline`** row 1 now shows the active thinking/effort level beside the model, and the session's launch-directory name beside the git branch.

@@ -8,10 +8,16 @@ description: >-
   ships (the mapping-forward procedure lives here) or when installing the rule into a repo/machine
   (paste-able snippets in references/). Short form: Opus 4.8 [1m] at xhigh (max when needed) for
   deep work; Sonnet 5 at max (xhigh when lighter) for fan-out; never Haiku/budget classes, never
-  auto-substitute Fable/mythos, never below xhigh. Set 2026-07-01 per Emmett.
+  auto-substitute Fable/mythos, never below xhigh. Set 2026-07-01 per Emmett. Scope: Claude Code /
+  Anthropic harnesses only — non-Anthropic agents should ignore this skill.
 ---
 
 # Subagent Model Preference
+
+> **Scope — Claude Code / Anthropic harnesses only.** This convention selects between Anthropic model
+> *classes* (Opus, Sonnet — never Haiku/Fable) and Claude's `xhigh`/`max` effort levels, which exist
+> only on Claude Code and other Claude-model harnesses. On **any non-Anthropic agent, ignore this skill
+> entirely** — its Opus/Sonnet model classes and effort levels have no valid mapping there.
 
 The operator's standing convention for the model + effort of **every subagent** spawned in any
 session, any repo. It mirrors the user-global preference in `~/.claude/CLAUDE.md`; this skill is the
@@ -81,7 +87,7 @@ role:
    below**. The floor stays at "one below the top" (today = `xhigh`) — never lower.
 4. Confirm the exact model IDs and the long-context suffix (today `[1m]`), and update the
    `{model:'opus'|'sonnet'}` tool aliases if the class keywords change (check current model docs).
-5. Bump the "Set …" date — here, in `references/`, and in any CLAUDE.md/AGENTS.md installs.
+5. Bump the "Set …" date — here, in `references/`, and in any CLAUDE.md installs.
 
 **Rule of thumb:** _Opus + Sonnet classes only (never Haiku, never auto-adopt Fable/mythos), top-ish
 effort, never below the second-highest effort._
@@ -93,7 +99,7 @@ Two paste-able snippets, for surfaces that don't load this skill:
 - [`references/user-global-snippet.md`](references/user-global-snippet.md) — for
   `~/.claude/CLAUDE.md` on any machine (applies to every project).
 - [`references/repo-snippet.md`](references/repo-snippet.md) — for a repository's `CLAUDE.md`
-  (Claude Code) / `AGENTS.md` (Codex and others), so repo-scoped agents on any harness follow it.
+  (Claude Code), so repo-scoped Claude Code agents follow it.
 
 Keep installs in lockstep with this skill when the mapping advances.
 

@@ -8,6 +8,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ## Most recent release — early July 2026
 
+**Changed**
+- The house rule for **which AI model and thinking level every helper agent should use** is now clearly marked as a Claude-only rule, and it's been removed from the Codex version of this bundle. Why: that rule talks about specific Claude models (the deep-reasoning one and the fast workhorse one) and Claude's thinking-effort dials — none of which exist on Codex, which runs a different company's AI. So on Codex, Cursor, Gemini, or any non-Claude assistant, the rule now plainly says "ignore me." Everywhere it still belongs — Claude Code — nothing changes.
+
+## Just before the latest — early July 2026
+
 **Added**
 - The status bar's top row now tells you two more things at a glance: **how hard the assistant is currently thinking** (the reasoning level shown right next to the model's name — and a clear "no-think" note if deep thinking is switched off entirely), and **which project folder this session was launched in**, shown right beside the branch name. Together the top row now reads like a full "where am I and what am I running" line: model, thinking depth, memory fill, session cost, folder, and branch.
 
