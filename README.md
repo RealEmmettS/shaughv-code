@@ -13,7 +13,7 @@ For first-time install — paste these two lines into any Claude Code session:
 /plugin install shaughv-code@shaughv-code
 ```
 
-That's it. All skills below auto-load whenever their description matches the task. The bundled MCP server connects on first use; the bundled slash command is available immediately.
+That's it. All skills below auto-load whenever their description matches the task. The bundled MCP servers connect on first use; the bundled slash command is available immediately.
 
 **Optional follow-up:** for the Remotion team's official skill set, run `npx skills add remotion-dev/skills` separately. Those skills aren't bundled here so they stay upstream-controlled.
 
@@ -26,7 +26,7 @@ codex plugin marketplace add RealEmmettS/shaughv-code
 codex plugin add shaughv-code@shaughv-code
 ```
 
-Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation + Craft Docs) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
+Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation, Craft Docs, and Shaughv Health) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
 
 ### Alternative: install skills-only with `npx skills`
 
@@ -117,6 +117,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 |---|---|---|
 | `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
 | `craft-docs` | `https://mcp.craft.do/links/.../mcp` (Streamable HTTP) | Connects to a specific Craft Docs link. OAuth-gated — first tool use pops a Craft sign-in flow, so the bundled URL alone is not a credential. Exposes Craft's standard tools (read/write blocks, revert). |
+| `shaughv-health` | `https://health.emmetts.dev/api/mcp` (Streamable HTTP) | Connects to Emmett's personal health-data MCP server. OAuth-gated via Google sign-in (allowlisted account) — first tool use pops a sign-in flow, so the bundled URL alone is not a credential. Exposes health/nutrition/sleep/exercise query and logging tools. |
 
 Both surfaces bundle these now: Claude Code reads them from the root `.mcp.json`, and the Codex package ships them too (`plugins/shaughv-code/.mcp.json`). Codex sessions run *inside this repo* also pick them up from `.codex/config.toml` before the plugin is installed.
 
@@ -134,7 +135,7 @@ shaughv-code/
 │   └── config.toml          # repo-local Codex MCP fallback (in-repo sessions)
 ├── .codex-plugin/
 │   └── plugin.json          # Codex plugin manifest (skills + MCP)
-├── .mcp.json                # bundled MCP servers (Remotion docs, Craft Docs)
+├── .mcp.json                # bundled MCP servers (Remotion docs, Craft Docs, Shaughv Health)
 ├── build-codex-plugin.ps1   # regenerates plugins/shaughv-code/ from root
 ├── commands/
 │   └── create-video.md      # /shaughv-code:create-video

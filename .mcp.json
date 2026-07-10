@@ -6,5 +6,9 @@
   "craft-docs": {
     "type": "http",
     "url": "https://mcp.craft.do/links/LKUYYz65h6s/mcp"
+  },
+  "shaughv-health": {
+    "type": "http",
+    "url": "https://health.emmetts.dev/api/mcp"
   }
 }

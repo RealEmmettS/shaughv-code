@@ -6,7 +6,15 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — 9 July 2026
+## Most recent release — 10 July 2026
+
+**Added**
+- The bundle now carries a **third built-in helper connection** — a link to Emmett's own personal health service. Once it's connected, the assistant can look things up and log entries directly (nutrition, sleep, steps, heart rate, workouts, and the like) on both the Claude and Codex versions of the bundle. The first time it's used it asks you to sign in with Google — and only Emmett's own approved account is let in — so even though the link ships inside this public bundle, the link by itself doesn't give anyone access. It's not a password.
+
+**Behind the scenes**
+- Listed the new connection everywhere the existing two are already described (the read-me, the maintainer notes, and the bundle's descriptions and search terms), and while in there filled in the notes-app connection on one maintainer list it had been missing from. Kept all the version numbers in step and refreshed the Codex copy of the bundle.
+
+## Previous release — 9 July 2026
 
 **Added**
 - The thinking helper now has a **strategy mode** built in — for contests, negotiations, competitor moves, and "what's my play" questions. It draws on four classic strategy traditions (Sun Tzu's Art of War, the 36 Stratagems, Musashi's Five Rings, and game theory), always asks "do you even need to fight this?" before reaching for tactics, and carries a firm ethics line against deception that harms people. The **complete classic Art of War text** ships alongside it as optional deep-dive reading.
@@ -19,7 +27,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 - The manual playbook for running pairs of helper agents (one to investigate, one to execute) is gone — it wasn't being used anymore.
 - Strategy advice no longer lives in its own separate skill; it's part of the thinking helper now, so there's one front door for all structured thinking.
 
-## Previous release — early July 2026
+## The release before — early July 2026
 
 **Changed**
 - The house rule for **which AI model and thinking level every helper agent should use** is now clearly marked as a Claude-only rule, and it's been removed from the Codex version of this bundle. Why: that rule talks about specific Claude models (the deep-reasoning one and the fast workhorse one) and Claude's thinking-effort dials — none of which exist on Codex, which runs a different company's AI. So on Codex, Cursor, Gemini, or any non-Claude assistant, the rule now plainly says "ignore me." Everywhere it still belongs — Claude Code — nothing changes.

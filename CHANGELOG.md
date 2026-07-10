@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.34.0] — 2026-07-10
+
+Added: a third bundled MCP server, **`shaughv-health`** — Emmett's personal health-data MCP at `https://health.emmetts.dev/api/mcp` — on both the Claude Code and Codex surfaces.
+
+### Added
+- `.mcp.json` — bundles a third MCP server, `shaughv-health`, pointing at `https://health.emmetts.dev/api/mcp` over Streamable HTTP transport (`"type": "http"`). The URL is OAuth-gated: installers see the server appear, then authenticate via Google sign-in (restricted to an allowlisted account) on first tool use, so the link committed to this public repo is not itself a credential. The server supports Dynamic Client Registration, so no OAuth-specific config is required beyond `type`/`url`. Exposes Emmett's health/nutrition/sleep/exercise query and logging tools.
+- `.codex/config.toml` — hand-added a matching `[mcp_servers.shaughv-health]` block (URL-only TOML shape) so Codex sessions run inside this repo pick up the server before the plugin is installed.
+
+### Changed
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — version bumped `0.33.0` → `0.34.0`; `health` and `shaughv-health` added to `keywords`; plugin description's MCP clause updated to list Shaughv Health alongside the Remotion documentation and Craft Docs MCP servers.
+- `.codex-plugin/plugin.json` — version bumped `0.33.0` → `0.34.0`; `interface.longDescription` updated to name Shaughv Health in the bundled-MCP-servers clause.
+- `README.md` — "MCP servers bundled" table extended with a `shaughv-health` row; "bundled MCP server" pluralized in the Claude install blurb; the Codex-install-section server list and the `.mcp.json` comment in the repo-layout tree updated to include Shaughv Health.
+- `CLAUDE.md`, `AGENTS.md` — the "Bundled non-skill components" `.mcp.json` bullet rewritten to enumerate all three servers (Remotion documentation, Craft Docs, and Shaughv Health), backfilling the `craft-docs` entry that was previously never added.
+- `plugins/shaughv-code/` — regenerated (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
 ## [0.33.0] — 2026-07-09
 
 Changed: **`critical-thinking`** absorbs **`strategic-thinking`** as its seventh framework and — together with **`logical-reasoning`** — is reframed **agent-first**: the default consumer is an agent slowing down to reason through its own in-progress work (self-check mode), with human facilitation retained as the secondary mode. The **`spawn`** skill is removed.
