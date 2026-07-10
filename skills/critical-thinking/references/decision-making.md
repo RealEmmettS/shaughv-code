@@ -1,13 +1,13 @@
 # Decision-Making Framework
 
 A structured process for making informed decisions when there are options to evaluate. Use
-when the user is choosing between paths, comparing options, or needs to commit to a direction.
+when choosing between paths, comparing options, or needing to commit to a direction.
 
 ## How this framework uses the canvas
 
 Decision-Making sessions accumulate facts, assumptions, constraints, options, and
-evaluations across 7 steps. The canvas is essential here — by Step 5, the user is
-evaluating options against criteria they wrote in Step 3, with constraints from Step 2.4,
+evaluations across 7 steps. The canvas is essential here — by Step 5, you're
+evaluating options against criteria you wrote in Step 3, with constraints from Step 2.4,
 under assumptions from Step 2.2. That's working-memory overflow without the canvas. Reach
 for visual models early (see Step 5).
 
@@ -17,7 +17,7 @@ for visual models early (see Step 5).
 
 Make sure you're solving the right decision before evaluating options.
 
-### Sub-questions to ask the user
+### Sub-questions to work — ask them of your own reasoning (in facilitation mode, pose them to the operator)
 
 **1.1.** Define the decision you are making and describe its context.
 - What exactly are you deciding?
@@ -38,9 +38,9 @@ that could meet your needs?
 - 1.4.5. If I look at this situation differently, can I avoid making this decision entirely?
 
 > **Reframe move:** Step 1.4.5 is the most powerful sub-question in the framework. Many
-> "decisions" disappear when reframed. If the user is genuinely stuck, push hard on this
-> one before continuing. Pair with the **Problem Restatement** techniques in
-> `references/problem-solving.md` Step 1.6.
+> "decisions" disappear when reframed. If you're genuinely stuck — or the operator is —
+> push hard on this one before continuing. Pair with the **Problem Restatement** techniques
+> in `references/problem-solving.md` Step 1.6.
 
 ---
 
@@ -48,7 +48,7 @@ that could meet your needs?
 
 Separate facts from assumptions, and identify what you still need to know.
 
-### Sub-questions to ask the user
+### Sub-questions to work
 
 **2.1.** List the facts that you know for sure about the situation.
 
@@ -75,7 +75,7 @@ Separate facts from assumptions, and identify what you still need to know.
 
 Map the boundaries before generating options.
 
-### Sub-questions to ask the user
+### Sub-questions to work
 
 **3.1.** List all of your needs and wants within this decision.
 - What is essential? What is unessential / nice-to-have?
@@ -97,7 +97,7 @@ Map the boundaries before generating options.
 
 **This is the divergent step.** Push for breadth before any narrowing.
 
-### Sub-questions to ask the user
+### Sub-questions to work
 
 **4.1.** Brainstorm at least five options.
 - Aim for as many as possible within 30 minutes.
@@ -113,7 +113,7 @@ new or different ideas?
 **4.4.** Rate each idea on a scale of 1 (useless) to 7 (superb).
 - Review all ideas that received a 6 or 7.
 
-> **Anti-anchoring move:** Don't let the user converge on the first 2 options. Push for
+> **Anti-anchoring move:** Don't converge on the first 2 options. Push for
 > at least five before any evaluation. Apply the **Four Commandments of Divergent Thinking**
 > from SKILL.md.
 
@@ -124,7 +124,7 @@ new or different ideas?
 Break the decision into parts and work systematically. **This is where externalization
 matters most.**
 
-### Sub-questions to ask the user
+### Sub-questions to work
 
 **5.1.** Break down the decision into its most prominent parts.
 - Make broader decisions first (eliminating the most options at once).
@@ -172,7 +172,7 @@ Render the chosen model as markdown in the working canvas.
 
 Commit. Then plan implementation.
 
-### Sub-questions to ask the user
+### Sub-questions to work
 
 **6.1.** Select the option that best aligns with your goals, constraints, and evaluations:
 - 6.1.1. Which option offers the most benefit while minimizing risks?
@@ -194,7 +194,7 @@ Commit. Then plan implementation.
 
 Don't skip this. The reflection is how decision-making improves over time.
 
-### Sub-questions to ask the user
+### Sub-questions to work
 
 **7.1.** What worked well, and what could be improved?
 
@@ -205,7 +205,7 @@ Don't skip this. The reflection is how decision-making improves over time.
 **7.4.** Are there patterns in your decision-making that need adjustment?
 
 > **When to ask Step 7:** Sometimes the answer isn't available until the decision plays
-> out. If so, schedule the reflection — name a specific date when the user will revisit.
+> out. If so, schedule the reflection — name a specific date to revisit it.
 > Otherwise it never happens. The canvas's "spaced revisit" field exists for this.
 
 ---
@@ -216,8 +216,8 @@ Before finalizing the canvas:
 
 - Does the chosen option pass the gut test? If you'd be uncomfortable telling a trusted
   colleague this is what you picked, that's a signal — surface it.
-- Does the conclusion follow from the evaluation, or did the framework rubber-stamp the
-  user's pre-existing preference?
+- Does the conclusion follow from the evaluation, or did the framework rubber-stamp a
+  pre-existing preference — the operator's, or your own?
 - Are the unfixable cons of the chosen option actually tolerable, or were they minimized?
 - What would have to be true in 3 months for this decision to look obviously wrong? How
   would you know early?
@@ -227,13 +227,13 @@ Heavy-on-assumptions decisions are **medium** or **low** even when they feel cer
 
 ---
 
-## Facilitation notes for this framework
+## Working notes for this framework
 
 - **Don't skip Step 1.4.5** ("Can I avoid this decision?"). Many decisions evaporate there.
-- **Don't skip Step 4.** Users will jump from "I have a problem" to "here are my two
-  options." Force at least five.
+- **Don't skip Step 4.** The jump from "I have a problem" straight to "here are my two
+  options" is tempting — yours as much as the operator's. Force at least five.
 - **Don't skip Step 7.** Even if the decision plays out over months, name the
   reflection date.
-- **Recommend mode:** when the user has a documented brief and wants a recommendation
+- **Recommend mode:** when the operator has a documented brief and wants a recommendation
   fast, run Steps 1–3 silently from the inputs and present a recommendation at Step 5/6.
-  But name what you skipped, so the user can object.
+  But name what you skipped, so the operator can object.

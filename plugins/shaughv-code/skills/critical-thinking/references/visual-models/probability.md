@@ -42,7 +42,7 @@ them.
 
 "Likely" means very different things to different people. When you assign probability,
 use a number (or a percentile range): **30%**, **75%**, **5–10%**. Even rough numbers
-beat fuzzy adjectives because they force the user to commit to a magnitude.
+beat fuzzy adjectives because they force you to commit to a magnitude.
 
 ---
 
@@ -258,5 +258,5 @@ the underlying utility scores and probabilities are often subjective estimates w
 substantial error bars. Tag confidence bands on the inputs, not just the conclusion.
 
 The matrix is a tool for thinking, not a calculator producing truth. When the result
-points to an option the user didn't expect, treat it as an invitation to inspect the
+points to an option you didn't expect, treat it as an invitation to inspect the
 inputs, not as a mandate.

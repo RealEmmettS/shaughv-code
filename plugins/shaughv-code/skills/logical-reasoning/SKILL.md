@@ -1,24 +1,26 @@
 ---
 name: logical-reasoning
 description: >-
-  Master toolkit for rigorous deductive and inductive reasoning. Use whenever the task involves
-  evaluating an argument, checking or building a proof, testing validity, symbolizing language
-  into logical notation, spotting a fallacy (including your own), weighing inductive,
-  statistical, or analogical evidence, or evaluating an explanation — or whenever a load-
-  bearing, contested conclusion you are about to assert deserves formal rigor. Trigger even when
-  the user never says "logic": "is this valid", "does this follow", "prove that", "symbolize
-  this", "what’s the fallacy", "sound or unsound", "how strong is this evidence", or any request
-  to reason carefully toward a conclusion. (For open-ended thinking facilitation prefer
-  critical-thinking; this skill is for formal rigor.) When in doubt whether reasoning needs to
-  be made rigorous, trigger.
+  Master toolkit for rigorous deductive and inductive reasoning — most often an agent applying
+  formal rigor to its OWN load-bearing, contested conclusion before asserting it. Use whenever
+  the task involves evaluating an argument, checking or building a proof, testing validity,
+  symbolizing language into logical notation, spotting a fallacy (including your own), weighing
+  inductive, statistical, or analogical evidence, or evaluating an explanation. Trigger even
+  when nobody says "logic": "is this valid", "does this follow", "prove that", "symbolize
+  this", "what’s the fallacy", "sound or unsound", "how strong is this evidence", or any move
+  toward a conclusion that deserves an audit. (For open-ended thinking, self-check, or
+  facilitation prefer critical-thinking; this skill is for formal rigor.) When in doubt whether
+  reasoning needs to be made rigorous, trigger.
 ---
 
 # Logical Reasoning
 
-A working manual for reasoning well — not a textbook to recite. The point is to reach
-or test knowledge: take a claim or an argument, find out what kind of support it has,
-apply the right method, show the work so it can be audited, and calibrate confidence to
-the actual logical strength.
+A working manual for reasoning well — not a textbook to recite. The most common
+invocation is an agent auditing its own reasoning: you are about to assert a
+load-bearing, contested conclusion, and it deserves formal rigor before it ships. The
+point either way is to reach or test knowledge: take a claim or an argument (yours, or
+one handed to you), find out what kind of support it has, apply the right method, show
+the work so it can be audited, and calibrate confidence to the actual logical strength.
 
 You already know what modus ponens is. This skill exists to stop the predictable
 failures that come from reasoning fast instead of carefully: asserting "valid" without a

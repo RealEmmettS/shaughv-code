@@ -1,7 +1,9 @@
 # Working Canvas
 
-The working canvas is the lossless ledger of a critical thinking session. It exists as a
-markdown file the user can watch update during the session and return to afterward.
+The working canvas is the lossless ledger of a critical thinking session. It is a
+*practice* before it is a file: structured, append-only, confidence-banded reasoning —
+kept inline for quick self-checks, or as a markdown file the operator can watch update
+during the session and return to afterward.
 
 ## The principle
 
@@ -13,19 +15,32 @@ The canvas is **append-only by default**. Items don't get overwritten when their
 changes — they get tagged with new status. Earlier framings stay visible because they often
 become relevant again.
 
-## Where the canvas lives
+## Scale to stakes (when the canvas is a file)
 
-At session start, propose a path. Default options:
+Match the skill's §1D rule:
 
-1. **User-specified path** — preferred. Ask: *"Where should I keep the working canvas?
+- **Quick self-check** — keep the canvas *inline* in your response: the same structure
+  (facts, tagged assumptions, confidence bands, sanity check), no file.
+- **High-stakes, long-running, or auditable work** — create the canvas as a **file** the
+  operator can open, watch, and audit — and a future session can resume.
+- **Human-facilitated sessions** — the canvas file is mandatory, as always.
+
+Everything below about updating and closing the canvas applies to both forms; the path
+conventions and watch-it-update behaviors apply to the file.
+
+## Where the canvas file lives
+
+When the canvas is a file, propose a path at session start. Default options:
+
+1. **Operator-specified path** — preferred. Ask: *"Where should I keep the working canvas?
    You can open it in another window and watch it update."*
 2. **Convention default** — `~/critical-thinking-sessions/<YYYY-MM-DD>-<topic>.md` if the
-   user wants the agent to pick.
+   operator wants the agent to pick.
 3. **Project-local** — `<project-root>/docs/thinking/<date>-<topic>.md` when the session
    is project work.
 
-The agent updates the canvas every turn. If the user has it open in another editor, they'll
-see the updates as they happen.
+The agent updates the canvas every turn. If the operator has it open in another editor,
+they'll see the updates as they happen.
 
 ## Canvas template
 
@@ -33,9 +48,9 @@ see the updates as they happen.
 # Critical Thinking Session — <topic>
 
 **Date:** YYYY-MM-DD
-**Framework:** <Contemplating | Decision-Making | Design | Problem-Solving>
-**Mode:** <Facilitate | Provoke | Recommend>
-**Stacked skills:** <none | logical-reasoning | strategic-thinking | ...>
+**Framework:** <Contemplating | Decision-Making | Design | Problem-Solving | Information Triage | Scientific Inquiry | Strategic / Adversarial>
+**Mode:** <Self-check | Facilitate | Provoke | Recommend>
+**Stacked skills:** <none | logical-reasoning | ...>
 
 ---
 
@@ -95,7 +110,8 @@ Analogies, links to prior projects, chunks of related knowledge.
 
 ### Step 1: <step name>
 **Sub-questions asked:** <list>
-**Responses:** <user's responses, in their own words where possible>
+**Responses:** <the answers — the operator's, in their own words where possible, or your
+own worked answers in self-check>
 **Insights:** <what surfaced>
 **Mode:** Convergent / Divergent
 
@@ -158,10 +174,11 @@ When updating the canvas mid-session, **preserve these things in their original 
 
 - **Emotional charge** — *"I'm dreading X"*. Never paraphrase to *"concerns about X."*
 - **Uncertainty markers** — *"I'm 60% confident."* Don't drop the percentage.
-- **The user's exact wording** where it carried specific meaning. If the user calls it
-  *"the conduit problem,"* keep that phrase, don't translate to *"the routing issue."*
+- **The original wording** — the operator's, or the source's — where it carried specific
+  meaning. If the operator calls it *"the conduit problem,"* keep that phrase, don't
+  translate to *"the routing issue."*
 - **Tacit reasoning** — *"I just have a bad feeling about this."* Capture it as written.
-  Don't translate to *"the user has identified risk factors."*
+  Don't translate to *"the operator has identified risk factors."*
 - **Connective tissue** — *why* a constraint matters, not just *that* it does. Keep the
   reasoning, not just the conclusion.
 
@@ -185,13 +202,13 @@ When updating the canvas mid-session, **preserve these things in their original 
 - **Chat is the conversation.** Brief, in-the-moment, responsive.
 - **Canvas is the territory.** Comprehensive, append-only, navigable later.
 
-The agent should never replace the canvas with a chat summary. If the user asks "where
+The agent should never replace the canvas with a chat summary. If the operator asks "where
 are we?" — point to the canvas, optionally produce a *checkpoint card* (status snapshot)
 in chat that references canvas sections, but don't rewrite the canvas content into chat.
 
 ## Resolution toggle
 
-The user can ask for any topic at three resolutions:
+Any topic can be asked for at three resolutions:
 
 - **Headline** — one sentence summary of where things stand on that topic
 - **Structured** — checkpoint-card density: a paragraph with key points
@@ -210,5 +227,5 @@ At session end, the canvas is finalized by:
 3. (Optional) Generating a separate executive summary document if formal deliverable
    is needed — but the canvas itself is the durable artifact.
 
-The canvas lives. The user revisits it. Future sessions on related topics start by reading
-the relevant prior canvases — that's how knowledge compounds across sessions.
+The canvas lives. The operator revisits it; future sessions on related topics start by
+reading the relevant prior canvases — that's how knowledge compounds across sessions.

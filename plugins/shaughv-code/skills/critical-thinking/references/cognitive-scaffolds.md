@@ -1,16 +1,19 @@
 # Cognitive Scaffolds
 
 Tools for managing cognitive load during a critical thinking session. When the canvas
-accumulates beyond what the user can hold in working memory, reach for these scaffolds.
+accumulates beyond what working memory can hold — yours, mid-task, or the operator's when
+you're facilitating — reach for these scaffolds.
 
-This material is drawn from the user's *Mental Toolbox* — the Learning chapter and
-Meta-Learning Research sections — adapted for live facilitation use.
+This material is drawn from the *Mental Toolbox* — the Learning chapter and Meta-Learning
+Research sections — adapted for use on your own reasoning mid-task, and for live
+facilitation.
 
 ## The principle
 
 Reductionism is not the answer to overwhelm. Externalization (visual models) plus
 cognitive scaffolds (chunks, analogies, encoding, active recall) are. The goal is not to
-make the information smaller — it is to make the user's *handle* on the information bigger.
+make the information smaller — it is to make the *handle* on the information bigger,
+yours or the operator's.
 
 ---
 
@@ -23,8 +26,9 @@ When the canvas has accumulated more than ~5 facts, ~3 assumptions, or ~3 option
 
 1. Identify items that pattern together — same source, same theme, same direction of
    pull.
-2. Give the chunk a name short enough to use in conversation. Use the user's own
-   vocabulary if possible.
+2. Give the chunk a name short enough to use in conversation. In facilitation, use the
+   operator's own vocabulary if possible; in self-check, use whatever term you'll
+   actually reuse.
 3. Reference the chunk by name in chat from then on. Keep the underlying items on the
    canvas, unchunked, for retrieval.
 
@@ -49,35 +53,36 @@ canvas; they're not substitutes for it.
 
 ## The encoding hierarchy
 
-From your Mental Toolbox: ways to make information stick, in order of effectiveness.
+From the Mental Toolbox: ways to make information stick, in order of effectiveness.
 
 | Level | Effort | Retention | When to use |
 |---|---|---|---|
 | **Structure alone** | Low | Low | Default — but recognize it doesn't stick |
 | **Chunking** | Low | Medium | When 5+ items accumulate |
-| **Sound (verbal)** | Medium | Medium-High | When introducing new terminology, say it aloud or have user say it |
+| **Sound (verbal)** | Medium | Medium-High | When introducing new terminology, say it aloud yourself, or have the operator say it, in facilitation |
 | **Abstract concept** | Medium | Medium-High | When the idea has structure but no obvious sensory hook |
-| **Tangible (multi-sensory)** | Higher | High | When the idea is complex and the user needs to retain it across sessions |
-| **Method of Loci** | High | Very High | For multi-session retention of a complex framework — anchor each part to a physical location the user knows |
+| **Tangible (multi-sensory)** | Higher | High | When the idea is complex and needs to survive across sessions, yours or the operator's |
+| **Method of Loci** | High | Very High | For multi-session retention of a complex framework — anchor each part to a physical location you know, or the operator knows, in facilitation |
 
 ### Practical move
 
 When introducing a complex concept in a session, escalate up the hierarchy:
 
 1. State it (structure)
-2. Give it a name the user can repeat (sound + chunking)
+2. Give it a name you can repeat — or the operator can, in facilitation (sound +
+   chunking)
 3. Connect it to a tangible image or scenario (tangible)
-4. Optionally, anchor it to a place the user knows (Method of Loci) for multi-session
-   retention
+4. Optionally, anchor it to a place you know, or the operator knows in facilitation
+   (Method of Loci), for multi-session retention
 
 ---
 
 ## Analogies
 
-When introducing a complex idea, find an analogy to something the user already knows.
-Analogies don't simplify the idea — they give the user a known structure to map the new
-idea onto, which costs much less working memory than learning the new structure from
-scratch.
+When introducing a complex idea, find an analogy to something already known — to you,
+or to the operator you're facilitating. Analogies don't simplify the idea — they give a
+known structure to map the new idea onto, which costs much less working memory than
+learning the new structure from scratch.
 
 ### How to construct a useful analogy
 
@@ -85,9 +90,9 @@ scratch.
    in the river"* is structural (irreversibility, branching). *"This decision is like a
    restaurant menu"* is surface (lots of options).
 2. **Name the limit of the analogy.** Every analogy breaks somewhere. State where, so
-   the user knows when to drop it.
-3. **Use the user's domain knowledge.** A construction analogy works for someone in
-   construction; a software analogy works for an engineer.
+   whoever's using it — you, or the operator — knows when to drop it.
+3. **Use your domain knowledge, or the operator's.** A construction analogy works for
+   someone in construction; a software analogy works for an engineer.
 
 ### Examples
 
@@ -101,9 +106,10 @@ scratch.
 
 ### When analogies go wrong
 
-The user accepts the analogy too literally. Watch for the user starting to reason from
-the analogy's structure rather than from the actual situation. When that happens, drop
-the analogy and return to the situation directly.
+Watch for reasoning that has started to follow the analogy's structure rather than the
+actual situation — yours, or the operator's, in facilitation. The analogy has been
+accepted too literally. When that happens, drop the analogy and return to the situation
+directly.
 
 ---
 
@@ -121,25 +127,26 @@ use a metaphor. Metaphors carry feeling and shape; analogies carry structure.
 - *"This codebase feels like a house of cards right now."* (Structurally fragile, small
   things can collapse it.)
 
-Metaphors are useful in **Contemplating** sessions especially — they let the user name
-felt experiences that resist analytical decomposition.
+Metaphors are useful in **Contemplating** sessions especially — they let you, or the
+operator you're facilitating, name felt experiences that resist analytical decomposition.
 
 ---
 
 ## Active Recall (opt-in)
 
-The single most effective technique for retention. From your Mental Toolbox: actively
+The single most effective technique for retention. From the Mental Toolbox: actively
 struggling to remember something, without looking, signals to the brain that the
-information is important.
+information is important. This scaffold needs two roles — one posing the prompt, one
+searching memory without peeking at the canvas. Facilitation only, not self-check.
 
 ### How to use during a session
 
-At a checkpoint (user-requested or at a major transition), offer:
+At a checkpoint (operator-requested or at a major transition), offer:
 
 > *"Before I show you the canvas, what do you remember as the key things we've
 > established so far?"*
 
-The user accepts or skips. If they accept:
+The operator accepts or skips. If they accept:
 
 1. Wait for them to recall (10–30 seconds of mental search is the sweet spot).
 2. Do not interrupt with hints.
@@ -151,10 +158,10 @@ The user accepts or skips. If they accept:
 
 ### When to skip active recall
 
-- The user explicitly declines.
+- The operator explicitly declines.
 - The session is short or moving fast.
-- The user is in distress (Contemplating mode, especially) — recall under emotional load
-  produces frustration, not retention.
+- The operator is in distress (Contemplating mode, especially) — recall under emotional
+  load produces frustration, not retention.
 
 ---
 
@@ -170,7 +177,8 @@ Then compare to the canvas. Anything missing is either:
 - Important but not retained (revisit how it was framed and chunked)
 
 This is one of the strongest signals for whether the session actually produced something
-the user owns vs. something that lives in the canvas but not in their head.
+that's owned — by you, or by the operator — vs. something that lives in the canvas but
+not in the head that needs it.
 
 ---
 
@@ -180,17 +188,17 @@ the user owns vs. something that lives in the canvas but not in their head.
 
 If the answer is "no," we don't have a conclusion yet. We have an artifact that looks
 like a conclusion. The teaching test is the strongest single check for whether
-externalization succeeded.
+externalization succeeded — in self-check as much as in facilitation.
 
-The variant: *"Could you write a 3-sentence Slack message to <name> explaining what we
-decided?"* — and then have them actually draft it. Watching them draft surfaces gaps
-faster than asking abstractly.
+The variant (facilitation): *"Could you write a 3-sentence Slack message to <name>
+explaining what we decided?"* — and then have them actually draft it. Watching them draft
+surfaces gaps faster than asking abstractly.
 
 ---
 
 ## The five chunk types
 
-From your *Meta-Learning Research* section, useful for tagging items on the canvas.
+From the *Meta-Learning Research* section, useful for tagging items on the canvas.
 
 | Chunk type | What it is | Example |
 |---|---|---|
@@ -215,7 +223,7 @@ for different handling:
 
 When a session's conclusions need to persist across weeks or months, schedule revisits.
 
-From your Mental Toolbox: the forgetting curve drops to ~21% retention after one month
+From the Mental Toolbox: the forgetting curve drops to ~21% retention after one month
 without review. Each review pushes the curve up.
 
 ### Practical move at session close
@@ -229,8 +237,8 @@ Add to the canvas's "Spaced revisit" field:
 - **Triggered revisit:** when <specific event> happens — e.g., when the decision plays
   out, when the deadline hits, when the assumption gets tested.
 
-The agent doesn't enforce these — the user does. But naming them on the canvas makes
-them more likely to happen.
+This session can't enforce these — a future you, reopening the canvas, or the operator
+does. But naming them on the canvas makes them more likely to happen.
 
 ---
 
@@ -260,11 +268,11 @@ externalizing as a concept map. See `references/visual-models/structure.md`.
 
 | Symptom | Reach for |
 |---|---|
-| User says *"I'm losing the thread"* | Checkpoint card + active recall offer |
+| You notice — or the operator says — *"I'm losing the thread"* | Checkpoint card + active recall offer |
 | Canvas has 5+ items in one section | Chunk them under a named handle |
-| Introducing a complex new idea | Analogy from user's domain |
-| Emotional weight matters | Metaphor in user's wording |
+| Introducing a complex new idea | Analogy from your domain, or the operator's |
+| Emotional weight matters | Metaphor in your wording, or the operator's |
 | Multi-session topic | Method of Loci anchor + spaced revisit schedule |
-| User can't articulate the conclusion | Teaching test |
+| You — or the operator — can't articulate the conclusion | Teaching test |
 | Canvas is dense with cross-refs | Concept map |
 | Decision was made but feels vague | Closed-book summary |

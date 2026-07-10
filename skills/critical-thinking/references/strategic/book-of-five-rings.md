@@ -16,8 +16,8 @@ public-domain classic, framed as a lens; apply it through the detection question
 - The position is set and the move is chosen — now it's about timing and execution.
 - Fast, interactive exchanges: a live negotiation, a sales call, a debate, a
   competitive match, a fast-moving rivalry.
-- The user is rigid — wedded to one approach, one "weapon," one tempo.
-- The user is reacting from agitation rather than reading the situation clearly.
+- The operator is rigid — wedded to one approach, one "weapon," one tempo.
+- The operator is reacting from agitation rather than reading the situation clearly.
 
 ## Earth — foundation and overview
 
@@ -101,6 +101,6 @@ just the flashing detail in front of you.
 
 In the Lens Ledger, capture the *execution* read: the rhythm and timing (act now or
 hold?), who holds the initiative and how to take it, what the situation looks like
-from the opponent's chair, where the user is being too rigid, and whether they're
+from the opponent's chair, where the operator is being too rigid, and whether they're
 reading clearly or through agitation. This lens turns a chosen move into a *when and
 how*.

@@ -85,7 +85,7 @@ specific findings, not just classification.
 
 ### Why a matrix beats prose
 
-The matrix forces every cell to be filled. Prose lets the user skip combinations they
+The matrix forces every cell to be filled. Prose lets the operator skip combinations they
 haven't thought about. Empty cells in the matrix are themselves a finding — *"we don't
 know how Option 2 performs on Criterion C"* — that prose hides.
 
@@ -221,7 +221,7 @@ Tally the wins, weight by share.
 
 ### Sanity check (Step 9)
 
-If the weighted ranking points to an option the user didn't expect, **don't immediately
+If the weighted ranking points to an option the operator didn't expect, **don't immediately
 adjust the weights to get the answer they wanted.** Instead:
 
 - Surface the discrepancy: "The matrix says X, but you seem to be leaning toward Y."

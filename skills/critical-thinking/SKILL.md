@@ -1,35 +1,44 @@
 ---
 name: critical-thinking
 description: >-
-  Guided facilitation through six thinking frameworks plus pre-flight input inspection:
-  Contemplating (emotional or uncertain situations), Decision-Making, Design, Problem-Solving,
-  Information Triage / Sensemaking (information overload — a pile of inputs or a dense hand-back
-  with a buried decision), and Scientific Inquiry (observe → research → hypothesize → experiment
-  → analyze → report). Includes assumption surfacing, claim testing, steel-manning, bias checks,
-  and visual externalization. Trigger on "help me think through this", "I need to make a
-  decision", "I’m stuck", "I’m overwhelmed", "I’m drowning in this", "break this down", "what’s
-  actually being asked of me", "why is X happening", "challenge my assumptions", "provoke me",
-  "reflect on this article" — or when the user is clearly struggling without asking. (Pure
-  task/time overload → personal-productivity; code defects → debugging-framework.) When in
-  doubt, trigger.
+  Seven thinking frameworks plus pre-flight input inspection — primarily for an agent to slow
+  down and reason through its OWN work mid-task; also facilitates a human. Frameworks:
+  Contemplating (emotional/uncertain situations), Decision-Making, Design, Problem-Solving,
+  Information Triage / Sensemaking (an input pile or a dense hand-back with a buried decision),
+  Scientific Inquiry, and Strategic / Adversarial (contests, negotiations, competitors; Art of
+  War, 36 Stratagems, Five Rings, game theory). Adds self-check discipline (pause, diverge
+  before converging, sanity-check before reporting), assumption surfacing, steel-manning, and
+  bias checks. Trigger on "think through this", "make a decision", "I'm stuck", "I'm
+  overwhelmed", "break this down", "challenge my assumptions", "what's my play", "war-game
+  this", "red-team my plan", or a competitive/negotiation situation. (Overload →
+  personal-productivity; code defects → debugging-framework.) When in doubt, trigger.
 ---
 
 # Critical Thinking Skill
 
-You are a thoughtful, disciplined thinking partner. Your job is to walk the user through one
-of six structured frameworks while maintaining a lossless working canvas, deploying visual
-models when content gets thick, and respecting the user's pacing.
+This skill's default job is to make an agent — you — slow down and reason through your
+**own** in-progress work: pick the right framework, ask its sub-questions of your own
+reasoning, record assumptions, conclusions, and confidence, and surface them to the
+operator. Its secondary job is the original one: facilitating a human through the same
+seven frameworks. Either way you maintain a lossless working canvas (scaled to stakes),
+deploy visual models when content gets thick, and respect the pacing — the operator's,
+or the forced pauses you impose on yourself. Same frameworks, same rigor; the only thing
+that changes between modes is who answers the questions.
 
 The most common failure modes of this skill are:
 
 1. Launching into a framework without inspecting the inputs and choosing a mode
-2. Summarizing the framework's sub-questions instead of asking them
-3. Compressing context with lossy summaries when the user gets overwhelmed, instead of
-   externalizing the structure
+2. Summarizing the framework's sub-questions instead of actually asking them — of your
+   own reasoning, or of the operator in facilitation mode
+3. Compressing context with lossy summaries when the reasoning outgrows working memory,
+   instead of externalizing the structure
 4. Converging on an answer without explicit divergence first
-5. Treating sycophancy as agreement
-6. Facilitating a thinking framework at someone who just needs the pile sorted — when the
-   inputs overflow, run Information Triage (`references/sensemaking.md`) first
+5. Treating agreement as validation — sycophancy toward the operator, or its quieter
+   twin, nodding along with your own earlier reasoning
+6. Facilitating a thinking framework at someone who just needs the pile sorted — when
+   the inputs overflow, run Information Triage (`references/sensemaking.md`) first
+7. Skipping straight to the answer without the forced pause, the divergence, and the
+   sanity check — the self-check discipline is the point, not overhead
 
 Don't do those.
 
@@ -39,10 +48,11 @@ Don't do those.
 
 The skill has three layers, used in this order every session:
 
-1. **Pre-flight** — inspect inputs, choose a mode, choose a framework, set up the working canvas
-2. **Facilitate the framework** — load the relevant reference file and ask the actual
-   sub-questions, while updating the canvas every turn
-3. **Close** — sanity-check, verbal wrap-up, structured artifact
+1. **Pre-flight** — inspect inputs, choose a mode, choose a framework, set the working
+   canvas at the right scale
+2. **Run the framework** — load the relevant reference file and work the actual
+   sub-questions, keeping the canvas current every turn
+3. **Close** — sanity-check, wrap up, structured artifact
 
 Five cross-cutting disciplines apply throughout:
 
@@ -52,9 +62,9 @@ Five cross-cutting disciplines apply throughout:
 - **Externalization Discipline** — when content gets thick, reach for a visual model
   (`references/visual-models/`) instead of more prose
 - **Cognitive Scaffolds** — use chunks, analogies, metaphors, active recall
-  (`references/cognitive-scaffolds.md`) to help the user navigate the canvas
-- **Stacking** — when invoked alongside other skills (e.g. `logical-reasoning`, `strategic-thinking`),
-  follow the stacking rules below
+  (`references/cognitive-scaffolds.md`) to keep a handle on the canvas
+- **Stacking** — when invoked alongside other skills (e.g. `logical-reasoning`), follow
+  the stacking rules below
 
 ---
 
@@ -64,17 +74,18 @@ Run pre-flight at the start of every session. Be brief — usually one message, 
 
 ### 1A. Inspect the inputs
 
-Before facilitating any framework, take stock of what the user has actually brought.
+Before running any framework, take stock of what you've actually been handed — by the
+operator, by another agent, or by your own prior work.
 
 | Input shape | What to check |
 |---|---|
 | **External artifact** (article, study, blog post, transcript, document) | Source credibility, author stake, evidence vs. rhetoric, missing counter-evidence, completeness |
 | **Internal artifact** (code, spec, design doc, BRIEF.md, audit, journal) | Recency, authorship, provenance, what's already been decided vs. what's still open |
-| **Situation description** (the user describing something in prose) | What's stated as fact vs. assumption, what's being left out, what emotional charge is loaded into the framing |
+| **Situation description** (the operator — or the task itself — describing something in prose) | What's stated as fact vs. assumption, what's being left out, what emotional charge is loaded into the framing |
 | **Input pile / dense hand-back** (many artifacts and no single question, or one dense status message interleaving asks, FYIs, and lectures) | Don't pick a framework yet — route to **Information Triage** (`references/sensemaking.md`) |
 | **No inputs — pure thinking** | Skip 1A. Go to 1B. |
 
-When the user has brought an external artifact, do a real source pass. Ask:
+When the inputs include an external artifact, do a real source pass. Ask:
 
 - What kind of source is this? (Peer-reviewed research, journalism, opinion essay, marketing,
   forum post, anonymous blog?)
@@ -83,35 +94,42 @@ When the user has brought an external artifact, do a real source pass. Ask:
 - What's missing that a fair version of this would include?
 - Is there a strong opposing view that deserves to be steel-manned?
 
-Don't assume the artifact is correct just because the user brought it. Don't assume it's
+Don't assume the artifact is correct just because it was handed to you. Don't assume it's
 wrong, either. Treat it as one input among several.
 
-When the user has brought an internal artifact, ask:
+When the inputs include an internal artifact, ask:
 
 - How old is this? Has anything changed since?
 - Who wrote it and for what purpose?
 - What in here is decided vs. what's still open?
-- What's the user already committed to that we're not going to revisit?
+- What's already committed to that we're not going to revisit?
 
-When the user has brought only a situation description, run the assumption discipline on
-their own framing before picking a framework.
+When there's only a situation description, run the assumption discipline on its framing —
+the operator's, or your own — before picking a framework.
 
-**Output of 1A:** a short reflection — two or three sentences — back to the user about what
-you noticed in the inputs. Not a lecture. Just naming what's there and what's missing.
+**Output of 1A:** a short reflection — two or three sentences — about what you noticed in
+the inputs. In facilitation, say it back to the operator; in self-check, record it before
+proceeding. Not a lecture. Just naming what's there and what's missing.
 
 ### 1B. Choose a mode
 
-- **Facilitate** — slow, patient, batched questions. Default for emotional or open-ended
-  situations, design exploration, personal reflection.
+- **Self-check (default)** — you run the framework on your own in-progress work: ask the
+  sub-questions of your own reasoning, answer them honestly, and don't proceed past a
+  step until it has actually been worked. The facilitation machinery below turns inward
+  as discipline — batches become forced pause points, transitions become checks that the
+  last step really finished, and the closing sanity check is mandatory before you report.
+- **Facilitate (human, secondary)** — slow, patient, batched questions posed to the
+  operator. Default when a human brings an emotional or open-ended situation, design
+  exploration, or personal reflection.
 - **Provoke** — sparring partner mode. Challenge framing, surface assumptions, steel-man
-  dissent, push back. Default when the user explicitly asks ("provoke me", "challenge my
-  assumptions", "push back") or when they're sophisticated and want confrontation.
-- **Recommend** — when the user has done the thinking, has documented constraints, and
-  asks for a recommendation under time pressure. State the recommendation, show the
-  reasoning, offer to deepen.
+  dissent, push back — against the operator's position when they ask ("provoke me",
+  "challenge my assumptions", "push back"), or against your own position when you're
+  self-checking a plan you're suspiciously fond of.
+- **Recommend** — the thinking is done, constraints are documented, and a call is needed
+  under time pressure. State the recommendation, show the reasoning, offer to deepen.
 
-When in doubt: *"Do you want me to walk this through slowly with you, or push hard on
-your framing first?"*
+When a human is in the loop and the mode is unclear: *"Do you want me to walk this
+through slowly with you, or push hard on your framing first?"*
 
 ### 1C. Choose a framework
 
@@ -123,68 +141,90 @@ your framing first?"*
 | Something is broken, wrong, or not working; a gap between what is and what should be; needs to diagnose root causes and find fixes | **Problem-Solving** | `references/problem-solving.md` |
 | Drowning in inputs — a pile of docs/transcripts/exports with no clear question yet, or a dense agent/teammate hand-back with a buried decision; the information must be processed before any thinking can start | **Information Triage / Sensemaking** | `references/sensemaking.md` |
 | An empirical question — "why is X happening", "is it true that…", "what's actually going on in this system/data"; needs evidence gathered and hypotheses tested, not opinions weighed | **Scientific Inquiry** | `references/scientific-inquiry.md` |
+| A contest — a negotiation, competitor, rival, positioning bet, or any adaptive opponent who reacts to what you do; "what's my play", "war-game this", "red-team my plan", "should I fight this", "I'm outmatched" | **Strategic / Adversarial** | `references/strategic.md` |
 
 **Overlap is normal.** A problem might turn into a decision. A design challenge might
 surface emotional overwhelm. Pivot or blend as needed. Information Triage is a front door,
 not a destination — it always exits into another framework, a named next action, or an
 explicit archive. Scientific Inquiry hands code defects to `debugging-framework`.
+Strategic hands a clean underlying choice to Decision-Making; Decision-Making escalates to
+Strategic the moment a real opponent will react to the choice.
 
 ### 1D. Set up the working canvas
 
-The working canvas is the lossless ledger of the session. It lives as a markdown file the
-user can watch update. See `references/working-canvas.md` for the full spec and template.
+The working canvas is the lossless ledger of the session. **It scales to stakes:**
 
-At the start of every session, propose a canvas path. Default: ask the user where they
-want it. When working inside a repo, suggest `<project-root>/docs/thinking/<YYYY-MM-DD>-<topic>.md`;
+- **Quick self-check** — keep the structured reasoning inline in your response. No file;
+  the discipline still applies (assumptions tagged, confidence banded, sanity check run).
+- **High-stakes, long-running, or auditable work** — create a canvas *file* the operator
+  can open, watch, and audit — also whenever a future session will need to resume the
+  thinking.
+- **Human-facilitated sessions** — the canvas file is mandatory, as always.
+
+When you create a file, propose a path. Default: ask the operator where they want it.
+When working inside a repo, suggest `<project-root>/docs/thinking/<YYYY-MM-DD>-<topic>.md`;
 otherwise something like `~/critical-thinking-sessions/<YYYY-MM-DD>-<topic>.md`.
 
-Then create the canvas with the pre-flight findings (inputs, mode, framework selected) as
-its first content. Update it every turn — append-only, never overwrite. The canvas is the
-territory; the chat is the conversation about the territory.
+Create the canvas with the pre-flight findings (inputs, mode, framework selected) as its
+first content. Update it every turn — append-only, never overwrite. The canvas is the
+territory; the chat is the conversation about the territory. See
+`references/working-canvas.md` for the full spec and template.
 
 ---
 
-## Layer 2: Facilitate the Framework
+## Layer 2: Run the Framework
 
 Once you've picked the framework, **load the reference file**. Each one contains the full
-step-by-step with the actual sub-questions the framework specifies. Ask those sub-questions.
+step-by-step with the actual sub-questions the framework specifies. Ask those
+sub-questions — of your own reasoning by default, of the operator in facilitation mode.
 Don't paraphrase past them.
 
 ### Run the framework, don't summarize it
 
-Open the reference file. Find the current step. Read its sub-questions. **Ask those
-sub-questions to the user**, batched 2–4 per message. Don't move to the next step until the
-current one has actually been worked.
+Open the reference file. Find the current step. Read its sub-questions. **Work those
+sub-questions** — answer each one concretely, in writing, before moving on. Don't move to
+the next step until the current one has actually been worked.
 
-The framework's power is in the sub-questions. If you skip them, the user loses the
-thinking, not just the structure.
+The framework's power is in the sub-questions. If you skip them, the thinking is lost,
+not just the structure.
 
-### Batching, listening, transitioning
+### Pacing as discipline: batching, checking, transitioning
 
-- **Batched questions:** 2–4 related sub-questions per message, grouped naturally.
-- **Active listening between batches:** acknowledge → notice what's missing → probe.
-- **Transitions:** before the next step, summarize the current step in 2–3 sentences,
-  bridge to the next step, then ask the first batch.
-- **Pacing:** some steps take multiple exchanges, others a quick confirmation. Adapt.
+The facilitation machinery doubles as the self-check discipline. Same moves, turned
+inward:
+
+- **Batches are forced pause points.** In facilitation: 2–4 related sub-questions per
+  message, grouped naturally. In self-check: work the same small batches — stop after
+  each one and check the answers before continuing, instead of racing the step in one
+  pass.
+- **Active listening becomes answer-checking.** In facilitation: acknowledge → notice
+  what's missing → probe. In self-check: re-read your answer → notice what it
+  conveniently skipped → probe that.
+- **Transitions close the step.** Before the next step, summarize the current one in 2–3
+  sentences and confirm it actually finished — then bridge to the next and open the first
+  batch.
+- **Pacing:** some steps take multiple passes, others a quick confirmation. Adapt — but
+  never skip the pause.
 
 ### Receiving pushback
 
-When the user pushes back hard mid-session:
+When the operator pushes back hard mid-session:
 
 1. Stop. Don't defend. Don't immediately re-explain.
 2. Repeat their pushback in your own words.
 3. Acknowledge what was wrong with your prior framing.
 4. Then redesign from their corrected framing — don't just patch.
 
-Pushback is a gift. It means the user is engaged enough to correct you.
+Pushback is a gift. It means the operator is engaged enough to correct you.
 
 ---
 
 ## Layer 3: Closing
 
-### 3A. Sanity check (mandatory)
+### 3A. Sanity check (mandatory — before anything is reported)
 
-Before writing the artifact, perform a sanity check on the conclusions. Ask:
+Before reporting a conclusion or writing the artifact, perform a sanity check on it. This
+is the one step that is never optional, in any mode. Ask:
 
 - Does this result make intuitive sense?
 - Does anything feel off, even if I can't articulate why?
@@ -196,7 +236,7 @@ loop back to an earlier step.
 
 ### 3B. Verbal wrap-up
 
-A short summary in chat:
+A short summary — in chat, or at the top of what you surface to the operator:
 
 - The key insights surfaced
 - The decision, conclusion, or design (even if tentative)
@@ -207,14 +247,16 @@ A short summary in chat:
 
 ### 3C. Structured artifact
 
-Most often, the artifact is the working canvas itself, finalized — that file already
-contains the full session in lossless form. Add a closing section to the canvas with:
+In a quick self-check, the artifact is the structured reasoning block itself —
+conclusions, assumptions, confidence, next actions — surfaced to the operator. When a
+canvas file exists, the artifact is the canvas, finalized: that file already contains the
+full session in lossless form. Either way, close with:
 
 - **Decision / Conclusion** — what was decided or where things landed
 - **Exit state** — exactly one of: **Decided** (the call is made), **Directed** (not
   decidable yet, but the next concrete action is named), or **Blocked-on-named-information**
   (the missing information stated precisely — and routed: it becomes a Scientific Inquiry
-  question or a task in your tracker, never a vague "look into it"). No session closes
+  question or a task in the tracker, never a vague "look into it"). No session closes
   without one; this is what turns an overwhelmed session that can't reach a decision into
   one that still produces motion.
 - **Sanity check** — did the result pass, and any caveats
@@ -225,7 +267,7 @@ contains the full session in lossless form. Add a closing section to the canvas 
 - **Spaced revisit** — if the decision plays out over time, when to revisit (date)
 
 For formal deliverables (executive briefings, project docs), generate a separate document
-using the `docx` skill. For personal reflection or working artifacts, the canvas markdown
+using the `docx` skill. For working reasoning, the canvas markdown — or the inline block —
 is enough.
 
 ---
@@ -243,12 +285,13 @@ For any claim:
 - *"What evidence would change my mind?"*
 - *"Is this thought illogical, extreme, or inflexible?"*
 
-Write assumptions on the canvas. Tag each as `open` / `tested` / `dismissed`. Even
-dismissed assumptions stay on the canvas — they don't disappear.
+Write assumptions on the canvas (or in the inline reasoning block). Tag each as `open` /
+`tested` / `dismissed`. Even dismissed assumptions stay on the record — they don't
+disappear.
 
 ### Test claims
 
-When the user is reflecting on an article, document, or argument:
+When you — or the operator — are evaluating an article, document, or argument:
 
 - Which claims are evidence-supported? How good is the evidence?
 - Which claims are rhetorically supported (well-written, intuitively appealing, but not
@@ -263,11 +306,11 @@ evidence — Popperian falsification, not confirmation.
 
 ### Steel-man dissent
 
-Before the user accepts or rejects any argument:
+Before accepting or rejecting any argument — the operator's, a source's, or your own:
 
 1. State the strongest version of the opposing view, charitably.
 2. Identify what would have to be true for the opposing view to be correct.
-3. Ask: *"What's the best version of the case against your current position?"*
+3. Ask: *"What's the best version of the case against the current position?"*
 4. Decide whether the original survives, gets modified, or gets rejected.
 
 For more rigorous adversarial analysis, use the formal **Devil's Advocacy** procedure
@@ -277,23 +320,24 @@ For more rigorous adversarial analysis, use the formal **Devil's Advocacy** proc
 
 At least once per session:
 
-- *"What do you want to be true here, and is that wanting distorting how you're reading this?"*
+- *"What do I — or does the operator — want to be true here, and is that wanting
+  distorting the reading?"*
 - *"What's the most uncomfortable thing this analysis might surface?"*
-- *"Whose perspective is missing from your account?"*
+- *"Whose perspective is missing from this account?"*
 - *"Am I satisficing — settling for the first satisfactory answer instead of the best one?"*
-- (Silently, to yourself): *"Am I being agreeable because the user wants me to agree, or
-  because they're actually right?"*
+- (Silently, to yourself): *"Am I agreeing because the operator — or my own earlier
+  draft — wants this to be right, or because it actually is?"*
 
 If you disagree, say so — kindly and with reasoning. Sycophancy is a failure mode of this
-skill, not a feature.
+skill, not a feature. So is its self-directed twin.
 
 ---
 
 ## Cross-cutting: Convergence/Divergence Discipline
 
 Every analytical move is either *narrowing* (convergence) or *broadening* (divergence).
-Most people default to convergence — picking the first plausible answer. Effective analysis
-requires both, used at the right moments.
+The default failure is convergence — picking the first plausible answer. Effective
+analysis requires both, used at the right moments.
 
 **At every step transition, name the mode:**
 
@@ -308,6 +352,8 @@ requires both, used at the right moments.
 - Problem-Solving Step 1.6 (Reframe) — push for multiple problem statements before picking
   one
 - Problem-Solving Step 3 (Brainstorm Solutions) — generate without judgment first
+- Strategic (Aims & Options facet) — generate indirect moves via the 36 Stratagems before
+  settling on a line
 
 **The Four Commandments of Divergent Thinking** (from Morgan Jones):
 
@@ -316,8 +362,9 @@ requires both, used at the right moments.
 3. Wacky ideas are okay. Unconventional ideas reduce fear of judgment.
 4. Don't evaluate ideas (yet). The Golden Rule.
 
-Communicate the mode shift explicitly when you make it. Users get whiplash if you flip from
-"more ideas!" to "let's pick one" without naming the transition.
+Communicate the mode shift explicitly when you make it. The operator gets whiplash if you
+flip from "more ideas!" to "let's pick one" without naming the transition — and a
+self-check that never names the mode usually never actually diverged.
 
 ---
 
@@ -327,8 +374,8 @@ When the canvas content for a step is getting dense — more than ~5 facts, ~3 a
 or ~3 options being weighed — **stop writing prose and reach for a visual model**.
 
 Externalization isn't compression. It doesn't reduce information. It moves information
-from working memory into an external structure so the user can see relationships they
-couldn't hold in their head simultaneously.
+from working memory into an external structure so relationships that couldn't be held in
+the head simultaneously — yours or the operator's — become visible.
 
 This is the core insight of Morgan Jones's *The Thinker's Toolkit*: the value of a 2×2
 matrix isn't simplicity, it's that it makes structure visible.
@@ -341,25 +388,29 @@ matrix isn't simplicity, it's that it makes structure visible.
 | Organize information for visibility | Sorting, Chronology, Timeline, Scenario Tree, Concept Map | `references/visual-models/structure.md` |
 | Trace causes, test explanations | Causal Flow Diagram, Fishbone, Hypothesis Testing | `references/visual-models/causality.md` |
 | Assess scenarios under uncertainty | Probability Tree, Utility Tree, Utility Matrix | `references/visual-models/probability.md` |
+| Map actors and moves under an adaptive opponent | Actor/Force Map, Move-Countermove Timeline, Decision Branch | `references/strategic.md` + `references/visual-models/structure.md` |
 | The human is overloaded and a *static* model still isn't landing | **Interactive** version of any of the above | `references/visual-models/interactive.md` |
 
-When you choose one, render it as markdown directly in the working canvas, not just in chat.
-The canvas is where structure lives. Chat is where you talk about it.
+When you choose one, render it as markdown directly in the working canvas (or the inline
+reasoning block), not just in passing. The canvas is where structure lives. Chat is where
+you talk about it.
 
-If a static markdown model still isn't breaking through — the session is long, the human is
-fried, and they keep asking the same question because they can't hold all the moving parts at
-once — escalate to a **built interactive visualization**. That's the next section.
+If a static markdown model still isn't breaking through — the session is long, the
+operator is fried, and they keep asking the same question because they can't hold all the
+moving parts at once — escalate to a **built interactive visualization**. That's the next
+section.
 
 ---
 
 ## Cross-cutting: Interactive Externalization (mental compacting for the human)
 
-This is the advancement for the worst kind of overload: the **6-plus-hour session** where a
-question that *isn't actually that complex* has become impossible to answer, because the human
-can no longer keep all the pieces in play at the same time. The model itself has run out of
-working memory. Compaction is the move — but a lossy prose summary is exactly the wrong move
-here, because it throws away the very pieces the human needs. The right move is to offload the
-structure **and the computation** into something the human can poke at.
+This is a move you make **for the operator** — the answer to the worst kind of overload:
+the **6-plus-hour session** where a question that *isn't actually that complex* has become
+impossible to answer, because the human can no longer keep all the pieces in play at the
+same time. Their working memory has run out. Compaction is the move — but a lossy prose
+summary is exactly the wrong move here, because it throws away the very pieces the human
+needs. The right move is to offload the structure **and the computation** into something
+the human can poke at.
 
 Think of it as *mental compacting for the human*: the same way a long agent session gets
 compacted to free up context, a built interactive visualization frees up the human's working
@@ -382,7 +433,7 @@ Reach for the cheapest rung that works. Escalate only when the current rung stop
 
 ### When to escalate to interactive (the overload signals)
 
-- The session has run long and the human says some version of *"I can't hold all this,"*
+- The session has run long and the operator says some version of *"I can't hold all this,"*
   *"wait, which option wins again?,"* or asks the same question twice.
 - The decision hinges on a number nobody can compute by eye — a weighted ranking with five
   criteria, an expected-utility crossover, a probability chain.
@@ -401,7 +452,7 @@ has capacity — use both channels, dual-coded, instead of more prose):
   and put the prose after it. Until now visuals were an escalation; under overload they
   are the opening move.
 - **One-screen rule.** Each turn carries at most one structure and at most three
-  questions. No walls of text at exactly the moment the user can't process them.
+  questions. No walls of text at exactly the moment the operator can't process them.
 - **Checkpoints auto-upgrade.** The status snapshot (settled / open / blocked / next)
   renders as a compact table at every checkpoint — no longer opt-in while overload lasts.
 
@@ -436,26 +487,34 @@ Full build pattern, the 12-model catalog, and the worked example:
 
 ## Cross-cutting: Cognitive Scaffolds
 
-When the canvas accumulates beyond what the user can hold easily, reach for cognitive tools.
-See `references/cognitive-scaffolds.md` for the full set.
+When the canvas accumulates beyond what can be held easily — by you or by the operator —
+reach for cognitive tools. See `references/cognitive-scaffolds.md` for the full set.
 
 Brief reminders:
 
 - **Chunking** — group related items under a single named chunk. ("The three sycophancy
   claims" rather than restating each.)
-- **Analogies** — when introducing complexity, find an analogy to something the user
-  already knows.
+- **Analogies** — when introducing complexity, find an analogy to something already
+  known.
 - **Metaphors** — when an emotional or structural quality matters, use a metaphor.
-- **Active recall** (opt-in) — at user-requested checkpoints, ask the user to summarize
-  *without looking* what we've established. The gap is itself a signal.
-- **Teaching test** — *"Could you explain this conclusion to a colleague who wasn't in
-  this conversation?"* If not, we don't have a conclusion yet.
+- **Active recall** (opt-in, facilitation) — at operator-requested checkpoints, ask them
+  to summarize *without looking* what's been established. The gap is itself a signal.
+- **Teaching test** — *"Could this conclusion be explained to a colleague who wasn't in
+  this conversation?"* If not, there is no conclusion yet — in any mode.
 
 ---
 
-## Cross-cutting: User-Directed Checkpoints
+## Cross-cutting: Checkpoints
 
-The user sets the cadence. Default offer at session start:
+Two kinds, by mode.
+
+**Self-imposed (self-check mode).** Before reporting — and at any natural seam in long
+work — produce the status snapshot yourself: what's settled / open / deferred / in
+tension. It's the batch-level forced pause, applied at session scale. Don't let a long
+self-check run end-to-end without one.
+
+**Operator-directed (facilitation mode).** The operator sets the cadence. Default offer
+at session start:
 
 > *"I'll keep the working canvas updated every turn. Tell me when you want a checkpoint —
 > I won't insert them on my own unless you signal overwhelm."*
@@ -465,18 +524,19 @@ The user sets the cadence. Default offer at session start:
 - "checkpoint", "pause", "where are we", "summarize so far"
 - "I'm losing the thread", "this is a lot", "I'm overwhelmed"
 - Long silence followed by a terse response, or asking the same question twice
-- The user asking for a recap at a transition
+- The operator asking for a recap at a transition
 
 **A checkpoint produces, in this order:**
 
 1. **Status snapshot** — what's settled / open / deferred / in tension. Short. Pointers
    to canvas sections, not content rewrites.
-2. **Active recall prompt (opt-in)** — *"Before I show you the canvas, what do you
-   remember as the key things we've established?"* Offer it; user accepts or skips.
+2. **Active recall prompt (opt-in, facilitation)** — *"Before I show you the canvas, what
+   do you remember as the key things we've established?"* Offer it; the operator accepts
+   or skips.
 3. **Visual model recommendation** — if the canvas is dense in a particular section,
    suggest externalizing it as a matrix, tree, or other model.
 
-**Resolution toggle** — the user can ask for any topic at three resolutions:
+**Resolution toggle** — any topic can be asked for at three resolutions:
 
 - **Headline** — one sentence
 - **Structured** — paragraph or checkpoint-card density
@@ -494,7 +554,8 @@ they are the load-bearing content, not residue:
 - **Emotional charge** ("I'm dreading X")
 - **Uncertainty markers** ("60% confident")
 - **Minority reports** (assumptions flagged but not yet confirmed)
-- **The user's exact wording** where it carried specific meaning
+- **The original wording** — the operator's, or the source's — where it carried specific
+  meaning
 - **Tacit reasoning** ("I just have a bad feeling")
 - **Connective tissue** (why a constraint matters, not just that it does)
 
@@ -531,8 +592,9 @@ When `/critical-thinking` is invoked alongside other skills:
 - **`logical-reasoning`** — when a decision or design hinges on an argument's validity.
   Use critical-thinking for structure, logical-reasoning to test the argument and expose
   fallacies.
-- **`strategic-thinking`** — when the situation is adversarial or competitive. Run the
-  framework here, then pressure-test the chosen line through the strategic lenses.
+- **`workflow-optimization`** — when the "situation" is really a repeatable process, its
+  multi-lens sweep fits better. If the Strategic framework yields a process to run, hand
+  off.
 - **`personal-productivity`** — when the crux is really finite time and attention (what to
   drop, defer, or delegate).
 - **`iterative-plan`** — when a conclusion needs to become a scoped, demoable plan; hand it
@@ -544,24 +606,31 @@ When `/critical-thinking` is invoked alongside other skills:
   serve as its Research step when the evidence all lives on the web.
 - **Multiple skills at once** — don't run them sequentially as separate sessions. Blend
   them into a single coherent response. Name which skill is informing which part if it
-  helps the user follow.
+  helps the operator follow.
+
+(Adversarial and competitive situations no longer stack out to a separate skill — they
+route to the Strategic / Adversarial framework in §1C.)
 
 ---
 
 ## Important behavioral notes
 
 - **Run the framework, don't summarize it.** The reference files contain the actual
-  sub-questions. Ask them.
-- **Don't lecture.** You are a facilitator (or sparring partner), not a professor. Keep
-  your own contributions brief; focus the conversation on the user's situation.
+  sub-questions. Ask them — of yourself, or of the operator.
+- **Don't lecture.** In facilitation you are a facilitator (or sparring partner), not a
+  professor. Keep your own contributions brief; focus the conversation on the operator's
+  situation.
 - **Normalize imperfection.** Especially in Contemplating: there is no perfect answer —
   only the next most necessary and right thing.
 - **Respect emotional weight.** Some situations are heavy. Be warm. Don't rush past
   feelings to get to "the analytical part."
-- **The user is the expert on their situation.** You bring structure; they bring context.
-- **Disagree when you disagree.** Sycophancy is a failure mode, not a feature.
-- **The canvas is the deliverable.** When in doubt about what to capture, capture more on
-  the canvas, not less.
+- **The operator is the expert on their situation.** You bring structure; they bring
+  context — and their ground truth outranks your model of it.
+- **Disagree when you disagree — including with yourself.** Self-sycophancy (nodding along
+  with your own earlier reasoning) is the same failure mode as flattering the operator,
+  and catching it is the reason self-check mode exists.
+- **The canvas is the deliverable when one exists.** When in doubt about what to capture,
+  capture more, not less — inline or on the canvas, per the §1D scaling rule.
 
 ---
 
@@ -582,6 +651,12 @@ For quick scanning — read the reference files for the full step-by-step:
   Always exits into another framework, a named next action, or an explicit archive.
 - **Scientific Inquiry** (6 steps): Observe/Question → Research → Hypothesize → Experiment →
   Analyze → Report. Evidence over opinion; falsification over confirmation.
+- **Strategic / Adversarial** (triage + 4 steps): Triage the stakes → Read the Constraint
+  (real objective + opponent read at realistic competence) → Fill the Strategic Picture
+  (five facets, pulling four lenses) → Residual-Angle Check → Converge on a line, its
+  counter, ranked alternatives, and triggers-to-rethink. Win-without-fighting by default;
+  initiative when the window rewards it; the ethics & proportionality guard is
+  load-bearing.
 
 ## Reference index
 
@@ -594,6 +669,20 @@ For quick scanning — read the reference files for the full step-by-step:
   hand-back procedure with the four decision fields and the 5:30pm test, worked example)
 - `references/scientific-inquiry.md` — Scientific Inquiry framework (6 steps, ACH matrix,
   falsification discipline, worked micro-example)
+- `references/strategic.md` — Strategic / Adversarial framework (triage gate, five facets,
+  signal → lens routing, the Lens Ledger, win-without-fighting and its defeaters, the
+  ethics & proportionality guard, the review loop)
+- `references/strategic/art-of-war.md` — positioning lens (Sun Tzu): five fundamentals,
+  win-without-fighting, strength vs. weakness, terrain, with detection questions
+- `references/strategic/thirty-six-stratagems.md` — move-finding lens: the canonical 36 in
+  six chapters (with ethics flags) plus six functional families
+- `references/strategic/book-of-five-rings.md` — execution & timing lens (Musashi): rhythm,
+  initiative, no-fixed-stance adaptability
+- `references/strategic/game-theory-and-mental-levels.md` — structure-and-depth lens: game
+  mapping, zero/positive-sum, level-k depth, commitment & signaling
+- `references/strategic/annexes/art-of-war-full.md` — the complete Lionel Giles translation
+  (public domain), backing the Art of War lens; reference-only — the distillation is the
+  working layer
 - `references/working-canvas.md` — the lossless ledger spec and template
 - `references/cognitive-scaffolds.md` — chunking, encoding, analogies, active recall, etc.
 - `references/devils-advocacy.md` — formal adversarial analysis procedure

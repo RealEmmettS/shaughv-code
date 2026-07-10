@@ -5,14 +5,15 @@ relationships visible so the human can see them all at once instead of holding t
 memory. This file is about the next rung up — externalizing the **computation** as well, into a
 **built interactive visualization** the human can poke at.
 
-Reach for this when a static markdown model still isn't landing: the session has run long, the
-human is fried, and a question that *isn't actually that complex* has become unanswerable because
-there are too many moving parts to hold at once. This is the most common failure point of long
-(6-plus-hour) working sessions — the human's working memory is full, simple answers to complex
-questions stop coming, and the temptation is to "just summarize." A lossy summary is the wrong
-move: it throws away the exact pieces the human needs. Instead, **compact the situation into
-something the human can manipulate** — the analogue of compacting an agent session to free up
-context, except here we are freeing up the *human's* working memory.
+This is a move you make **for the operator**. Reach for it when a static markdown model still
+isn't landing: the session has run long, the human is fried, and a question that *isn't actually
+that complex* has become unanswerable because there are too many moving parts to hold at once.
+This is the most common failure point of long (6-plus-hour) working sessions — the human's
+working memory is full, simple answers to complex questions stop coming, and the temptation is
+to "just summarize." A lossy summary is the wrong move: it throws away the exact pieces the human
+needs. Instead, **compact the situation into something the human can manipulate** — the analogue
+of compacting an agent session to free up context, except here we are freeing up the *human's*
+working memory.
 
 This file covers:
 

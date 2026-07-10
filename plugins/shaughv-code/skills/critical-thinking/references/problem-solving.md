@@ -27,6 +27,8 @@ sessions skip this step or rush through it.
 
 ### Sub-questions to ask
 
+Ask these of your own reasoning by default — in facilitation mode, pose them to the operator.
+
 **1.1.** Clearly describe the problem by stating:
 - What is happening?
 - What should be happening?

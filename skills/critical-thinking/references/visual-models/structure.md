@@ -192,7 +192,7 @@ Concept maps make cross-references visible.
 
 - The session's canvas has many cross-references between items
 - Multiple frameworks or domains intersect
-- Helping the user see how their existing knowledge connects to a new idea
+- Helping the operator see how their existing knowledge connects to a new idea
 
 ### Markdown rendering
 
@@ -238,7 +238,7 @@ For complex maps, render as a list of relationships:
 - Pre-flight when an external artifact is rich and interconnected — map its concepts
   before evaluating
 - Mid-session when the canvas's cross-references become tangled
-- Closing when teaching the user the conceptual structure of what was decided
+- Closing when teaching the operator the conceptual structure of what was decided
 
 ### Concept maps vs. trees
 

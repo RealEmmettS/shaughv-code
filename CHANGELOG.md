@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.33.0] — 2026-07-09
+
+Changed: **`critical-thinking`** absorbs **`strategic-thinking`** as its seventh framework and — together with **`logical-reasoning`** — is reframed **agent-first**: the default consumer is an agent slowing down to reason through its own in-progress work (self-check mode), with human facilitation retained as the secondary mode. The **`spawn`** skill is removed.
+
+### Added
+- `skills/critical-thinking/references/strategic.md` — the Strategic / Adversarial framework's reference file, condensed from the old strategic-thinking SKILL.md: triage gate, the five facets + Strategic Picture template, signal→lens routing, the Lens Ledger (now a section of the scaled working canvas, not a separate mandatory file), Win-Without-Fighting bias + its defeaters, the Ethics & Proportionality guard in full, and the review loop — reframed so the agent war-games the opponent itself (in facilitation the operator confirms the constraint read; in autonomous self-application the opponent read is flagged as the weakest-evidenced, highest-leverage assumption and confidence-banded hard).
+- `skills/critical-thinking/references/strategic/` — the four lens distillations moved (git renames) from `skills/strategic-thinking/references/`: `art-of-war.md`, `thirty-six-stratagems.md`, `book-of-five-rings.md`, `game-theory-and-mental-levels.md`.
+- `skills/critical-thinking/references/strategic/annexes/art-of-war-full.md` — the complete public-domain Lionel Giles (1910) translation of *The Art of War* (Project Gutenberg-derived etext incl. Giles' introduction and the classical commentators' bracketed notes), OCR-cleaned: 242 artifact lines removed (page numbers, running heads) with the word-delta verified to exactly match, 20 hand-verified page-break paragraph rejoins, chapter-heading levels normalized, and the known "element in water" → "in war" OCR fix. Reference-only annex — the distilled lens stays the working layer.
+- `skills/critical-thinking/SKILL.md` — the Strategic / Adversarial routing row in §1C, a framework quick-reference entry, reference-index entries for `strategic.md` / the lenses / the annex, a Decision-Making ↔ Strategic routing clause, and a seventh failure mode (skipping the forced pause / divergence / sanity check).
+
+### Changed
+- `skills/critical-thinking/SKILL.md` — rewritten agent-first: new frontmatter description (969 chars, under the 1024 cap); §1B modes now led by **Self-check (default)** with Facilitate demoted to the secondary human mode; the facilitation machinery recast as self-check discipline (batches = forced pause points, active listening = answer-checking, transitions close the step, the closing sanity check mandatory before reporting in any mode); §1D working canvas now **scales to stakes** (inline for quick self-checks; a file for high-stakes / long-running / auditable work and all human-facilitated sessions); Checkpoints split into self-imposed vs. operator-directed; Stacking drops the external `strategic-thinking` entry and gains the `workflow-optimization` hand-off.
+- `skills/critical-thinking/references/` — full context-aware audience sweep across the reference files (`decision-making`, `contemplating`, `cognitive-scaffolds`, `devils-advocacy`, `design`, `sensemaking`, `problem-solving`, `working-canvas`, `visual-models/{comparison,structure,probability,interactive}`, and the four moved lens files): facilitatee-sense "the user" reframed to the agent / "the operator" with each framework's meaning preserved exactly. Deliberately kept: `design.md`'s end-user/stakeholder tokens, `contemplating.md`'s human-facing emotional framing, `cognitive-scaffolds.md`'s facilitation-only mechanics (Active Recall) now explicitly marked, and `interactive.md` / `html/`'s artifact-facing "the human".
+- `skills/critical-thinking/references/working-canvas.md` — scale-to-stakes section added to match §1D; template's Framework/Mode lines cover all seven frameworks + Self-check; `strategic-thinking` dropped from the stacked-skills line.
+- `skills/logical-reasoning/SKILL.md` — frontmatter description (865 chars) + intro reframed to the agent applying formal rigor to its OWN load-bearing, contested conclusion before asserting it; its `references/` untouched (already audience-clean).
+- Cross-references repointed from `strategic-thinking` to "`critical-thinking` (Strategic / Adversarial framework)": `skills/iterative-plan/SKILL.md`, `skills/workflow-optimization/SKILL.md`, `skills/personal-productivity/SKILL.md`.
+- `skills/subagent-model-preference/SKILL.md` — dropped the `/spawn` playbook parenthetical and removed the `spawn` bullet from Cross-references.
+- `.claude-plugin/plugin.json` + `.codex-plugin/plugin.json` — descriptions updated (critical thinking now "seven agent-first thinking frameworks incl. strategic/adversarial reasoning via Art of War, 36 Stratagems, Five Rings, and game theory"; the "/spawn orchestration playbook" / "spawn orchestration" and "strategic thinking" clauses removed).
+- `README.md` — `critical-thinking` and `logical-reasoning` rows rewritten for the new framing; `spawn` and `strategic-thinking` rows removed.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.32.0` → `0.33.0`.
+- `plugins/shaughv-code/` — regenerated (`pwsh ./build-codex-plugin.ps1 -Check` passes).
+
+### Removed
+- `skills/spawn/` — the manual `/spawn` two-phase orchestration playbook, retired.
+- `skills/strategic-thinking/` — merged into `critical-thinking` (content preserved as `references/strategic.md` + `references/strategic/`); the standalone skill is gone.
+- Keywords: `spawn` from `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`; `subagent` from `.codex-plugin/plugin.json` (orphaned on the Codex surface — spawn removed, and `subagent-model-preference` was already excluded from the Codex package).
+
 ## [0.32.0] — 2026-07-06
 
 Changed: the **`subagent-model-preference`** skill is now scoped to Claude Code / Anthropic harnesses only, and is excluded from the Codex package — its Opus/Sonnet model classes and `xhigh`/`max` effort levels have no valid mapping on Codex/GPT.

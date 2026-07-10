@@ -1,10 +1,10 @@
 # Contemplating With Wisdom and Joy
 
 A personal and imperfect process for finding peaceful options in challenging situations. Use
-when the user is facing overwhelming, uncertain, or emotionally charged situations where
+when the operator is facing overwhelming, uncertain, or emotionally charged situations where
 perfectionism or anxiety might block progress.
 
-This system is incomplete, imperfect, and fallible. Using it gets the user closer to living
+This system is incomplete, imperfect, and fallible. Using it gets the operator closer to living
 a life aligned with wisdom, joyfulness, and peace — not toward a perfect answer.
 
 ## Core principles
@@ -19,8 +19,8 @@ Share these early. They set the tone.
 ## How this framework uses the canvas
 
 Contemplating sessions tend to be private and emotionally weighted. The canvas is for the
-user alone, not for sharing. Keep the language personal. Capture facts and assumptions on
-the canvas, but capture *feelings* in the user's own words — don't translate them into
+operator alone, not for sharing. Keep the language personal. Capture facts and assumptions on
+the canvas, but capture *feelings* in the operator's own words — don't translate them into
 analytical language.
 
 ---
@@ -29,7 +29,7 @@ analytical language.
 
 Separate facts from assumptions. Surface how emotions are coloring the picture.
 
-### Sub-questions to ask the user
+### Sub-questions to ask the operator
 
 **1.1. Write down the facts of the situation.**
 - What is known or proven to be accurate and certain?
@@ -54,7 +54,7 @@ Separate facts from assumptions. Surface how emotions are coloring the picture.
 
 Broaden the view by involving others and challenging assumptions.
 
-### Sub-questions to ask the user
+### Sub-questions to ask the operator
 
 **2.1. Involve those directly impacted by the decision.**
 A useful model: who would have to *sacrifice something* if things go poorly? Those people
@@ -82,9 +82,9 @@ are indirectly impacted. The directly impacted are the ones whose input matters 
 
 ## Step 3 — Acceptance
 
-Help the user accept what they can't control and focus on what they can.
+Help the operator accept what they can't control and focus on what they can.
 
-### Sub-questions to ask the user
+### Sub-questions to ask the operator
 
 **3.1. Reflect on the opportunities available within current circumstances.**
 - What can you build upon or utilize in what you already have?
@@ -103,7 +103,7 @@ Help the user accept what they can't control and focus on what they can.
 
 Evaluate whether action is needed now or whether waiting is more beneficial.
 
-### Sub-questions to ask the user
+### Sub-questions to ask the operator
 
 **4.1. Evaluate the timeliness of the decision.**
 - How urgent is this actually?
@@ -123,7 +123,7 @@ Evaluate whether action is needed now or whether waiting is more beneficial.
 
 Define what peace looks like and what counts as sufficient progress.
 
-### Sub-questions to ask the user
+### Sub-questions to ask the operator
 
 **5.1. Reflect on what peace looks like in the situation.**
 - What is the minimum disruption required to reach a resolution or meet your goal?
@@ -141,7 +141,7 @@ Define what peace looks like and what counts as sufficient progress.
 
 Stay flexible as the situation evolves.
 
-### Sub-questions to ask the user
+### Sub-questions to ask the operator
 
 **6.1. Consider how to remain flexible as new facts emerge.**
 - What would cause you to revise your plan?
@@ -156,7 +156,7 @@ Stay flexible as the situation evolves.
 
 Recognize that contemplation is cyclical, and be gentle with yourself.
 
-### Sub-questions to ask the user
+### Sub-questions to ask the operator
 
 **7.1. Reflect on what "enough" looks like in each moment.**
 - 7.1.1. The process is cyclical and evolving — when will you revisit these steps?
@@ -185,14 +185,14 @@ Schedule a revisit. Contemplation is cyclical by design.
 ## Facilitation notes for this framework
 
 - **Move slower than you think you should.** Contemplating is not a productivity exercise.
-  If the user is rushing through the sub-questions, gently slow them down.
+  If the operator is rushing through the sub-questions, gently slow them down.
 - **Don't rush past feelings.** Step 1.3 and 1.4 are not optional. Emotions distorting
   judgment is the entire reason this framework exists.
 - **Don't problem-solve prematurely.** If you find yourself wanting to suggest solutions
   during Steps 1–3, you've shifted into Decision-Making or Problem-Solving framework. Name
-  the shift and ask the user if they want to switch.
+  the shift and ask the operator if they want to switch.
 - **The canvas for this framework is private.** Unlike Decision or Design artifacts,
-  contemplation outputs are usually for the user alone. Keep the language personal.
+  contemplation outputs are usually for the operator alone. Keep the language personal.
 - **Visual models are usually not needed here.** Contemplating is mostly prose-shaped.
   The exceptions: a 2×2 of "what I can control / what I can't" against "what I have to do
   / what I want to do" can be useful at Step 3.

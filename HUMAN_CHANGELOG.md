@@ -6,7 +6,20 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — early July 2026
+## Most recent release — 9 July 2026
+
+**Added**
+- The thinking helper now has a **strategy mode** built in — for contests, negotiations, competitor moves, and "what's my play" questions. It draws on four classic strategy traditions (Sun Tzu's Art of War, the 36 Stratagems, Musashi's Five Rings, and game theory), always asks "do you even need to fight this?" before reaching for tactics, and carries a firm ethics line against deception that harms people. The **complete classic Art of War text** ships alongside it as optional deep-dive reading.
+
+**Improved**
+- The thinking helper and the logic helper now point **inward by default**: instead of only coaching a person through a decision, they make the assistant itself slow down and double-check its own work — pausing between steps, generating alternatives before picking one, questioning its own assumptions, and running a sanity check before reporting anything. Coaching a person through the same frameworks still works exactly as before; it's just the second job now. Why it matters: the assistant catches its own mistakes before you see them, not after.
+- The session notebook the thinking helper keeps now **matches the stakes**: quick self-checks stay right in the conversation, while big or long-running decisions still get a full file you can open, watch, and audit.
+
+**Removed**
+- The manual playbook for running pairs of helper agents (one to investigate, one to execute) is gone — it wasn't being used anymore.
+- Strategy advice no longer lives in its own separate skill; it's part of the thinking helper now, so there's one front door for all structured thinking.
+
+## Previous release — early July 2026
 
 **Changed**
 - The house rule for **which AI model and thinking level every helper agent should use** is now clearly marked as a Claude-only rule, and it's been removed from the Codex version of this bundle. Why: that rule talks about specific Claude models (the deep-reasoning one and the fast workhorse one) and Claude's thinking-effort dials — none of which exist on Codex, which runs a different company's AI. So on Codex, Cursor, Gemini, or any non-Claude assistant, the rule now plainly says "ignore me." Everywhere it still belongs — Claude Code — nothing changes.

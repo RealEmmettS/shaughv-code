@@ -265,7 +265,7 @@ Promotion is a content change to this plugin — per the repo's lockstep rules i
 - **The success criterion lives here.** The binary/demoable gate, the number test, the invariants, and the task hand-off discipline are owned by this skill.
 - **`git-workflow`** owns the dispatch posture (workbranches, worktrees, gates). Phase C step 2 defers to it entirely.
 - **`critical-thinking`** and **`logical-reasoning`** own structured decision-making and argument-testing when a clarify-phase question turns into a genuine decision or a claim that needs scrutiny. Hand off to them rather than reinventing the framework here.
-- **`strategic-thinking`** owns the higher-altitude "should we do this at all / what's the sequencing across projects" framing that sits above a single milestone.
+- **`critical-thinking`** (its Strategic / Adversarial framework) also owns the higher-altitude "should we do this at all / what's the sequencing across projects" framing that sits above a single milestone.
 
 ## Reference index
 

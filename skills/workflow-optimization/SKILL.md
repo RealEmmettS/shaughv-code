@@ -201,7 +201,7 @@ Read the relevant file before you need it — do not work from memory.
 
 - **`agile`** — methodology and team-process questions (frameworks, retros, estimation).
 - **`iterative-plan`** — planning a specific milestone.
-- **`strategic-thinking`** — adversarial situations; it already routes process work here.
+- **`critical-thinking`** (Strategic / Adversarial framework) — adversarial situations; it already routes process work here.
 
 ## Behavioral notes
 

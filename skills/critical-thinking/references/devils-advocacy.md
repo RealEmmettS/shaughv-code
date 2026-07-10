@@ -1,7 +1,8 @@
 # Devil's Advocacy
 
 Formal adversarial analysis. Use for high-stakes decisions, contested conclusions, or
-when the user is leaning toward a position that hasn't been seriously challenged.
+when you — or the operator — are leaning toward a position that hasn't been seriously
+challenged.
 
 This is the structured version of the steel-manning routine in SKILL.md. Use steel-manning
 for routine challenge; use Devil's Advocacy when the stakes warrant rigor.
@@ -14,21 +15,23 @@ nominees: an advocate argues *against* the canonization to surface weaknesses in
 advocate, but in opposition — which reveals biases and blind spots that confirmation
 cannot.
 
-The point is **not to talk the user out of their position.** The point is to surface what
-would have to be true for their position to be wrong, so they can:
+The point is **not to talk yourself out of your own position, or the operator out of
+theirs.** The point is to surface what would have to be true for the position to be wrong,
+so you — or they — can:
 
 1. Test those conditions explicitly
 2. Monitor for those signals after committing
-3. Strengthen the case for their position by addressing the strongest objections
+3. Strengthen the case for the position by addressing the strongest objections
 
 ## When to use Devil's Advocacy
 
 - **High-stakes decisions** — the cost of being wrong is large or hard to reverse
-- **The user is heavily committed** to a position before evaluation is complete
+- **You — or the operator — are heavily committed** to a position before evaluation is
+  complete
 - **The decision rests on assumptions** that haven't been independently tested
 - **Group dynamics suppressed dissent** in earlier discussions
-- **Recommend mode** has been used and the user wants the case stress-tested before
-  committing
+- **Recommend mode** has been used and you — or the operator — want the case
+  stress-tested before committing
 
 When *not* to use it:
 
@@ -40,11 +43,13 @@ When *not* to use it:
 
 ### Step 1 — State the position to be challenged
 
-Write the user's current position on the canvas, in the user's own words, exactly as
-they would defend it. Get their confirmation: *"Is this the position you'd defend?"*
+Write the position under scrutiny (your own, or the operator's) on the canvas, in the
+words it was actually held in, exactly as it would be defended. Confirm it's right before
+proceeding — from the operator, or from your own honest check: *"Is this the position
+you'd defend?"*
 
-If they want to revise the position before challenge, that's a useful signal — the
-position wasn't fully formed.
+If the position gets revised before challenge, that's a useful signal — it wasn't fully
+formed.
 
 ### Step 2 — Generate the strongest case against
 
@@ -58,8 +63,8 @@ version of the opposing case, not a strawman. Work through:
 - **What new evidence could exist that would falsify the position?**
 
 If the agent can't generate a strong opposing case, that's itself a finding — either the
-position is genuinely solid, or the agent has been captured by the user's framing. Push
-harder before concluding the former.
+position is genuinely solid, or the agent has been captured by the framing it started from
+— its own, or the operator's. Push harder before concluding the former.
 
 ### Step 3 — Identify the conditions for the opposing view to be correct
 
@@ -70,8 +75,8 @@ the opposing view to win:
 - *"If we observed Y, it would support the opposition."*
 - *"If Z happened in the next 3 months, that would mean the opposition was right."*
 
-These conditions become **monitoring signals** after commitment — they tell the user
-what to watch for.
+These conditions become **monitoring signals** after commitment — they tell you, or the
+operator, what to watch for.
 
 ### Step 4 — Test the conditions
 
@@ -101,14 +106,15 @@ For positions that survive (modified or intact), the conditions from Step 3 that
   - <condition>: <how we'd notice it, when we'd revisit>
 
 This is the most underrated output of Devil's Advocacy. Even when the original position
-wins, the user now has a concrete list of things that would tell them they were wrong.
+wins, you now have a concrete list of things that would say it's wrong — or, in
+facilitation, the operator does.
 
 ## Example structure on the canvas
 
 ```markdown
 ## Devil's Advocacy — <position being challenged>
 
-**Position challenged:** <user's exact wording>
+**Position challenged:** <exact wording — yours, or the operator's>
 
 ### Strongest opposing case
 <charitable version of the case against>
@@ -132,9 +138,9 @@ wins, the user now has a concrete list of things that would tell them they were 
 - <unknown condition>: revisit when <event> or by <date>
 ```
 
-## When the user resists Devil's Advocacy
+## When the operator resists Devil's Advocacy
 
-Some users push back on adversarial analysis as confrontational or unproductive. Two
+Some operators push back on adversarial analysis as confrontational or unproductive. Two
 moves:
 
 1. **Reframe the purpose.** It's not about talking them out of their position — it's
@@ -146,9 +152,10 @@ moves:
 
 ## When the agent resists Devil's Advocacy
 
-If the agent finds itself hesitant to push back on the user — *"they seem confident,
-maybe I shouldn't"* — that's the sycophancy failure mode. The whole point of Devil's
-Advocacy is to overcome the social gradient toward agreement. Run it anyway.
+If the agent finds itself hesitant to push back — on the operator, or on its own plan —
+*"they seem confident, maybe I shouldn't"* — that's the sycophancy failure mode. The
+whole point of Devil's Advocacy is to overcome the social gradient toward agreement. Run
+it anyway.
 
 ## Devil's Advocacy vs. steel-manning
 

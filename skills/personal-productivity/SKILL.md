@@ -258,5 +258,5 @@ This protects rest, and rest is what makes the next deep-work block possible.
 
 - **`critical-thinking`** — when the overwhelm is emotionally fraught or deeply uncertain,
   route there (its Contemplating framework) before any ranking machinery.
-- **`strategic-thinking`** — when the situation is adversarial or competitive, not just crowded.
+- **`critical-thinking`** (Strategic / Adversarial framework) — when the situation is adversarial or competitive, not just crowded.
 - **`learn`** — when the underlying goal is deliberate skill acquisition.

@@ -53,8 +53,7 @@ model's preferred default and the floor.
 - `Agent` tool: set `model` to `opus`/`sonnet` (it inherits the session's `[1m]` context/effort
   configuration; if the surface has no effort parameter, instruct the depth in the dispatch prompt —
   "Work at MAXIMUM reasoning depth").
-- Never downgrade a subagent to save cost — correctness and depth win (the /spawn playbook's
-  standing rule; it defers to this skill for current defaults).
+- Never downgrade a subagent to save cost — correctness and depth win.
 
 ## Mapping this forward (when new models are released)
 
@@ -105,7 +104,5 @@ Keep installs in lockstep with this skill when the mapping advances.
 
 ## Cross-references
 
-- **`spawn`** — the /spawn two-phase orchestration playbook; its dispatches follow this convention
-  for model/effort choices.
 - **`iterative-plan`** — when planning fans work out to agents, the fan-out's model choices follow
   this convention.

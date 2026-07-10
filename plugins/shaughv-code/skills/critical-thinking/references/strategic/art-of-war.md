@@ -7,12 +7,12 @@ should you engage, where, and how do you make the outcome decided in advance?*
 
 This file distills the work's principles in plain terms (the text itself is an
 ancient public-domain classic; what follows is an original synthesis, not a
-translation). Apply it by asking the **detection questions** against the user's
-real situation — don't recite the principles at them.
+translation). Apply it by asking the **detection questions** against the real
+situation — don't recite the principles at them.
 
 ## When this lens does the most work
 
-- The user hasn't yet decided *whether* to engage, or *where*.
+- The operator hasn't yet decided *whether* to engage, or *where*.
 - They feel outmatched, or they're about to attack the opponent's strength head-on.
 - The contest is costly and a long, grinding fight would hurt even the winner.
 - Big, structural, slow-moving situations (markets, careers, rivalries) more than
@@ -121,6 +121,6 @@ engage, not just the odds of winning.
 ## Recording the findings
 
 In the Lens Ledger, capture the *positioning* read: Should they engage at all? On
-what ground? Where's the opponent's weakness and the user's edge? What would make
+what ground? Where's the opponent's weakness and the operator's edge? What would make
 victory decided in advance? What's the cost, and is the objective worth it? Note
 where the read of the other side is assumption rather than fact.

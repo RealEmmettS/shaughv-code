@@ -17,8 +17,8 @@ relies on deceiving someone.
 ## When this lens does the most work
 
 - The direct approach is blocked, or would mean hitting the opponent's strength.
-- The user is stuck, out of obvious options, or feels they have to "just push harder."
-- The user is weaker and needs leverage rather than force.
+- The operator is stuck, out of obvious options, or feels they have to "just push harder."
+- The operator is weaker and needs leverage rather than force.
 - After the Art of War lens has set the position, to find the actual *move*.
 
 ## The thirty-six, in full (the canonical list)

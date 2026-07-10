@@ -1,9 +1,9 @@
 # Information Triage / Sensemaking — the overload front door
 
-This framework exists for the moment the *volume of inputs* is the problem — when the user
-cannot even name the question yet because there is too much material between them and it.
+This framework exists for the moment the *volume of inputs* is the problem — when you
+cannot even name the question yet because there is too much material between you and it.
 It is a front door, not a destination: a triage session **always exits** into another
-framework, a named next action, or an explicit archive. If the user already knows their
+framework, a named next action, or an explicit archive. If you already know the
 question, skip this framework entirely.
 
 Grounding: Pirolli & Card's intelligence-analysis model (a *foraging loop* — find, filter,
@@ -68,7 +68,7 @@ interactive model (`visual-models/interactive.md`) when it outgrows a screen.
 
 Per branch, write the three-resolution stack the skill already defines: **headline** (one
 sentence), **structured** (a short paragraph or table), **full** (pointers into the ledger
-— never a paraphrase replacing the source). The user reads headlines first and descends
+— never a paraphrase replacing the source). You read headlines first and descend
 only where needed. This is where the overload actually dissolves: the pile becomes one
 screen of headlines with lossless depth behind each.
 
@@ -126,7 +126,7 @@ a future re-architecture proposal, and an API-budget constraint. Triage produced
   calls, one-line reversible config. Doing nothing = stays hourly until the proper fix;
   agent explicitly won't act without a yes. Deadline pressure: none.
 - **Done — FYI:** tasks 101/102 done; 103 = PR #8; 104 = PR #9 green + backend
-  commit; nothing merged, all parked for the user's merge session.
+  commit; nothing merged, all parked for the operator's merge session.
 - **In flight:** research agent mapping 20 entities → webhook / incremental / full-refresh,
   docs only, zero API spend.
 - **Coming later:** per-entity re-architecture + ADR after research lands; new tasks, not

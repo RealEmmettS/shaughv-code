@@ -1,7 +1,7 @@
 # Design Framework
 
 A streamlined design thinking process for crafting and refining solutions to problems —
-products, systems, processes, experiences. Use when the user is *building* something, not
+products, systems, processes, experiences. Use when you're *building* something, not
 just choosing or diagnosing.
 
 ## How this framework uses the canvas
@@ -36,9 +36,9 @@ skip empathy fail by solving the designer's problem rather than the user's.
 - 1.3.2. What is the need or challenge from their perspective?
 - 1.3.3. Why does it matter to them (and/or you)?
 
-> **Designing for yourself:** When the user is designing for themselves, empathy is
-> harder, not easier. They'll skip ahead to solutions that feel right rather than the ones
-> they'd actually use. Force the empathize step anyway — what does your *future, tired,
+> **Designing for yourself:** When you're designing for yourself, empathy is
+> harder, not easier. You'll skip ahead to solutions that feel right rather than the ones
+> you'd actually use. Force the empathize step anyway — what does your *future, tired,
 > distracted self* need from this design?
 
 ---
@@ -256,7 +256,7 @@ much depends on assumptions about user behavior.
 - **Don't skip Step 1.** Designs that skip empathy solve the wrong problem.
 - **Don't fall in love with the first idea in Step 4.** Force breadth — at least 5
   concepts, including a "worst possible idea" — before narrowing.
-- **For meta-design** (designing a process or skill rather than a product), the user
-  *is* the user. Empathize with their future self.
+- **For meta-design** (designing a process or skill rather than a product), you
+  *are* the user. Empathize with your future self.
 - **Use the canvas to track unanswered questions across steps.** Designs accumulate open
   questions as they progress; the canvas's open-questions section is essential.
