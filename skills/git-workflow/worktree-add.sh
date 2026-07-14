@@ -64,7 +64,7 @@ fi
 echo "Creating worktree: $WORKTREE_PATH on $BRANCH (off $BASE)"
 git worktree add "$WORKTREE_PATH" -b "$BRANCH" "$BASE"
 
-# Push the branch to origin immediately (per non-negotiable #7)
+# Push the branch to origin immediately (per strong default #7)
 cd "$WORKTREE_PATH"
 echo "Pushing $BRANCH to origin..."
 git push -u origin "$BRANCH"

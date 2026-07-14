@@ -7,8 +7,18 @@
 #
 # Designed to be wired as a pre-push git hook, or run manually:
 #   ./scripts/check-branch.sh
+# After explicit owner approval for a direct default-branch push:
+#   ./scripts/check-branch.sh --allow-main
 
 set -uo pipefail
+
+ALLOW_MAIN=0
+if [[ "${1:-}" == "--allow-main" ]]; then
+  ALLOW_MAIN=1
+elif [[ -n "${1:-}" ]]; then
+  echo "Usage: $0 [--allow-main]" >&2
+  exit 2
+fi
 
 FAIL=0
 warn() {
@@ -19,18 +29,25 @@ ok() {
   echo "✓ $*"
 }
 
-# 1. Not on main
+# 1. Not on main unless the owner explicitly approved the direct route
 BRANCH="$(git branch --show-current)"
 if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
-  warn "You are on '$BRANCH'. Direct work on the trunk branch is not allowed."
-  echo "   Create a feature branch: git checkout -b feat/<description>-<id>" >&2
-  exit 1
+  if (( ALLOW_MAIN == 1 )); then
+    ok "Direct push to '$BRANCH' explicitly authorized; continuing quality checks"
+  else
+    warn "You are on '$BRANCH'. The default route uses a PR-gated branch."
+    echo "   Create a feature branch, or rerun with --allow-main after clear owner approval." >&2
+    exit 1
+  fi
+else
+  ok "On branch '$BRANCH' (not trunk)"
 fi
-ok "On branch '$BRANCH' (not trunk)"
 
 # 2. Branch name convention
 NAME_REGEX='^(feat|fix|refactor|chore|docs|test|hotfix)/[a-z0-9][a-z0-9-]*$'
-if [[ ! "$BRANCH" =~ $NAME_REGEX ]]; then
+if (( ALLOW_MAIN == 1 )); then
+  ok "Branch naming check skipped for approved default-branch route"
+elif [[ ! "$BRANCH" =~ $NAME_REGEX ]]; then
   warn "Branch name '$BRANCH' does not match convention."
   echo "   Expected: <type>/<short-kebab-description>[-<ticket-id>]" >&2
   echo "   Types: feat, fix, refactor, chore, docs, test, hotfix" >&2
@@ -101,6 +118,6 @@ if (( FAIL == 0 )); then
   exit 0
 else
   echo "One or more TBD checks failed. Review the warnings above."
-  echo "If you intend to proceed anyway, document the override reason in the PR or commit."
+  echo "A route approval does not waive failed checks; review the results above." >&2
   exit 1
 fi

@@ -142,9 +142,10 @@ to prevent.
 off this workbranch. Existing in-flight tasks can complete and merge in,
 but no new work starts.
 
-**At 24+ hours**: the skill refuses anything except the workbranch → main
-merge flow. The workbranch must ship before any new work begins. If the
-batch isn't ready, ship it with feature flags off and continue tomorrow.
+**At 24+ hours**: the skill strongly recommends the workbranch → main merge
+flow before new work begins. If the batch isn't ready, prefer shipping it
+with feature flags off and continuing tomorrow. A clear owner instruction can
+override the route without waiving tests or CI.
 
 ## What if the workbranch is broken (CI red)?
 
@@ -223,7 +224,8 @@ There are cases where the workbranch is the wrong tool:
   workbranch is for planned work; hotfixes are emergencies.
 - **Single-task days.** If you'll only do one task today, the workbranch
   adds friction without benefit. Override-allow direct branch-to-main is
-  acceptable here with a stated reason. (The skill will warn.)
+  acceptable here with clear owner approval. No justification is required;
+  the normal quality checks still run.
 - **Trivial doc fixes.** Same logic.
 
 Don't optimize for the edge case at the cost of the common path. The

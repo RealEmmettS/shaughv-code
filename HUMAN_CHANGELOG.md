@@ -6,7 +6,19 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — 10 July 2026
+## Most recent release — 14 July 2026
+
+**Added**
+- The bundle now includes a **Pipedream connection** on both Claude and Codex. The first time it is used, Pipedream asks the user to sign in, choose which apps to make available, and approve access. Why it matters: the assistant can work with the user's authorized tools across thousands of supported apps without putting account credentials in this public bundle.
+
+**Improved**
+- The Git workflow keeps its careful branch, review, and release process as the strong default, but the repository owner can now choose a simpler route with a plain instruction such as "I approve a push to main." That approval changes **how** the work is delivered, not **how carefully** it is checked: local testing, validation, secret checks, and confirmation that the published change passed its automated checks still happen unless the owner specifically says otherwise. Why it matters: the workflow remains safe and disciplined without treating the owner like they need a manager's permission to ship.
+- Approvals no longer require a magic sentence, a written justification, or repeated confirmation after the checks finish. A clear "when ready" instruction remains valid as long as the checks pass; a newly discovered failure is still shown separately so the owner can make an informed decision about that actual issue.
+
+**Behind the scenes**
+- Updated the connection lists, maintainer guidance, release metadata, and project reference everywhere the Claude and Codex versions describe what they carry, made the bundled safety checker cover the whole project consistently, fixed the package refresher's cross-platform path check, then refreshed the generated Codex copy.
+
+## Previous release — 10 July 2026
 
 **Added**
 - The bundle now carries a **third built-in helper connection** — a link to Emmett's own personal health service. Once it's connected, the assistant can look things up and log entries directly (nutrition, sleep, steps, heart rate, workouts, and the like) on both the Claude and Codex versions of the bundle. The first time it's used it asks you to sign in with Google — and only Emmett's own approved account is let in — so even though the link ships inside this public bundle, the link by itself doesn't give anyone access. It's not a password.
@@ -14,7 +26,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 **Behind the scenes**
 - Listed the new connection everywhere the existing two are already described (the read-me, the maintainer notes, and the bundle's descriptions and search terms), and while in there filled in the notes-app connection on one maintainer list it had been missing from. Kept all the version numbers in step and refreshed the Codex copy of the bundle.
 
-## Previous release — 9 July 2026
+## The release before — 9 July 2026
 
 **Added**
 - The thinking helper now has a **strategy mode** built in — for contests, negotiations, competitor moves, and "what's my play" questions. It draws on four classic strategy traditions (Sun Tzu's Art of War, the 36 Stratagems, Musashi's Five Rings, and game theory), always asks "do you even need to fight this?" before reaching for tactics, and carries a firm ethics line against deception that harms people. The **complete classic Art of War text** ships alongside it as optional deep-dive reading.
@@ -27,7 +39,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 - The manual playbook for running pairs of helper agents (one to investigate, one to execute) is gone — it wasn't being used anymore.
 - Strategy advice no longer lives in its own separate skill; it's part of the thinking helper now, so there's one front door for all structured thinking.
 
-## The release before — early July 2026
+## Earlier in July 2026
 
 **Changed**
 - The house rule for **which AI model and thinking level every helper agent should use** is now clearly marked as a Claude-only rule, and it's been removed from the Codex version of this bundle. Why: that rule talks about specific Claude models (the deep-reasoning one and the fast workhorse one) and Claude's thinking-effort dials — none of which exist on Codex, which runs a different company's AI. So on Codex, Cursor, Gemini, or any non-Claude assistant, the rule now plainly says "ignore me." Everywhere it still belongs — Claude Code — nothing changes.

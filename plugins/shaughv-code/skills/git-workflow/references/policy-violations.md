@@ -31,28 +31,28 @@ When a check fails:
 3. **Offer the compliant alternative.** "I'd recommend either (a) landing what
    you have behind a feature flag and continuing on a fresh branch, or (b)
    slicing the remaining work into smaller chunks."
-4. **Ask for override reason if they want to proceed.** "If you want to
-   continue on this branch anyway, tell me why — I'll log the reason."
-5. **Log the reason verbatim if they override.** "Override logged: <quoted reason>."
+4. **Accept a clear owner decision.** "If you want to continue on this
+   branch anyway, say so and I'll proceed."
+5. **Acknowledge the route override once.** Do not demand a justification or
+   repeat the approval prompt after an unambiguous answer.
 
-## What counts as a valid override reason
+## What counts as approval
 
-Valid reasons name a trade-off:
+Any clear owner/operator instruction counts:
 
-- "The work is one logical unit and splitting it would create more risk than
-  it removes."
-- "I'm an hour from done and a fresh branch costs more than the extra hour."
-- "We have a customer demo tomorrow and ceremony cost isn't worth it."
+- "I approve a push to main."
+- "Push directly to the default branch when ready."
+- "Proceed with this branch."
+- "Override the PR route."
 
-Invalid reasons:
+No magic phrase or tradeoff explanation is required, and an advance "when
+ready" directive stays valid after checks finish. Silence or ambiguity does
+not count.
 
-- "Just do it"
-- "It's fine"
-- "Trust me"
-- (no reason at all)
-
-If the user gives a non-reason, ask again: "I need a reason that names the
-trade-off. What's being traded off and why?"
+The approval changes the delivery route, not the quality bar. Continue local
+tests, lint/format/build checks, secret scanning, sync checks, and post-push CI.
+If one of those checks fails, disclose that specific failure and get a fresh
+decision about it; the earlier route approval does not silently accept it.
 
 ## Examples of warn-and-override in action
 
@@ -68,7 +68,7 @@ trade-off. What's being traded off and why?"
 > the PR, and continue on a fresh branch off the merged `main`. I can walk
 > you through that.
 >
-> If you'd rather push as-is, tell me why and I'll proceed.
+> If you'd rather push as-is, say so and I'll proceed after the normal checks.
 
 ### Example 2: direct commit to main
 
@@ -80,9 +80,8 @@ trade-off. What's being traded off and why?"
 > Recommended: `git checkout -b docs/fix-typo-in-readme && git add ...
 > && git commit && gh pr create`. The PR takes 30 seconds and CI runs.
 >
-> If you want to bypass anyway, tell me why and I'll proceed. (Acceptable
-> example reason: "Trivial doc fix, no code logic, CI on docs-only changes
-> adds no value here.")
+> If you approve the direct push, say so and I'll proceed after the same local
+> checks, then verify CI on `main`.
 
 ### Example 3: force-push without lease
 
@@ -110,18 +109,21 @@ trade-off. What's being traded off and why?"
 > Recommended: either pair on one machine, or start a fresh branch off
 > current `main` and cherry-pick what you need from theirs.
 >
-> If you want to push to their branch anyway, tell me why.
+> If the teammate knows and you still want this route, confirm that coordination
+> and I'll proceed.
 
-## Things that are never overridable
+## Hard safety and informed exceptions
 
-These are hard refusals — no override accepted:
+These destructive actions remain hard refusals:
 
 - **Plain `--force` to a shared branch.** Use `--force-with-lease` or stop.
   Plain `--force` can silently destroy work.
 - **Pushing to someone else's branch without their knowledge.** Coordinate
   first.
-- **Committing secrets, credentials, or API keys.** Stop, rotate the secret,
-  use the project's secret-management approach.
 
-If the user really wants to do one of these, they need to run the commands
-themselves outside this skill.
+A secret, credential, or Critical/High security finding must be disclosed
+clearly and specifically before shipping. The owner may accept that disclosed
+exception with a brief explicit decision; no prescribed phrase or justification
+essay is required. Record the exception in the available delivery record. A
+general route override given before the finding does not count as acceptance of
+the finding.

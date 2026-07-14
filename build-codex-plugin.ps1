@@ -51,9 +51,9 @@ trap {
 }
 
 $repoRoot  = $PSScriptRoot
-$mirror    = Join-Path $repoRoot 'plugins\shaughv-code'
+$mirror    = Join-Path (Join-Path $repoRoot 'plugins') 'shaughv-code'
 $srcSkills = Join-Path $repoRoot 'skills'
-$srcManif  = Join-Path $repoRoot '.codex-plugin\plugin.json'
+$srcManif  = Join-Path (Join-Path $repoRoot '.codex-plugin') 'plugin.json'
 $srcMcp    = Join-Path $repoRoot '.mcp.json'
 
 # --- Claude-only skills excluded from the Codex package ------------------------
@@ -94,18 +94,18 @@ function Get-RelativePath {
         [Parameter(Mandatory)] [string] $Base,
         [Parameter(Mandatory)] [string] $Path
     )
-    $baseUri = [System.Uri]((Get-FullPath $Base).TrimEnd('\', '/') + '\')
-    $pathUri = [System.Uri](Get-FullPath $Path)
-    return [System.Uri]::UnescapeDataString(
-        $baseUri.MakeRelativeUri($pathUri).ToString()
+    return [System.IO.Path]::GetRelativePath(
+        (Get-FullPath $Base),
+        (Get-FullPath $Path)
     ) -replace '/', '\'
 }
 
 function Assert-MirrorPath {
     $repoFull = (Get-FullPath $repoRoot).TrimEnd('\', '/')
     $mirrorFull = (Get-FullPath $mirror).TrimEnd('\', '/')
-    $expectedSuffix = 'plugins\shaughv-code'
-    if (-not $mirrorFull.StartsWith($repoFull + '\', [System.StringComparison]::OrdinalIgnoreCase)) {
+    $separator = [System.IO.Path]::DirectorySeparatorChar
+    $expectedSuffix = Join-Path 'plugins' 'shaughv-code'
+    if (-not $mirrorFull.StartsWith($repoFull + $separator, [System.StringComparison]::OrdinalIgnoreCase)) {
         throw "Refusing to touch mirror outside repo: $mirrorFull"
     }
     if (-not $mirrorFull.EndsWith($expectedSuffix, [System.StringComparison]::OrdinalIgnoreCase)) {
@@ -134,7 +134,8 @@ function Build-Package {
         Remove-Item -LiteralPath $Destination -Recurse -Force
     }
     New-Item -ItemType Directory -Force -Path (Join-Path $Destination '.codex-plugin') | Out-Null
-    Copy-Item -LiteralPath $srcManif -Destination (Join-Path $Destination '.codex-plugin\plugin.json')
+    $destManifest = Join-Path (Join-Path $Destination '.codex-plugin') 'plugin.json'
+    Copy-Item -LiteralPath $srcManif -Destination $destManifest
     Write-WrappedMcp -Destination (Join-Path $Destination '.mcp.json')
 
     # Copy skills verbatim, file-by-file (preserves bytes and structure), except
@@ -227,7 +228,8 @@ if ($Check) {
         $issues = Compare-Trees -Expected $temp -Actual $mirror
 
         $srcVersion = (Get-Content -LiteralPath $srcManif -Raw | ConvertFrom-Json).version
-        $dstVersion = (Get-Content -LiteralPath (Join-Path $mirror '.codex-plugin\plugin.json') -Raw | ConvertFrom-Json).version
+        $dstManifest = Join-Path (Join-Path $mirror '.codex-plugin') 'plugin.json'
+        $dstVersion = (Get-Content -LiteralPath $dstManifest -Raw | ConvertFrom-Json).version
         if ($srcVersion -ne $dstVersion) { $issues.Add("version mismatch: source $srcVersion != package $dstVersion") }
 
         if ($issues.Count -gt 0) {

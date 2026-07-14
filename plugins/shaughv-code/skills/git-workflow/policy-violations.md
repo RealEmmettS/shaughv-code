@@ -31,28 +31,28 @@ When a check fails:
 3. **Offer the compliant alternative.** "I'd recommend either (a) landing what
    you have behind a feature flag and continuing on a fresh branch, or (b)
    slicing the remaining work into smaller chunks."
-4. **Ask for override reason if they want to proceed.** "If you want to
-   continue on this branch anyway, tell me why — I'll log the reason."
-5. **Log the reason verbatim if they override.** "Override logged: <quoted reason>."
+4. **Accept a clear owner decision.** "If you want to continue on this
+   branch anyway, say so and I'll proceed."
+5. **Acknowledge the route override once.** Do not demand a justification or
+   repeat the approval prompt after an unambiguous answer.
 
-## What counts as a valid override reason
+## What counts as approval
 
-Valid reasons name a trade-off:
+Any clear owner/operator instruction counts:
 
-- "The work is one logical unit and splitting it would create more risk than
-  it removes."
-- "I'm an hour from done and a fresh branch costs more than the extra hour."
-- "We have a customer demo tomorrow and ceremony cost isn't worth it."
+- "I approve a push to main."
+- "Push directly to the default branch when ready."
+- "Proceed with this branch."
+- "Override the PR route."
 
-Invalid reasons:
+No magic phrase or tradeoff explanation is required, and an advance "when
+ready" directive stays valid after checks finish. Silence or ambiguity does
+not count.
 
-- "Just do it"
-- "It's fine"
-- "Trust me"
-- (no reason at all)
-
-If the user gives a non-reason, ask again: "I need a reason that names the
-trade-off. What's being traded off and why?"
+The approval changes the delivery route, not the quality bar. Continue local
+tests, lint/format/build checks, secret scanning, sync checks, and post-push CI.
+If one of those checks fails, disclose that specific failure and get a fresh
+decision about it; the earlier route approval does not silently accept it.
 
 ## Examples of warn-and-override in action
 
@@ -68,7 +68,7 @@ trade-off. What's being traded off and why?"
 > the PR, and continue on a fresh branch off the merged `main`. I can walk
 > you through that.
 >
-> If you'd rather push as-is, tell me why and I'll proceed.
+> If you'd rather push as-is, say so and I'll proceed after the normal checks.
 
 ### Example 2: direct commit to main
 
@@ -80,9 +80,8 @@ trade-off. What's being traded off and why?"
 > Recommended: `git checkout -b docs/fix-typo-in-readme && git add ...
 > && git commit && gh pr create`. The PR takes 30 seconds and CI runs.
 >
-> If you want to bypass anyway, tell me why and I'll proceed. (Acceptable
-> example reason: "Trivial doc fix, no code logic, CI on docs-only changes
-> adds no value here.")
+> If you approve the direct push, say so and I'll proceed after the same local
+> checks, then verify CI on `main`.
 
 ### Example 3: force-push without lease
 
@@ -110,7 +109,8 @@ trade-off. What's being traded off and why?"
 > Recommended: either pair on one machine, or start a fresh branch off
 > current `main` and cherry-pick what you need from theirs.
 >
-> If you want to push to their branch anyway, tell me why.
+> If the teammate knows and you still want this route, confirm that coordination
+> and I'll proceed.
 
 ## Things the agent may never decide on its own
 
@@ -130,13 +130,13 @@ operator — it does not override, downgrade, or proceed by inference:
   - write the finding into a PR body and merge on top of it;
   - reason "private repo / low blast radius / author intended it" and
     proceed.
-  The agent halts, warns the operator loudly and directly (a standalone
-  chat message, not a PR-body line), and waits. Only the operator may
-  accept the finding, via a decision logged verbatim in chat AND written
-  into the PR body as an "Accepted security exception." If the operator
-  is unavailable, the state is **blocked**. Remediation is: remove the
-  secret, rotate/revoke it at the provider, move it to an env var or
-  secret manager.
+  The agent halts, warns the operator clearly and directly, and waits. Only
+  the operator may accept the specific disclosed finding. A brief explicit
+  acceptance is enough; no essay or prescribed phrase is required. Record
+  the accepted exception in the available delivery record (PR body when
+  there is a PR, otherwise the commit/release notes or chat). Remediation is:
+  remove the secret, rotate/revoke it at the provider, and move it to an env
+  var or secret manager.
 - **A security-agent FAIL verdict (Critical/High finding).** Same handling
   as above — surfaced to the operator, never downgraded by the agent.
 

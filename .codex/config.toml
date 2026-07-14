@@ -16,3 +16,6 @@ url = "https://mcp.craft.do/links/LKUYYz65h6s/mcp"
 
 [mcp_servers.shaughv-health]
 url = "https://health.emmetts.dev/api/mcp"
+
+[mcp_servers.pipedream]
+url = "https://mcp.pipedream.net/v2"

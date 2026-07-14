@@ -30,8 +30,8 @@ analyze is `git diff main...taylor/wb-2026-05-19`.
 
 | Tier | Behavior |
 |---|---|
-| **Tier 1 — Hard gate** | If the check fails, the skill refuses to create or merge the PR. No override accepted by the agent. Only the operator may decide to accept a Tier-1 failure, and only via an explicit, logged decision (see below). |
-| **Tier 2 — Warn + override** | If the check fails, the skill warns loudly, explains the risk, recommends the fix, and asks for an override reason that names the trade-off. If the user provides a reason, the skill logs it verbatim and proceeds. |
+| **Tier 1 — Hard gate** | If the check fails, the skill pauses before create/merge and shows the specific failure. Only the operator may accept it, through a clear decision made after disclosure. |
+| **Tier 2 — Warn + override** | If the check fails, the skill explains the risk and recommends the fix. A clear owner instruction to proceed is enough; no justification or magic phrase is required. |
 | **Tier 3 — Soft check** | The skill notes the result in its output and in the PR body, but does not block or require an override. |
 
 ### The agent may not reclassify a gate
@@ -51,10 +51,11 @@ diff. Specifically:
   They may be valid *operator* decisions — surface them to the operator;
   do not act on them yourself.
 
-Only the operator can accept a Tier-1 failure. When they do, it is logged
-verbatim in the chat AND written as a visible "Accepted exception" section
-in the PR body — both. If the operator is unavailable, the state is
-**blocked**.
+Only the operator can accept a Tier-1 failure. A brief explicit approval after
+the failure is disclosed is enough; no prescribed phrase or justification essay
+is required. Record it in chat and, when a PR exists, in a visible "Accepted
+exception" section. A route approval given before the failure does not count as
+acceptance of that failure.
 
 If the agent is unsure whether something is a Tier-1 failure: treat it as
 one and surface it. Surfacing a non-issue costs the operator ten seconds.
@@ -85,7 +86,7 @@ the change. This is a fixed list, not agent discretion:
 - Documentation-only diffs (only `.md` files) MAY skip type-check, linter,
   formatter, and console-warning gates
 - Hotfixes run the full Tier-1 list but MAY relax the Tier-2 list when
-  production is actively broken; the override reason names the incident
+  production is actively broken; note the incident when known
 - **Workbranch → main** never scales down. The full gate flow runs every
   time.
 
@@ -102,7 +103,8 @@ without announcement is a gate that failed silently.
 ## Tier 1 — Hard gates
 
 These are checks the skill MUST verify before opening a PR. Failure of any
-hard gate means the skill refuses to call `gh pr create`.
+hard gate pauses `gh pr create` until the issue is fixed or the operator
+explicitly accepts that disclosed failure.
 
 ### T1.1 — All tests pass locally
 
@@ -221,15 +223,12 @@ any further git operation:
 4. **Recommend** the remediation path: remove the secret, rotate/revoke the
    credential at its provider (the value in git history is dead only once
    revoked), and move the value to an env var or secret manager.
-5. **Wait for an explicit operator decision.** Only the operator may decide
-   to accept the finding. If they do, the override is logged verbatim in
-   the chat ("Override logged: <operator's exact words>") AND written into
-   the PR body as a visible "Accepted security exception" section — both,
-   not either. "Accept" requires the operator to type a decision; agent
-   silence or agent inference does not count.
+5. **Wait for an explicit operator decision.** Only the operator may accept
+   the disclosed finding. A brief "approved" / "accept and proceed" is
+   sufficient; do not demand a reason or exact phrase. Record the decision in
+   chat and in the available delivery record (PR body when applicable).
 
-If the operator is unavailable, the correct state is **blocked**. Shipping
-on top of an unresolved secret finding is never the default.
+Shipping on top of an unresolved secret finding is never the default.
 
 ### T1.6 — No build artifacts or junk files in diff
 
@@ -310,11 +309,10 @@ Diff to review:
 - **PASS** → gate clears
 - **PASS WITH NOTES** → gate clears, but the findings are appended to the
   PR body in a "Security review notes" section so the human reviewer sees them
-- **FAIL** (any Critical or High finding) → gate blocks. The skill summarizes
-  the findings to the operator and refuses to open the PR until the issues
-  are addressed (or, in narrow circumstances, the operator overrides — but
-  Critical findings should require a written justification in the PR body
-  itself, not just a chat message)
+- **FAIL** (any Critical or High finding) → gate pauses. The skill summarizes
+  the findings and waits for remediation or a specific operator acceptance
+  after disclosure. A brief explicit acceptance is sufficient and is recorded
+  in the PR body when one exists.
 
 The full security-review output gets attached to the PR body in a collapsed
 section so reviewers have it on the record.
@@ -363,12 +361,9 @@ Example PR body addition:
 
 ### T1.11 — Operator sign-off
 
-The skill MUST NOT call `gh pr create` until the operator types the exact
-phrase:
-
-> `I have reviewed the diff and approve`
-
-(Case-insensitive, trailing punctuation OK.)
+The operator must clearly authorize opening the PR. Any unambiguous approval
+counts, including "approved," "go," "open the PR when ready," or "I have
+reviewed the diff and approve." No exact phrase is required.
 
 Before asking for sign-off, the skill MUST:
 
@@ -376,14 +371,13 @@ Before asking for sign-off, the skill MUST:
 2. Print the output of every other Tier 1 check (so the operator sees the
    state)
 3. Run `git diff main...HEAD --stat` and include the result
-4. Ask: "I've completed all automated checks. Please review the diff
-   yourself and type 'I have reviewed the diff and approve' to confirm.
-   Anything shorter or different will not count as sign-off."
+4. Ask for approval only if the operator has not already given an advance
+   delivery directive.
 
-Variants like "ok", "yes", "approved", "lgtm", or "go" do NOT count. The
-specific phrase forces the operator to look at the actual sign-off message
-and decide. This is the human-in-the-loop guarantee — the moment of
-attention the gate is designed to create.
+An earlier instruction such as "open the PR when ready" or "ship this through
+a PR" remains valid once all checks pass. Do not ask again solely because the
+diff and results are now available. If a check failed after that instruction,
+surface the failure and obtain a new decision about that failure.
 
 If the operator wants to abort instead of approving, they can say so freely.
 
@@ -391,9 +385,9 @@ If the operator wants to abort instead of approving, they can say so freely.
 
 ## Tier 2 — Warn + override
 
-Each failure prints a warning, explains the risk, recommends the fix, and
-asks for an override reason. If the operator provides a reason, log it
-verbatim and proceed.
+Each failure prints a warning, explains the risk, and recommends the fix. A
+clear operator instruction to proceed is sufficient; acknowledge it and
+continue without demanding a reason or prescribed wording.
 
 ### T2.1 — Operator has personally exercised the change
 
@@ -406,7 +400,7 @@ If no: warn. "Tests passing isn't the same as the feature actually working.
 For changes more than a typo, exercising it yourself catches things tests
 don't. Do you want to do that first?"
 
-Override reason example: "Pure refactor with no behavior change; existing
+Optional context example: "Pure refactor with no behavior change; existing
 tests cover it."
 
 ### T2.2 — New tests added for new behavior
@@ -414,7 +408,7 @@ tests cover it."
 If the diff adds new functions, endpoints, or branches and contains zero
 new or modified test files: warn.
 
-Override reason example: "Refactor only — no new behavior, existing tests
+Optional context example: "Refactor only — no new behavior, existing tests
 cover the surface area."
 
 ### T2.3 — Diff size is sane
@@ -427,7 +421,7 @@ Warn if:
 These are proxies for "this change is hard to review well." Suggest slicing
 if possible.
 
-Override reason example: "Generated migration file inflates line count;
+Optional context example: "Generated migration file inflates line count;
 hand-written changes are ~80 lines."
 
 ### T2.4 — CI is currently green on `main`
@@ -437,7 +431,7 @@ Check the most recent CI run on `main`. If it's failing: warn.
 Recommended fix: revert the breaking commit or fix-forward on `main` before
 piling on new PRs.
 
-Override reason example: "Known CI flake — last 3 runs show the same test
+Optional context example: "Known CI flake — last 3 runs show the same test
 flakes intermittently, fix is in #203."
 
 ### T2.5 — Branch is under 48h age cap
@@ -457,7 +451,7 @@ If found: list them. Ask the operator if they're intentional (some are —
 e.g., production logging via `console.log` in some Node setups; surfaces
 in CLI tools).
 
-Override reason example: "console.log in CLI tool — intentional output to
+Optional context example: "console.log in CLI tool — intentional output to
 user."
 
 ### T2.7 — Feature flag wired if change is partial/risky
@@ -469,7 +463,7 @@ feature flag?"
 If not: warn. Recommend wrapping the new behavior in a flag per
 `references/feature-flags.md`.
 
-Override reason example: "Internal admin endpoint, auth-gated, not exposed
+Optional context example: "Internal admin endpoint, auth-gated, not exposed
 to users."
 
 ### T2.8 — Commit messages are meaningful
@@ -480,7 +474,7 @@ Scan commit messages for: `wip`, `fix`, `stuff`, `update`, `changes`,
 If found: offer to interactive-rebase to clean them up
 (`git rebase -i origin/main`).
 
-Override reason example: "Squash merge will replace these anyway."
+Optional context example: "Squash merge will replace these anyway."
 
 ### T2.9 — Risk level explicitly stated in PR body
 
@@ -541,8 +535,8 @@ When the operator says "open a PR," the skill performs this sequence:
    standalone, primary message — never folded into a PR body or a merge.
    The agent does not downgrade it or proceed past it.
 
-3. Run Tier 2 gates in order. Each failure → warn, recommend, ask for
-   override reason. Log overrides.
+3. Run Tier 2 gates in order. Each failure → warn and recommend. A clear
+   operator instruction to proceed is enough; acknowledge it once.
 
 4. Note Tier 3 results in PR body.
 

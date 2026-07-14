@@ -26,7 +26,7 @@ codex plugin marketplace add RealEmmettS/shaughv-code
 codex plugin add shaughv-code@shaughv-code
 ```
 
-Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation, Craft Docs, and Shaughv Health) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
+Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation, Craft Docs, Shaughv Health, and Pipedream) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
 
 ### Alternative: install skills-only with `npx skills`
 
@@ -36,7 +36,7 @@ If you're using another agent (Cursor, OpenCode, Gemini CLI, and ~50 others), or
 npx skills add RealEmmettS/shaughv-code
 ```
 
-Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. To get the bundled MCP server and slash command too, use the Claude Code marketplace flow above instead.
+Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. To get the bundled MCP servers and slash command too, use the Claude Code marketplace flow above instead.
 
 ## Update
 
@@ -81,7 +81,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `debugging-framework` | Structured debugging framework for stack bugs — integration drift, writes that didn't land, vanished messages, 5xx errors, datetime and idempotency gotchas, "works locally but not in prod". |
 | `defensive-programming` | What "defensive" means at a system boundary — error contracts, try/except critique, retry-backoff and timeout logic, where validation belongs — safety without the noise. |
 | `gcs-storage` | Generic Google Cloud Storage reference. Install on macOS/Linux/Windows, ADC vs service-account auth, upload/download/list/delete, flat vs HNS folders, public access, signed URLs, CORS, lifecycle, scripting cheat-sheet, and a comprehensive gotchas catalog. Agent asks for project ID + bucket before mutating commands. |
-| `git-workflow` | The team's official git workflow and committing strategy for all repos — branches, worktrees, commits, PRs, rebasing, merge conflicts, hotfixes, multi-agent coordination. |
+| `git-workflow` | The team's preferred git workflow for branches, worktrees, commits, PRs, rebasing, merge conflicts, hotfixes, and multi-agent coordination. It strongly defaults to the full workbranch/worktree/PR route, while treating clear owner approval as sufficient for a simpler delivery route without skipping tests, validation, secret checks, or post-push CI. |
 | `handoff` | Write an exhaustive session handoff document so a future agent resumes exactly where this one stopped — conversation arc, plan state, every decision, and what's left. Produces a dated `docs/agents/handoff/` file, then defers to `git-workflow` for the commit. |
 | `human-changelog` | Create/update a `HUMAN_CHANGELOG.md` by translating a repo's `CHANGELOG.md` into plain-English entries (no version numbers, no jargon), and wires up the repo's `CLAUDE.md` to keep both files in sync going forward. |
 | `image-gen` | Generate or edit images (text-to-image and image-to-image), routed to Nano Banana 2 / Gemini, MAI-Image-2.5, or Reve — always asks which provider to use first, saves results to Downloads. |
@@ -118,6 +118,7 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
 | `craft-docs` | `https://mcp.craft.do/links/.../mcp` (Streamable HTTP) | Connects to a specific Craft Docs link. OAuth-gated — first tool use pops a Craft sign-in flow, so the bundled URL alone is not a credential. Exposes Craft's standard tools (read/write blocks, revert). |
 | `shaughv-health` | `https://health.emmetts.dev/api/mcp` (Streamable HTTP) | Connects to Emmett's personal health-data MCP server. OAuth-gated via Google sign-in (allowlisted account) — first tool use pops a sign-in flow, so the bundled URL alone is not a credential. Exposes health/nutrition/sleep/exercise query and logging tools. |
+| `pipedream` | `https://mcp.pipedream.net/v2` (Streamable HTTP) | Connects to Pipedream's end-user MCP service, with access to tools from thousands of apps. OAuth-gated — first use prompts the installer to sign in, choose apps, and authorize access; the bundled URL is not a credential. |
 
 Both surfaces bundle these now: Claude Code reads them from the root `.mcp.json`, and the Codex package ships them too (`plugins/shaughv-code/.mcp.json`). Codex sessions run *inside this repo* also pick them up from `.codex/config.toml` before the plugin is installed.
 
@@ -135,7 +136,7 @@ shaughv-code/
 │   └── config.toml          # repo-local Codex MCP fallback (in-repo sessions)
 ├── .codex-plugin/
 │   └── plugin.json          # Codex plugin manifest (skills + MCP)
-├── .mcp.json                # bundled MCP servers (Remotion docs, Craft Docs, Shaughv Health)
+├── .mcp.json                # bundled MCP servers (Remotion, Craft, Health, Pipedream)
 ├── build-codex-plugin.ps1   # regenerates plugins/shaughv-code/ from root
 ├── commands/
 │   └── create-video.md      # /shaughv-code:create-video

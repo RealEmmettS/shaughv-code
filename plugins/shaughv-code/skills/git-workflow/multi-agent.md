@@ -24,7 +24,7 @@ Two sources of truth:
 2. **`git branch -r`** and `gh pr list`. The remote-level view of which
    branches and PRs are active across all agents and developers.
 
-The key discipline that makes this work is **non-negotiable #7: push every
+The key discipline that makes this work is **strong default #7: push every
 new branch to origin immediately on creation**. Because branches appear on
 origin from minute zero, any agent can see what every other agent is doing
 with a single `git fetch`. Branch names are the coordination protocol.
@@ -131,7 +131,7 @@ What to do:
 
 ## Branch reservation via push-to-origin-first
 
-The "push to origin immediately on creation" rule (non-negotiable #7) is
+The "push to origin immediately on creation" rule (strong default #7) is
 how agents reserve branches across sessions. The moment a branch exists
 on origin:
 

@@ -1,21 +1,15 @@
 ---
 name: git-workflow
 description: >
-  Our team's official git workflow and committing strategy — the standard
-  for ALL git work across ALL repos. Use this skill any time anything
-  git-related comes up: branches, worktrees, workbranches, commits,
-  commit messages, PRs, pull requests, pushing, pulling, rebasing,
-  merging, deleting branches, merge conflicts, hotfixes, feature flags,
-  multi-agent coordination, or being asked "what branch should I use",
-  "how do I ship this", "how do we do git here", "what's our workflow",
-  "how should I commit this", "where should I work", or "another agent
-  is on this repo". Also trigger on any mention of "main", "trunk",
-  "workbranch", "the branch is old", "stale branch", "force-push",
-  or any phrase about getting code into production. The skill encodes
-  the full policy and the exact git CLI commands; it enforces a
-  worktrees-always, daily-workbranch, gated-PR model derived from
-  Trunk-Based Development for small multi-agent teams. When in doubt —
-  trigger. This skill applies to every repo this team owns.
+  Official git workflow and committing strategy for all repos. Use for
+  branches, worktrees, workbranches, commits and messages, PRs, pushing,
+  pulling, rebasing, merging, cleanup, conflicts, hotfixes, feature flags,
+  multi-agent coordination, shipping, or questions about which branch or
+  workflow to use. Also trigger on main, trunk, stale branches, force-push,
+  direct/default-branch delivery, or getting code into production. Provides
+  exact CLI guidance and strongly defaults to worktrees, daily workbranches,
+  and gated PRs, while accepting clear owner approval for a simpler delivery
+  route without skipping tests, validation, secret checks, or post-push CI.
 ---
 
 # Git Workflow — Team Standard
@@ -48,19 +42,23 @@ keeps them implicitly aligned. Task worktrees branch from the workbranch
 and merge back into it. At end of day (or end of batch), the workbranch
 goes through the full pre-PR gate flow and merges to `main`.
 
-**Worktrees-always.** Every branch lives in its own physical directory via
+**Worktrees-always by default.** Every branch lives in its own physical directory via
 `git worktree`. The main checkout is reserved for being on `main`. Task
 worktrees are sibling directories: `~/code/myrepo/`, `~/code/myrepo-feat-csv-export/`,
-`~/code/myrepo-fix-auth-bug/`. This is non-negotiable — see
+`~/code/myrepo-fix-auth-bug/`. This is the preferred route — see
 `references/worktrees.md` for the full mental model.
 
-## The non-negotiables
+## Strong defaults and hard safety boundaries
+
+Rules 1–13 are the standard workflow and should be recommended and followed
+unless the repository owner/operator clearly approves another route. Rule 14
+remains a hard destructive-safety boundary.
 
 1. **One trunk.** `main` is the only globally long-lived branch. Workbranches
    live ≤24h. Task branches live ≤2 days.
-2. **Worktrees-always.** Every branch lives in its own worktree directory.
-   The main checkout is reserved for `main`. No `git checkout -b` in place
-   for task work.
+2. **Worktrees-always by default.** Every branch normally lives in its own
+   worktree directory. The main checkout is reserved for `main`; direct work
+   there is allowed when the owner explicitly approves that delivery route.
 3. **Per-developer workbranches.** Each developer has at most one active
    workbranch at a time, named `<developer>/wb-<YYYY-MM-DD>`. Workbranches
    never merge into each other — they only meet on `main`.
@@ -86,63 +84,53 @@ worktrees are sibling directories: `~/code/myrepo/`, `~/code/myrepo-feat-csv-exp
     lightweight gate (tests, lint, type, console, security agent, sign-off).
     Workbranch → main is the full pre-PR gate walk in
     `references/pre-pr-gates.md`.
-12. **No direct pushes to `main` or to another developer's workbranch.**
-    Workbranches are personal but PR-protected; `main` is universal and
-    PR-protected.
+12. **Prefer PR-gated pushes to `main`; never silently use another developer's
+    workbranch.** A clear owner instruction such as "push directly to main when
+    ready" authorizes a direct default-branch commit and push after the normal
+    quality checks pass. It does not authorize pushing to someone else's branch.
 13. **Delete worktrees and branches immediately after merge.** Local and remote.
 14. **No force-push without `--force-with-lease`.** Never plain `--force`.
 
-## Operating mode: warn loudly, allow override
+## Operating mode: strict default, lightweight owner override
 
-When the user asks you to do something that violates the policy, or when a
-gate fails:
+Default to the full workflow. When the owner asks for a simpler route, briefly
+name the recommended route and the concrete tradeoff once, then respect their
+decision. Do not turn the recommendation into a permission ritual.
 
-1. State plainly which rule is being violated.
-2. Explain the specific risk in this situation.
-3. Offer the compliant alternative as the default path.
-4. Ask the user to either take the alternative OR state a reason for the
-   override.
-5. If they override, log the reason verbatim ("Override logged: <reason>")
-   and proceed.
+### What counts as approval
 
-Never proceed with a violation without an explicit, stated override reason.
-"Just do it" is not a reason. "It's urgent" is not a reason. A reason names
-what is being traded off and why.
+Any clear owner/operator instruction is sufficient, including:
 
-### What "loudly" concretely means
+- "I approve a push to main."
+- "Push directly to the default branch when ready."
+- "Skip the workbranch for this one."
+- "Override the PR route."
 
-"Warn loudly" is not satisfied by mentioning the problem somewhere. It has
-a specific, testable meaning:
+No magic phrase, repeated confirmation, or justification is required. An
+advance directive containing "when ready" remains valid after checks complete;
+do not ask again merely because time passed or the diff is now available. Log
+or acknowledge the instruction once and proceed.
 
-- The warning is the **primary content of a chat message to the operator**,
-  not a line inside a PR body, a commit message, a collapsed `<details>`
-  section, or a status footer.
-- The warning **stops the workflow**. It is followed by waiting for the
-  operator, not by the next git command. A warning that appears in the
-  same turn as the action it was warning about is not a warning — it is a
-  caption on a decision already made.
-- The operator gets a **genuine decision moment**: a clear statement of
-  the problem and an explicit ask. "Do you want to (a) fix it or (b)
-  override with a reason?" The agent does not answer this question on the
-  operator's behalf.
+### The delivery route, not the quality bar
 
-The test: could the operator have missed it? If the warning was bundled
-into a merge, a PR body, or a wall of other output, the answer is yes,
-and it was not loud. A loud warning is one the operator must respond to
-before anything else happens.
+A route override changes branching, worktree, PR, or merge ceremony only. It
+does **not** skip applicable local tests, linting, formatting, build/package
+validation, secret scanning, endpoint smoke tests, remote-sync checks, or
+post-push CI verification. Continue those checks unless the operator explicitly
+waives a specific check.
 
-### The agent never decides an override for the operator
+If a check actually fails or a security/secret finding appears, surface that
+specific result clearly before shipping. A prior route override does not
+silently accept a later failure. The owner can still accept the disclosed
+failure with a brief explicit approval; do not demand an essay or prescribed
+wording. Record the accepted exception and proceed only after that decision.
 
-The agent surfaces; the operator decides. The agent must not infer that a
-violation is "probably fine," supply the override reason itself, or treat
-operator silence as consent. If the operator is unavailable, the correct
-state is **blocked** — not "proceeded because the reason seemed obvious."
+### Hard safety boundaries
 
-This applies with full force to security findings. A failed secret scan,
-a security-agent FAIL verdict, or any Tier-1 failure is surfaced and
-handed to the operator. It is never downgraded, re-scoped, or shipped on
-top of by agent initiative. See `references/pre-pr-gates.md`,
-"The agent may not reclassify a gate."
+The agent never uses plain `--force` where `--force-with-lease` can protect
+remote work, never pushes to someone else's branch without coordination, and
+never hides or quietly downgrades a failed check. These are operational safety
+rules, not approval ceremony.
 
 ## The lifecycle — exact commands
 
@@ -153,8 +141,9 @@ refresh**, **finish the task** (worktree → workbranch), **ship the day**
 
 ### Phase 0 — Prepare the main checkout
 
-The main checkout (e.g. `~/code/myrepo/`) is reserved for being on `main`.
-It is NOT where work happens. Start every day by getting it fresh:
+The main checkout (e.g. `~/code/myrepo/`) is normally reserved for being on
+`main`, not for task work. An explicit owner-approved direct-to-main route is
+the exception. In either case, start by getting it fresh:
 
 ```bash
 cd ~/code/myrepo
@@ -419,7 +408,8 @@ section "Worktree → workbranch gates" for the full list. Summary:
 - PR body filled out
 - **Security agent review** complete (PASS / PASS WITH NOTES)
 - **Chrome DevTools console** inspected (when diff touches UI)
-- **Operator sign-off** with the phrase: `I have reviewed the diff and approve`
+- **Operator authorization** — any unambiguous approval or advance delivery
+  directive counts when the checks are green
 
 **Tier 2 warn-override gates:**
 - Operator personally exercised the change
@@ -717,10 +707,10 @@ tasks on a broken workbranch.
 
 ### "I want to commit directly to main or to the workbranch (not via PR)"
 
-Don't. PR-gated merges at both levels. If a change is truly trivial (typo
-in a README), open the PR anyway — it takes 30 seconds and CI runs.
-
-Override possible (e.g., the README typo), but log the reason.
+Recommend the PR-gated route once and name the review tradeoff. If the owner
+clearly approves a direct push, acknowledge it and proceed after the same local
+quality checks. Push to the repository's actual default branch, then verify its
+CI run. Do not demand a reason or a second approval when the checks are green.
 
 ## Quick reference card
 
@@ -822,11 +812,14 @@ git branch -d taylor/wb-2026-05-19
   gates. Workbranch → main is full gates. Don't conflate them.
 - **State the rule, not just "policy says no."** "Workbranch is 26 hours
   old, cap is 24" is useful. "Policy violation" is not.
-- **Suggest the compliant alternative before asking for an override.** The
-  override is a last resort.
-- **Log overrides verbatim.** When the user gives a reason, repeat it back.
-- **The main checkout is sacred.** It stays on `main`. No work happens
-  there. Every other branch lives in a worktree.
+- **Recommend the compliant route once.** Keep the warning proportional and
+  do not repeat it after clear owner approval.
+- **Honor clear owner overrides.** A simple direct-push approval is enough;
+  acknowledge it once without requiring justification or ritual wording.
+- **Keep route separate from quality.** Direct-to-main approval does not skip
+  checks; run them locally and verify CI after the push.
+- **The main checkout stays on `main`.** Task work normally happens in a
+  worktree; explicit owner-approved direct-to-main work is the exception.
 - **Continuous rebase is not optional.** The model only works if workbranches
   pull from main continuously. If you've been working for more than ~2 hours
   without a rebase, do one before continuing.

@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.35.0] — 2026-07-14
+
+Added: a fourth bundled MCP server, **`pipedream`**, at `https://mcp.pipedream.net/v2` on both the Claude Code and Codex surfaces. Improved: the **`git-workflow`** skill still defaults to its full workbranch/worktree/PR discipline, but now accepts simple owner approval for a direct/default-branch route without treating that route override as permission to skip quality checks.
+
+### Added
+- `.mcp.json` — bundles `pipedream` over Streamable HTTP transport (`"type": "http"`). Pipedream's end-user endpoint uses OAuth on first connection, so the committed static URL is not a credential; users sign in, select the apps to expose, and authorize the MCP client. The short server name avoids adding unnecessary length to Pipedream's generated tool names.
+- `.codex/config.toml` — adds the matching `[mcp_servers.pipedream]` URL-only block for Codex sessions run inside this repository.
+- `CODEX_PROJECT.md` — adds the required project-status reference with a TL;DR, architecture/release summary, current goals, and complete workspace tree.
+
+### Changed
+- `skills/git-workflow/SKILL.md` — replaces reason-gated, prescribed-phrase overrides with lightweight owner authorization. Clear instructions such as "I approve a push to main" or "push directly to the default branch when ready" now authorize the delivery route immediately and remain valid after checks finish.
+- `skills/git-workflow/{policy-violations.md,pre-pr-gates.md,workbranches.md,multi-agent.md}` and their applicable `references/` counterparts — align override/sign-off guidance with the new rule. The full workbranch/worktree/PR path remains the recommendation and default; route approval never silently accepts a failing test, secret finding, or security failure, which must be disclosed separately.
+- `skills/git-workflow/scripts/check-branch.sh` — adds `--allow-main` for an explicitly approved direct default-branch push while continuing branch-sync and trunk-CI checks.
+- `skills/git-workflow/scripts/secret-scan.sh` — aligned with the full-tree Tier-1 checker (full mode by default, optional weaker `--diff` mode clearly labeled) so the packaged helper no longer performs a narrower scan than the policy requires.
+- `build-codex-plugin.ps1` — makes the mirror/source path guard platform-aware instead of hard-coding Windows separators, so regeneration remains path-safe and now works under PowerShell on macOS as well as Windows.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.34.0` → `0.35.0`; Pipedream added to the MCP descriptions/keywords while the three plugin surfaces remain in lockstep.
+- `README.md`, `AGENTS.md`, `CLAUDE.md` — document all four bundled MCP servers and the Git workflow's "delivery route, not quality bar" owner-override policy.
+- `plugins/shaughv-code/` — regenerated from the root authoring sources for Claude/Codex parity.
+
 ## [0.34.0] — 2026-07-10
 
 Added: a third bundled MCP server, **`shaughv-health`** — Emmett's personal health-data MCP at `https://health.emmetts.dev/api/mcp` — on both the Claude Code and Codex surfaces.

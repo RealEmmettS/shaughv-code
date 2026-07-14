@@ -9,8 +9,8 @@
     {
       "name": "shaughv-code",
       "source": "./",
-      "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills so they are available across every Claude Code instance from a single source.",
-      "version": "0.34.0",
+      "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills and MCP servers so they are available across every Claude Code instance from a single source.",
+      "version": "0.35.0",
       "homepage": "https://github.com/RealEmmettS/shaughv-code",
       "keywords": [
         "shaughv",
@@ -27,6 +27,7 @@
         "craft-docs",
         "health",
         "shaughv-health",
+        "pipedream",
         "bug-triage",
         "design-patterns",
         "debugging",

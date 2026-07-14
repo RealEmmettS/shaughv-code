@@ -147,7 +147,7 @@ if git rev-parse --verify "$ORIGIN_BRANCH" >/dev/null 2>&1; then
   fi
 else
   warn "Branch '$BRANCH' is not pushed to origin yet."
-  echo "   Per non-negotiable #7: branches must be on origin before work begins." >&2
+  echo "   Per strong default #7: branches should be on origin before work begins." >&2
   echo "   Run: git push -u origin $BRANCH" >&2
 fi
 
