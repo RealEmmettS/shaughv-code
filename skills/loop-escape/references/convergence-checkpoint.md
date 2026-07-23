@@ -74,10 +74,11 @@ Classify the pair:
 - Is this the actual target runtime and privilege boundary?
 - Are observers or competing processes contaminating the result?
 
-## Route
-- **Primary skill:** critical-thinking | iterative-plan | logical-reasoning | debugging-framework
-- **Optional support skill:**
-- **Why this route:**
+## Recovery lens
+- **Primary lens:** strategy | scope | evidence | defect
+- **Action applied here:**
+- **Optional deeper skill:** critical-thinking | iterative-plan | logical-reasoning | debugging-framework | none
+- **Why deeper guidance is or is not needed:**
 
 ## Smallest working rung
 <The next thin end-to-end slice. Preserve the final goal.>

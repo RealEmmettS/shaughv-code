@@ -6,7 +6,17 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — 23 July 2026
+## Most recent update — 23 July 2026
+
+**Improved**
+- The **loop escape** helper now carries the full recovery method itself. Even if no other thinking, planning, logic, or debugging helper is visible, it can still reconstruct the known state, decide whether another try would teach anything, make a silent failure observable, find the smallest working version, and continue with a genuinely different next move.
+- The guide is deliberately flexible rather than mechanical. A small loop can use a short checkpoint; a long, expensive, or release-critical stall can use the full attempt ledger. Other helpers are optional deep dives, not dependencies.
+- The recovery advice now reflects what actually ended a prolonged real-world stall: trust verified handoffs without restarting every audit; get an authorized validated fix in front of the system that decides success; make silent checks show their evidence; ask the owner to decide the fate of expensive nonessential proof; test the real runtime without competing observers; change tools when a tool cannot see the objective; and leave clear conclusions for the next session.
+
+**Behind the scenes**
+- Kept this as one portable helper shared by Claude and Codex. No background rule, general index, helper agent, extra command, duplicate fallback, or machine-only instruction was added. Direct invocation remains the dependable option when a runtime has too many installed helpers to show every description automatically.
+
+## Earlier release — 23 July 2026
 
 **Added**
 - A new **loop escape** helper gives an agent a reliable way out when work is going in circles, returning the same result without learning anything, or trying to solve too much at once. You can call it directly in Claude or Codex, and its wording also helps agents notice the situation automatically. Why it matters: a long failure sequence now stops for an honest checkpoint instead of quietly repeating itself.

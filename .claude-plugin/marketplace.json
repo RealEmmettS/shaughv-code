@@ -11,7 +11,7 @@
       "name": "shaughv-code",
       "source": "./",
       "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles custom SHAUGHV skills for loop escape, convergence recovery, evidence-aware retries, progressive slicing, and the broader coding and creative toolkit, plus MCP servers, from one source.",
-      "version": "0.36.0",
+      "version": "0.36.1",
       "homepage": "https://github.com/RealEmmettS/shaughv-code",
       "keywords": [
         "shaughv",

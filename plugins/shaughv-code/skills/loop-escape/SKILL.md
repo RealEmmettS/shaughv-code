@@ -1,24 +1,27 @@
 ---
 name: loop-escape
 description: >-
-  Convergence recovery for work that is stuck, going in circles, producing the same result
-  twice, or running for hours or days without new evidence. Use when a task is too ambitious,
-  the agent keeps retrying the same command/check/tool, nobody can state the last known-good
-  state, the validation oracle cannot see the current candidate, or the operator says "get the
-  basic version working first," "try a different approach," "break this into steps," "we
-  learned nothing," or "does another retry help?" Builds an attempt ledger, separates the
-  basic functional bar from additional qualification, classifies repetitions as new evidence,
-  valid replication, or duplicate cycles, then routes narrowly to critical-thinking,
-  iterative-plan, logical-reasoning, or debugging-framework. Do not trigger for passive
-  monitoring, an expected long operation, materially changed iterations, or deliberately
+  Convergence recovery for work stuck, going in circles, producing the same result twice,
+  or running for hours/days without new evidence. Use when a task is too ambitious, the
+  agent repeats the same command/check/tool, nobody can state the last known-good state, the
+  validation oracle cannot see the current candidate, or the operator says "get the basic
+  version working first," "try a different approach," "break this into steps," "we learned
+  nothing," or "does another retry help?" Builds an attempt ledger, separates the basic
+  functional bar from qualification, classifies repetitions as new evidence, valid
+  replication, or duplicate cycles, and applies self-contained strategy, scope, evidence,
+  observability, and debugging lenses. It may optionally deepen with sibling
+  reasoning/planning/debugging skills but never depends on them. Do not trigger for passive
+  monitoring, expected long operations, materially changed iterations, or deliberately
   independent replication with a stated prediction.
 ---
 
 # Loop Escape
 
-Use this skill as a recovery entrypoint, not as a general-purpose reasoning framework.
-Its job is to restore information gain when work has become repetitive, over-scoped, or
-impossible to validate.
+Use this as a complete recovery workflow, not merely a dispatcher. Its job is to restore
+information gain when work has become repetitive, over-scoped, or impossible to validate.
+It must still produce a useful checkpoint and next action when no sibling skill is visible
+or available. Scale the ceremony to the situation: a short loop may need a compact inline
+checkpoint; a long, expensive, or release-critical stall deserves the full ledger.
 
 Automatic invocation depends on the runtime matching the description above. Explicit
 invocation is the reliable escape hatch.
@@ -39,7 +42,7 @@ Do not call ordinary waiting a loop. Passive monitoring, a build that is still w
 expected duration, a retry after a known transient with an explicit bound, a materially
 changed experiment, and intentionally independent replication are not duplicate cycles.
 
-## Recovery protocol
+## Recovery guide
 
 ### 1. Freeze and checkpoint
 
@@ -98,29 +101,23 @@ next move expose evidence:
 Do not spend another cycle changing product behavior while the failure remains
 unobservable.
 
-### 4. Route to the owning skill
+### 4. Orient with the recovery lenses
 
-Always name and read one primary sibling skill, including when observability is broken.
-Use `critical-thinking` for an unsuitable oracle/tool, hidden output, observer
-contamination, or a strategy-family change; the reporting-first action is the first move
-inside that route, not a reason to leave ownership blank.
+Use the failure shapes below as prompts, not a rigid state machine. One usually dominates,
+but several may overlap. Apply enough of the embedded guidance to reveal a materially
+different next move. Loading another skill is optional, never a prerequisite for recovery.
 
-Read only the smallest useful sibling skill set:
-
-| Failure shape | Primary skill | Optional support |
+| Failure shape | Recovery action owned here | Optional deeper guidance |
 |---|---|---|
-| The framing, assumptions, tool, or strategy family may be wrong | `../critical-thinking/SKILL.md` | `../logical-reasoning/SKILL.md` when the conclusion itself needs an evidence audit |
-| The task is too ambitious or lacks a basic end-to-end rung | `../iterative-plan/SKILL.md` | `../critical-thinking/SKILL.md` when no viable slice is apparent |
-| The question is whether repeated attempts add evidential weight | `../logical-reasoning/SKILL.md` | `../critical-thinking/SKILL.md` to generate a genuinely different test |
-| A concrete code defect remains after the loop is narrowed | `../debugging-framework/SKILL.md` | none; it owns hypothesis-driven debugging |
+| Framing, assumptions, oracle, tool, or strategy family may be wrong | State the load-bearing assumption and its falsifier. Generate alternatives from genuinely different families: improve observability, build a smaller end-to-end prototype, use an alternate runtime/tool, compare with a working reference, or isolate the environment. Pick the cheapest discriminating family. | `../critical-thinking/SKILL.md` |
+| The task is too ambitious or lacks a basic end-to-end rung | Preserve the final goal, then separate the smallest functional rung, demoable integration/hardening rungs, and remaining qualification. Give every expensive optional gate an owner and explicit disposition. | `../iterative-plan/SKILL.md` |
+| The question is whether repetition adds evidential weight | Compare starting state, intervention, observation, and information gained. Treat unchanged correlated retries as one inference; require stated independence, prediction, sample count, and stop rule for valid replication. | `../logical-reasoning/SKILL.md` |
+| A concrete defect remains after the loop is narrowed | State one live defect hypothesis, the observation that would distinguish it, and one bounded experiment. Hand off only after the oracle can see the candidate and preserve the result. | `../debugging-framework/SKILL.md` |
 
-Normally read one primary skill and at most one support skill. Read all three reasoning
-skills only when framing, scope, and evidence are simultaneously broken; state why the
-extra context is necessary.
-
-The router contract controls the recovery. Sibling guidance informs the next action but
-must not erase a supplied fact, suppress the checkpoint, or add a new proof burden before
-the smallest discriminating move.
+Use the embedded guidance by default. Read a sibling only when its full method would
+materially improve the next move, and keep the added context proportionate. Never block,
+invent a replacement skill, or add a proof burden because a sibling is omitted from a
+runtime's visible skill list.
 
 ### 5. Re-enter on the smallest working rung
 
@@ -137,9 +134,33 @@ Choose one next action that is cheap, reversible where possible, and discriminat
 between live explanations. State the evidence expected under each relevant outcome and
 the condition that stops or redirects the attempt.
 
+## Habits that turn a stall into progress
+
+These are judgment guides drawn from a real long-running recovery, not mandatory ceremony:
+
+- **Inherit verified work.** Read the handoff and current evidence completely. Spot-check
+  load-bearing claims, but do not restart settled audits merely to feel certain.
+- **Convert diagnosis into an observable result.** A locally validated fix sitting outside
+  the deciding oracle produces no new information. When delivery is already authorized,
+  land and dispatch it promptly; otherwise identify the missing authority plainly.
+- **Make the failure speak.** If a check is mute, improve reporting before guessing at
+  behavior. Preserve raw payloads and bridge privilege, process, or GUI output boundaries.
+- **Let the owner arbitrate scope.** Surface the cost and consequence of an expensive,
+  nonessential gate once. Record any deferral with an owner, date, and backlog home rather
+  than silently dropping it or grinding on it forever.
+- **Treat environment and runtime as test inputs.** Remove observers, inspect competing
+  processes, isolate measurements, and prove runtime-specific behavior on the actual
+  runtime the product uses.
+- **Respect tool boundaries.** After a bounded number of attempts, distinguish “the tool
+  ran” from “the objective was observed.” Change tools when the current one cannot see or
+  affect the target.
+- **Leave conclusions, not a mystery.** Record the evidence, decision, and remaining debt
+  so the next session advances from the known state.
+
 ## Required output
 
-Before resuming execution, surface:
+Before resuming execution, surface the equivalent of this checkpoint. Use the full form
+for long or high-stakes work and a concise version for a small loop:
 
 ```markdown
 ## Convergence checkpoint
@@ -149,12 +170,13 @@ Before resuming execution, surface:
 - Basic functional bar:
 - Additional evidence bar:
 - Attempt verdict: new evidence | valid replication | duplicate cycle
-- Primary skill route:
+- Primary recovery lens: strategy | scope | evidence | defect
+- Optional deeper skill:
 - Smallest working rung:
 - Next discriminating action:
 - Expected evidence:
 - Stop / redirect condition:
 ```
 
-Then continue the task using the selected sibling guidance. Do not end by merely telling
-the operator which skill they should invoke.
+Then continue the task using the selected recovery lens. Do not end by merely telling the
+operator which skill they should invoke.

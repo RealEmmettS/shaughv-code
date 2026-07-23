@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.36.1] — 2026-07-23
+
+Fixed: **`loop-escape`** is now a comprehensive, self-contained recovery guide rather than a router whose usefulness depends on other skills being visible. This preserves one portable recovery surface for Claude Code and Codex without adding hooks, agents, commands, duplicate recovery skills, a general index, or machine-specific standing instructions.
+
+### Changed
+- `skills/loop-escape/SKILL.md` — embeds the strategy, scope, evidence, observability, and concrete-defect recovery lenses directly. Specialist skills remain available for optional depth, but the checkpoint, smallest working rung, discriminating next action, and continued execution no longer depend on loading them.
+- `skills/loop-escape/SKILL.md` — adds public-safe lessons from a long-running stalled recovery: inherit verified handoffs instead of restarting settled audits; promptly put an authorized validated candidate in front of the deciding oracle; repair silent reporting before changing behavior; let the owner explicitly disposition expensive nonessential gates; test the real runtime in an uncontaminated environment; change tools when the current tool cannot observe the objective; and leave durable conclusions for the next session.
+- `skills/loop-escape/SKILL.md` and `skills/loop-escape/references/convergence-checkpoint.md` — scale the recovery ceremony to the stakes and describe the four recovery lenses without prescribing a rigid state machine. The full ledger remains available for long, expensive, or release-critical stalls, while small loops can use an equivalent compact checkpoint.
+- `README.md` — documents that automatic matching depends on each runtime's skill-description budget and that explicit invocation is the reliable supported escape hatch. It also makes clear that the skill stands alone and sibling skills are optional depth.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.36.0` → `0.36.1`.
+- `plugins/shaughv-code/` — regenerated from the root sources for Claude/Codex parity.
+
 ## [0.36.0] — 2026-07-23
 
 Added: **`loop-escape`**, a narrow convergence-recovery router for stalled, repetitive, or over-ambitious work. Improved: **`critical-thinking`**, **`iterative-plan`**, and **`logical-reasoning`** now share an evidence-aware stop condition for materially identical cycles while preserving their distinct ownership of reframing, progressive delivery, and inference.

@@ -72,12 +72,12 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 
 ## Loop escape and convergence recovery
 
-The `loop-escape` skill is a narrow recovery router for work that is going in circles, has produced the same result twice without new evidence, has been stuck for hours or days, or needs to get a basic version working before pursuing the full goal.
+The `loop-escape` skill is a self-contained recovery workflow for work that is going in circles, has produced the same result twice without new evidence, has been stuck for hours or days, or needs to get a basic version working before pursuing the full goal.
 
 - Claude Code: `/shaughv-code:loop-escape`
 - Codex: `$shaughv-code:loop-escape`
 
-Agents may select the skill automatically from those signals, but automatic selection is probabilistic; explicit invocation is the reliable recovery mechanism. The skill creates a convergence checkpoint, classifies the last two attempts as `new evidence`, `valid replication`, or `duplicate cycle`, selects the smallest working rung, and routes to the relevant specialist guidance. It deliberately does not treat expected long operations, passive monitoring, meaningful iteration, or independent replication as loops.
+Agents may select the skill automatically from those signals, but automatic selection depends on each runtime's description budget and matching; explicit invocation is the reliable recovery mechanism. Once loaded, the skill stands alone: it creates a convergence checkpoint, classifies the last two attempts as `new evidence`, `valid replication`, or `duplicate cycle`, applies the relevant strategy, scope, evidence, observability, or defect lens, and selects the smallest working rung. It may read one or two specialist skills for deeper method, but their visibility is never required. It deliberately does not treat expected long operations, passive monitoring, meaningful iteration, or independent replication as loops.
 
 ## Skills bundled
 
@@ -97,7 +97,7 @@ Agents may select the skill automatically from those signals, but automatic sele
 | `iterative-plan` | Milestone planning and loop-triggered re-slicing for work that is too ambitious or needs the basic version first. Preserves the final goal while separating the smallest end-to-end functional rung, demoable integration/hardening rungs, and remaining qualification evidence. |
 | `learn` | Guided facilitation for deliberate learning — Kickoff/Session/Review/Course-Correct modes, the Learning Loop, proficiency levels, and a Learning Journal as the living artifact. |
 | `logical-reasoning` | Rigorous deductive and inductive reasoning, including whether another retry actually adds evidence. Audits attempt signatures, distinguishes independent replication from correlated retries and pseudoreplication, and changes proof method when an unchanged transformation stalls. |
-| `loop-escape` | Narrow recovery router for repetitive, stalled, or over-ambitious work. Produces a convergence checkpoint, finds the smallest working rung, chooses a discriminating next action with a stop condition, and loads at most the relevant critical-thinking, iterative-plan, logical-reasoning, or debugging guidance. |
+| `loop-escape` | Self-contained recovery workflow for repetitive, stalled, or over-ambitious work. Produces a convergence checkpoint, applies the relevant recovery lens, finds the smallest working rung, and chooses a discriminating next action with a stop condition; specialist skills are optional depth, not dependencies. |
 | `mistral` | Comprehensive Mistral AI API skill — every endpoint in the spec, with **OCR**, **audio transcription** (Voxtral), and **text-to-speech** as the headline jobs, plus chat/tools/structured-output, embeddings, FIM, classifiers, files, batch, fine-tuning, and the Agents & Conversations API. Bundles the full OpenAPI spec for offline/diff use, dependency-optional runner scripts (`mistral_ocr.py` / `mistral_transcribe.py` / `mistral_speech.py`), and a key discover→prompt→save flow. Uploaded files are auto-deleted after use. Reads `$env:MISTRAL_API_KEY`. |
 | `naming-conventions` | SHAUGHV + general naming rules for any identifier — variables, files, folders, repos, branches, commits, PRs, columns, flags. Carries Code Complete 2 and DevOps Handbook principles plus SHAUGHV-specific conventions. |
 | `openai-audio` | OpenAI audio stack — Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports. Includes 13 runnable examples (py/js/ts). |
