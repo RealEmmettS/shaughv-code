@@ -1,18 +1,18 @@
 ---
 name: iterative-plan
 description: >-
-  Use when planning a milestone — the work between a request (demo feedback, a
-  status update, a discovery transcript) and what you hand back — or when authoring
-  the milestone itself: sketching the 2–5 milestones for a new project, writing or
-  rewriting a success criterion, flipping a milestone to "in flight," or stuck on what
-  "done" means. Walks Profile, Clarify, Spine, and the Slice loop, and owns the
-  binary/demoable success-criterion gate. Trigger on "plan this milestone," "scope this
-  out," "help me write the tasks," "what's our first slice," vague criteria like "works
-  well" / "is ready" / "Foundation complete," asks for more than 5 milestones, tasks
-  generated from a criterion that isn't observable in 5 minutes, or mid-flight "is this
-  slice too big" / "do a post-mortem." Applies to any milestone-shaped chunk of work
-  (Jira epics, Notion briefs, roadmaps, Markdown plans). Fights overplanning and
-  Waterfall.
+  Milestone planning and recovery for work between a request and a demoable hand-back.
+  Walks Clarify, Profile, Spine, and the Slice loop; owns the binary/demoable success
+  criterion. Trigger on "plan this milestone", "scope this out", "help me write the
+  tasks", "what's our first slice", "task is too ambitious", "get the basic version
+  working first", "break it into steps", "is this slice too big", a vague "works well" /
+  "is ready" / "Foundation complete", more than five milestones, or two materially
+  identical evidence cycles that require stop-the-line re-slicing. Preserves the real end
+  goal while separating the smallest end-to-end functional rung, integration/hardening,
+  and remaining qualification. Applies to Jira epics, Notion briefs, roadmaps, and
+  Markdown plans. Pair with loop-escape for repeated no-information execution, critical-
+  thinking for reframing, and logical-reasoning for evidence audits. Fights overplanning
+  and Waterfall.
 ---
 
 # Iterative Plan
@@ -24,6 +24,10 @@ This is the planning loop for the gap between **a request and what you hand back
 Trigger on "plan this milestone," "scope this out," "help me write the tasks," "what's our first slice," "turn this transcript into a plan" — and mid-flight: "help me cut slices," "is this slice too big," "do a post-mortem on this milestone." You can resume from any phase. The retro/meta-feedback loop after each gate gathers informational, internal, and external feedback before solving. This skill soft-gates the three classic dispatch anti-patterns (milestone-sized batch, no baseline, slices too large).
 
 It also triggers on the **milestone-authoring** moments: drafting a new project's 2–5 milestones from scratch; reviewing a milestone before flipping it from `pending` to `in_flight`; a teammate handing you a vague criterion ("works well," "is ready," "Foundation complete," "X is done," "improve Y") and asking for tasks; a milestone stuck at the same progress reading for two or more reviews when someone wants to "just move the dot"; a request for more than 5 milestones, or milestones "fast" with no shaping; and milestone-shaped chunks in any tool (a Jira epic, a Notion plan, a customer-facing roadmap, a Markdown brief). This skill owns both the planning **loop** and the success **criterion** — the binary/demoable gate (see **The success criterion** below).
+
+Use it as a recovery method too: when the task feels too ambitious, the operator asks for
+the basic version first, or two consecutive execution cycles produce materially identical
+evidence, stop expanding the current plan and re-slice from the last known-good state.
 
 Skip it for pure chit-chat, one-line tweaks to an already-binary criterion, or marking an in-flight milestone done after the demo has actually happened.
 
@@ -124,10 +128,30 @@ For the current slice only:
    Gather all three *before* proposing any fix (the gather/solve firewall — mixing them makes you grab the first fix and miss the rest). Run this lightweight (~3 questions) at every gate; run the full post-mortem at milestone close or after a bad slice.
 5. **Re-plan** — 5 minutes. Now solutions are allowed. Turn the retro's informational divergences into the questions the *next* slice's scope will answer; reshape the spine explicitly; promote any recurring surprise into the skills (the meta-loop below). *This is where the loop earns its keep* — the plan adjusts at slice speed, not milestone speed.
 
-Two standing rules keep the loop stable (full reasoning in `references/anti-patterns.md`):
+Three standing rules keep the loop stable (full reasoning in `references/anti-patterns.md`):
 
 - **Stop the line.** If neither operator can state what is currently verified-working, stop dispatching until a gate restores a known-good state. Overload is a stop condition, not a push-through condition.
 - **WIP limit — one slice in flight per operator.** The constraint is operator validation attention, not agent output. Work is pulled at the pace you can validate, never pushed at the pace agents can produce.
+- **Duplicate-cycle cutoff.** Two consecutive attempts with the same relevant starting
+  state, intervention, and observation trigger `loop-escape`. Record what changed and what
+  information each produced; do not authorize a third duplicate as "one more try."
+
+### Recovery ladder for a stalled or over-ambitious slice
+
+Preserve the milestone's actual success criterion. Re-slicing changes the route, not the
+destination:
+
+1. **Basic functional rung** — the smallest vertical, end-to-end walking skeleton that
+   answers "can this work?" with a binary/demoable gate.
+2. **Integration and hardening rungs** — independently demoable additions: real data
+   breadth, error handling, performance, lifecycle, packaging, or platform coverage.
+3. **Qualification and evidence** — proof required for the actual release or completion,
+   plus expensive nonessential evidence.
+
+Do not silently defer proof that the milestone or release criterion requires. An expensive
+gate that is not essential to basic function gets an owner, cost, explicit disposition,
+and—if waived—a dated waiver plus backlog item. Surface the choice to the operator rather
+than grinding indefinitely or dropping it invisibly.
 
 ---
 
@@ -243,6 +267,7 @@ When you catch yourself or the user reaching for one of these, surface it:
 | Profiling-as-project | The investigation grows a plan and a task graph | Timeboxed spike, point it at the real thing |
 | Overplanning | >5 turns and still no contact with the system | Ship the spine, start slice 1, learn |
 | Decision-not-a-task | "We'll figure out X when we get there" | Make X a decision task now, with a binary/demoable outcome (run the criterion gate on it) |
+| Evidence-free retry loop | Same candidate/intervention/observation twice, no narrower hypothesis | Stop, run `loop-escape`, repair observability or re-slice to the smallest discriminating rung |
 
 ---
 
@@ -266,6 +291,9 @@ Promotion is a content change to this plugin — per the repo's lockstep rules i
 - **`git-workflow`** owns the dispatch posture (workbranches, worktrees, gates). Phase C step 2 defers to it entirely.
 - **`critical-thinking`** and **`logical-reasoning`** own structured decision-making and argument-testing when a clarify-phase question turns into a genuine decision or a claim that needs scrutiny. Hand off to them rather than reinventing the framework here.
 - **`critical-thinking`** (its Strategic / Adversarial framework) also owns the higher-altitude "should we do this at all / what's the sequencing across projects" framing that sits above a single milestone.
+- **`loop-escape`** owns the convergence checkpoint and duplicate-cycle verdict. This
+  skill owns re-slicing the preserved goal into functional, hardening, and qualification
+  rungs once that checkpoint routes here.
 
 ## Reference index
 

@@ -1,5 +1,6 @@
 {
   "name": "shaughv-code",
+  "description": "The SHAUGHV skill and MCP marketplace, including loop escape, convergence recovery, evidence-aware retries, and progressive slicing.",
   "owner": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -9,13 +10,17 @@
     {
       "name": "shaughv-code",
       "source": "./",
-      "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills and MCP servers so they are available across every Claude Code instance from a single source.",
-      "version": "0.35.0",
+      "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles custom SHAUGHV skills for loop escape, convergence recovery, evidence-aware retries, progressive slicing, and the broader coding and creative toolkit, plus MCP servers, from one source.",
+      "version": "0.36.0",
       "homepage": "https://github.com/RealEmmettS/shaughv-code",
       "keywords": [
         "shaughv",
         "personal",
         "skills",
+        "loop-escape",
+        "convergence",
+        "stuck",
+        "retry",
         "brand",
         "design",
         "gcs",

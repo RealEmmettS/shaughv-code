@@ -72,7 +72,27 @@ Tools for isolating a cause from circumstances:
 - **Survivorship / selection bias** — drawing conclusions from a sample that systematically
   excludes failures.
 
-## 6. Calibrating and reporting strength
+## 6. Repetition, independence & pseudoreplication
+
+Repeated observations strengthen an inductive claim only to the degree that they add
+independent information.
+
+- **Valid replication** repeats a test intentionally to estimate noise or reproducibility.
+  State the prediction, source of independence, bounded repeat count, and stop rule before
+  running it.
+- **Correlated retries** share the same hidden causes — candidate, cache, machine, runtime,
+  permissions, data, or observer — so ten matching results may carry little more weight
+  than one.
+- **Pseudoreplication** treats multiple measurements from one experimental unit or one
+  unchanged execution state as if they were independent samples.
+- **Duplicate cycles** repeat the relevant starting state and intervention and gain no new
+  observation or narrower hypothesis. They add no inferential force.
+
+Ask: *what could vary independently between repeats, and what conclusion would the added
+sample actually discriminate?* If the answer is "nothing" or "none," do not increase
+confidence merely because the action was repeated.
+
+## 7. Calibrating and reporting strength
 
 Match the conclusion's confidence to the evidence: a representative sample and controlled
 comparison support "strongly"; a single anecdote or uncontrolled correlation supports

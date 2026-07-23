@@ -126,6 +126,15 @@ Break it down. Find the root cause, not the surface symptom.
 - What does the worst-case scenario look like?
 - What does the best-case scenario look like?
 
+**2.8. Audit the last attempts before proposing another.**
+- For the two most recent attempts, record the relevant starting state, intervention,
+  observation, and information gained.
+- What changed materially between them?
+- Did the second attempt distinguish hypotheses, verify a criterion, or reveal a runtime
+  fact — or did it reproduce the same uninformative result?
+- If the signatures are materially identical, stop and route through `loop-escape`
+  before brainstorming another variation of the same tactic.
+
 > **The Five Whys (2.4) is the engine of this step.** It's easy to do badly. Users will
 > stop at the second or third "why" because it feels like progress. Push for all five.
 > The root cause is rarely the first thing surfaced.
@@ -190,6 +199,10 @@ Pick. Test. Commit.
 
 **4.2.** Test promising solutions through small-scale trials.
 - What's the cheapest way to find out if this works?
+- Before each trial, state the material delta from the prior attempt, the prediction under
+  each live explanation, and the stop/redirect condition.
+- Repeat an unchanged trial only as deliberate replication: name why the trials are
+  independent, how many repeats are needed, and what result would change the conclusion.
 
 **4.3.** Reassess if assumptions are incorrect.
 - Revisit earlier analysis steps if a trial surfaces something unexpected.
@@ -211,6 +224,7 @@ Before finalizing the canvas:
 - Does the chosen solution actually address the *problem statement* you settled on at
   Step 1.6, or has scope drifted?
 - Did you stop at a plausible "why" instead of pushing to the root cause?
+- Did every repeated trial add information, or was a duplicate cycle counted as progress?
 - Are you treating a recurring system problem as a one-time event problem? (If the
   symptom returns in 6 weeks, you didn't actually solve it.)
 - What would have to be true in 30 days for this solution to have failed? How would you

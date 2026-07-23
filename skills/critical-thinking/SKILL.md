@@ -1,17 +1,17 @@
 ---
 name: critical-thinking
 description: >-
-  Seven thinking frameworks plus pre-flight input inspection — primarily for an agent to slow
-  down and reason through its OWN work mid-task; also facilitates a human. Frameworks:
-  Contemplating (emotional/uncertain situations), Decision-Making, Design, Problem-Solving,
-  Information Triage / Sensemaking (an input pile or a dense hand-back with a buried decision),
-  Scientific Inquiry, and Strategic / Adversarial (contests, negotiations, competitors; Art of
-  War, 36 Stratagems, Five Rings, game theory). Adds self-check discipline (pause, diverge
-  before converging, sanity-check before reporting), assumption surfacing, steel-manning, and
-  bias checks. Trigger on "think through this", "make a decision", "I'm stuck", "I'm
-  overwhelmed", "break this down", "challenge my assumptions", "what's my play", "war-game
-  this", "red-team my plan", or a competitive/negotiation situation. (Overload →
-  personal-productivity; code defects → debugging-framework.) When in doubt, trigger.
+  Seven agent-first thinking frameworks plus input inspection: Contemplating, Decision-Making,
+  Design, Problem-Solving, Information Triage / Sensemaking, Scientific Inquiry, and Strategic /
+  Adversarial (Art of War, 36 Stratagems, Five Rings, game theory). Use to slow down and audit
+  your OWN work or facilitate a human. Trigger on "think through this", "make a decision", "I'm
+  stuck", "challenge my assumptions", "try a different approach", "what's my play",
+  "war-game this", "red-team my plan", or when a stalled approach needs reframing across
+  genuinely different strategy families. Adds forced pause, divergence before convergence,
+  sanity checks, assumption/bias discipline, steel-manning, and a lossless canvas. For repeated
+  same-result/no-new-evidence execution cycles, start with loop-escape and use this skill to
+  reframe; for oversized scope use iterative-plan; for formal evidence audits use
+  logical-reasoning; for code defects use debugging-framework.
 ---
 
 # Critical Thinking Skill
@@ -39,6 +39,8 @@ The most common failure modes of this skill are:
    the inputs overflow, run Information Triage (`references/sensemaking.md`) first
 7. Skipping straight to the answer without the forced pause, the divergence, and the
    sanity check — the self-check discipline is the point, not overhead
+8. Mistaking persistence for progress — repeating a materially identical attempt without
+   stating what changed, what it tests, or what information it can produce
 
 Don't do those.
 
@@ -54,7 +56,7 @@ The skill has three layers, used in this order every session:
    sub-questions, keeping the canvas current every turn
 3. **Close** — sanity-check, wrap up, structured artifact
 
-Five cross-cutting disciplines apply throughout:
+Six cross-cutting disciplines apply throughout:
 
 - **Assumption & Bias Discipline** — surface, test, steel-man, check for motivated reasoning
 - **Convergence/Divergence Discipline** — name which mode each move is in, push for breadth
@@ -63,6 +65,8 @@ Five cross-cutting disciplines apply throughout:
   (`references/visual-models/`) instead of more prose
 - **Cognitive Scaffolds** — use chunks, analogies, metaphors, active recall
   (`references/cognitive-scaffolds.md`) to keep a handle on the canvas
+- **Stagnation & Escape Discipline** — after two materially identical cycles, stop,
+  compare attempt signatures, and change the information-producing strategy
 - **Stacking** — when invoked alongside other skills (e.g. `logical-reasoning`), follow
   the stacking rules below
 
@@ -368,6 +372,32 @@ self-check that never names the mode usually never actually diverged.
 
 ---
 
+## Cross-cutting: Stagnation & Escape Discipline
+
+Two consecutive attempts with the same relevant starting state, intervention, and
+observation trigger a forced checkpoint. Do not call the third repetition persistence.
+Compare the attempt signatures and state what information, if any, the second produced.
+
+Intentional replication is the exception, not a loophole. Repetition is valid when it is
+declared in advance to estimate noise or reproducibility, the trials are meaningfully
+independent, a prediction and sample count are recorded, and a stop rule is set. Otherwise
+an unchanged signature is a duplicate cycle.
+
+When the cycle is duplicate, route through `loop-escape` and diverge across **strategy
+families**, not cosmetic variations of the same tactic:
+
+- repair reporting or observability before changing behavior again
+- restore and prove the last known-good state
+- build a smaller end-to-end prototype or walking skeleton
+- test on the actual target runtime or through a different capable tool
+- inspect a working sibling/reference implementation
+- remove observers, competing processes, or environmental contamination before measuring
+
+The next move must state its material delta, prediction, and stop/redirect condition. If
+none of those can be named, it is not a new attempt.
+
+---
+
 ## Cross-cutting: Externalization Discipline
 
 When the canvas content for a step is getting dense — more than ~5 facts, ~3 assumptions,
@@ -589,6 +619,9 @@ Communicate the confidence band when surfacing the claim, not just at session en
 
 When `/critical-thinking` is invoked alongside other skills:
 
+- **`loop-escape`** — when execution has repeated without information gain or the work is
+  too broad to validate. Loop-escape owns the checkpoint and routing; critical-thinking
+  owns reframing assumptions and generating genuinely different strategy families.
 - **`logical-reasoning`** — when a decision or design hinges on an argument's validity.
   Use critical-thinking for structure, logical-reasoning to test the argument and expose
   fallacies.

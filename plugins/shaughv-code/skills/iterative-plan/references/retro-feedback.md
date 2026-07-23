@@ -54,6 +54,9 @@ Prompts:
 - What did the gate's validation reveal that we didn't expect to see?
 - Did anything in the standing-checks list (auth, rate limits, grant ordering, freshness) bite — and was it on the list or a new one?
 - What did the data/metrics say vs. what we predicted? (If there was a baseline, how did we move against it?)
+- Compare the last two attempt signatures: candidate/state, intervention, observation,
+  information gained. Was the second new evidence, valid replication, or a duplicate
+  cycle?
 
 ---
 
@@ -74,7 +77,7 @@ Open with Kerth's Prime Directive to keep it blameless: *everyone did the best t
 1. **Outcome.** Did the milestone/slice meet its demoable success criterion? Binary. If partial, what shipped vs. what didn't.
 2. **The plan.** Was the spine right? Did slices land in the order that made sense, or did we reshape mid-flight (and was the reshape cheap or expensive)? Did the first slice turn out to be the right thinnest cut?
 3. **The tasks.** Did the tasks created actually map to the work? Were any unverifiable, mis-scoped, mis-routed (wrong executor), or never needed? How many tasks were added/cancelled vs. the first pass — and was that healthy discovery or scope inflation? (The milestone-inflation receipt: 50→107 was the tell.)
-4. **The execution.** Where did dispatch reveal what planning missed? How long did the loop take from scope to validated gate? Did we have to stop the line? Did the git posture hold (one workbranch) or pile up (the multi-branch batch tell)?
+4. **The execution.** Where did dispatch reveal what planning missed? How long did the loop take from scope to validated gate? Did we have to stop the line? Did the git posture hold (one workbranch) or pile up (the multi-branch batch tell)? Did any two cycles repeat without a material delta or information gain? A duplicate pair automatically makes this a bad-slice retro and routes through `loop-escape` before re-planning.
 5. **The three feedback passes** — informational, internal, external (above), each as its own list.
 6. **Promotion decisions.** Now — and only now — convert. For each captured item, decide: is this a one-off (log it and move on), or has it recurred ~2–3 times and earned promotion into a skill? Recurring items become a new standing check (`standing-checks.md`), a new anti-pattern (`anti-patterns.md`), a splitting pattern, or an edit to `iterative-plan` itself (the success-criterion section) or a sibling skill like `git-workflow` — whichever owns it. **Name the promotion as an action with an owner**, not a someday-maybe. This is the arrow that was missing when one milestone repeated another's mistakes.
 

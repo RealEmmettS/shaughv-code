@@ -38,6 +38,29 @@ This is a **living list**. It grows via the meta-loop: when a re-plan or retro s
 
 ---
 
+## 6. Validation oracle, runtime & failure reporting
+
+**The question:** Can the system that decides success see this exact candidate, on the
+actual target runtime, and will a failure preserve enough output to act on?
+
+**Why it bites:** A hosted runner cannot validate an uncommitted local fix; one shell
+runtime may differ from another in modules, exit codes, commands, or encoding; GUI or
+cross-privilege processes may swallow normal output. Before repeating the gate, make the
+candidate visible, test on the real runtime, print payloads before throwing, and redirect
+or relay output through a file when the process boundary hides it.
+
+## 7. Measurement observers & environmental contamination
+
+**The question:** Which debuggers, telemetry tools, terminals, refresh loops, background
+processes, or human interactions can perturb the measurement?
+
+**Why it bites:** Performance and unattended lifecycle tests can fail because the observer
+is consuming resources or changing timing. Establish the measurement environment,
+eliminate nonessential observers, and quarantine the machine for unattended runs before
+changing product behavior to chase a contaminated result.
+
+---
+
 ## How to use this during planning
 
-You don't need to run all five every time. During Profile, glance down the list and ask the question only for the ones the milestone plausibly touches. A data-source-onboarding milestone touches 1–4 almost always; a frontend-only milestone might touch only 4. The cost of asking is one sentence; the cost of not asking is a slice that breaks at hour three for a reason you could have named on day one.
+You don't need to run all seven every time. During Profile, glance down the list and ask the question only for the ones the milestone plausibly touches. A data-source-onboarding milestone touches 1–4 almost always; a frontend-only milestone might touch only 4. The cost of asking is one sentence; the cost of not asking is a slice that breaks at hour three for a reason you could have named on day one.

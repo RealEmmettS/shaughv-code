@@ -58,7 +58,35 @@ Each entry: **signature** (how to spot it), **what it cost**, **recovery** (mid-
 
 ---
 
-## The two structural failures underneath all four
+## 5. Evidence-free retry loop
+
+**Signature.** A long-running effort remains "nearly done" while the same gate is retried
+against effectively the same candidate. Fixes stay local or otherwise invisible to the
+real validation oracle, failures discard their useful output, and a basic functionality
+question is mixed together with expensive maximal qualification.
+
+**What it cost.** More than a working day can disappear without a stronger conclusion:
+the hosted or target runtime never sees the candidate, silent checks produce no payload,
+and the operator cannot tell whether the product works basically or is merely missing one
+costly proof. Activity stays high while information gain stays near zero.
+
+**Root cause.** The loop has no attempt ledger, duplicate-cycle cutoff, or gate owner.
+Persistence is counted as progress even though the relevant state, intervention, and
+observation are unchanged.
+
+**Recovery.** Stop before the next retry. Restore the last known-good state; make the
+candidate visible to the real oracle; improve reporting before behavior; separate the
+basic functional rung from integration/hardening and qualification; ask the operator once
+about any costly nonessential gate. Land each validated fix so the next cycle can observe
+it.
+
+**Prevention.** Use `loop-escape` after two materially identical cycles. Every cycle must
+end with a passed criterion, actionable failure evidence, a narrower hypothesis, a verified
+runtime fact, or an explicit operator decision. Anything else is a duplicate, not progress.
+
+---
+
+## The structural failures underneath all five
 
 1. **Loop latency.** The disease across the batch-dispatch failure especially: the plan couldn't adjust to reality fast enough because reality was only contacted at the very end. Batch size is the biggest driver of loop length, but even right-sized slices need a fast plan↔reality loop, because the slice scope is itself a hypothesis. *Shorten the loop* is the cure; everything else is a tactic in service of it.
 

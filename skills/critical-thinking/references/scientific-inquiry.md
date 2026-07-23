@@ -67,6 +67,15 @@ Design the cheapest decisive test, and write down the predictions **before** run
   on the canvas, so the result can't be rationalized after the fact.
 - *"What's the timebox?"* An experiment that needs a project plan is a milestone, not a
   test — route it to `iterative-plan`.
+- *"What changed from the last experiment?"* Record the relevant starting state,
+  intervention, observation, and information gained. If none changed materially, stop
+  and use `loop-escape` rather than relabeling a retry as a new experiment.
+
+An intentional repeat is valid replication only when it estimates noise or
+reproducibility, the trials are meaningfully independent, predictions are written first,
+the repeat count is bounded, and the stop rule is explicit. Re-running the same operation
+against the same state because the first result was inconvenient is blind retrying, not
+replication.
 
 ## Step 5 — Analyze
 
@@ -74,6 +83,8 @@ Design the cheapest decisive test, and write down the predictions **before** run
   inconsistent, or diagnostic (distinguishes between them).
 - The standard is Popperian: the winner is the hypothesis with the **least inconsistent
   evidence**, not the most confirming. Evidence consistent with everything is decoration.
+- Do not count correlated or duplicate trials as independent support. One observation
+  repeated through the same state and mechanism is still one evidential source.
 - *"What confidence band does the surviving hypothesis earn — and what single observation
   would change the conclusion?"*
 

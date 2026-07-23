@@ -1,16 +1,16 @@
 ---
 name: logical-reasoning
 description: >-
-  Master toolkit for rigorous deductive and inductive reasoning — most often an agent applying
-  formal rigor to its OWN load-bearing, contested conclusion before asserting it. Use whenever
-  the task involves evaluating an argument, checking or building a proof, testing validity,
-  symbolizing language into logical notation, spotting a fallacy (including your own), weighing
-  inductive, statistical, or analogical evidence, or evaluating an explanation. Trigger even
-  when nobody says "logic": "is this valid", "does this follow", "prove that", "symbolize
-  this", "what’s the fallacy", "sound or unsound", "how strong is this evidence", or any move
-  toward a conclusion that deserves an audit. (For open-ended thinking, self-check, or
-  facilitation prefer critical-thinking; this skill is for formal rigor.) When in doubt whether
-  reasoning needs to be made rigorous, trigger.
+  Rigorous deductive and inductive reasoning for an agent auditing its OWN load-bearing
+  conclusion. Use to evaluate arguments, build/check proofs, test validity, symbolize language,
+  name fallacies, weigh statistical/analogical evidence, or compare explanations. Also trigger
+  on "does this retry add evidence?", "same result again", "are these attempts independent?",
+  "is this valid?", "does this follow?", "prove that", "what's the fallacy", "sound or
+  unsound", or "how strong is this evidence?" Audits repeated attempts by comparing starting
+  state, intervention, observation, and information gained, then classifies them as new evidence,
+  valid replication, or duplicate cycles; correlated retries do not become independent support.
+  Pair with loop-escape when execution is stuck, critical-thinking for open-ended reframing, and
+  iterative-plan when scope needs a smaller end-to-end rung. This skill owns formal rigor.
 ---
 
 # Logical Reasoning
@@ -87,12 +87,48 @@ Non-negotiable, because they are exactly the steps fast reasoning skips:
 7. **Calibrate inductive force.** Inductive and abductive conclusions get a strength
    judgment tied to the evidence (sample quality, analogy fit, base rates), never a
    bare "therefore."
+8. **Audit repetition before counting it as support.** Compare the relevant starting
+   state/premises, intervention or transformation, observation, and information gained.
+   An unchanged signature is a duplicate cycle, not a new inference. Repetition adds
+   weight only when it is intentionally independent or estimates noise under a declared
+   prediction, bounded count, and stop rule.
+
+## Retry / iteration audit
+
+Use this audit whenever a conclusion relies on repeated attempts or the same proof move
+has been tried more than once:
+
+1. State the conclusion the attempts are supposed to support.
+2. Reconstruct the last two attempt signatures:
+   `starting state/premises + intervention/transformation + observation + information gained`.
+3. Classify the pair:
+   - **New evidence** — a material change creates an observation that distinguishes live
+     claims.
+   - **Valid replication** — an intentionally independent or noise-estimating repeat with
+     a prediction, repeat count, and stop rule declared in advance.
+   - **Duplicate cycle** — no material delta and no additional inferential force.
+4. Isolate the smallest unsettled premise, lemma, counterexample, or empirical distinction.
+5. Choose the next move that can settle that point. If execution itself is stuck, route
+   through `loop-escape`; if a new strategy family is needed, stack `critical-thinking`.
+
+**Output:**
+
+```text
+Conclusion under audit:
+Attempt A signature:
+Attempt B signature:
+Verdict: new evidence | valid replication | duplicate cycle
+Smallest unsettled point:
+Next discriminating move:
+```
 
 ## Mode workflows
 
 ### Analyze
 1. Decide whether there's an argument at all (premises offered *for* a conclusion) vs.
    an explanation, report, or assertion. If explanation → switch to **Explain**.
+   If the support consists of repeated attempts, run the Retry / iteration audit before
+   treating the observations as separate premises.
 2. **Distil it first** — step back from the wording and write your *own* summary
    (author's purpose? conclusion? evidence? why is the evidence supposed to prove it?),
    then reconstruct in standard form (premises numbered, conclusion `∴`), supplying any
@@ -127,6 +163,8 @@ Verdict: <one line>
    **conditional proof (CP)** for `→`-conclusions and **indirect proof (IP/RAA)** when a
    direct route stalls. Full rule statements: `references/deductive-propositional.md`;
    quantified goals: `references/deductive-predicate.md`.
+   If the proof state does not change after a transformation, do not replay it. Isolate
+   the smallest unproved subgoal, seek a countermodel, or switch proof method.
 3. Read back the strategy in plain English (what each block of moves accomplished).
 
 **Quick rule reference (modern notation; full forms with traditional + English in the reference):**

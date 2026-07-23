@@ -14,6 +14,18 @@ A **walking skeleton** (Cockburn) is the first vertical slice: the thinnest poss
 
 Why it matters here: the spine (Phase B) is Patton's story-map backbone, and slice 1 is the walking skeleton. The discipline of "thinnest cut that still teaches you something end-to-end" is what de-risks everything downstream. The sync receipt — "full manual sync of 20 tables" reduced to "one table, one call" — is exactly this move.
 
+### Walking skeleton as recovery, not just a starting technique
+
+When a large slice is already stuck, do not keep pushing horizontally through the same
+pile. Return to the last known-good state and rebuild the route as three visible rungs:
+
+1. the smallest end-to-end functional skeleton
+2. separately demoable integration and hardening increments
+3. the remaining qualification/evidence needed for the true end goal
+
+This is not permission to lower the milestone criterion. It shortens the feedback loop so
+basic function is proved before expensive breadth and proof are layered back in.
+
 ## Story splitting — SPIDR and friends (Richard Lawrence; Bill Wake's INVEST)
 
 When a slice is still too big, these are the cuts that keep it vertical (never split into horizontal layers):

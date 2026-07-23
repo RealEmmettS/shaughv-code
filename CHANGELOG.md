@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.36.0] — 2026-07-23
+
+Added: **`loop-escape`**, a narrow convergence-recovery router for stalled, repetitive, or over-ambitious work. Improved: **`critical-thinking`**, **`iterative-plan`**, and **`logical-reasoning`** now share an evidence-aware stop condition for materially identical cycles while preserving their distinct ownership of reframing, progressive delivery, and inference.
+
+### Added
+- `skills/loop-escape/SKILL.md` — front-loads portable automatic-selection signals such as "going in circles," "same result twice," "no new evidence," "stuck for hours/days," "task is too ambitious," and "get the basic version working first." Negative boundaries protect expected long operations, passive monitoring, meaningful iteration, and intentionally independent replication. Explicit recovery is available as `/shaughv-code:loop-escape` in Claude Code and `$shaughv-code:loop-escape` in Codex.
+- `skills/loop-escape/references/convergence-checkpoint.md` — adds a reusable recovery canvas and attempt ledger covering the objective, last known-good state, functional versus qualification bars, the last two state/intervention/observation/information signatures, repetition verdict, smallest working rung, next discriminating action, and stop condition.
+
+### Changed
+- `skills/critical-thinking/` — adds stuck-loop and strategy-change routing, a two-identical-cycle checkpoint, state/action/evidence delta checks, distinct alternative strategy families, and an explicit distinction between intentional replication and blind retrying.
+- `skills/iterative-plan/` — adds loop-triggered re-slicing into a smallest end-to-end functional rung, separately demoable integration/hardening rungs, and remaining qualification evidence. Expensive optional gates now require an owner, explicit disposition, and backlog placement; standing checks cover validation-oracle visibility, target runtime, silent reporting failures, and observer contamination.
+- `skills/logical-reasoning/` — adds attempt-signature audits and the classifications `new evidence`, `valid replication`, and `duplicate cycle`; distinguishes independent replication from pseudoreplication and correlated retries; and changes proof method when an unchanged transformation stalls.
+- `README.md` — documents the router, both invocation forms, probabilistic automatic selection, negative boundaries, and the ownership boundaries of the four affected skills. No general plugin index, hook, agent, command, or MCP server was added.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` — version bumped `0.35.0` → `0.36.0`; descriptions and keywords now expose loop escape, convergence recovery, evidence-aware retries, and progressive slicing.
+- `plugins/shaughv-code/` — regenerated from root sources; the Claude surface contains 31 skills and the Codex package contains 30, excluding only the Claude-specific `subagent-model-preference`.
+
 ## [0.35.0] — 2026-07-14
 
 Added: a fourth bundled MCP server, **`pipedream`**, at `https://mcp.pipedream.net/v2` on both the Claude Code and Codex surfaces. Improved: the **`git-workflow`** skill still defaults to its full workbranch/worktree/PR discipline, but now accepts simple owner approval for a direct/default-branch route without treating that route override as permission to skip quality checks.

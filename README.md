@@ -70,13 +70,22 @@ claude --plugin-dir C:/Users/hey/git/shaughv-code
 
 If you originally installed with `npx skills add`, update with `npx skills update` (add `-g` if you installed globally).
 
+## Loop escape and convergence recovery
+
+The `loop-escape` skill is a narrow recovery router for work that is going in circles, has produced the same result twice without new evidence, has been stuck for hours or days, or needs to get a basic version working before pursuing the full goal.
+
+- Claude Code: `/shaughv-code:loop-escape`
+- Codex: `$shaughv-code:loop-escape`
+
+Agents may select the skill automatically from those signals, but automatic selection is probabilistic; explicit invocation is the reliable recovery mechanism. The skill creates a convergence checkpoint, classifies the last two attempts as `new evidence`, `valid replication`, or `duplicate cycle`, selects the smallest working rung, and routes to the relevant specialist guidance. It deliberately does not treat expected long operations, passive monitoring, meaningful iteration, or independent replication as loops.
+
 ## Skills bundled
 
 | Skill | Purpose |
 |---|---|
 | `bug-triage` | Interactive bug-triage and investigation agent for internal tools — actively reproduces and investigates with browser tools and data-platform queries instead of just asking questions. |
 | `code-design-patterns` | Gang of Four design-patterns reference and analyzer — all 22 GoF patterns (Creational/Structural/Behavioral) with Python, TypeScript, and SQL examples. Triggers on "what pattern fits" / "how should I structure this". |
-| `critical-thinking` | Seven thinking frameworks — contemplating, decision-making, design, problem-solving, information triage / sensemaking, scientific inquiry, and strategic / adversarial (Art of War, 36 Stratagems, Five Rings, game theory; full Giles Art of War bundled as an annex) — framed agent-first: the default consumer is an agent slowing down to reason through its own work, with human facilitation as the secondary mode. Adds self-check discipline (pause, diverge before converging, mandatory sanity check), pre-flight input inspection, devil's advocacy, a stakes-scaled lossless working canvas, and visual models — including ready-to-use interactive HTML templates for overloaded sessions. |
+| `critical-thinking` | Seven agent-first thinking frameworks for reframing assumptions, changing strategy families, and testing whether a stalled approach is still fit for purpose. Two materially identical cycles force a convergence checkpoint; alternatives must differ through observability, a smaller end-to-end prototype, another runtime/tool, a working reference, or environmental isolation. |
 | `crystal-upscaler` | Upscale, enlarge, and enhance images via fal.ai's Clarity Crystal Upscaler (`clarityai/crystal-upscaler`) — tuned for faces, portraits, and profile pictures. 1x–200x scale, creativity dial, PNG/JPG out. Bundled `upscale.py` handles upload, queue polling, cost reporting, and auto-fitting inputs over the 100 MiB API cap. Reads `$env:FAL_KEY`. |
 | `debugging-framework` | Structured debugging framework for stack bugs — integration drift, writes that didn't land, vanished messages, 5xx errors, datetime and idempotency gotchas, "works locally but not in prod". |
 | `defensive-programming` | What "defensive" means at a system boundary — error contracts, try/except critique, retry-backoff and timeout logic, where validation belongs — safety without the noise. |
@@ -85,9 +94,10 @@ If you originally installed with `npx skills add`, update with `npx skills updat
 | `handoff` | Write an exhaustive session handoff document so a future agent resumes exactly where this one stopped — conversation arc, plan state, every decision, and what's left. Produces a dated `docs/agents/handoff/` file, then defers to `git-workflow` for the commit. |
 | `human-changelog` | Create/update a `HUMAN_CHANGELOG.md` by translating a repo's `CHANGELOG.md` into plain-English entries (no version numbers, no jargon), and wires up the repo's `CLAUDE.md` to keep both files in sync going forward. |
 | `image-gen` | Generate or edit images (text-to-image and image-to-image), routed to Nano Banana 2 / Gemini, MAI-Image-2.5, or Reve — always asks which provider to use first, saves results to Downloads. |
-| `iterative-plan` | Milestone-planning methodology — Profile → Clarify → Spine → Slice loop with a binary/demoable success-criterion gate. Turns a vague request into scoped, demoable milestones and tasks; works for any tracker (Jira epics, Notion briefs, roadmaps). |
+| `iterative-plan` | Milestone planning and loop-triggered re-slicing for work that is too ambitious or needs the basic version first. Preserves the final goal while separating the smallest end-to-end functional rung, demoable integration/hardening rungs, and remaining qualification evidence. |
 | `learn` | Guided facilitation for deliberate learning — Kickoff/Session/Review/Course-Correct modes, the Learning Loop, proficiency levels, and a Learning Journal as the living artifact. |
-| `logical-reasoning` | Rigorous deductive and inductive reasoning — most often an agent applying formal rigor to its own load-bearing conclusion before asserting it. Copi-style natural deduction, propositional/predicate/categorical/modal logic, fallacies, induction, statistics, inference to the best explanation. |
+| `logical-reasoning` | Rigorous deductive and inductive reasoning, including whether another retry actually adds evidence. Audits attempt signatures, distinguishes independent replication from correlated retries and pseudoreplication, and changes proof method when an unchanged transformation stalls. |
+| `loop-escape` | Narrow recovery router for repetitive, stalled, or over-ambitious work. Produces a convergence checkpoint, finds the smallest working rung, chooses a discriminating next action with a stop condition, and loads at most the relevant critical-thinking, iterative-plan, logical-reasoning, or debugging guidance. |
 | `mistral` | Comprehensive Mistral AI API skill — every endpoint in the spec, with **OCR**, **audio transcription** (Voxtral), and **text-to-speech** as the headline jobs, plus chat/tools/structured-output, embeddings, FIM, classifiers, files, batch, fine-tuning, and the Agents & Conversations API. Bundles the full OpenAPI spec for offline/diff use, dependency-optional runner scripts (`mistral_ocr.py` / `mistral_transcribe.py` / `mistral_speech.py`), and a key discover→prompt→save flow. Uploaded files are auto-deleted after use. Reads `$env:MISTRAL_API_KEY`. |
 | `naming-conventions` | SHAUGHV + general naming rules for any identifier — variables, files, folders, repos, branches, commits, PRs, columns, flags. Carries Code Complete 2 and DevOps Handbook principles plus SHAUGHV-specific conventions. |
 | `openai-audio` | OpenAI audio stack — Realtime API, transcription, translation, TTS, WebRTC/WebSocket/SIP transports. Includes 13 runnable examples (py/js/ts). |
@@ -149,6 +159,7 @@ shaughv-code/
     ├── critical-thinking/
     ├── gcs-storage/
     ├── human-changelog/
+    ├── loop-escape/
     ├── naming-conventions/
     ├── openai-audio/
     ├── pretext/

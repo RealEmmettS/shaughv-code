@@ -6,7 +6,22 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
-## Most recent release — 14 July 2026
+## Most recent release — 23 July 2026
+
+**Added**
+- A new **loop escape** helper gives an agent a reliable way out when work is going in circles, returning the same result without learning anything, or trying to solve too much at once. You can call it directly in Claude or Codex, and its wording also helps agents notice the situation automatically. Why it matters: a long failure sequence now stops for an honest checkpoint instead of quietly repeating itself.
+- The checkpoint records the last known-good state and the last two attempts, separates "does the basic thing work?" from extra proof and qualification, and names one next action that can actually distinguish between competing explanations. It also sets a stop condition before the next try.
+
+**Improved**
+- The planning helper now preserves the full destination while rebuilding a stalled plan from the smallest end-to-end version that can work, followed by separately demoable integration, hardening, and remaining-proof steps. Expensive optional proof must have a named owner and an explicit decision instead of becoming an endless invisible blocker.
+- The critical-thinking helper now requires a genuinely different kind of strategy after two materially identical cycles—for example, improving visibility, building a tiny complete path, switching runtime or tool, comparing with a working reference, or isolating the environment.
+- The logic helper now asks whether a repeat is truly independent and evidence-producing. A deliberate independent reproduction remains valid; correlated reruns and unchanged attempts no longer masquerade as stronger proof.
+- Expected long-running operations, passive monitoring, and meaningful iterations with changed evidence are not treated as loops.
+
+**Behind the scenes**
+- Updated the Claude and Codex discovery text, release metadata, and generated Codex package together. No general index, background hook, helper agent, command, or new connection was added.
+
+## Previous release — 14 July 2026
 
 **Added**
 - The bundle now includes a **Pipedream connection** on both Claude and Codex. The first time it is used, Pipedream asks the user to sign in, choose which apps to make available, and approve access. Why it matters: the assistant can work with the user's authorized tools across thousands of supported apps without putting account credentials in this public bundle.
@@ -18,7 +33,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 **Behind the scenes**
 - Updated the connection lists, maintainer guidance, release metadata, and project reference everywhere the Claude and Codex versions describe what they carry, made the bundled safety checker cover the whole project consistently, fixed the package refresher's cross-platform path check, then refreshed the generated Codex copy.
 
-## Previous release — 10 July 2026
+## The release before — 10 July 2026
 
 **Added**
 - The bundle now carries a **third built-in helper connection** — a link to Emmett's own personal health service. Once it's connected, the assistant can look things up and log entries directly (nutrition, sleep, steps, heart rate, workouts, and the like) on both the Claude and Codex versions of the bundle. The first time it's used it asks you to sign in with Google — and only Emmett's own approved account is let in — so even though the link ships inside this public bundle, the link by itself doesn't give anyone access. It's not a password.
@@ -26,7 +41,7 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 **Behind the scenes**
 - Listed the new connection everywhere the existing two are already described (the read-me, the maintainer notes, and the bundle's descriptions and search terms), and while in there filled in the notes-app connection on one maintainer list it had been missing from. Kept all the version numbers in step and refreshed the Codex copy of the bundle.
 
-## The release before — 9 July 2026
+## An earlier release — 9 July 2026
 
 **Added**
 - The thinking helper now has a **strategy mode** built in — for contests, negotiations, competitor moves, and "what's my play" questions. It draws on four classic strategy traditions (Sun Tzu's Art of War, the 36 Stratagems, Musashi's Five Rings, and game theory), always asks "do you even need to fight this?" before reaching for tactics, and carries a firm ethics line against deception that harms people. The **complete classic Art of War text** ships alongside it as optional deep-dive reading.

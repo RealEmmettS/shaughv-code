@@ -100,6 +100,13 @@ Two surfaced items pulling against each other and not yet reconciled.
 Things flagged but parked. Not lost.
 - <item>: <why parked, when to revisit>
 
+### Attempt ledger (use when work repeats or stalls)
+Compare execution cycles without pretending repetition is progress.
+
+| # | Relevant starting state | Intervention | Observation | Information gained | Verdict |
+|---|---|---|---|---|---|
+| 1 | <candidate/runtime/inputs> | <action> | <raw result> | <criterion, narrower hypothesis, or none> | new evidence / valid replication / duplicate cycle |
+
 ### Connections
 Analogies, links to prior projects, chunks of related knowledge.
 - <connection>
@@ -196,6 +203,9 @@ When updating the canvas mid-session, **preserve these things in their original 
    step or input surfaced it. Provenance matters for revisits.
 6. **Visual models embed inline.** When a 2×2 or matrix gets built, paste it as markdown
    into the "Visual Models In Play" section, not just into chat.
+7. **Repeated attempts get ledger rows.** After two materially identical cycles, stop,
+   classify the pair, and route through `loop-escape`. Preserve a valid replication's
+   prediction, independence rationale, bounded repeat count, and stop rule.
 
 ## How the canvas relates to chat
 
