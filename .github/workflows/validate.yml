@@ -3,8 +3,10 @@ name: Validate
 # Keeps the tracked Codex package (plugins/shaughv-code/) permanently in sync with
 # root content. Runs on every PR into `main` and on every push to `main`: if the
 # package has drifted from root skills/ / .mcp.json / .codex-plugin/plugin.json, if a
-# manifest is malformed, or if the version is out of lockstep across the three
-# manifests + CHANGELOG, the run fails. Regenerate locally with:
+# manifest is malformed, or if the version is out of lockstep across the two plugin
+# manifests + CHANGELOG, the run fails. (`.claude-plugin/marketplace.json` carries no
+# version: Claude Code always prefers the one in plugin.json, so declaring it in both
+# only creates a way for them to drift.) Regenerate locally with:
 #   pwsh ./build-codex-plugin.ps1
 #
 # This is the shaughv-code equivalent of the work theia-tools plugin's validate gate.
@@ -52,16 +54,23 @@ jobs:
         shell: pwsh
         run: ./build-codex-plugin.ps1 -Check
 
-      - name: Version lockstep (3 manifests + CHANGELOG agree)
+      - name: Version lockstep (2 plugin manifests + CHANGELOG agree)
+        # The marketplace entry deliberately declares no version — Claude Code always
+        # uses plugin.json's, so a version there could silently mask a stale manifest.
+        # This step also fails if one is reintroduced, to keep that decision enforced.
         shell: pwsh
         run: |
           $codex  = (Get-Content .codex-plugin/plugin.json -Raw | ConvertFrom-Json).version
           $claude = (Get-Content .claude-plugin/plugin.json -Raw | ConvertFrom-Json).version
           $market = (Get-Content .claude-plugin/marketplace.json -Raw | ConvertFrom-Json).plugins[0].version
           $clog   = ([regex]::Match((Get-Content CHANGELOG.md -Raw), '(?m)^##\s*\[(\d+\.\d+\.\d+)\]')).Groups[1].Value
-          Write-Host "codex=$codex  claude=$claude  marketplace=$market  changelog=$clog"
-          if (($codex -ne $claude) -or ($codex -ne $market) -or ($codex -ne $clog)) {
-            Write-Error "VERSION LOCKSTEP DRIFT: codex=$codex claude=$claude marketplace=$market changelog=$clog"
+          Write-Host "codex=$codex  claude=$claude  changelog=$clog"
+          if ($null -ne $market) {
+            Write-Error "MARKETPLACE VERSION REINTRODUCED: .claude-plugin/marketplace.json plugins[0].version = $market. Remove it; .claude-plugin/plugin.json is the single source of truth."
+            exit 1
+          }
+          if (($codex -ne $claude) -or ($codex -ne $clog)) {
+            Write-Error "VERSION LOCKSTEP DRIFT: codex=$codex claude=$claude changelog=$clog"
             exit 1
           }
           Write-Host "version lockstep OK ($codex)"

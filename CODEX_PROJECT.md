@@ -40,14 +40,16 @@ approval to simplify the delivery route without waiving validation.
 
 | Consumer | Source | Contents |
 |---|---|---|
-| Claude Code marketplace | Repository root | Root skills, bare `.mcp.json`, and `commands/create-video.md` |
-| Codex marketplace | `plugins/shaughv-code/` | Generated manifest, wrapped MCP configuration, and root skills except explicit Claude-only exclusions |
+| Claude Code marketplace | Repository root | Root skills, `.mcp.json`, and `commands/create-video.md` |
+| Codex marketplace | `plugins/shaughv-code/` | Generated manifest, a verbatim copy of `.mcp.json`, and root skills except explicit Claude-only exclusions |
 | In-repo Codex sessions | `.codex/config.toml` | Hand-maintained native TOML fallback for the bundled MCP servers |
 | skills.sh-compatible agents | Root `skills/` | Skills only; no MCP servers or slash command |
 
-The root `.mcp.json` must stay in Claude's bare server-map shape. The generator
-wraps it as `{"mcpServers": {...}}` for Codex. Never hand-edit the generated
-package.
+The root `.mcp.json` uses `{"mcpServers": {...}}` — the shape Claude Code's plugin
+reference documents and the shape Codex expects — so the generator copies it into
+the package byte-for-byte. Before 1.0.1 the root file was a bare server map and the
+generator wrapped it; that had the Claude requirement backwards. Never hand-edit the
+generated package.
 
 ## Bundled MCP servers
 
@@ -106,7 +108,6 @@ This tree includes the entire project workspace except Git's internal
 │       └── validate.yml
 ├── .gitignore
 ├── .mcp.json
-├── 2026-07-09-163602-can-you-get-rid-of-the-spawn-skill-and-then-can.txt
 ├── AGENTS.md
 ├── CHANGELOG.md
 ├── CLAUDE.md

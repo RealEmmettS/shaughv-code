@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.0.1] — 2026-07-25
+
+Fixed: the Claude surface now matches the documented Claude Code plugin contract exactly. The
+Codex package and every bundled skill are unchanged in behavior.
+
+### Fixed
+- `.mcp.json` now uses the shape [Claude Code's plugin
+  reference](https://code.claude.com/docs/en/plugins-reference) documents,
+  `{ "mcpServers": { … } }`, instead of a bare server map. The bare map did load, but it was
+  undocumented, and the repo had the premise backwards: `build-codex-plugin.ps1` treated the bare
+  form as "the Claude shape" and wrapped it on the way into the Codex package. Both files now
+  carry the same documented shape, so `Write-WrappedMcp` is replaced by a verbatim `Copy-Mcp` and
+  the packaged `.mcp.json` is byte-identical to the root one. No server definition changed.
+- `.claude-plugin/marketplace.json` no longer declares `plugins[0].version`. The marketplace docs
+  warn against setting `version` in both the manifest and the marketplace entry because Claude
+  Code always uses the `plugin.json` value without warning, so the second copy can only ever
+  drift or mask a stale manifest. `.claude-plugin/plugin.json` is now the single source of truth.
+- Removed `2026-07-09-163602-can-you-get-rid-of-the-spawn-skill-and-then-can.txt`, a 128 KB
+  session transcript committed by accident in `4a5197e`. The Claude plugin source is `"./"`, so
+  it was being copied into every install. `.gitignore` now ignores root-level session transcripts.
+
+### Improved
+- `.agents/plugins/marketplace.json` gains a top-level `owner` object. Verified against
+  `codex-cli 0.145.0`: Codex accepts the marketplace, lists its plugin normally, and ignores the
+  field. Its `source: { "source": "local", … }` is deliberately unchanged — that file is Codex's
+  marketplace and must not become loadable as Claude's, which is
+  `.claude-plugin/marketplace.json` and only that.
+- `.github/workflows/validate.yml` version-lockstep gate now compares the two plugin manifests
+  plus `CHANGELOG.md`, and fails if a `version` is ever reintroduced into the marketplace entry.
+- `AGENTS.md`, `CLAUDE.md`, and `.gitattributes` comments corrected: they documented the old wrap
+  and the inverted "Claude needs the bare form" rule. `CLAUDE.md` also dropped a stale claim that
+  `mistral`, `shaughv-cdn`, and `gcs-storage` exceed the 1024-char description cap — they were
+  trimmed in `0.18.2`, and all 32 skills now pass (longest is `learn` at 1017).
+
+### Behind the scenes
+- Claude/Codex manifests and generated package version advanced `1.0.0` → `1.0.1`.
+- Audited against the current plugin reference and marketplace docs: manifest location, root-level
+  `skills/` / `commands/` / `.mcp.json`, marketplace `name`/`owner`/`plugins[]`, and the
+  `"source": "./"` root-plugin form all check out, and `claude plugin validate . --strict` passes.
+- The Codex package is unchanged apart from the manifest version and the now byte-identical
+  `.mcp.json`: still 31 skills, still excluding `subagent-model-preference`.
+
 ## [1.0.0] — 2026-07-25
 
 Released: the first stable `shaughv-code` plugin contract for Claude Code, Codex, and

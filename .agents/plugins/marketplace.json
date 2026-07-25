@@ -1,5 +1,10 @@
 {
   "name": "shaughv-code",
+  "owner": {
+    "name": "Emmett Shaughnessy",
+    "email": "hey@emmetts.dev",
+    "url": "https://github.com/RealEmmettS"
+  },
   "interface": {
     "displayName": "shaughv-code"
   },

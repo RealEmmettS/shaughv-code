@@ -46,7 +46,7 @@ Each of these was added by explicit ask — don't remove them without one:
 - **`build-codex-plugin.ps1` + `plugins/shaughv-code/` + `.codex/config.toml`** —
   the Codex surface. `plugins/shaughv-code/` is a generated, self-contained Codex
   package (a copy of root `skills/` — minus the Claude-only skills in the build
-  script's `$ExcludeSkills`, currently `subagent-model-preference` — a wrapped copy
+  script's `$ExcludeSkills`, currently `subagent-model-preference` — a verbatim copy
   of `.mcp.json`, and the Codex
   manifest); `build-codex-plugin.ps1` regenerates it from root; `.codex/config.toml`
   is a repo-local MCP fallback. **Never hand-edit `plugins/shaughv-code/`.** See
@@ -75,13 +75,15 @@ Each of these was added by explicit ask — don't remove them without one:
    ---
    ```
    Keep the `description` under **1024 chars** — Claude Code silently skips a
-   skill whose description exceeds the cap (`mistral`, `shaughv-cdn`, and
-   `gcs-storage` currently exceed it and should be trimmed).
+   skill whose description exceeds the cap. Every skill currently passes; the
+   longest is `learn` at 1017, so there is very little headroom.
 2. Put supporting docs in `skills/<name>/references/`, code in `examples/`,
    assets in `assets/`.
-3. Bump `version` in `.claude-plugin/plugin.json` if it's a substantive change.
-   Bump the same version in `.claude-plugin/marketplace.json` and
-   `.codex-plugin/plugin.json` so the manifests stay aligned.
+3. Bump `version` in `.claude-plugin/plugin.json` if it's a substantive change,
+   and the same version in `.codex-plugin/plugin.json` so the two plugin
+   manifests stay aligned. **Do not add a `version` to
+   `.claude-plugin/marketplace.json`** — Claude Code always prefers the one in
+   `plugin.json`, so a second copy can only ever drift. CI fails if one appears.
 4. Regenerate the Codex package: `pwsh ./build-codex-plugin.ps1`.
 5. Add a release entry to both changelogs (see the Changelog rule below).
 

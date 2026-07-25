@@ -54,7 +54,7 @@ flat root (which must stay flat for Claude Code). So the Codex surface is a
 tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 
 - **`plugins/shaughv-code/`** is the self-contained Codex package — a generated
-  copy of root `.codex-plugin/plugin.json`, a wrapped copy of `.mcp.json`, and a
+  copy of root `.codex-plugin/plugin.json`, a verbatim copy of `.mcp.json`, and a
   copy of `skills/` **minus the Claude-only skills excluded by
   `build-codex-plugin.ps1` (`$ExcludeSkills`)** — currently
   `subagent-model-preference`, whose Opus/Sonnet model-class and `xhigh`/`max`
@@ -65,15 +65,26 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 - **`.agents/plugins/marketplace.json`** is the Codex marketplace entry. Its
   source is `{ "source": "local", "path": "./plugins/shaughv-code" }` — a
   subdirectory, not the repo root (Codex does not list a plugin whose local
-  source path is the marketplace root itself).
+  source path is the marketplace root itself). It also carries a top-level
+  `owner` object, added in 1.0.1: Codex ignores it (verified against
+  `codex-cli 0.145.0` — the marketplace loaded and listed its plugin normally),
+  and it makes the file less likely to hard-fail any other agent that happens to
+  scan `.agents/` and expects an owner. Don't "clean it up". Equally, don't try
+  to make this file valid as a *Claude* marketplace: `source: "local"` is not a
+  Claude source type, and a Claude surface that did load this file would point
+  at the Codex package, which has no `.claude-plugin/` and no `commands/`.
+  Claude's marketplace is `.claude-plugin/marketplace.json` and only that.
 - **`.codex-plugin/plugin.json`** is the Codex manifest (source of truth, copied
   verbatim into the package). Keep it lowercase. It points at `./skills/` and
   `./.mcp.json` and carries the MCP servers — the Codex surface is **not**
   skills-only.
-- **`.mcp.json`** at root is the bare Claude-plugin shape (`{ "<name>": {…} }`);
-  the build script wraps it (`{ "mcpServers": {…} }`) in the package, which is
-  the shape Codex expects. Do not change the root file's shape — Claude Code
-  needs the bare form.
+- **`.mcp.json`** at root carries the documented shape both runtimes expect,
+  `{ "mcpServers": { "<name>": {…} } }`, so the build script copies it into the
+  package verbatim. Until 1.0.1 the root file was a bare server map
+  (`{ "<name>": {…} }`) and the script wrapped it — that was backwards: the
+  wrapped form is what [Claude Code's plugin
+  reference](https://code.claude.com/docs/en/plugins-reference) documents, and
+  it is also what Codex expects. Keep both files in the wrapped shape.
 - **`.codex/config.toml`** is a repo-local MCP fallback (TOML) so Codex sessions
   run *inside this repo* get the servers before the plugin is installed. It is
   hand-maintained (different format from `.mcp.json`) and the build script does

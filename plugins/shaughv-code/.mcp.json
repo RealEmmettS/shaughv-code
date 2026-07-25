@@ -2,9 +2,7 @@
   "mcpServers": {
     "remotion-documentation": {
       "command": "npx",
-      "args": [
-        "@remotion/mcp@latest"
-      ]
+      "args": ["@remotion/mcp@latest"]
     },
     "craft-docs": {
       "type": "http",

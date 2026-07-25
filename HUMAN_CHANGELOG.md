@@ -6,6 +6,39 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Making the bundle match Claude's own rulebook — late July 2026
+
+**Fixed**
+- The file that lists the bundle's connected services was written in a slightly different style
+  than Claude's official instructions describe. It worked, but it was the odd one out — and the
+  project had the rule backwards in its own notes, believing Claude wanted the unusual style and
+  that the standard style was only for the other assistant. Both files now use the one documented
+  style, so the two versions are finally identical.
+- The bundle was declaring its version number in two places. Claude only ever reads one of them,
+  so the second could quietly fall out of step and hide the real number. There is now one place
+  it lives.
+- Deleted a saved chat transcript that had been committed to the project by mistake. Because the
+  whole project folder is what gets delivered when someone installs the bundle, that stray file
+  was being copied onto every machine that installed it. Stray transcripts are now ignored
+  automatically.
+
+**Improved**
+- Added owner details to the listing file the other assistant reads. This was tested against the
+  other assistant first to confirm it changes nothing there, and it makes the file friendlier to
+  any tool that expects to see who maintains it.
+- The automated pre-publish check now also catches the duplicate version number if anyone
+  reintroduces it later, so this particular mistake cannot come back silently.
+- Corrected several stale notes left for future assistants working on this project, including one
+  claiming three helpers had over-long summaries. They were shortened a while ago and all of them
+  now fit comfortably.
+
+**Behind the scenes**
+- Reviewed the whole bundle against Claude's current published requirements — where the settings
+  files live, how helpers and commands are found, and how the catalog entry is written. Everything
+  else already matched, and Claude's own validation tool passes.
+- Nothing about any individual helper changed, and the other assistant's copy is untouched apart
+  from the version number.
+
 ## First stable release — late July 2026
 
 **Improved**

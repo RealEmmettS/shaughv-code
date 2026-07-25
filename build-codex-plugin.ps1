@@ -16,10 +16,11 @@
 
         plugins/shaughv-code/
         |-- .codex-plugin/plugin.json   (copied verbatim from root)
-        |-- .mcp.json                   (root .mcp.json WRAPPED as
-        |                                { "mcpServers": { ... } }: the root file
-        |                                is the bare Claude-plugin shape, and the
-        |                                Codex package wants the wrapped shape)
+        |-- .mcp.json                   (copied verbatim from root: both Claude and
+        |                                Codex consume the same documented shape,
+        |                                { "mcpServers": { ... } }, so no rewrite is
+        |                                needed. This was a wrap until 1.0.1, when the
+        |                                root file adopted the documented shape.)
         \-- skills/...                  (copied verbatim from root skills/, EXCEPT
                                          the Claude-only skills listed in
                                          $ExcludeSkills below, which are omitted
@@ -113,18 +114,12 @@ function Assert-MirrorPath {
     }
 }
 
-function Write-WrappedMcp {
-    # Root .mcp.json is the bare Claude-plugin shape: { "<name>": { ... } }.
-    # The Codex package wants the wrapped shape: { "mcpServers": { "<name>": ... } }.
-    # Deterministic: parse the bare map (order preserved), wrap, serialize, write
-    # UTF-8 no-BOM with LF newlines so -Check reproduces identical bytes.
+function Copy-Mcp {
+    # Root .mcp.json already carries the documented shape both runtimes expect:
+    # { "mcpServers": { "<name>": { ... } } }. Copy it byte-for-byte, the same way
+    # the manifest and the skills are copied, so the package stays reproducible.
     param([Parameter(Mandatory)] [string] $Destination)
-    $bare    = Get-Content -LiteralPath $srcMcp -Raw | ConvertFrom-Json
-    $wrapped = [pscustomobject]@{ mcpServers = $bare }
-    $json    = ($wrapped | ConvertTo-Json -Depth 20) -replace "`r`n", "`n" -replace "`r", "`n"
-    if (-not $json.EndsWith("`n")) { $json += "`n" }
-    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-    [System.IO.File]::WriteAllText($Destination, $json, $utf8NoBom)
+    Copy-Item -LiteralPath $srcMcp -Destination $Destination
 }
 
 function Build-Package {
@@ -136,7 +131,7 @@ function Build-Package {
     New-Item -ItemType Directory -Force -Path (Join-Path $Destination '.codex-plugin') | Out-Null
     $destManifest = Join-Path (Join-Path $Destination '.codex-plugin') 'plugin.json'
     Copy-Item -LiteralPath $srcManif -Destination $destManifest
-    Write-WrappedMcp -Destination (Join-Path $Destination '.mcp.json')
+    Copy-Mcp -Destination (Join-Path $Destination '.mcp.json')
 
     # Copy skills verbatim, file-by-file (preserves bytes and structure), except
     # the Claude-only skills named in $ExcludeSkills (matched by top-level skill
