@@ -11,7 +11,7 @@
       "name": "shaughv-code",
       "source": "./",
       "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles self-routing agentic prompt engineering, cross-runtime subagent brief compilation, Claude Fable/Opus and GPT-5.6 Sol overlays, evidence receipts, loop escape, convergence recovery, progressive slicing, and the broader coding and creative toolkit, plus MCP servers, from one source.",
-      "version": "0.37.1",
+      "version": "1.0.0",
       "homepage": "https://github.com/RealEmmettS/shaughv-code",
       "keywords": [
         "shaughv",

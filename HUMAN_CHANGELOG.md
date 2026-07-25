@@ -6,6 +6,18 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## First stable release — late July 2026
+
+**Improved**
+- Declared the current helper bundle stable across Claude Code, Codex, and other compatible
+  assistants. The self-routing prompt helper, carefully prepared subagent briefs, long-horizon
+  controls, and loop recovery are now the supported foundation for future compatible updates.
+
+**Behind the scenes**
+- Promoted the already validated behavior without changing how it works. Future compatible
+  refinements will move forward as ordinary updates; anything that intentionally breaks the
+  supported surface will require a new major release.
+
 ## A helper that routes itself and briefs every branch — late July 2026
 
 **Improved**

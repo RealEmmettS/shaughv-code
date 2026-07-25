@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.0.0] — 2026-07-25
+
+Released: the first stable `shaughv-code` plugin contract for Claude Code, Codex, and
+skills-compatible agents.
+
+### Improved
+- Promotes the validated self-routing `agentic-prompt-engineering` workflow, cross-runtime
+  subagent brief compiler, vague-request clarification gate, hard-problem escalation, and
+  automatic handoff to `loop-escape` from preview status to the stable public surface.
+- Establishes the current skills bundle, generated Codex package, Claude marketplace surface,
+  bundled MCP servers, and `/create-video` command as the supported `1.x` compatibility baseline.
+  Future breaking surface changes require a new major version; compatible refinements release
+  forward as minor or patch versions.
+
+### Behind the scenes
+- Claude/Codex manifests and generated package version advanced `0.37.1` → `1.0.0`.
+- The promoted behavior is unchanged from validated commit `a359068`; package parity, Skill and
+  plugin validation, frontmatter limits, relative links, cross-runtime forward tests, and GitHub
+  validation had already passed before the stable version promotion.
+
 ## [0.37.1] — 2026-07-25
 
 Improved: `agentic-prompt-engineering` now safely routes an unspecified invocation from the active

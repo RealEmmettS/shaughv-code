@@ -1,6 +1,6 @@
 {
   "name": "shaughv-code",
-  "version": "0.37.1",
+  "version": "1.0.0",
   "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles custom SHAUGHV skills for self-routing long-horizon agentic prompt engineering and cross-runtime subagent brief compilation across software, data, mathematics, and science; falsifiable contracts, evidence receipts, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, convergence recovery, progressive slicing, critical thinking, OpenAI audio, PreText, Quiver AI, Mistral AI, SHAUGHV brand design, animated brandmark, human changelog, CDN, naming, Google Cloud Storage, bug triage, design patterns, evidence-backed debugging, defensive programming, git workflow, security audit/red-team, typed session handoffs, iterative milestone planning, proportional workflow optimization, image generation/upscaling, deliberate learning, logical reasoning, personal productivity, subagent model/effort preference, wb300, usage status line, and TT;DR; plus Remotion, Craft Docs, Shaughv Health, and Pipedream MCP servers and /create-video. (The task + workplace-memory system lives in shaughv-tasks.)",
   "author": {
     "name": "Emmett Shaughnessy",
