@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.37.1] — 2026-07-25
+
+Improved: `agentic-prompt-engineering` now safely routes an unspecified invocation from the active
+conversation and compiles every orchestrated subagent brief through the same evidence contract in
+Claude Code and Codex.
+
+### Improved
+- `skills/agentic-prompt-engineering/SKILL.md` — adds a top-level invocation resolver. When the
+  operator does not name Author, Audit, Operate, Evaluate, a domain, or an overlay, it infers the
+  final deliverable from the latest applicable unresolved request, explicit corrections, canonical
+  task state, supplied artifacts, and governing instructions; builds a compact routing contract;
+  and selects only relevant conditional guidance. A vague consequential request now surfaces the
+  proposed interpretation and asks one compact batch of still-unanswered material questions before
+  committing to a long-horizon route. Derived routing cannot revive stale instructions, silently
+  assume material operator choices, or create new authority.
+- The resolver is also an automatic escalation path when an underspecified long-horizon task or
+  difficult problem needs better representation, method families, premises, or oracles. An
+  execution that already satisfies the separate recurrence gate invokes `loop-escape` and
+  continues from its checkpoint rather than merely suggesting another Skill; expected long
+  operations, changed experiments, and declared independent replication are not mislabeled.
+- Top-level and nested orchestrators now compile every authorized dispatch through the Skill.
+  Branch prompts combine the normal repository/tool context with branch-specific objective,
+  starting evidence, scope, method family, artifacts, next action window, acceptance oracle,
+  loop/retirement policy, valid terminal states, and evidence receipt. The orchestrator explicitly
+  requests `agentic-prompt-engineering` when the child runtime exposes it and embeds the equivalent
+  contract otherwise; loading a Skill in the parent is never assumed to propagate automatically.
+- `references/long-horizon-control.md` — adds a portable branch-brief schema, cross-runtime Claude
+  Code/Codex invocation guidance, nested-orchestrator boundary, contamination protection, and the
+  rule that a branch cannot expand authority or claim global completion.
+
+### Behind the scenes
+- Claude/Codex manifests bumped `0.37.0` → `0.37.1`, discovery copy now exposes self-routing and
+  subagent brief compilation, and the generated Codex package was refreshed from root sources.
+- Revalidated the existing `loop-escape` source, generated Codex copy, trigger contract, relative
+  references, and standalone recovery output; no loop-escape change was necessary.
+
 ## [0.37.0] — 2026-07-24
 
 Added: a compact **`agentic-prompt-engineering`** Skill for designing, auditing, applying, and

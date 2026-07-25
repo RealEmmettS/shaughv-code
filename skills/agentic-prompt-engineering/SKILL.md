@@ -1,16 +1,16 @@
 ---
 name: agentic-prompt-engineering
 description: >-
-  Design, audit, and apply high-reliability prompts for difficult long-horizon agentic work.
-  Use when someone asks to write or improve a prompt, system prompt, agent brief, Claude Code or
-  Codex instruction, multi-agent workflow, research prompt, complex software/data task prompt,
-  Erdős-level mathematics or scientific-discovery prompt, or a durable workflow for an agent that
-  must plan, act, verify, hand off, and avoid loops. Converts goals into falsifiable contracts,
-  pairs claims with authoritative oracles, tests load-bearing premises early, selects
-  information-bearing actions, preserves truthful partial/blocked/refuted states, and conditionally
-  loads domain and model guidance. Use loop-escape for an already-stalled execution. Do not invoke
-  heavy ceremony for a routine, directly verifiable request or for general agent-platform,
-  environment, or memory-system design.
+  Design, audit, and apply high-reliability prompts for difficult agentic work. Use for vague or
+  underspecified consequential requests, prompts/system prompts/agent briefs, Claude Code or Codex
+  instructions, multi-agent workflows, hard problems needing a better representation or method,
+  complex software/data work, Erdős-level mathematics/science, and durable long-horizon tasks.
+  Without a named mode, infer Author/Audit/Operate/Evaluate and relevant guidance from the latest
+  active context, propose a compact working contract, ask concise material questions, and proceed.
+  When orchestrating, compile every subagent brief with branch-specific context, oracle, loop
+  policy, and return receipt. Tests load-bearing premises, selects information-bearing actions, and
+  preserves truthful partial/blocked/refuted states. Route already-stalled work to loop-escape;
+  keep routine work proportional.
 ---
 
 # Agentic Prompt Engineering
@@ -24,17 +24,94 @@ Scale the method to the task. A routine edit may need one objective and one chec
 software investigation, research-mathematics search, or scientific workflow needs the full
 contract, action ledger, independent evidence, and truthful exit states.
 
-## Choose the mode
+## Resolve and route the invocation
 
-- **Author** — write a copy-ready prompt for another capable agent.
-- **Audit** — diagnose a supplied prompt, identify load-bearing defects, and produce a corrected
-  version plus a compact change log.
-- **Operate** — apply this method directly while doing the user's task.
-- **Evaluate** — compare prompt or Skill variants on representative cases. Read
-  `references/evaluation.md`.
+Apply this resolver when the operator invokes the Skill and also when a consequential request is
+vague, a clearly long-horizon task lacks a usable contract, or a hard problem needs a better
+representation, method family, or success oracle. Infer from the **latest applicable unresolved
+request**, explicit corrections, active canonical task state, supplied artifacts, and requested
+deliverable. Do not ask the operator to learn or choose this taxonomy when the context decides it:
 
-If the user asks only for a prompt, do not execute the underlying task. If the user asks for the
-outcome, do not stop after drafting a prompt.
+- **Author** — the requested deliverable is a copy-ready prompt, brief, or instruction set for
+  another capable agent.
+- **Audit** — a prompt or Skill is supplied and the requested outcome is diagnosis and correction.
+- **Evaluate** — the requested outcome is an empirical comparison or release decision about prompt
+  or Skill variants. Read `references/evaluation.md`.
+- **Operate** — the requested outcome is the underlying software, data, mathematics, science,
+  research, or other task. This is the default when invoked against an active task.
+
+For a mixed request, choose the mode matching the final deliverable and use the others as bounded
+phases. If the user asks only for a prompt, do not execute the underlying task. If the user asks for
+the outcome, do not stop after drafting a prompt. Explicit mode selection wins within governing
+authority.
+
+Before substantive work, synthesize a compact routing contract from the current context and treat
+it as the working prompt for this run:
+
+```yaml
+routing_contract:
+  mode:
+  objective:
+  authority_scope_and_approval_boundaries:
+  inputs_and_source_precedence:
+  non_goals_and_preservation_invariants:
+  deliverable:
+  acceptance_criteria_and_oracles:
+  valid_terminal_states:
+  first_load_bearing_premise:
+  next_action_window:
+  domain_adapter:
+  model_overlay:
+  orchestration: none | branch | review | synthesis
+```
+
+Fill only decision-relevant fields. Preserve unknowns rather than inventing them. This contract is
+derived state, not a new authority layer, and must not revive stale or superseded instructions.
+When a vague or underspecified consequential request leaves any material choice unresolved,
+surface the proposed interpretation and ask one compact batch of clarification or confirmation
+questions before committing to the long-horizon route. Do not silently convert a material unknown
+into an assumption. Do not ask for information already answered by the current conversation,
+canonical task state, or designated instructions. Read-only or safely reversible discovery may
+continue while awaiting answers only when it cannot prejudice the choice. If no material ambiguity
+remains, do not invent a question merely to perform ceremony; proceed and surface the resolved
+contract only as much as the operator needs.
+
+Route automatically through the conditional guidance below: use task objects to select a domain
+adapter, the actual target model/version to select a model overlay, dependency depth or genuinely
+independent branches to select long-horizon/orchestration controls, and reuse/release decisions to
+select evaluation guidance. Unknown model identity means no model overlay. Routing never requires
+delegation when direct work is cheaper and equally reliable.
+
+If the current execution already meets `loop-escape` eligibility—equivalent attempts without
+information gain, an invisible deciding oracle, no recoverable verified state, or a false-premise
+trajectory—invoke that Skill and continue from its convergence checkpoint. Do not merely recommend
+it to the operator. A merely difficult problem, expected long operation, materially changed
+experiment, or declared independent replication remains here and is not mislabeled as a loop.
+
+### Compile every subagent prompt
+
+When acting as an orchestrator, apply this Skill before every dispatch. Do not assume the
+top-level invocation automatically propagates into a subagent:
+
+1. Resolve the branch's mode and applicable adapters from the live parent contract.
+2. Compile a branch-scoped prompt containing the normal task-local context plus the applicable
+   objective/dependency, authority, starting evidence, source precedence, scope and preservation
+   rules, unique role or method family, artifacts, next action window, acceptance oracle,
+   loop/retirement policy, valid terminal states, and return receipt.
+3. If the branch runtime exposes this Skill, explicitly tell the subagent to use
+   `agentic-prompt-engineering` in **Operate** mode for that branch. Claude Code may invoke
+   `/shaughv-code:agentic-prompt-engineering`; Codex may invoke
+   `$shaughv-code:agentic-prompt-engineering`. If the Skill is unavailable or invocation syntax
+   will not propagate through the dispatch surface, embed the equivalent compact contract instead.
+4. Keep decision-relevant context and stable evidence pointers; do not dump the full Skill or
+   conversation. Preserve deliberate independence by withholding another branch's conclusions
+   from a fresh reviewer when contamination would weaken the oracle.
+5. Require the subagent to return claims as evidence, not authority. The orchestrator integrates
+   dependencies and owns the global completion claim.
+
+A subagent that is explicitly authorized to orchestrate repeats this compiler for its own
+dispatches. Otherwise the instruction does not authorize recursive fan-out. Read
+`references/long-horizon-control.md` for the branch brief schema and synthesis rules.
 
 ## The invariant control loop
 
@@ -235,7 +312,7 @@ Load only what the task needs:
 | Task shape | Read |
 |---|---|
 | prompt wording, examples, schemas, instruction order | `references/prompt-construction.md` |
-| long-horizon planning, branching, review, handoff, loop control | `references/long-horizon-control.md` |
+| long-horizon planning, orchestration, branching, review, handoff, loop control | `references/long-horizon-control.md` |
 | software engineering or data engineering/analytics | `references/software-data-adapter.md` |
 | research mathematics, Erdős-level search, or scientific discovery | `references/math-science-adapter.md` |
 | target model is Claude Fable 5, Claude Opus 5, or GPT-5.6 Sol/Codex | `references/model-overlays.md` |

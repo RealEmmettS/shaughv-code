@@ -6,6 +6,32 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## A helper that routes itself and briefs every branch — late July 2026
+
+**Improved**
+- Invoking the agentic prompt helper no longer requires knowing whether to ask for authoring,
+  auditing, operating, evaluation, software, data, mathematics, science, or multi-agent mode. It
+  reads the latest still-active request and corrections and chooses the smallest suitable
+  workflow. If a vague, important request still leaves a real choice, it shows its proposed
+  interpretation and asks a short set of useful questions instead of guessing; it does not repeat
+  questions the session already answered.
+- The helper can engage automatically when a hard problem needs a better framing, method, or proof
+  of success even if the operator did not know which mode to name. If work is genuinely repeating
+  without learning anything, it hands control to the separate loop-recovery method and continues
+  from that checkpoint rather than merely pointing at it.
+- An orchestrating assistant now prepares every subagent with a purpose-built brief rather than
+  assuming the parent helper automatically carries over. The brief includes the useful session
+  facts, boundaries, evidence, success check, stopping rule, and expected return while leaving out
+  stale conversation and unrelated detail.
+- The same behavior works in Claude Code and Codex. When a child can load the helper it is named
+  explicitly; when it cannot, the orchestrator includes the compact working contract directly.
+  Nested assistants repeat this only when they are actually authorized to orchestrate, preventing
+  accidental recursive fan-out.
+
+**Behind the scenes**
+- Rechecked that the separate loop-escape helper is present, packaged, valid, and self-contained.
+  It already handles repeated, evidence-free work correctly, so it did not need to be rewritten.
+
 ## Hard problems with honest proof — late July 2026
 
 **Added**

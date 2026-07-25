@@ -82,6 +82,21 @@ GPT-5.6 Sol / Codex overlay.
 - Claude Code: `/shaughv-code:agentic-prompt-engineering`
 - Codex: `$shaughv-code:agentic-prompt-engineering`
 
+If no mode or domain is named, the skill infers the final deliverable from the latest active
+request and corrections, builds a compact working contract, selects only the relevant
+software/data/math/science, model, long-horizon, or evaluation guidance, and asks one compact set
+of material questions when a vague consequential request still leaves a real operator choice.
+It does not ask for facts the live session already answers or silently turn important unknowns
+into assumptions. When a top-level agent delegates, it compiles each subagent's normal task
+context into a branch-specific prompt with evidence, scope, oracle, loop policy, and return
+receipt. It explicitly invokes the skill in Claude Code or Codex when the child can see it and
+embeds the equivalent contract when it cannot; top-level skill loading is never assumed to
+propagate automatically.
+
+The skill may also auto-route a hard problem when better representation, method selection, or
+verification—not another routine attempt—is the bottleneck. If the execution is already repeating
+without information gain, it invokes `loop-escape` and continues from the recovery checkpoint.
+
 The skill is intentionally not an agent-platform, memory-system, or environment-design guide.
 Routine directly verifiable work stays routine; `loop-escape` remains the focused recovery entry
 point once an execution is already stuck.
@@ -99,7 +114,7 @@ Agents may select the skill automatically from those signals, but automatic sele
 
 | Skill | Purpose |
 |---|---|
-| `agentic-prompt-engineering` | Compact prompt-facing operating system for difficult agentic work: falsifiable task contracts, load-bearing-premise checks, causal attempt signatures, information-bearing action windows, claim-matched completion receipts, mechanism-specific loop control, truthful terminal states, conditional orchestration/fresh review, software/data/math/science adapters, dated Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, and prompt/Skill evaluation with ablations and repeat-run reliability. |
+| `agentic-prompt-engineering` | Self-routing prompt-facing operating system for vague, difficult, or long-horizon agentic work: improves the operator's request from active context, asks compact material questions, infers Author/Audit/Operate/Evaluate and applicable adapters, compiles cross-runtime subagent briefs, builds falsifiable task contracts, tests load-bearing premises, selects information-bearing actions, requires claim-matched receipts, routes true stalls to loop escape, and conditionally loads software/data/math/science, Claude Fable 5 / Opus 5, GPT-5.6 Sol / Codex, and evaluation guidance. |
 | `bug-triage` | Interactive bug-triage and investigation agent for internal tools — actively reproduces and investigates with browser tools and data-platform queries instead of just asking questions. |
 | `code-design-patterns` | Gang of Four design-patterns reference and analyzer — all 22 GoF patterns (Creational/Structural/Behavioral) with Python, TypeScript, and SQL examples. Triggers on "what pattern fits" / "how should I structure this". |
 | `critical-thinking` | Seven agent-first thinking frameworks for reframing assumptions, changing strategy families, and testing whether a stalled approach is still fit for purpose. Two materially identical cycles force a convergence checkpoint; alternatives must differ through observability, a smaller end-to-end prototype, another runtime/tool, a working reference, or environmental isolation. |

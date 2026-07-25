@@ -132,9 +132,43 @@ Use another agent only when the work can be separated by an information boundary
 - separable modules or artifacts;
 - parallel, non-overlapping data investigations.
 
-Each branch receives the same objective, constraints, sources of truth, acceptance map, and output
-schema. Keep branch artifacts isolated until commitment. Require each branch to state predictions,
-evidence, failures, and uncertainty.
+Before every dispatch, compile a branch prompt through the parent Skill. Loading the Skill in the
+orchestrator does not automatically load it in the child. If the child runtime exposes
+`agentic-prompt-engineering`, explicitly request **Operate** mode for the branch; otherwise embed
+the equivalent contract. Use the runtime-neutral Skill name in the prose, with
+`/shaughv-code:agentic-prompt-engineering` for Claude Code or
+`$shaughv-code:agentic-prompt-engineering` for Codex when the dispatch surface supports explicit
+invocation.
+
+The compiled brief augments, rather than replaces, the normal repository, tool, artifact, and
+environment information the orchestrator would provide:
+
+```yaml
+branch_brief:
+  parent_objective_and_dependency:
+  branch_objective_and_unique_role:
+  authority_scope_and_approval_boundaries:
+  starting_verified_state_and_evidence_pointers:
+  source_precedence:
+  non_goals_and_preservation_invariants:
+  artifacts_paths_tools_and_environment:
+  method_family_or_hypothesis:
+  next_action_window:
+  predicted_observation_and_contradiction:
+  acceptance_criterion_and_authoritative_oracle:
+  loop_budget_retirement_and_reentry:
+  valid_terminal_states:
+  required_evidence_and_return_receipt:
+```
+
+Each branch receives the applicable slice of the shared objective, constraints, sources of truth,
+acceptance map, and output schema—not a transcript dump or every unrelated criterion. Keep branch
+artifacts isolated until commitment. Require each branch to state predictions, evidence, failures,
+uncertainty, information gained, and route decision. A branch may not expand authority or declare
+global completion.
+
+If a child is authorized to orchestrate, it repeats the compiler at that boundary. Otherwise the
+brief does not authorize recursive delegation merely because multi-agent guidance is present.
 
 Synthesis is not voting. Compare:
 
