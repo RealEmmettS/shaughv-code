@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "0.36.1",
-  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles all custom SHAUGHV skills (loop escape and convergence recovery, evidence-aware retries, progressive basic-to-complete slicing, critical thinking — seven agent-first thinking frameworks incl. strategic/adversarial reasoning via Art of War, 36 Stratagems, Five Rings, and game theory — OpenAI audio, PreText, Quiver AI, a comprehensive Mistral AI API skill covering OCR, audio transcription, text-to-speech, chat, agents, and the full API surface, SHAUGHV brand design, animated brandmark, human changelog, SHAUGHV CDN consumer guide, naming conventions, generic Google Cloud Storage reference, a pre-wired SHAUGHV-bucket GCS skill, bug triage, GoF code design patterns, a debugging framework, defensive programming, git workflow, a security audit & red-team skill, a session handoff document generator, an iterative milestone-planning method, a workflow-optimization facilitator, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, the standing subagent model/effort preference convention, the wb300 git branch / worktree / agent control tower, a usage status-line installer, and the TT;DR \"Too Tired; Didn't Read\" summary convention), the Remotion documentation, Craft Docs, Shaughv Health, and Pipedream MCP servers, and a /create-video slash command for scaffolding Remotion Recorder projects, so everything is available across every Claude Code instance from a single source. (The task + workplace-memory system now lives in the standalone shaughv-tasks plugin.)",
+  "version": "0.37.0",
+  "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles custom SHAUGHV skills for advanced long-horizon agentic prompt engineering across software, data, mathematics, and science; falsifiable contracts, evidence receipts, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, convergence recovery, progressive slicing, critical thinking, OpenAI audio, PreText, Quiver AI, Mistral AI, SHAUGHV brand design, animated brandmark, human changelog, CDN, naming, Google Cloud Storage, bug triage, design patterns, evidence-backed debugging, defensive programming, git workflow, security audit/red-team, typed session handoffs, iterative milestone planning, proportional workflow optimization, image generation/upscaling, deliberate learning, logical reasoning, personal productivity, subagent model/effort preference, wb300, usage status line, and TT;DR; plus Remotion, Craft Docs, Shaughv Health, and Pipedream MCP servers and /create-video. (The task + workplace-memory system lives in shaughv-tasks.)",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -19,6 +19,12 @@
     "openai-audio",
     "quiver",
     "critical-thinking",
+    "agentic-prompt-engineering",
+    "prompt-engineering",
+    "long-horizon",
+    "erdos",
+    "gpt-5.6-sol",
+    "completion-receipt",
     "loop-escape",
     "convergence",
     "stuck",

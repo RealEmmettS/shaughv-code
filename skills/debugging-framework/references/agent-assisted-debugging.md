@@ -4,12 +4,26 @@ The Mode 2 formal protocol describes the Operator's (or autonomous Agent's) debu
 
 > **Vocabulary.** **Operators** are the people driving the debug session (you or a teammate) and **Agents** are AI coding teammates. Both can run the Mode 2 protocol. This file describes the most common configuration — one Operator paired with one Agent — beat-by-beat.
 
+## Contents
+
+- [The five operating principles](#the-five-operating-principles)
+- [Bug classification — by Agent diagnostic value](#bug-classification--by-agent-diagnostic-value)
+- [The Agent-Operator beat-by-beat](#the-agent-operator-beat-by-beat)
+- [When to frame the session explicitly](#when-to-frame-the-session-explicitly)
+- [The output structure (when the Agent is reporting)](#the-output-structure-when-the-agent-is-reporting)
+- [Anti-patterns specific to Agent-assisted debugging](#anti-patterns-specific-to-agent-assisted-debugging)
+- [A worked Agent-assisted Mode 2 example](#a-worked-agent-assisted-mode-2-example)
+- [When the Agent is debugging autonomously](#when-the-agent-is-debugging-autonomously)
+
 ## The five operating principles
 
-1. **The Agent accelerates spotting problems, but Operator judgment decides the fix.** The Agent is a pair programmer, not an autopilot. The Operator signs off on every change; the Agent proposes and reasons.
+1. **The Agent accelerates investigation; authority and evidence decide the action.** For an
+   authorized, reversible, in-scope fix, the Agent may implement and verify without a ceremonial
+   approval pause. Ask before irreversible/external actions, material scope changes, missing
+   authority, or decisions only the Operator can make.
 2. **"Fix this" is the fastest way to hallucinate.** Context determines quality. Always gather context before suggesting solutions. A short, vague prompt invites the Agent to invent a plausible-looking fix that addresses a plausible-looking bug — neither of which is real.
 3. **Symptom fixes are not root-cause fixes.** The Agent is biased toward producing code that "makes the error go away" because that is the visible success signal. The Operator is responsible for pushing past that to *why*.
-4. **Two failed attempts = change approach.** After two Agent fix proposals that didn't work, STOP accepting code suggestions. Pivot to manual investigation: instrument, log, run with a debugger, write a minimal repro, check git history.
+4. **Equivalent attempts without information gain = change approach.** When Agent proposals share a causal premise and stop changing the evidence, freeze that route. Instrument, log, run with a debugger, write a minimal repro, or check git history before accepting another proposal. Predeclared independent replication remains valid.
 5. **Every fix must be explainable.** If the Operator can't explain the fix to another teammate in one sentence, it's not ready to ship.
 
 These map cleanly onto the Mode 2 beats — they are not a separate protocol, they are the Agent-collaboration discipline layered on top.
@@ -24,7 +38,7 @@ Different bug shapes have different Agent ROI. Knowing which category you're in 
 | **Logic bug in a single function/module** | Wrong output for known input; no error | **Good.** The Agent can step through and surface the divergence between intent and behavior. | Ask the Agent to walk through what the code DOES; the Operator walks through what the code SHOULD do. The diff is the bug. Use Socratic mode. |
 | **Behavioral bug with no error** | "It just doesn't work as expected." Often UI / async / state-management. | **Moderate.** The Agent can help write targeted tests and logging to surface the failure. | Don't ask for a fix yet. Ask the Agent to suggest targeted log statements or test cases that would expose the divergence. Run them; bring the data back. |
 | **Multi-system / distributed bug** | Failure crosses process / service / network boundaries | **Lower.** The Agent can only see what you show it; cross-system reasoning requires the Operator to be the integrator. | Ask the Agent to help map the components, generate hypotheses, and write instrumentation. Be honest with the Agent (and yourself): it cannot see your network, your queues, and your databases simultaneously. |
-| **Intermittent / race condition** | "Works most of the time"; reproduces 1 in N runs | **Lowest** for direct fixes. | Ask the Agent for stabilization strategies (more aggressive logging, deterministic test inputs, concurrency-pattern analysis). Do NOT ask for a fix until you can reproduce reliably. |
+| **Intermittent / race condition** | "Works most of the time"; reproduces 1 in N runs | **Lowest** for direct fixes. | Ask the Agent for stabilization strategies (more aggressive logging, deterministic test inputs, concurrency-pattern analysis). Prefer a reliable reproduction before changing code. If a finite stabilization budget expires, preserve the strongest repeatable statistical, trace, or target-environment oracle and allow only a bounded hypothesis-driven change whose result that oracle can distinguish. |
 | **Performance issue** | Correct output, but too slow / too much memory / too many queries | **Moderate.** The Agent can suggest profiling strategy, identify hot paths, propose measurement. | Profile FIRST. Bring the profiler output to the Agent. Without the profile, Agent suggestions are guesses about what's slow, which are almost always wrong. |
 
 **When in doubt, classify out loud.** Tell the Agent which category you think this is. Its response will be calibrated to that category; if you're wrong about the category, the response will be wrong-shaped in a way that signals the misclassification.
@@ -38,7 +52,11 @@ Each Mode 2 beat with the Agent-collaboration motion that applies. The Operator 
 **Operator's job:** identify the failing scenario.
 **Agent's job:** help construct a minimal repro. Ask "what's the smallest input that reproduces this?"
 
-**Anti-pattern:** asking the Agent to fix the bug before stabilization. The Agent will happily propose a fix to a *description* of a bug — and that fix will be a guess. Until you can show the Agent the actual failure (paste the stack trace; paste the failing output; share the repro command), every Agent proposal is theatre.
+**Anti-pattern:** asking the Agent to fix the bug before stabilization. Show the actual failure
+when possible: a stack trace, failing output, or repro command. If direct reproduction is
+unavailable, supply the strongest preserved signature—authoritative logs, correlated traces,
+state evidence, a crash dump, or a measured failure rate—and name its blind spots. A proposal
+without either kind of evidence is an ungrounded guess.
 
 ### Beat 2 — Locate
 
@@ -54,7 +72,10 @@ Each Mode 2 beat with the Agent-collaboration motion that applies. The Operator 
 **Operator's job:** state the hypothesis. The Agent's hypothesis becomes the Operator's hypothesis only after the Operator endorses it (or modifies it).
 **Agent's job:** generate 2–3 hypotheses, ranked by likelihood, each with a specific way to confirm or rule out.
 
-**The confidence-calibration habit.** When the Agent proposes a hypothesis, ask for a confidence: "How confident are you in this — high / medium / low?" Well-calibrated Agents will say "70% — if this is wrong, the next thing I'd check is X." Poorly-calibrated Agents will say "very confident" about everything; that itself is signal that you should weight that hypothesis lower.
+**The evidence-calibration habit.** When the Agent proposes a hypothesis, require the evidence
+state, falsifier, and oracle quality: what supports it, what observation would contradict it, and
+whether the deciding system can observe that distinction. Numerical self-confidence is optional
+and never substitutes for those fields.
 
 ### Beat 4 — Verify
 
@@ -65,7 +86,9 @@ Each Mode 2 beat with the Agent-collaboration motion that applies. The Operator 
 
 ### Beat 5 — Fix
 
-**Operator's job:** read the proposed fix. Confirm you can explain it in one sentence. Confirm it's at the source layer, not the consuming layer.
+**Operator's job:** when actively paired, review the proposed fix and confirm its causal story,
+scope, and evidence. A source-layer repair is preferred; an external/unowned source may justify
+explicit containment or consumer-boundary protection.
 **Agent's job:** propose the fix WITH the reasoning. Never accept "change X to Y" without "because Z."
 
 **The explainability test.** Before accepting the fix, write a one-sentence explanation in your own words. If you cannot — if you have to copy the Agent's reasoning back verbatim — you don't understand the fix yet. Keep asking the Agent questions until you do.
@@ -74,15 +97,20 @@ Each Mode 2 beat with the Agent-collaboration motion that applies. The Operator 
 
 ### Beat 6 — Regression-test
 
-**Operator's job:** ensure the failing test is written FIRST. Run it RED. Apply the fix. Run it GREEN.
-**Agent's job:** generate the test (when asked), run the suite, report results.
+**Operator's job:** ensure the original failure has a preserved oracle and that the planned
+regression evidence matches the claim.
+**Agent's job:** generate a failing test when feasible, otherwise preserve the strongest
+alternative oracle; run proportional affected and broader required checks; report raw results.
 
-**Don't let the Agent skip TDD because "the fix is obvious."** The Agent's bias toward speed will produce a fix without a test if you don't insist. The test is the regression guarantee; the fix without the test will be re-broken in three months.
+**Do not let “the fix is obvious” erase regression protection.** Prefer red/green TDD when
+feasible. When exact automation is impossible, record why and preserve a repeatable manual,
+state-based, statistical, or target-environment oracle.
 
 ### Beat 7 — Look for similar defects
 
-**Operator's job:** define the search predicate (the bug shape) and the search scope (which directories, which entities, which integrations).
-**Agent's job:** run the search. Grep the codebase. Read sibling modules. Report findings.
+**Operator's job:** when actively paired, confirm the search predicate and scope.
+**Agent's job:** run the discovery search. Grep the codebase, read sibling modules, and report
+findings. Do not silently fix out-of-scope siblings.
 
 **This is one of the highest-leverage Agent uses.** The Agent can grep 200 files in seconds; the Operator can't. Define the pattern precisely ("any function that reads from the integrated `projects` table's `contact` column without first checking the field-mapping config's projected column list"), then let the Agent search.
 
@@ -114,14 +142,14 @@ Use this structure when reporting on a complex debug step to the Operator; skip 
 |---|---|---|
 | **"Fix this" prompting** | One-line prompt pointing at a file. The Agent proposes a plausible fix without seeing the actual failure. | Paste the full stack trace, the failing output, the repro command. The Agent's quality is bounded by the context you provide. |
 | **Accepting unexplained fixes** | "This should work" / "Try this" with no reasoning. | Refuse. Demand the reasoning. If the Agent can't explain WHY the fix works, the fix is a guess — and a guess from the Agent is no better than a guess from you. |
-| **Chaining 4+ Agent fix proposals** | First fix doesn't work, ask for another, doesn't work, ask again, etc. | After TWO failed proposals, stop. Pivot to instrumentation. The next proposal will be a guess on top of two wrong guesses. |
-| **Letting the Agent skip TDD** | "Here's the fix" — no test. | Insist on the failing test FIRST. The Agent's speed bias will skip TDD if you let it. |
-| **Treating Agent confidence as truth** | The Agent says "very confident" — the Operator ships without verification. | Calibrate. Ask the Agent for the confidence level. Weight low-confidence proposals as hypotheses, not conclusions. |
+| **Chaining equivalent Agent fix proposals** | Each proposal renames the same causal guess without changing the evidence. | Freeze that route and instrument. Continue only with a discriminating hypothesis or a predeclared independent replication. |
+| **Letting the Agent erase the regression oracle** | "Here's the fix" — no test or preserved failure signature. | Prefer a failing test first. If exact automation is infeasible, require the strongest repeatable alternative oracle, the reason automation is unavailable, and proportional affected plus required broader checks. |
+| **Treating Agent confidence as truth** | The Agent says "very confident" — the Operator ships without verification. | Require the evidence state, falsifier, and oracle quality. Numerical confidence is optional and non-authoritative; every unverified proposal remains a hypothesis regardless of its self-rating. |
 | **Overloading context** | Pasting the entire codebase / 30 files into the prompt. | Be selective. The Agent's attention degrades with context bloat; the most-relevant 200 lines beat the most-comprehensive 20,000. |
 | **Asking the Agent to debug what it cannot see** | Asking about prod behavior the Agent has no access to. | The Agent sees only what you show it. For prod bugs: paste the prod log, paste the prod query result. Don't ask it to imagine prod. |
 | **Treating the Agent as the Operator** | Letting the Agent sign off on the fix; the Operator not reading the diff before commit. | The Operator is responsible for every line that ships. Agent-proposed = Operator-reviewed = Operator-accountable. |
 | **Skipping the postmortem because "the Agent fixed it"** | Bug gone, no write-up. | Same protocol applies. The fact that the Agent proposed the fix doesn't change the postmortem warrant. Record what shape the bug was, what allowed it, and any skill-update candidates. |
-| **Autonomous Agent acting without an Operator review gate** | An Agent ships a non-trivial fix to main without an Operator sign-off. | For non-trivial fixes, the Agent posts the hypothesis + proposed fix as a CONTEXT / QUESTION / OPTIONS write-up and waits for Operator sign-off — the equivalent of "please review this diff." See § "When the Agent is debugging autonomously" below. |
+| **Autonomous Agent exceeds authority** | An Agent makes an irreversible/external change, widens scope, or chooses an owner-only trade-off without approval. | Continue authorized reversible investigation and fixes; pause only at the actual authority/risk boundary and present evidence plus the smallest decision. |
 
 ## A worked Agent-assisted Mode 2 example
 
@@ -137,7 +165,7 @@ Use this structure when reporting on a complex debug step to the Operator; skip 
 >
 > **Beat 5 — Fix.** Agent proposes: "Rename the view column to `tenant_code` AND verify all other consumers of `tenant_id` are updated." Operator: "Wait — that would break the other consumers. Is the right fix to revert the entity rename, or to also rename the view?" Agent: "If `tenant_code` is the intended canonical name, rename the view and all consumers. If the entity rename was premature, revert it. Which canonical name does the team prefer? — that's a design decision, not a debugging decision." Operator makes the call: rename the view and audit consumers.
 >
-> **Beat 6 — Regression-test.** Operator writes a test that asserts the entity returns ≥1 row for a known-good filter. Runs it RED before the fix. Applies the fix. Runs it GREEN. Runs the full test suite.
+> **Beat 6 — Regression-test.** Operator writes a test that asserts the entity returns ≥1 row for a known-good filter. Runs it RED before the fix. Applies the fix. Runs it GREEN. Runs the affected checks and the broader project suite required for this change.
 >
 > **Beat 7 — Sweep.** Operator: "Grep the entity-definitions directory for any other column reference that doesn't exist in the underlying view." Agent runs the grep, finds two more — same shape, same root cause, same fix. All three ship as one commit.
 >
@@ -147,16 +175,21 @@ The Agent's contribution was: structuring the hypotheses, running the grep, surf
 
 ## When the Agent is debugging autonomously
 
-When an Agent is debugging without an Operator actively at the keyboard, the protocol is the same — but the **review gate moves to a written check-in**.
+When an Agent is debugging without an Operator actively at the keyboard, the protocol and granted
+authority remain the same.
 
 - The Agent runs the Mode 2 beats end-to-end as normal.
-- For non-trivial fixes (anything that would qualify as Mode 2 in the first place), the Agent **posts a check-in** before applying the fix, with a CONTEXT / QUESTION / OPTIONS format:
+- The Agent may apply and verify authorized, reversible, in-scope fixes. It records the causal
+  hypothesis, diff, and completion receipt for later review.
+- Before an irreversible/external action, material scope change, missing-authority step, or
+  owner-only trade-off, the Agent **posts a check-in**:
   ```
   CONTEXT: <one paragraph — what was investigated, what was found>
   QUESTION: <should I apply this fix?>
   OPTIONS: A) apply as proposed; B) modify <specific way>; C) different approach
   ```
-- The Agent waits for Operator response before applying. This is the autonomous-Agent equivalent of "please review this diff."
-- For Mode 1 trivial fixes (typo, missing import, single-character correction), the Agent applies, then reports the result. No pre-approval needed.
+- The Agent waits only for that blocked decision. It continues safe read-only or otherwise
+  authorized work that can add evidence.
 
-This protects the codebase from speed-biased autonomous fixes while preserving the Agent's ability to do the up-front investigation independently.
+This protects real authority boundaries without turning every non-trivial but authorized fix into
+an idle approval loop.

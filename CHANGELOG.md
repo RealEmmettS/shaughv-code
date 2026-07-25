@@ -7,6 +7,85 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [0.37.0] — 2026-07-24
+
+Added: a compact **`agentic-prompt-engineering`** Skill for designing, auditing, applying, and
+evaluating prompts for long-horizon software, data, research-mathematics, and scientific work.
+Improved: the existing planning, recovery, reasoning, debugging, handoff, and workflow Skills now
+share evidence-typed state without becoming one giant universal prompt.
+
+### Added
+- `skills/agentic-prompt-engineering/SKILL.md` — adds the portable core: falsifiable outcome and
+  authority contracts, load-bearing-premise checks, short information-bearing action windows,
+  causal attempt signatures, claim-matched oracles, completion receipts, mechanism-specific
+  response/route/task stopping, typed handoffs, and truthful partial/blocked/refuted/unknown
+  outcomes. Routine work stays proportional; active stalls still route to `loop-escape`.
+- `skills/agentic-prompt-engineering/references/` — adds one-level conditional references for
+  task-contract construction, prompt wording/schemas/examples, long-horizon branching and fresh
+  review, software/data oracles, Erdős-level mathematics and executable scientific discovery,
+  dated Fable 5 versus Opus 5 overlays, a dated GPT-5.6 Sol/Codex overlay for lean outcome-first
+  prompts and surgical eval-driven migration, and prompt/Skill evaluation with compact baselines,
+  ablations, held-out cases, false-success checks, and repeat-run reliability.
+  The mathematics adapter also makes quantifier games, nearest misses, representation parity,
+  probabilistic dual certificates, post-success mechanism digestion, and a three-arm
+  bare/compact/full control explicit; the science adapter separates ranking from measurement.
+
+### Improved
+- `loop-escape` — expands attempts with causal hypothesis, strategy family, oracle, prediction,
+  contradiction, and state delta; distinguishes token, epistemic, action-policy, and
+  false-premise loops; separates response/route/task stops; and replays the original and broader
+  acceptance oracles after repair. Two equivalent cycles remain a guarded audit trigger, not a
+  universal task limit.
+- `iterative-plan` — treats turn, slice, task, and milestone counts as ordinary product-planning
+  defaults; supports conjunctive acceptance rows and truthful non-success; tests cheap
+  load-bearing premises before long chains; records slice receipts; and permits genuinely
+  independent parallel work without weakening WIP discipline.
+- `handoff` and `critical-thinking` — replace transcript-style live context with compact typed
+  decision packets and stable pointers to lossless archives. Handoffs now separate verified facts,
+  hypotheses, evidence receipts, retired routes, unresolved contradictions, and the exact next
+  action; runtime/model and secret references are portable. When an active task system already
+  owns continuation state, that task packet remains canonical and a standalone handoff is created
+  only when explicitly requested or needed by a receiver without task access. Critical-thinking's
+  local Decided/Directed/Blocked labels no longer substitute for an owning task's evidence-bearing
+  terminal state.
+- `workflow-optimization` — replaces mandatory exhaustive six-lens ceremony with focused,
+  comprehensive, and design modes. Every lens gets an applicability disposition; only
+  evidence-distinct lenses run deeply; improvements require a baseline, causal hypothesis,
+  bounded pilot, and remeasurement receipt; diagrams and clarification waits are conditional.
+- `logical-reasoning` — enriches retry audits with causal hypotheses, strategy families,
+  competing predictions, oracles, state deltas, and re-entry conditions while routing
+  research-mathematics search to the new adapter.
+- `subagent-model-preference` — advances the named Opus lineage from Opus 4.8 to Opus 5 with its
+  default/maximum 1M context while preserving `xhigh` preferred, `max` when needed, Sonnet 5 for
+  fan-out, and the rule that distinct Fable and Mythos classes require an explicit preference
+  change rather than an automatic remap.
+- The software/data adapter now routes full lifecycle work—features, architecture, refactors,
+  migrations, performance/reliability, release/deploy, transformations, data incidents,
+  backfills, streaming/incremental correctness, and cost—through mode-specific contracts and
+  acceptance oracles instead of forcing everything through bug repair or analytical SQL.
+- Prompt/Skill evaluation now freezes task/spec versions, starting state, contamination and
+  evaluator-change policy; reports repeat-run terminal distributions and trajectory burden; and
+  locates failures at the capability, prompt, scaffold/tool, runtime, or evaluator layer before
+  changing prose.
+- `debugging-framework` and `bug-triage` — allow the strongest alternative oracle when exact
+  reproduction is impossible, bound non-informative routes, protect evaluator integrity, make
+  regression evidence proportional to the claim, distinguish root-cause repair from authorized
+  containment, keep sibling sweeps discovery-first, and pause only at real authority/risk
+  boundaries.
+
+### Behind the scenes
+- `README.md` — documents the new Skill, invocation forms, progressive-disclosure package, and
+  revised specialist boundaries.
+- `critical-thinking` now keeps its executable core below 500 lines and routes detailed
+  cross-cutting disciplines to a direct reference; every touched long reference includes a
+  compact contents map for selective loading.
+- `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and
+  `.codex-plugin/plugin.json` — version bumped `0.36.1` → `0.37.0`; discovery descriptions and
+  keywords expose prompt engineering, long-horizon work, GPT-5.6 Sol guidance, completion
+  receipts, and Erdős-level search.
+- No agent definitions, hooks, commands, MCP servers, build system, or legacy `.skill` archives
+  were added.
+
 ## [0.36.1] — 2026-07-23
 
 Fixed: **`loop-escape`** is now a comprehensive, self-contained recovery guide rather than a router whose usefulness depends on other skills being visible. This preserves one portable recovery surface for Claude Code and Codex without adding hooks, agents, commands, duplicate recovery skills, a general index, or machine-specific standing instructions.

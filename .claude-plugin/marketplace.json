@@ -1,6 +1,6 @@
 {
   "name": "shaughv-code",
-  "description": "The SHAUGHV skill and MCP marketplace, including loop escape, convergence recovery, evidence-aware retries, and progressive slicing.",
+  "description": "The SHAUGHV skill and MCP marketplace, including agentic prompt engineering, current Claude and GPT-5.6 Sol overlays, long-horizon evidence control, loop escape, convergence recovery, and progressive slicing.",
   "owner": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -10,13 +10,19 @@
     {
       "name": "shaughv-code",
       "source": "./",
-      "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles custom SHAUGHV skills for loop escape, convergence recovery, evidence-aware retries, progressive slicing, and the broader coding and creative toolkit, plus MCP servers, from one source.",
-      "version": "0.36.1",
+      "description": "Emmett Shaughnessy's personal Claude Code plugin — bundles advanced agentic prompt engineering, Claude Fable/Opus and GPT-5.6 Sol overlays, evidence receipts, loop escape, convergence recovery, progressive slicing, and the broader coding and creative toolkit, plus MCP servers, from one source.",
+      "version": "0.37.0",
       "homepage": "https://github.com/RealEmmettS/shaughv-code",
       "keywords": [
         "shaughv",
         "personal",
         "skills",
+        "agentic-prompt-engineering",
+        "prompt-engineering",
+        "long-horizon",
+        "erdos",
+        "gpt-5.6-sol",
+        "completion-receipt",
         "loop-escape",
         "convergence",
         "stuck",

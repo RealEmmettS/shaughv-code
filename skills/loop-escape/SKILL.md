@@ -1,18 +1,16 @@
 ---
 name: loop-escape
 description: >-
-  Convergence recovery for work stuck, going in circles, producing the same result twice,
-  or running for hours/days without new evidence. Use when a task is too ambitious, the
-  agent repeats the same command/check/tool, nobody can state the last known-good state, the
-  validation oracle cannot see the current candidate, or the operator says "get the basic
-  version working first," "try a different approach," "break this into steps," "we learned
-  nothing," or "does another retry help?" Builds an attempt ledger, separates the basic
-  functional bar from qualification, classifies repetitions as new evidence, valid
-  replication, or duplicate cycles, and applies self-contained strategy, scope, evidence,
-  observability, and debugging lenses. It may optionally deepen with sibling
-  reasoning/planning/debugging skills but never depends on them. Do not trigger for passive
-  monitoring, expected long operations, materially changed iterations, or deliberately
-  independent replication with a stated prediction.
+  Recover work that is stuck, going in circles, repeating the same result, or running without
+  new evidence. Use when an agent repeats a command/check/tool, the current candidate is invisible
+  to the deciding oracle, nobody can state the last verified state, the task is too ambitious, or
+  the operator says "get the basic version working," "try a different approach," "we learned
+  nothing," or "does another retry help?" Builds causal attempt signatures, distinguishes
+  productive iteration, valid replication, and duplicate routes, classifies token, epistemic,
+  action-policy, and false-premise loops, repairs observability, and re-enters through a
+  discriminating action. Self-contained; sibling skills add optional depth. Do not trigger for
+  passive monitoring, expected long operations, materially changed experiments, or predeclared
+  independent replication.
 ---
 
 # Loop Escape
@@ -30,17 +28,21 @@ invocation is the reliable escape hatch.
 
 Use this workflow when at least one condition holds:
 
-- two consecutive attempts have materially the same relevant state, intervention, and
-  observation
+- two consecutive attempts have materially the same relevant state, causal hypothesis,
+  intervention family, oracle, and observation, with no information gain — the default audit
+  trigger, not a universal attempt limit
 - work has continued for a long time without a passed check, actionable failure payload,
   or narrower hypothesis
 - the current candidate is invisible to the system that decides success
 - the task contains too many coupled gates to establish a basic end-to-end path
 - nobody can state the last verified-working state
+- one deterministic contradictory observation invalidates a load-bearing premise or route
 
 Do not call ordinary waiting a loop. Passive monitoring, a build that is still within its
 expected duration, a retry after a known transient with an explicit bound, a materially
 changed experiment, and intentionally independent replication are not duplicate cycles.
+Noisy trials may need more than two observations, but only under a predeclared independence
+model, sample count or power rationale, and stop rule.
 
 ## Recovery guide
 
@@ -52,6 +54,7 @@ Stop the next retry. Read `references/convergence-checkpoint.md` and capture:
 - last known-good state
 - basic functional bar
 - additional evidence / qualification bar
+- load-bearing premise, causal hypothesis, and earliest predicted contradiction
 - the last two attempt signatures
 
 If the information is unavailable, say precisely what is missing. Do not invent a clean
@@ -66,7 +69,9 @@ block the checkpoint when the available facts establish the relevant equality or
 
 An attempt signature is:
 
-`relevant starting state + intervention + observation + information gained`
+`target + relevant starting state + load-bearing premise + causal hypothesis + strategy
+family + intervention + evidence source/oracle + prediction + actual observation +
+artifact/state delta + information gained`
 
 Classify the pair:
 
@@ -75,18 +80,38 @@ Classify the pair:
 - **Valid replication** — the intervention is intentionally repeated to estimate noise or
   reproducibility; independence, prediction, sample/attempt count, and stop rule were stated
   in advance.
-- **Duplicate cycle** — the relevant signature is unchanged and the result neither settles
-  a criterion nor narrows a hypothesis.
+- **Non-informative route variation** — the exact intervention or artifact changed, but it stayed
+  inside the same causal premise and strategy family and produced no observation that
+  distinguishes a live hypothesis. Retire or redesign the family instead of rewarding surface
+  variation.
+- **Duplicate cycle** — the decision-relevant signature is causally equivalent or unchanged and
+  the result neither settles a criterion nor narrows a hypothesis.
 
 A retry that merely feels different is still a duplicate if the deciding system receives
-the same candidate and produces the same uninformative observation.
+the same candidate and produces the same uninformative observation. A genuinely different
+candidate that repeats the family's non-discriminating outcome is a non-informative route
+variation, not new evidence.
 
 If the operator states that the candidate/revision, intervention, and silent observation
 were the same twice, classify the available signature as a duplicate cycle even when the
 hidden payload cannot be reconstructed. Do not demand independent proof of the supplied
 facts before restoring convergence.
 
-### 3. Repair observability before behavior
+### 3. Classify the recurrence mechanism
+
+Classify before choosing the repair:
+
+| Class | Observable shape | Mechanism-matched change |
+|---|---|---|
+| **Token loop** | repeated words or reasoning fragments inside one response | stop/resample, shorten the target, cautiously change decoding, or switch model |
+| **Epistemic loop** | rephrased uncertainty with no new test | acquire missing evidence, branch by method, clarify, or return a bounded unknown |
+| **Action-policy loop** | the same safe/easy action recurs while a hard progress action is avoided | name and decompose the avoided action or change representation |
+| **False-premise trajectory** | varied coherent actions all extend one wrong premise | invalidate descendants, reopen the premise, and test a rival causal model |
+
+Structured equality comes before prose similarity. A different explanation can still be the
+same route; a repeated action with a real state or evidence delta can still be productive.
+
+### 4. Repair observability before behavior
 
 When a check fails silently or the validation oracle cannot see the candidate, make the
 next move expose evidence:
@@ -101,7 +126,7 @@ next move expose evidence:
 Do not spend another cycle changing product behavior while the failure remains
 unobservable.
 
-### 4. Orient with the recovery lenses
+### 5. Orient with the recovery lenses
 
 Use the failure shapes below as prompts, not a rigid state machine. One usually dominates,
 but several may overlap. Apply enough of the embedded guidance to reveal a materially
@@ -109,7 +134,7 @@ different next move. Loading another skill is optional, never a prerequisite for
 
 | Failure shape | Recovery action owned here | Optional deeper guidance |
 |---|---|---|
-| Framing, assumptions, oracle, tool, or strategy family may be wrong | State the load-bearing assumption and its falsifier. Generate alternatives from genuinely different families: improve observability, build a smaller end-to-end prototype, use an alternate runtime/tool, compare with a working reference, or isolate the environment. Pick the cheapest discriminating family. | `../critical-thinking/SKILL.md` |
+| Framing, assumptions, oracle, tool, or strategy family may be wrong | State the load-bearing assumption, earliest dependent action, predicted contradiction, and descendants invalidated if false. Generate alternatives from genuinely different families: improve observability, build a smaller end-to-end prototype, use an alternate runtime/tool, compare with a working reference, or isolate the environment. Pick the cheapest discriminating family. | `../critical-thinking/SKILL.md` |
 | The task is too ambitious or lacks a basic end-to-end rung | Preserve the final goal, then separate the smallest functional rung, demoable integration/hardening rungs, and remaining qualification. Give every expensive optional gate an owner and explicit disposition. | `../iterative-plan/SKILL.md` |
 | The question is whether repetition adds evidential weight | Compare starting state, intervention, observation, and information gained. Treat unchanged correlated retries as one inference; require stated independence, prediction, sample count, and stop rule for valid replication. | `../logical-reasoning/SKILL.md` |
 | A concrete defect remains after the loop is narrowed | State one live defect hypothesis, the observation that would distinguish it, and one bounded experiment. Hand off only after the oracle can see the candidate and preserve the result. | `../debugging-framework/SKILL.md` |
@@ -119,7 +144,7 @@ materially improve the next move, and keep the added context proportionate. Neve
 invent a replacement skill, or add a proof burden because a sibling is omitted from a
 runtime's visible skill list.
 
-### 5. Re-enter on the smallest working rung
+### 6. Re-enter on the smallest working rung
 
 Preserve the real end goal. Do not silently redefine success downward.
 
@@ -133,6 +158,17 @@ Separate:
 Choose one next action that is cheap, reversible where possible, and discriminates
 between live explanations. State the evidence expected under each relevant outcome and
 the condition that stops or redirects the attempt.
+
+Distinguish three stopping decisions:
+
+- **response stop** — end malformed or repeating generation
+- **route stop** — retire one hypothesis, representation, proof family, or repair strategy
+- **task stop** — return the truthful terminal state only when acceptance is proved, authority or
+  an external dependency blocks progress, a finite budget is exhausted, or no
+  information-bearing route remains
+
+After a repair, replay the original failing oracle and the broader acceptance oracle. A
+second model's agreement or confident closing paragraph is not a completion receipt.
 
 ## Habits that turn a stall into progress
 
@@ -169,13 +205,23 @@ for long or high-stakes work and a concise version for a small loop:
 - Last known-good:
 - Basic functional bar:
 - Additional evidence bar:
-- Attempt verdict: new evidence | valid replication | duplicate cycle
+- Load-bearing premise:
+- Causal hypothesis:
+- Predicted contradictory signal:
+- Attempt verdict: new evidence | valid replication | non-informative route variation | duplicate cycle
+- Loop class: token | epistemic | action-policy | false-premise trajectory | not a loop
 - Primary recovery lens: strategy | scope | evidence | defect
 - Optional deeper skill:
+- Invalidated descendants:
 - Smallest working rung:
 - Next discriminating action:
 - Expected evidence:
-- Stop / redirect condition:
+- Response stop condition:
+- Route stop condition:
+- Task stop condition:
+- Original failing oracle to replay:
+- Broader acceptance oracle:
+- Terminal state if the finite budget ends:
 ```
 
 Then continue the task using the selected recovery lens. Do not end by merely telling the

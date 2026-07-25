@@ -87,8 +87,10 @@ Non-negotiable, because they are exactly the steps fast reasoning skips:
 7. **Calibrate inductive force.** Inductive and abductive conclusions get a strength
    judgment tied to the evidence (sample quality, analogy fit, base rates), never a
    bare "therefore."
-8. **Audit repetition before counting it as support.** Compare the relevant starting
-   state/premises, intervention or transformation, observation, and information gained.
+8. **Audit repetition before counting it as support.** Compare the target claim, relevant
+   starting state/premises, causal hypothesis, strategy or transformation family, oracle,
+   predicted observations under competing outcomes, actual observation, state delta, and
+   information gained.
    An unchanged signature is a duplicate cycle, not a new inference. Repetition adds
    weight only when it is intentionally independent or estimates noise under a declared
    prediction, bounded count, and stop rule.
@@ -100,7 +102,9 @@ has been tried more than once:
 
 1. State the conclusion the attempts are supposed to support.
 2. Reconstruct the last two attempt signatures:
-   `starting state/premises + intervention/transformation + observation + information gained`.
+   `target + starting state/premises + causal hypothesis + strategy family +
+   intervention/transformation + oracle + predicted observations + actual observation +
+   state delta + information gained`.
 3. Classify the pair:
    - **New evidence** — a material change creates an observation that distinguishes live
      claims.
@@ -108,7 +112,8 @@ has been tried more than once:
      a prediction, repeat count, and stop rule declared in advance.
    - **Duplicate cycle** — no material delta and no additional inferential force.
 4. Isolate the smallest unsettled premise, lemma, counterexample, or empirical distinction.
-5. Choose the next move that can settle that point. If execution itself is stuck, route
+5. State what evidence must appear before a retired route may reopen.
+6. Choose the next move that can settle that point. If execution itself is stuck, route
    through `loop-escape`; if a new strategy family is needed, stack `critical-thinking`.
 
 **Output:**
@@ -120,6 +125,7 @@ Attempt B signature:
 Verdict: new evidence | valid replication | duplicate cycle
 Smallest unsettled point:
 Next discriminating move:
+Reopen condition:
 ```
 
 ## Mode workflows
@@ -234,4 +240,10 @@ of non-classical logics (intuitionistic, many-valued, paraconsistent).
 **Out:** metalogic proofs (soundness/completeness/compactness theorems), higher-order
 logic, and full Bayesian/probabilistic formalism beyond base rates and basic conditional
 probability. These are flagged as extension points, not gaps to hide.
+
+Research-mathematics search is also outside this skill's core. Use
+`agentic-prompt-engineering` for statement fidelity, prove/refute/repair contracts,
+counterexample search, proof-family portfolios, proof-obligation DAGs, first-move loss,
+semantic correspondence, novelty, and bounded proof digestion; return here to audit a
+specific argument or completed proof.
 

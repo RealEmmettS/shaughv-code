@@ -6,6 +6,14 @@ The Mode 1 loop from `SKILL.md` in detail. Pull this when:
 - You are unsure whether the bug qualifies for Mode 1 or should escalate to Mode 2.
 - You finished a Mode 1 attempt that didn't work and want to know whether to try once more or escalate.
 
+## Contents
+
+- [When Mode 1 applies](#when-mode-1-applies)
+- [The 5-minute loop](#the-5-minute-loop)
+- [Hard escalation triggers (Mode 1 → Mode 2)](#hard-escalation-triggers-mode-1--mode-2)
+- [Worked micro-examples](#worked-micro-examples)
+- [What "lightweight" does NOT mean](#what-lightweight-does-not-mean)
+
 ## When Mode 1 applies
 
 Mode 1 is for bugs where ALL of the following are true:
@@ -14,7 +22,9 @@ Mode 1 is for bugs where ALL of the following are true:
 - **The bug is not user-visible in production.** Local repro, CI failure, dev-env behavior, internal scripts.
 - **No write path is involved.** Read-only inspection bugs, view-layer bugs, type errors, build failures.
 - **The "fix" is mechanical.** Off-by-one, missing `await`, typo in a key name, wrong env var name, missing import.
-- **You have not already attempted >1 fix.** If two attempts have failed, escalate.
+- **A mechanical Mode 1 retry is still informative.** If causally equivalent attempts stop
+  changing the evidence, escalate the investigation to Mode 2; do not treat that as a universal
+  task-stop rule.
 
 If any of these is false, this bug is Mode 2 from the start. Skip the 5-minute attempt entirely — the cost of a wrong fix on a Mode 2 bug far exceeds the 10 minutes you'd save by treating it as Mode 1 first.
 
@@ -64,7 +74,7 @@ Switch to Mode 2 the moment ANY of these is true. Do not bargain.
 - The 5-minute clock has elapsed.
 - The fix would touch a write path (DB write, queue publish, third-party POST, file write).
 - The bug is user-visible in production.
-- The first two fix attempts didn't work.
+- Causally equivalent Mode 1 fixes stopped changing the evidence.
 - You don't fully understand why the fix would work.
 - The bug crosses a process, service, or network boundary.
 - The bug involves money, PII, or system-of-record data (financial rollups, billing math, anything other systems treat as the source of truth).
@@ -106,7 +116,7 @@ When you escalate: state the trigger explicitly in your notes (or the PR / issue
 Mode 1 is faster, not less rigorous. The five steps still apply:
 
 - Reading the error literally is still required.
-- Reproducing is still required.
+- A direct reproduction or strongest preserved failure signature is still required.
 - The fix must still be defensible (you can explain WHY in one sentence).
 - Verification is still required.
 

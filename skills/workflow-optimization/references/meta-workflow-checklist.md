@@ -1,84 +1,45 @@
-# Meta-Workflow Checklist
+# Workflow Improvement Self-Check
 
-This is the skill's own pre-flight checklist — what to verify before leaving each
-of the five procedure steps. The skill optimizes other people's workflows; this
-file keeps the skill's *own* workflow disciplined. Consult it at every step
-transition. Do not advance to the next step until the current step's box can
-honestly be checked.
+Use the section matching the selected mode. This is a decision-quality check, not a mandatory
+multi-turn ceremony.
 
----
+## Focused improvement
 
-## Before leaving Step 1 — Read & Gut-Check
+- [ ] The workflow outcome, boundary, customer, and deciding metric are explicit.
+- [ ] Current state and baseline are supported or marked unknown.
+- [ ] One primary causal hypothesis and a rival were considered when uncertainty is material.
+- [ ] The selected lens can add evidence not already supplied by another lens.
+- [ ] The proposed pilot is bounded, measurable, and reversible where practical.
+- [ ] The remeasurement oracle, expected observation, and stop/rollback condition were declared.
+- [ ] The final status distinguishes recommendation, pilot, verified improvement, failure, and
+      indeterminate evidence.
 
-- [ ] I have actually read every file, link, and pasted artifact provided — not
-      skimmed. If something was attached, I opened it.
-- [ ] I can state the workflow's **goal** in one sentence: the output it exists
-      to produce.
-- [ ] I have identified the **lifecycle stage**: designing new / optimizing
-      existing / auditing a running system.
-- [ ] I have a written list of every **ambiguity, gap, or contradiction** in
-      what I was given.
-- [ ] I have given the user a short reflection of what I understood and what is
-      unclear.
-- [ ] I have **not** produced a diagram yet.
+## Comprehensive audit
 
-## Before leaving Step 2 — Clarify
+- [ ] The evidence inventory covers the process boundaries, steps, branches, owners, queues,
+      failures, measures, and controls relevant to the decision.
+- [ ] All six lenses have an explicit disposition: `applied`, `not applicable`, or `overlaps`.
+- [ ] Applied lenses produced distinct findings grounded in the actual workflow.
+- [ ] Lens overlap was synthesized rather than repeated.
+- [ ] Cross-cutting quality, flow, constraint, customer, measurement, and redesign risks were
+      considered.
+- [ ] The primary response contains a bounded shortlist; the full ledger remains available as an
+      artifact.
+- [ ] A diagram is included only if it materially clarifies structure or state.
+- [ ] Recommendations name causal mechanism, owner, pilot, oracle, risk, and rollback/stop rule.
 
-- [ ] My clarifying questions target the ambiguities from Step 1 — not generic
-      questions whose answers I could infer.
-- [ ] I asked the minimum number of high-value questions, batched sensibly — not
-      a long survey.
-- [ ] My questions cover, where still unknown: the true start/end of the
-      workflow, the trigger, step owners, hand-off points, decision branches,
-      rough volumes/timings, and what "good" means to the workflow's customer.
-- [ ] I have received the user's answers and resolved the major ambiguities. (If
-      key ambiguities remain, ask one more focused round — do not proceed on a
-      guess.)
+## Design mode
 
-## Before leaving Step 3 — Capture
+- [ ] Customer value and the decision/output contract are explicit.
+- [ ] Demand, capacity, dependencies, approvals, and failure modes are identified.
+- [ ] Measurement is designed before optimization.
+- [ ] Controls do not create more handoff cost than the risk they address.
+- [ ] The workflow has a thin executable pilot before broad rollout.
 
-- [ ] I have produced a rough, ordered **step list** of the workflow.
-- [ ] For each step I have noted, where known: input, action, owner, output.
-- [ ] I have identified the workflow's decision points and branches.
-- [ ] I have **opened the Lens Ledger** with all six lenses listed as `pending`.
-- [ ] I have shown the rough capture to the user and invited corrections.
-- [ ] The capture reflects the user's corrections — it is accurate, because a
-      wrong capture produces a wrong sweep.
+## Cross-cutting
 
-## Before leaving Step 4 — Sweep
-
-- [ ] **All six lenses have been applied** — Lean, Six Sigma, Theory of
-      Constraints, TQM, BPR, Process Optimization. None skipped, regardless of
-      how simple the workflow looked.
-- [ ] I read each theory's reference file before applying its lens.
-- [ ] Each lens received a genuine, substantive pass — grouping lenses into
-      shared turns did not shorten any individual lens.
-- [ ] Every Lens Ledger row is marked `complete`, with concrete findings recorded
-      (or an explicit "no findings" where a lens genuinely surfaced nothing).
-- [ ] I applied the ten cross-cutting principles (`core-principles.md`) as a
-      check.
-- [ ] I ran the detection checklists (`checklists.md`).
-- [ ] Where a lens needed the user's domain knowledge, I asked rather than
-      guessed.
-
-## Before leaving Step 5 — Converge
-
-- [ ] I generated the full authoritative diagram, informed by the sweep, using
-      the correct diagram type per `diagramming.md`.
-- [ ] The diagram renders correctly (valid Mermaid syntax).
-- [ ] I presented the complete Lens Ledger as the lens-sweep deliverable.
-- [ ] I produced a shortlist of improvement opportunities synthesized from the
-      ledger.
-- [ ] The shortlist is ranked by **transparent, visible, user-overridable
-      criteria** — not by my private verdict.
-- [ ] I surfaced every option; I did not silently drop or pre-decide any.
-- [ ] The deliverable has all three parts: diagram + full lens sweep + shortlist.
-
----
-
-## Cross-cutting checks — true at every step
-
-- [ ] I am working *with* the user turn by turn, not producing a one-shot report.
-- [ ] I have not let the workflow's apparent simplicity tempt me into shortcuts.
-- [ ] I am keeping the Lens Ledger visible and current.
-- [ ] When unsure whether to record something, I recorded it.
+- [ ] Missing user-only information was asked once; inferable facts did not cause a needless wait.
+- [ ] Bulky raw material is referenced by stable pointer instead of copied into active context.
+- [ ] A proxy metric was not treated as the outcome without validation.
+- [ ] No framework was forced to produce findings merely for completeness.
+- [ ] The receipt reports what was observed, not what the recommendation was expected to do.

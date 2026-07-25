@@ -15,7 +15,12 @@ description: >
 
 ## Overview
 
-Debugging means **prove the bug is real, narrow down where it lives, pin the cause at the source layer, fix that, verify the fix, then sweep for siblings**. It does NOT mean trying changes until the symptom goes away, blaming the compiler, or fixing at the consuming layer because the source layer is hard to reach. The first kind of work surfaces the system property that allowed the bug; the second kind hides it and guarantees a repeat.
+Debugging means **establish the failure through a reproduction or strongest alternative oracle,
+narrow down where it lives, identify the earliest causal boundary, make the smallest coherent
+repair, verify it, then discover siblings**. Root-cause/source-layer repair is the default.
+Explicit incident containment and consumer-boundary protection are legitimate when the source is
+external, unowned, inaccessible, or too risky to change; label containment honestly and preserve
+the causal investigation. Debugging does not mean trying edits until the symptom disappears.
 
 This skill is a calibrated debug loop. It is the runtime mirror of the `defensive-programming` skill: same stance, applied when something has already failed instead of before. Defensive design surfaces the failure loudly; this skill finds the root cause.
 
@@ -43,9 +48,9 @@ Skip this skill for: end-user-facing bug intake (use `bug-triage`); pre-emptive 
 | | **Mode 1 — Lightweight triage** | **Mode 2 — Formal protocol** |
 |---|---|---|
 | Scope | Trivial, isolated, contained | Anything user-visible in prod, anything in a write path, anything systemic |
-| Time budget | ≤ 5 minutes | As long as needed |
-| Reproducibility required | One repro is fine | Stable repro required before any fix |
-| Test before fix | Sanity check is fine | **Failing automated test required** |
+| Time budget | ≤ 5 minutes | Explicit investigation/action budget with route-stop conditions |
+| Reproducibility required | One observation or strong signature | Stable repro preferred; strongest alternative oracle when exact repro is impossible |
+| Test before fix | Sanity check is fine | Failing automated test when feasible; otherwise preserved regression oracle |
 | Look for similar defects | Skip | **Required** |
 | Postmortem note | Skip unless instructive | **Required if the bug was non-trivial** |
 
@@ -53,7 +58,7 @@ Skip this skill for: end-user-facing bug intake (use `bug-triage`); pre-emptive 
 
 - The change touches a write path (DB write, queue publish, third-party POST, external state mutation).
 - The bug is user-visible in production.
-- The first two Mode 1 attempts didn't fix it.
+- Causally equivalent Mode 1 attempts stopped changing the evidence.
 - You don't fully understand why the fix would work.
 - The bug crosses a process / service / network boundary.
 - The bug involves money, PII, or system-of-record data (financial rollups, billing math, anything other systems treat as the source of truth).
@@ -70,7 +75,7 @@ Before choosing a mode, classify the bug. Different shapes have different debugg
 | **Logic bug in a single function/module** | Wrong output for known input; no error | **Good** | Socratic — Operator states intent; Agent walks actual behavior; divergence is the bug. |
 | **Behavioral bug with no error** | "It just doesn't work as expected"; UI / async / state | **Moderate** | Don't ask for a fix yet — instrument first. Targeted log statements / test cases that surface the divergence. |
 | **Multi-system / distributed** | Failure crosses process / service / network boundary | **Lower** | The Agent helps map components, generate hypotheses, write instrumentation — but can only see what you show it. |
-| **Intermittent / race condition** | Works 9 of 10 times | **Lowest** for direct fixes | Stabilize first. Aggressive logging, deterministic test inputs, concurrency-pattern analysis. No fix until reproducible. |
+| **Intermittent / race condition** | Works 9 of 10 times | **Lowest** for direct fixes | Stabilize or define a statistical/observability oracle first. Contain risk if authorized; do not claim a causal fix without evidence. |
 | **Performance** | Correct output, too slow / too much memory / too many queries | **Moderate** | Profile FIRST. Bring profiler output to the Agent. Without the profile, Agent suggestions are guesses about what's slow — almost always wrong. |
 
 The full Agent-collaboration discipline is in `references/agent-assisted-debugging.md`.
@@ -78,7 +83,9 @@ The full Agent-collaboration discipline is in `references/agent-assisted-debuggi
 ## Mode 1 — Lightweight triage (the 5-minute loop)
 
 1. **Read the error literally.** Stack trace top to bottom, file path, line number, error code. Do not skim — the error often names the fix in its own text.
-2. **Reproduce it once.** A bug you have not seen is a bug you cannot fix.
+2. **Observe it once or preserve the strongest signature.** Prefer direct reproduction; when that
+   is impossible, use authoritative logs, state inspection, a trace, a crash dump, or a bounded
+   alternative oracle. Do not invent a failure you have not observed.
 3. **Check the last commit.** `git log -1 --stat` and `git diff HEAD~1`. If the bug appeared after a recent change, the change is the suspect until proven otherwise.
 4. **Fix the obvious thing.** Typo, off-by-one, missing await, wrong env var name. Make the smallest possible change.
 5. **Verify the fix.** Re-run the failing path; confirm the original error is gone AND no new error appeared.
@@ -91,7 +98,12 @@ You MUST complete each beat before moving to the next. Skipping a beat to "save 
 
 ### 1. Stabilize (make it reproducible)
 
-If the bug does not reproduce reliably, you cannot fix it — you can only guess. Simplify the inputs and environment until changing any one variable changes the behavior (Code Complete §23, page-579). If you cannot stabilize after a sustained attempt: instrument first, fix second. Add diagnostic logging at the layer boundaries and *wait* for the next occurrence rather than fix-by-guess.
+Prefer a stable reproduction: simplify inputs and environment until changing one variable changes
+the behavior (Code Complete §23, page-579). Set a finite stabilization budget. If exact
+reproduction remains unavailable, define the strongest alternative oracle—authoritative logs,
+state/query evidence, trace correlation, statistical failure rate, or a target-environment
+observation—then instrument the uncertain boundary. You may apply bounded, explicitly labeled
+containment when incident risk warrants it, but do not claim causal repair from a guess.
 
 "Stabilize" usually means one of:
 
@@ -134,25 +146,37 @@ Use *negative* results — the bug NOT being in the area you thought it was is r
 
 ### 5. Fix (the problem, not the symptom)
 
-Fix at the source layer the data-flow trace landed on. Do not fix at the consuming layer (Code Complete §23, page-589). Symptom-fixes generate a new fix every time a new consumer surfaces the same root cause.
+Fix at the earliest owned layer responsible for the broken invariant when practical (Code Complete
+§23, page-589). If the source is external, unowned, inaccessible, or a source change would widen
+risk, a consumer-boundary guard can be the correct coherent repair. Record whether the result is a
+root-cause repair, containment, or compatibility boundary.
 
 - Fix at the **smallest** correct layer — the layer responsible for the invariant being broken, not the layer where the broken invariant happened to surface.
-- **One change at a time.** No "while I'm here" cleanup, no bundled refactoring. Those are separate commits, ideally separate PRs.
-- If the fix requires changes in three places, that is signal — either (a) the abstraction is wrong (consider whether the architectural question from `superpowers:systematic-debugging` Phase 4.5 applies), or (b) you found the source AND two consumer-layer band-aids that the source fix obsoletes.
+- **One causal story at a time.** No "while I'm here" cleanup or unrelated refactor. The smallest
+  coherent repair may span several files or layers when the invariant genuinely crosses them.
+- If the fix requires changes in several places, verify that every edit serves the same causal
+  story; otherwise split it or reconsider the abstraction.
 
 ### 6. Regression-test (lock the fix in)
 
 Before declaring the fix done:
 
-- **A failing test exists** that reproduced the bug; cross-ref `superpowers:test-driven-development`. Run it — it MUST go red without the fix.
-- **The full local test suite passes** with the fix. Not just the test you wrote; the whole suite.
+- **A failing test or preserved alternative oracle exists** for the original defect. When a test is
+  feasible, run it red without the fix and green with it.
+- **Affected regression checks pass**, plus the broader suite or target oracle required by the
+  claim and risk. Do not run an unrelated exhaustive suite merely as ritual; do not omit a
+  required release or target-environment gate.
 - **The fix actually landed** in the environment where the bug fired. A green local test does not prove a green prod; cross-ref `superpowers:verification-before-completion`. For data-pipeline fixes, this means re-running the pipeline and confirming the bad row is now correct.
+- **The evaluator stayed trustworthy.** Inspect changes to tests, fixtures, exclusions, or
+  acceptance criteria. Do not weaken them to make the fix pass.
 
 ### 7. Look for similar defects (the McConnell sweep)
 
 *"Defects tend to occur in groups. Look for others that are similar."* (Code Complete §23, page-591)
 
-This beat is non-optional. It is also the highest-leverage beat — fixing one bug typically takes minutes; finding its three siblings before they fire takes minutes too and saves three future debugging sessions.
+The **discovery sweep** is non-optional in formal mode. Report sibling findings and their evidence.
+Fix them in the same change only when they are in scope, authorized, and part of the same causal
+repair; otherwise create a separate owned follow-up. Discovery is not blanket authorization.
 
 For each fix, ask:
 
@@ -163,6 +187,26 @@ For each fix, ask:
 - **Sister envs?** A bug in prod usually exists in staging too. A bug for one tenant usually exists for another. A bug in one region/partition usually exists in another.
 
 Record the sweep in the PR description (or wherever the fix is tracked) so the next person knows what was checked.
+
+### Completion receipt
+
+Before claiming the defect is fixed, record:
+
+```yaml
+debug_receipt:
+  original_failure_oracle:
+  original_raw_failure_or_pointer:
+  causal_hypothesis:
+  repair_scope: root_cause | containment | compatibility_boundary
+  target_check:
+  regression_checks:
+  evaluator_integrity_check:
+  target_environment_result:
+  remaining_limitation:
+  status: PASS | FAIL | NOT_RUN | INDETERMINATE
+```
+
+The final claim is no stronger than the weakest mandatory row.
 
 ## Bug shapes — the vocabulary
 
@@ -210,10 +254,12 @@ Where to add diagnostic signal:
 
 An Operator is often debugging alongside an Agent — Claude Code is the default, also GitHub Copilot, Cursor, Aider, ChatGPT. (An Agent may also debug autonomously without an Operator at the keyboard; see § "When the Agent is debugging autonomously" in `references/agent-assisted-debugging.md` for the review-gate adjustment.) Five principles govern the Agent-Operator collaboration. They do NOT replace Mode 2 — they are the Agent discipline layered on top.
 
-1. **The Agent accelerates spotting problems, but Operator judgment decides the fix.** The Agent is a pair programmer, not an autopilot. The Operator signs off on every change.
+1. **The Agent accelerates investigation; authority and evidence decide the action.** It may apply
+   authorized, reversible, in-scope fixes. Ask at irreversible/external actions, material scope
+   changes, missing authority, or owner-only decisions.
 2. **"Fix this" is the fastest way to hallucinate.** Context determines quality. Paste the FULL stack trace, the failing output, the recent diff — never a vague description. A short prompt invites a plausible-looking fix to a plausible-looking bug, neither of which is real.
 3. **Symptom fixes are not root-cause fixes.** The Agent is biased toward "make the error go away" because that is the visible success signal. The Operator is responsible for pushing past that to *why*.
-4. **Two failed Agent fix proposals = pivot to instrumentation.** Do NOT chain a third proposal. After two misses, stop accepting code suggestions; switch to evidence-gathering — targeted logs, debugger breakpoints, minimal repro, git diff. The next Agent proposal on top of two wrong ones is a guess raised to the third power.
+4. **Equivalent, non-informative Agent fix proposals = pivot to instrumentation.** When proposals share the same causal story and stop changing the evidence, freeze that route and gather discriminating evidence — targeted logs, debugger breakpoints, minimal repro, git diff. A predeclared independent replication may still be informative; another paraphrase of the same guess is not.
 5. **Every fix must be explainable in one sentence.** If you cannot articulate WHY the fix works without copying the Agent's reasoning verbatim, you do not understand it yet. Keep asking until you do. The explainability test is what separates a fix from a workaround.
 
 Full mechanics, beat-by-beat Agent-Operator motion, the autonomous-Agent review-gate rule, and the canonical worked Agent-assisted debugging example are in `references/agent-assisted-debugging.md`.
@@ -224,23 +270,26 @@ Full mechanics, beat-by-beat Agent-Operator motion, the autonomous-Agent review-
 |---|---|---|
 | **Shotgun debugging** | Random code changes hoping one helps. | Stop. Return to Mode 2 beat 3 (hypothesize). Each change must test a stated hypothesis. |
 | **Superstitious debugging** | "The compiler is broken / the framework is broken / the library is buggy." (Code Complete §23, page-577) | Exhaust your own code first. The library is wrong roughly 1 in 100 times; you are wrong roughly 99 in 100. When the library IS wrong, you can prove it with a minimal repro. |
-| **Symptom-hack** | Special-case `if (entity.id == 4521) return default_value`. Hides the bug in a way that looks like a fix. (Code Complete §23, page-575) | Fix at the source layer. If the source layer is "out of scope", file a follow-up to fix it AND surface the symptom with a typed error AND continue working — three things, not one band-aid. |
-| **Fix-without-test** | "I'll write the test after I confirm the fix works." | Untested fixes don't stick. Write the failing test FIRST — it is also the only thing that proves you understand the bug. Cross-ref `superpowers:test-driven-development`. |
+| **Symptom-hack** | Special-case `if (entity.id == 4521) return default_value`. Hides the bug in a way that looks like a fix. (Code Complete §23, page-575) | Prefer the earliest owned invariant boundary. If the source is external/unowned, implement explicit containment or compatibility protection and preserve the causal follow-up. |
+| **Fix-without-regression oracle** | "I'll verify it somehow after I confirm the fix." | Prefer a failing test first. If exact automation is impossible, preserve the strongest repeatable alternative oracle and state the limitation. |
 | **Ego interference** | "My code is fine, the data is corrupt." (Code Complete §23, page-591) | Assume the bug is yours until evidence proves otherwise — the assumption helps you debug (Code Complete §23, page-577). |
 | **Confirmation bias / psychological set** | Seeing what you expect to see. Reading "SYSSTSTS" as "SYSTSTS". (Code Complete §23, page-592) | Have someone else look. Read the line out loud. Get distance — take the break (heuristic above). |
-| **Premature symptom fix** | Fixing at the consuming layer when the source layer is the problem. | Trace data flow backward. Fix at the source. The consuming layer should not have to know. |
-| **"One more fix attempt"** | After 2+ failed fix attempts, trying a third. | STOP. Three failed fixes = either the hypothesis is wrong (return to beat 3) or the architecture is wrong (`superpowers:systematic-debugging` Phase 4.5). Discuss before attempting Fix #4. |
+| **Premature symptom fix** | Patching the visible consumer before locating the causal boundary. | Trace backward first. Repair the earliest owned layer, or explicitly justify external-source containment at the consumer boundary. |
+| **"One more equivalent fix attempt"** | Repeating a causally equivalent change after that route stopped changing the evidence. | Freeze that route. Audit the premise, observer, evaluator, fix layer, architecture, and task grain; resume only with a discriminating prediction or declared independent replication. |
 | **Silent-failure traps** | `try/except: pass`, log-and-continue, optional-chaining-as-skip, retry-without-bound, generic 500 instead of a structured 400. | Don't reproduce the full anti-pattern catalogue here — cross-ref `pr-review-toolkit:silent-failure-hunter` for the 12 named anti-patterns and the severity matrix. If the bug you are debugging is *itself* a silent-failure trap firing, fix the trap first (`defensive-programming`) and the underlying bug becomes loud. |
 | **No-trail debugging** | Hours of debugging that no one else can see or pick up. | Record your investigation at each meaningful step (in your notes, or the PR / issue tracking the fix). If you go idle / blocked, the next Operator or Agent has context. |
 | **"Fix this" prompting** | One-line prompt at the Agent pointing at a file; no error context. | Paste the full stack trace, the failing output, the repro command. Agent quality is bounded by the context you provide. See § Working with the Agent above and `references/agent-assisted-debugging.md`. |
 | **Accepting unexplained Agent fixes** | "Here's the fix" / "Try this" with no reasoning. Operator ships without understanding. | Refuse. Demand the reasoning. If the Agent cannot explain WHY the fix works, the fix is a guess — and a guess from the Agent is no better than a guess from you. Apply the one-sentence explainability test. |
-| **Chaining 4+ Agent fix proposals** | First Agent fix didn't work, ask for another, doesn't work, ask again. | After TWO failed Agent proposals, STOP accepting code suggestions. Pivot to instrumentation. The next proposal is a guess on top of two wrong guesses. |
+| **Chaining equivalent Agent fix proposals** | Each proposal renames the same causal guess without producing new evidence. | Stop that route and instrument. A genuinely different hypothesis must predict a different observation; independent replication must be declared in advance. |
 
 ## After the fix
 
 Three beats. None of them are optional for a non-trivial bug.
 
-1. **Regression test.** Automated if possible. Run the full suite, not just the new test. Cross-ref `superpowers:test-driven-development`.
+1. **Regression oracle.** Prefer an automated red/green test. If exact automation is
+   infeasible, preserve the strongest repeatable alternative oracle and state the limitation.
+   Run the affected checks plus whatever broader suite or target-environment gate the claim,
+   risk, and release contract require. Cross-ref `superpowers:test-driven-development`.
 2. **Similar-defect sweep.** McConnell §23 step 5 — covered above; the section to revisit is "Look for similar defects". Sweep, then record the sweep.
 3. **Surface the lesson.** Write a short, blameless postmortem in the PR description (or wherever the fix is tracked):
    - **What happened** — symptom, root cause, fix (one sentence each).
@@ -284,13 +333,15 @@ Two composite bugs that show the 7-beat motion end to end. The condensed walkthr
 - **`references/bug-shapes.md`** — Long-form vocabulary of the recurring bug archetypes. Each archetype: symptom, where it tends to live, the diagnostic question that resolves it, a real or composite example. This file is expected to grow over time.
 - **`references/worked-examples.md`** — Full long-form walkthroughs of the two worked examples with each beat of the formal protocol traced, the sample queries / SQL / per-type matrix.
 - **`references/anti-patterns.md`** — Rationalization gallery, mirroring `defensive-programming/references/anti-patterns.md`. Two-column table — what the Operator (or Agent) says to justify the shortcut, the rebuttal.
-- **`references/agent-assisted-debugging.md`** — The Agent-collaboration adaptation. Bug classification with Agent diagnostic value, beat-by-beat Agent-Operator motion, confidence calibration habits, the two-failed-attempts pivot, the explainability test, the autonomous-Agent review-gate rule, and a worked Agent-assisted Mode 2 example.
+- **`references/agent-assisted-debugging.md`** — The Agent-collaboration adaptation. Bug classification with Agent diagnostic value, beat-by-beat Agent-Operator motion, confidence calibration habits, the non-informative-route pivot, the explainability test, the autonomous-Agent review-gate rule, and a worked Agent-assisted Mode 2 example.
 
 ## Cross-references
 
-- `superpowers:systematic-debugging` — the universal scientific-method foundation. This skill carries its **iron law** (`NO FIXES WITHOUT ROOT CAUSE`) forward and extends with a vocabulary of recurring bug shapes; for the universal pattern-analysis and 3+-failed-fixes-architectural-problem techniques, read it directly.
+- `superpowers:systematic-debugging` — the universal scientific-method foundation. This skill carries its **iron law** (`NO FIXES WITHOUT ROOT CAUSE`) forward and extends with a vocabulary of recurring bug shapes; for pattern analysis and the architectural audit after repeated non-informative fixes, read it directly.
 - `superpowers:systematic-debugging/root-cause-tracing.md` — the backward-tracing technique used in beat 2.
-- `superpowers:test-driven-development` — required for the failing-test-before-the-fix in beat 6.
+- `superpowers:test-driven-development` — use for failing-test-before-the-fix when an automated
+  red/green oracle is feasible; otherwise preserve and document the strongest repeatable
+  alternative oracle.
 - `superpowers:verification-before-completion` — the fix must actually land in the env where the bug fired; do not declare done based on a green local test alone.
 - `pr-review-toolkit:silent-failure-hunter` — the review-side catalogue of the 12 silent-failure anti-patterns. Cross-referenced here rather than duplicated.
 - `defensive-programming` — the prevention side. Prevention vs diagnosis. If a bug being debugged is a silent-failure trap firing, fix the trap there first; the underlying bug becomes loud.

@@ -6,6 +6,66 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Hard problems with honest proof — late July 2026
+
+**Added**
+- A new **agentic prompt-engineering** helper turns ambitious goals into observable contracts,
+  tests the assumptions most likely to poison a long run, chooses actions for what they can teach,
+  matches every success claim to the right proof, and preserves honest partial, blocked, refuted,
+  or still-unknown outcomes.
+- The helper includes optional playbooks for software, data, research mathematics, and science.
+  It aims for Erdős-like behavior through statement precision, counterexamples, genuinely
+  different method families, proof obligations, structural-loss checks, and independent review—
+  not by asking an assistant to pretend to be a famous mathematician.
+- Mathematical work now records quantifier dependence, near misses, exact representation
+  equivalence, dual certificates, and what a successful proof teaches. Evaluation compares the
+  bare problem, a compact honest contract, and the full scaffold at equal compute.
+- Claude's two newest long-horizon models get separate, dated guidance: one benefits from explicit
+  fresh review at consequential boundaries; the other avoids redundant generic checking. Both
+  still need real acceptance evidence.
+- GPT-5.6 Sol and Codex get their own dated guidance for lean outcome-first prompts, explicit
+  autonomy and stopping boundaries, sparse phase updates, preserved reasoning baselines, and
+  small evaluation-backed prompt changes instead of wholesale rewrites.
+
+**Improved**
+- Loop recovery now distinguishes a repeating response, missing knowledge, avoidance of a hard
+  action, and a whole trajectory built on a false premise. It stops the failing route without
+  giving up on the real objective, then reruns the original and broader proof after repair.
+- Planning keeps useful small-number defaults for ordinary product work without treating turns,
+  slices, tasks, or milestones as universal limits. Complex outcomes can have several mandatory
+  checks, and independent research branches can coexist when their work and proof are truly
+  isolated.
+- The Claude-only subagent preference now follows the Opus family forward to Opus 5 at its full
+  context while keeping the same high reasoning floor. Fable and Mythos remain separate,
+  deliberately excluded choices unless the preference is explicitly changed.
+- Handoffs and deep-thinking notes now lead with the compact state a fresh assistant needs:
+  objective, verified facts and proof, live hypotheses, failed routes, unresolved obligations, and
+  the exact next action. Raw chronology remains available by pointer instead of flooding every new
+  session. When a task board already owns that state, it stays the single source of truth instead
+  of spawning a second handoff file that can drift.
+- Deep-thinking session labels now describe only where that framework landed; they cannot turn a
+  partial, refuted, unverified, or budget-limited owning task into success.
+- Workflow improvement can run as a focused bottleneck investigation or a comprehensive audit.
+  Frameworks are used when they add distinct evidence, diagrams appear only when they clarify the
+  process, and a recommendation does not become an “improvement” until a measured pilot supports
+  it.
+- Debugging and bug intake no longer grind indefinitely or demand an automated reproduction that
+  cannot exist. They can use the strongest available observation, label containment honestly,
+  protect tests from being weakened, proceed through authorized reversible fixes, and report a
+  tentative diagnosis without waiting on a ceremonial confirmation.
+- Software and data work now follows the workflow that matches the job: building a feature,
+  making an architecture choice, refactoring, migrating, improving reliability, releasing,
+  operating a pipeline, recovering an incident, backfilling, validating a stream, or reducing
+  cost. Each route names the proof that actually establishes its outcome.
+- Prompt evaluations now freeze the starting task and state, guard against contamination and
+  test editing, report repeat-run outcome distributions, measure unnecessary work, and identify
+  whether a failure belongs to the prompt, the model, the tools, the runtime, or the evaluator.
+
+**Behind the scenes**
+- Kept the method portable across Claude, Codex, and other skill-compatible assistants with a
+  small core, optional references, and contents maps for long guidance files. No new background
+  agent, hook, command, connection, build step, or retired archive format was introduced.
+
 ## Most recent update — 23 July 2026
 
 **Improved**

@@ -1,19 +1,30 @@
 # Working Canvas
 
-The working canvas is the lossless ledger of a critical thinking session. It is a
-*practice* before it is a file: structured, append-only, confidence-banded reasoning —
-kept inline for quick self-checks, or as a markdown file the operator can watch update
-during the session and return to afterward.
+The working canvas combines a compact **active decision packet** with a lossless **cold
+archive**. It is a practice before it is a file: confidence-banded reasoning kept inline for
+quick self-checks, or as a markdown file the operator can watch during the session and revisit.
+
+## Contents
+
+- [The principle](#the-principle)
+- [Scale to stakes (when the canvas is a file)](#scale-to-stakes-when-the-canvas-is-a-file)
+- [Where the canvas file lives](#where-the-canvas-file-lives)
+- [Canvas template](#canvas-template)
+- [What must never be lost when updating the canvas](#what-must-never-be-lost-when-updating-the-canvas)
+- [Canvas update rules](#canvas-update-rules)
+- [How the canvas relates to chat](#how-the-canvas-relates-to-chat)
+- [Resolution toggle](#resolution-toggle)
+- [Closing the canvas](#closing-the-canvas)
 
 ## The principle
 
-**Externalization beats compression.** When information accumulates, the right response is
-not to summarize (lossy) but to move structure into an external representation (lossless).
-The chat is the conversation. The canvas is the territory.
+**Externalization enables useful compression.** When information accumulates, preserve raw
+material and superseded states in the cold archive, then keep a typed active packet for the next
+decision. The chat is the conversation. The packet is the current map. The archive preserves the
+territory and provenance.
 
-The canvas is **append-only by default**. Items don't get overwritten when their status
-changes — they get tagged with new status. Earlier framings stay visible because they often
-become relevant again.
+Archive entries are append-only by default. The active packet is updated in place when evidence
+changes. Earlier framings stay retrievable without remaining in active reasoning context.
 
 ## Scale to stakes (when the canvas is a file)
 
@@ -30,17 +41,14 @@ conventions and watch-it-update behaviors apply to the file.
 
 ## Where the canvas file lives
 
-When the canvas is a file, propose a path at session start. Default options:
+When the canvas is a file, use the repository's existing convention. Otherwise default to
+`<project-root>/docs/thinking/<date>-<topic>.md` for project work or an available workspace
+artifact directory outside a repo. Ask only when path choice changes visibility, sharing,
+authority, or the requested deliverable.
 
-1. **Operator-specified path** — preferred. Ask: *"Where should I keep the working canvas?
-   You can open it in another window and watch it update."*
-2. **Convention default** — `~/critical-thinking-sessions/<YYYY-MM-DD>-<topic>.md` if the
-   operator wants the agent to pick.
-3. **Project-local** — `<project-root>/docs/thinking/<date>-<topic>.md` when the session
-   is project work.
-
-The agent updates the canvas every turn. If the operator has it open in another editor,
-they'll see the updates as they happen.
+Update the active packet after material evidence, decisions, routes, or obligations change, and
+at natural checkpoints or the operator's request. Append archival detail when it is worth
+preserving. Do not create busywork updates for conversational turns that change nothing.
 
 ## Canvas template
 
@@ -51,6 +59,19 @@ they'll see the updates as they happen.
 **Framework:** <Contemplating | Decision-Making | Design | Problem-Solving | Information Triage | Scientific Inquiry | Strategic / Adversarial>
 **Mode:** <Self-check | Facilitate | Provoke | Recommend>
 **Stacked skills:** <none | logical-reasoning | ...>
+
+---
+
+## Active Decision Packet
+
+- Objective / decision:
+- Governing constraints and non-goals:
+- Verified facts and exact evidence pointers:
+- Live assumptions / hypotheses:
+- Unresolved contradiction:
+- Current decision:
+- Next bounded action and predicted observation:
+- Archive sections needed for that action:
 
 ---
 
@@ -191,8 +212,9 @@ When updating the canvas mid-session, **preserve these things in their original 
 
 ## Canvas update rules
 
-1. **Append, don't overwrite.** If a fact later turns out to be wrong, mark it as
-   `dismissed` with a note — don't delete.
+1. **Update the packet; append the archive.** If an archived fact later turns out to be wrong,
+   mark it `dismissed` with a note rather than deleting provenance. Replace it in the active packet
+   with the current supported state.
 2. **Status tags are open vocabulary.** Common ones: `open`, `tested`, `confirmed`,
    `dismissed`, `deferred`, `revisit`. Use whatever fits.
 3. **Confidence bands are required** on every fact, finding, and conclusion.
@@ -203,18 +225,19 @@ When updating the canvas mid-session, **preserve these things in their original 
    step or input surfaced it. Provenance matters for revisits.
 6. **Visual models embed inline.** When a 2×2 or matrix gets built, paste it as markdown
    into the "Visual Models In Play" section, not just into chat.
-7. **Repeated attempts get ledger rows.** After two materially identical cycles, stop,
-   classify the pair, and route through `loop-escape`. Preserve a valid replication's
-   prediction, independence rationale, bounded repeat count, and stop rule.
+7. **Repeated attempts get ledger rows.** After two materially identical, non-informative
+   cycles, pause that route, classify the pair, and audit through `loop-escape`; this is not a
+   universal task limit. Preserve a valid replication's prediction, independence rationale,
+   bounded repeat count, and stop rule.
 
 ## How the canvas relates to chat
 
 - **Chat is the conversation.** Brief, in-the-moment, responsive.
-- **Canvas is the territory.** Comprehensive, append-only, navigable later.
+- **Active packet is the current map.** Compact, typed, and updated when evidence changes.
+- **Archive is the territory record.** Lossless, append-oriented, and navigable later.
 
-The agent should never replace the canvas with a chat summary. If the operator asks "where
-are we?" — point to the canvas, optionally produce a *checkpoint card* (status snapshot)
-in chat that references canvas sections, but don't rewrite the canvas content into chat.
+Do not replace the archive with a summary or treat the summary as raw evidence. If the operator
+asks "where are we?", return the active packet or a checkpoint card with exact archive pointers.
 
 ## Resolution toggle
 

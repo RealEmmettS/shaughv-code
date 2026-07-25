@@ -6,8 +6,8 @@ description: >-
   criterion. Trigger on "plan this milestone", "scope this out", "help me write the
   tasks", "what's our first slice", "task is too ambitious", "get the basic version
   working first", "break it into steps", "is this slice too big", a vague "works well" /
-  "is ready" / "Foundation complete", more than five milestones, or two materially
-  identical evidence cycles that require stop-the-line re-slicing. Preserves the real end
+  "is ready" / "Foundation complete", an overloaded milestone set, or materially
+  identical evidence cycles that require stop-the-line route review. Preserves the real end
   goal while separating the smallest end-to-end functional rung, integration/hardening,
   and remaining qualification. Applies to Jira epics, Notion briefs, roadmaps, and
   Markdown plans. Pair with loop-escape for repeated no-information execution, critical-
@@ -23,7 +23,14 @@ This is the planning loop for the gap between **a request and what you hand back
 
 Trigger on "plan this milestone," "scope this out," "help me write the tasks," "what's our first slice," "turn this transcript into a plan" — and mid-flight: "help me cut slices," "is this slice too big," "do a post-mortem on this milestone." You can resume from any phase. The retro/meta-feedback loop after each gate gathers informational, internal, and external feedback before solving. This skill soft-gates the three classic dispatch anti-patterns (milestone-sized batch, no baseline, slices too large).
 
-It also triggers on the **milestone-authoring** moments: drafting a new project's 2–5 milestones from scratch; reviewing a milestone before flipping it from `pending` to `in_flight`; a teammate handing you a vague criterion ("works well," "is ready," "Foundation complete," "X is done," "improve Y") and asking for tasks; a milestone stuck at the same progress reading for two or more reviews when someone wants to "just move the dot"; a request for more than 5 milestones, or milestones "fast" with no shaping; and milestone-shaped chunks in any tool (a Jira epic, a Notion plan, a customer-facing roadmap, a Markdown brief). This skill owns both the planning **loop** and the success **criterion** — the binary/demoable gate (see **The success criterion** below).
+It also triggers on **milestone-authoring** moments: drafting a small product milestone set;
+reviewing a milestone before it moves from `pending` to `in_flight`; a teammate handing you a
+vague criterion ("works well," "is ready," "Foundation complete," "X is done," "improve Y") and
+asking for tasks; a milestone stuck at the same progress reading for repeated reviews; a request
+for an overloaded milestone set with no shaping; and milestone-shaped chunks in Jira, Notion,
+roadmaps, or Markdown. This skill owns both the planning **loop** and the success **criterion** —
+the binary/demoable gate below. Sparse-reward research uses `agentic-prompt-engineering` instead
+of product-planning count defaults.
 
 Use it as a recovery method too: when the task feels too ambitious, the operator asks for
 the basic version first, or two consecutive execution cycles produce materially identical
@@ -39,16 +46,20 @@ This is Dave Thomas's loop (*find where you are → take a small step → adjust
 
 The receipts for why this matters live in `references/anti-patterns.md` — the milestone-sized batch that collapsed, and the milestone that inflated 50→107 tasks. Read it when you want the evidence; the soft-gates below encode its lessons.
 
-## The four phases (and the 5-turn budget)
+## The four phases (with proportional defaults)
 
-The whole loop should fit in **about five turns of conversation**. If it's taking longer, you're overplanning — which is itself the anti-pattern. The phases:
+For an ordinary product milestone, the initial pass often fits in **about five turns of
+conversation**. Treat that as an overplanning sensor, not a correctness limit. Horizon is
+dependency depth, not turn count: a research, migration, safety-critical, or high-uncertainty
+milestone can need more interaction when each turn changes evidence or resolves a dependency.
+If planning continues without contact with the real system, shrink the local window. The phases:
 
-| Phase | The question it answers | Output | Turn |
+| Phase | The question it answers | Output | Typical ordinary-milestone turn |
 |---|---|---|---|
 | **0 · Clarify** | What is actually being asked, and what does "done" mean? | A short requirements list the requester would confirm | ~1 |
 | **A · Profile** | What does the real system actually do? | Written findings + a baseline number (if optimizing) | ~1–2 |
-| **B · Spine** | What are the 3–6 demoable slices, and which is first? | Named slices, slice 1 scoped only | ~2–3 |
-| **C · Slice loop** | What are the tasks for *this* slice? | 1–5 tasks; dispatch; gate; **retro**; re-plan | ~3–5, repeating |
+| **B · Spine** | What are the few demoable slices, and which is first? | Named slices, slice 1 scoped only | ~2–3 |
+| **C · Slice loop** | What bounded work advances *this* slice? | Small task set; dispatch; gate; **retro**; re-plan | ~3–5, repeating |
 
 Phase C's loop is *scope → dispatch → gate → retro → re-plan*. The **retro** sub-step (gather feedback on how the planning went, before re-planning) is what makes this skill self-improving — it's detailed in Phase C below and in `references/retro-feedback.md`.
 
@@ -95,7 +106,10 @@ Soft-gates for this phase:
 
 ## Phase B — Spine (high-level, change-absorbing, not detailed)
 
-The spine is how you hold the **whole milestone in view without planning all of it**. Name 3–6 slices, each a one-line *demoable outcome* in sequence. This is Jeff Patton's story-map backbone: the spine is the journey; each slice is a thin vertical cut through it that ships something observable.
+The spine is how you hold the **whole milestone in view without planning all of it**. Name a
+small set of slices—often 3–6 for an ordinary product milestone—each a concise *demoable
+outcome* in dependency order. This is Jeff Patton's story-map backbone: the spine is the journey;
+each slice is a thin vertical cut through it that ships something observable.
 
 The spine's job is to **absorb future change cheaply**. Because later slices are one-liners, not scoped tasks, reshaping them after slice 1 teaches you something costs a sentence, not a re-plan. That is the entire point — it's what makes the plan fluid.
 
@@ -117,24 +131,41 @@ A good first slice is a **walking skeleton**: thin, but it touches every layer (
 
 For the current slice only:
 
-1. **Scope** it into 1–5 tasks. Each task is verb-first, passes the new-hire test (a fresh agent can run it from the description), and carries a verifiable success criterion. Treat the slice's scope as a hypothesis — note what you expect to be true and what would change the plan. The full task-authoring discipline (grounding prompts in code, no hedges, one owner per cross-task action, the contradiction check) is in **The milestone→task hand-off** below.
+1. **Scope** it into the smallest coherent task set—often 1–5 tasks. Each task is verb-first,
+   passes the new-hire test (a fresh agent can run it from the description), and carries a
+   verifiable success criterion. Treat the slice's scope as a hypothesis: name the load-bearing
+   premise, its cheapest falsifier, what you expect to observe, and what would change the plan.
+   Test a cheap high-blast-radius premise before a long dependent chain. The full task-authoring
+   discipline (grounding prompts in code, no hedges, one owner per cross-task action, the
+   contradiction check) is in **The milestone→task hand-off** below.
 2. **Dispatch** against the git posture: one daily workbranch, one worktree per task, slice-only context. (Defer to `git-workflow`; the multi-branch merge pileup in the batch-dispatch failure was a violation of it, caused by dispatching more than one slice's worth at once.)
-3. **Gate** — the slice ends in a demoable output the operator validates by looking at it or running it. Merge to the workbranch; that's a known-good state.
+3. **Gate** — the slice ends in a demoable output checked by the authoritative oracle for its
+   claim. Operator inspection can validate visible acceptance; executable, semantic, physical,
+   formal, or policy claims need the matching evidence. Record a compact completion receipt and
+   only then treat the merged workbranch as known-good.
 4. **Retro** — gather feedback on *how the planning went* before you touch the next plan. This is the meta-feedback step, run after the gate and before the re-plan, while the slice is still fresh. Gather three kinds of feedback — kept separate, and **captured without solving** — then decide what gets promoted into the skills. Full question sets and the post-mortem structure are in `references/retro-feedback.md`; the short version:
    - **Informational** — what diverged from reality, stated flatly. *Not* what we should have asked or should change — naming the fix here makes you stop looking for other divergences. Just the list.
    - **Internal** — your own intuition: what felt off, was the slice the right size, where did you feel overloaded (a stop-the-line signal worth recording even if you pushed through).
    - **External** — what the system actually emitted: error codes, failed deploys, the 429, the false-red tile, the data-trust flag. Quote the real messages.
 
-   Gather all three *before* proposing any fix (the gather/solve firewall — mixing them makes you grab the first fix and miss the rest). Run this lightweight (~3 questions) at every gate; run the full post-mortem at milestone close or after a bad slice.
-5. **Re-plan** — 5 minutes. Now solutions are allowed. Turn the retro's informational divergences into the questions the *next* slice's scope will answer; reshape the spine explicitly; promote any recurring surprise into the skills (the meta-loop below). *This is where the loop earns its keep* — the plan adjusts at slice speed, not milestone speed.
+   Gather all three *before* proposing any fix (the gather/solve firewall — mixing them makes you grab the first fix and miss the rest). For routine gates this can be a few compact questions; use the full post-mortem at milestone close, after a bad slice, or when the result changes the global skeleton.
+5. **Re-plan** — keep this bounded and decision-focused. Turn the retro's informational
+   divergences into the questions the *next* slice's scope will answer; reshape the spine
+   explicitly; promote any recurring surprise into the skills (the meta-loop below). At the first
+   contradictory observation, invalidate dependent assumptions and tasks before extending the
+   route. *This is where the loop earns its keep* — the plan adjusts at slice speed, not
+   milestone speed.
 
 Three standing rules keep the loop stable (full reasoning in `references/anti-patterns.md`):
 
 - **Stop the line.** If neither operator can state what is currently verified-working, stop dispatching until a gate restores a known-good state. Overload is a stop condition, not a push-through condition.
-- **WIP limit — one slice in flight per operator.** The constraint is operator validation attention, not agent output. Work is pulled at the pace you can validate, never pushed at the pace agents can produce.
-- **Duplicate-cycle cutoff.** Two consecutive attempts with the same relevant starting
-  state, intervention, and observation trigger `loop-escape`. Record what changed and what
-  information each produced; do not authorize a third duplicate as "one more try."
+- **WIP default — one coupled slice in flight per operator.** The constraint is operator
+  validation attention, not agent output. Independent branches may run concurrently only when
+  they have isolated artifacts, genuinely different information boundaries, and a shared oracle.
+- **Duplicate-route audit.** Two consecutive attempts with the same relevant starting state,
+  causal hypothesis, strategy family, oracle, and observation normally trigger `loop-escape`.
+  Record what changed and what information each produced. Retire or change the route; do not treat
+  this as a universal two-attempt task stop or suppress predeclared noisy replication.
 
 ### Recovery ladder for a stalled or over-ambitious slice
 
@@ -157,7 +188,13 @@ than grinding indefinitely or dropping it invisibly.
 
 ## The success criterion
 
-A milestone is the unit of demoable progress, and it has exactly one job: **be the thing whose criterion you would point at to call it done.** That criterion has to be checkable by someone who is not you in under five minutes, without judgment calls. Everything else — progress reading, appetite, tasks, demo format — is downstream of that one sentence. Get the sentence right first; the rest follows for free. Get the sentence wrong and every downstream artifact inherits the vagueness. This is why a sound process rejects "Foundation complete" or "OCR pipeline works well" no matter who wrote it: a sentence the team cannot check is a sentence the team cannot ship against.
+A milestone is the unit of demoable progress, and it has exactly one job: **name the outcome whose
+mandatory acceptance rows permit it to be called done.** Use one concise outcome statement plus
+as many non-overlapping acceptance rows as the real claim requires. Each row must be independently
+checkable in a bounded way without hidden judgment calls. Everything else — progress reading,
+appetite, tasks, demo format — is downstream of that outcome and acceptance map. This is why a
+sound process rejects "Foundation complete" or "OCR pipeline works well": the team cannot identify
+the deciding observation.
 
 Scoping the criterion happens **before** any task is generated, any progress reading is set, or any appetite is locked. If the criterion fails the gate below, **stop**. Do not generate tasks. Do not update the progress reading. Do not extend the appetite. Rewrite the criterion. It is a sentence, not a redesign.
 
@@ -165,18 +202,34 @@ Scoping the criterion happens **before** any task is generated, any progress rea
 
 Apply these three questions, in order. If any answer is no, the criterion fails. Rewrite before continuing.
 
-1. **One sentence?** If you need two, you have two milestones. Split.
-2. **Binary?** A stakeholder who is not you, looking at the output in five minutes, can call it done or not-done without a judgment call. No percents. No "mostly." No "works well." If a vague word slips in, run the **number test**: replace it with a number or a proper noun. "Fast" → "under 2 s." "Real data" → "the Northwind sample database." "Users" → "the two named reviewers." "Reliable" → "passes the 50-invoice fixture set with zero failures." "Observable" / "monitored" → name the surface: "emits to the logging backend and shows a green tile on the status dashboard." A criterion that says a system is "reliable," "monitored," or "production-ready" without naming the observability surface is hiding the monitoring work — the number test drags it back into scope.
-3. **Demoable?** A non-technical stakeholder can be shown the result and nod. Internal-only deliverables (a migration, a CI change, a refactor) demo by **consequence** — show the thing the change enables, not the change itself.
+1. **Concise outcome?** Can one short statement name the semantic result? If it names unrelated
+   outcomes with separate dependency paths, split them. Multiple conjunctive acceptance rows do
+   not automatically mean multiple milestones.
+2. **Decidable rows?** An independent reviewer can call each mandatory row
+   `PASS`, `FAIL`, `NOT RUN`, or `INDETERMINATE` from a named oracle. No "mostly" or "works well."
+   If a vague word slips in, run the **number test**: replace it with a number, proper noun, exact
+   state, or named evidence surface. "Fast" → "under 2 s." "Real data" → "the Northwind sample
+   database." "Reliable" → "passes the 50-invoice fixture set with zero failures."
+3. **Observable at the claim's layer?** A stakeholder or independent verifier can inspect the
+   result through the appropriate executable, semantic, physical, formal, or review oracle.
+   Internal-only deliverables demo by **consequence** where the claim is behavioral.
 
-If you cannot point at the output and call it done in five minutes, the criterion has failed. Stop, rewrite, retest.
+If you cannot name the bounded observation that decides each row, the criterion has failed. Stop,
+rewrite, and retest. Valid non-success outcomes include partial, blocked, refuted, indeterminate,
+unverified, and unknown within a finite budget; a clear criterion does not force a false success.
 
-### Invariants you do not get to negotiate
+### Operating defaults and invariants
 
-These are enforced by the methodology (and, where a tracking tool is involved, by the tooling). Working around them produces the failures the methodology is specifically designed to prevent.
+The acceptance/oracle map and honest status are invariants. The numeric shapes below are strong
+defaults for ordinary product planning, not universal laws for sparse-reward research,
+mathematics, science, or genuinely independent parallel work.
 
-- **2–5 milestones per project.** Fewer than 2 is just the project. More than 5 means some are tasks (route them as tasks under the appropriate milestone, not as milestones themselves). If a teammate asks for "9 milestones, fast," produce 3–5 with binary criteria and list the rest as candidate task-grain work under the relevant milestone. **Do not produce both versions.** The non-compliant version becomes a live option once it is written down; that is the loss.
-- **One milestone in flight per project.** When you flip the next milestone to in-flight, the previous one is already done. Every roll-up view ("where are we?") anchors on the current milestone — two in-flight forces every view to guess.
+- **Usually 2–5 milestones per ordinary product project.** More often means some items are tasks or
+  slices; fewer may mean the project itself is the useful milestone. Preserve more only when each
+  is a real independently accepted outcome.
+- **Usually one coupled milestone in flight per project.** More than one is legitimate only when
+  dependencies, ownership, artifacts, and acceptance are genuinely isolated. Roll-up views must
+  not guess which state governs the project.
 - **Progress reading uses discrete anchors, not a continuous slider.** Use a small set of named anchors (e.g. early / mid / "I can see all the remaining work" / late / nearly-done) rather than a free-floating percentage. The "I can see all the remaining work" anchor specifically means exactly that. A milestone stuck at the same anchor for three reviews is the dashboard working correctly — it is telling you the milestone is stuck. Moving the dot does not unstick the milestone; it falsifies the most-trusted signal in the review ritual.
 - **Appetite is a time budget, not an estimate.** If the criterion overruns the appetite, reshape or drop — do not extend silently.
 
@@ -226,7 +279,12 @@ These are the rationalizations agents and operators use when they slip. Each one
 
 ### Outside a tracking tool
 
-The binary/demoable test is identical for Jira epics, Notion plans, customer-facing roadmaps, and Markdown briefs. The shape changes (no progress-reading enum, no milestone-order integer, no anchor invariant) but the criterion-writing discipline does not. Apply the gate universally, including the number test. The 2–5-per-project invariant translates: if a Jira epic has nine "sub-epics," some of them are stories — collapse.
+The binary/demoable test is identical for Jira epics, Notion plans, customer-facing roadmaps, and
+Markdown briefs. The shape changes (no progress-reading enum, no milestone-order integer, no
+anchor invariant) but the criterion-writing discipline does not. Apply the gate universally,
+including the number test. The 2–5 shape remains a product-planning heuristic: if a Jira epic has
+nine tightly coupled "sub-epics," some are probably stories; independently accepted parallel
+outcomes may remain separate.
 
 ### Worked end-to-end example (the gate in action)
 
@@ -265,7 +323,7 @@ When you catch yourself or the user reaching for one of these, surface it:
 | No baseline | Optimizing without measuring the before-state | One profiling task that outputs a number |
 | Slice too large | First slice touches many tables/views/screens | Challenge for the thinnest end-to-end cut |
 | Profiling-as-project | The investigation grows a plan and a task graph | Timeboxed spike, point it at the real thing |
-| Overplanning | >5 turns and still no contact with the system | Ship the spine, start slice 1, learn |
+| Overplanning | Planning continues without a state or information change | Ship the spine, start slice 1, learn |
 | Decision-not-a-task | "We'll figure out X when we get there" | Make X a decision task now, with a binary/demoable outcome (run the criterion gate on it) |
 | Evidence-free retry loop | Same candidate/intervention/observation twice, no narrower hypothesis | Stop, run `loop-escape`, repair observability or re-slice to the smallest discriminating rung |
 
@@ -294,6 +352,9 @@ Promotion is a content change to this plugin — per the repo's lockstep rules i
 - **`loop-escape`** owns the convergence checkpoint and duplicate-cycle verdict. This
   skill owns re-slicing the preserved goal into functional, hardening, and qualification
   rungs once that checkpoint routes here.
+- **`agentic-prompt-engineering`** owns sparse-reward research, model overlays, domain-specific
+  SWE/data/math/science prompt controls, and the broader evidence/terminal-state contract. Use it
+  when ordinary product-milestone defaults do not fit.
 
 ## Reference index
 

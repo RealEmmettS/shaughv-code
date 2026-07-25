@@ -7,6 +7,18 @@ Pull this when:
 - Another teammate — Operator or Agent (the Agent in your session) — is making one.
 - You are reviewing a PR whose description hints at one — "quick fix to unblock the demo", "added a defensive check", "rolled back, will investigate later".
 
+## Contents
+
+- [The mode-shortcut excuses (skipping Mode 2 when Mode 2 is required)](#the-mode-shortcut-excuses-skipping-mode-2-when-mode-2-is-required)
+- [The fix-layer excuses (fixing at the symptom, not the cause)](#the-fix-layer-excuses-fixing-at-the-symptom-not-the-cause)
+- [The oracle excuses (erasing regression evidence)](#the-oracle-excuses-erasing-regression-evidence)
+- [The sweep excuses (skipping the look-for-similar-defects beat)](#the-sweep-excuses-skipping-the-look-for-similar-defects-beat)
+- [The cognitive-trap excuses (where the bug is in your head, not the code)](#the-cognitive-trap-excuses-where-the-bug-is-in-your-head-not-the-code)
+- [The trail excuses (skipping the debugging trail)](#the-trail-excuses-skipping-the-debugging-trail)
+- [The "spirit vs letter" excuses (the meta-rationalization)](#the-spirit-vs-letter-excuses-the-meta-rationalization)
+- [The Agent-collaboration excuses (specific to Agent-Operator pairs)](#the-agent-collaboration-excuses-specific-to-agent-operator-pairs)
+- [The closing principle](#the-closing-principle)
+
 ---
 
 ## The mode-shortcut excuses (skipping Mode 2 when Mode 2 is required)
@@ -14,7 +26,7 @@ Pull this when:
 | Rationalization | Rebuttal |
 |---|---|
 | *"It's just a small bug, Mode 1 is fine."* | Mode 1 explicitly does NOT apply when the bug is user-visible in prod, touches a write path, or involves system-of-record data. Re-read `references/lightweight-triage.md` § Hard escalation triggers — if any trigger fires, the bug is Mode 2 regardless of size. |
-| *"I've already tried Mode 1 three times, one more attempt and I'll get it."* | Three failed attempts is not "almost there" — it's signal that the hypothesis is wrong, the fix layer is wrong, or the architecture is wrong (`superpowers:systematic-debugging` Phase 4.5). Escalate. The fourth attempt costs more than the formal protocol it bypasses. |
+| *"This equivalent Mode 1 attempt might work if I repeat it again."* | Once a route stops changing the evidence, freeze it. Audit the hypothesis, observer, fix layer, and architecture; repeat only under a declared replication plan or with a prediction that discriminates a new cause. |
 | *"There's no time for the full protocol, the demo is in an hour."* | Systematic debugging is **faster** than guess-and-check thrashing — the McConnell 20-to-1 statistic is the headline. Under deadline pressure, the protocol is what protects you from shipping a band-aid you'll spend tomorrow morning unwrapping. |
 | *"It's intermittent, I can't really repro it, so I'll just guess at the fix."* | Guessing at the fix on an intermittent bug is the worst outcome — at best lucky, at worst makes the bug less frequent without solving it (now it's hard to even know if your fix worked). **Instrument first, fix second.** See `references/bug-shapes.md` § Lock-conflict masquerading. |
 | *"It works on retry, so it's transient — just add retry logic."* | Sometimes true; often a lock-conflict-masquerading bug where the retry path is masking a real problem (idempotency replay, partial write, race). Confirm the retry is correct AND the operation is idempotent before declaring it solved. |
@@ -34,14 +46,14 @@ Pull this when:
 
 ---
 
-## The test excuses (skipping the failing-test-before-the-fix beat)
+## The oracle excuses (erasing regression evidence)
 
 | Rationalization | Rebuttal |
 |---|---|
-| *"I'll write the test after I confirm the fix works."* | Untested fixes don't stick. A test written AFTER the fix is "what does this code do?" — it codifies whatever you happened to ship. A test written BEFORE the fix is "what SHOULD this code do?" — it codifies the bug's absence as a property. Cross-ref `superpowers:test-driven-development`. |
-| *"This bug is too hard to write a test for."* | Almost always means you don't fully understand the bug yet. The act of writing a test that reproduces it is the act of stating exactly what's wrong. If you cannot write a failing test, you cannot articulate the bug — which means you cannot defensibly fix it. |
+| *"I'll write the test after I confirm the fix works."* | When an automated oracle is feasible, a red test written before the fix states what SHOULD happen and proves the test detects the defect. Prefer that sequence. When exact automation is infeasible, preserve the pre-fix failure through the strongest repeatable manual, state-based, statistical, trace, or target-environment oracle before changing code. Cross-ref `superpowers:test-driven-development`. |
+| *"This bug is too hard to write a test for."* | Do not use test difficulty to erase the oracle. First try to isolate an automatable seam. If a finite attempt shows exact automation is infeasible, record why, preserve the strongest repeatable alternative oracle, and constrain the claim to what that oracle can actually prove. |
 | *"It's just a config / data change, no test needed."* | Config changes break things too. Partition-key changes, env var renames, feature flag flips — all of these have shipped real outages. If the change has a runtime effect, the effect can be tested (deployment smoke test, post-deploy assertion, manual repro script). |
-| *"I'll skip the regression test, the manual repro is enough."* | The bug WILL come back — every engineer has watched a bug reappear after a different change re-introduced it. The regression test is the only thing that catches the re-introduction in CI rather than in prod. |
+| *"I'll skip the regression test, the manual repro is enough."* | A repeatable manual repro can be the strongest available oracle, but it creates evidence debt because CI cannot replay it. Record the exact steps and raw result, explain why automation is infeasible, and create a follow-up when the risk warrants converting it into an automated regression check. |
 | *"Tests are flaky in CI, I'll just merge."* | Flaky tests are a separate bug; treat them as Mode 2 themselves, don't paper over them. Merging through flake is how flake becomes the team's default and the test suite stops being trusted. |
 
 ---
@@ -86,7 +98,7 @@ These are the second-order excuses — when an Operator (or Agent) admits they'r
 
 | Rationalization | Rebuttal |
 |---|---|
-| *"I'm following the spirit of the protocol — Stabilize and Locate are the same beat for this bug."* | They are not. Stabilize is "I can reproduce it on demand." Locate is "I know which layer the cause lives in." Conflating them means you proceed to fix without confirming stability — and an unstable bug's "fix" is just the bug going dormant. **Violating the letter of the protocol is violating the spirit of the protocol.** |
+| *"I'm following the spirit of the protocol — Stabilize and Locate are the same beat for this bug."* | They answer different questions. Stabilize is "what repeatable failure or preserved signature will distinguish change?" Locate is "which layer most likely contains the cause?" Keep both answers explicit even when one experiment supplies evidence for both. |
 | *"The protocol is fine in general but this bug is special."* | Almost never true. Bugs that feel special are usually bugs you don't yet understand — and the protocol's first beats (stabilize, locate, hypothesize) are designed to dissolve the feeling of specialness by producing evidence. The bug being "special" is itself the signal that the protocol applies. |
 | *"This is Mode 1 because I've decided it's Mode 1."* | Mode selection is determined by the explicit hard escalation triggers in `references/lightweight-triage.md`, not by your preference. If any trigger fires, the bug is Mode 2 — your discomfort about Mode 2 taking longer is not the trigger, it's the bias the triggers exist to override. |
 
@@ -101,9 +113,9 @@ These are the additional rationalizations that show up when an Agent is in the l
 | *"The Agent said it should work."* | "Should work" is not a hypothesis. Demand the reasoning. If the Agent cannot articulate WHY the fix works, treat the proposal as a guess (and a guess from the Agent is no better than a guess from the Operator). |
 | *"I'll just paste the file and ask the Agent to fix it."* | "Fix this" is the fastest way to hallucinate. Paste the FULL stack trace, the failing output, and the recent diff. The Agent's quality is bounded by the context you provide. |
 | *"The Agent is very confident, so I'll ship it."* | Calibrate first. Ask "high / medium / low confidence — what would falsify this?" An Agent that cannot articulate a falsifying outcome is searching for confirmation, not running an experiment. Weight the proposal accordingly. |
-| *"I've tried three Agent fix proposals, one more and we'll get it."* | After two failed Agent proposals, stop. Pivot to instrumentation — logs, breakpoints, minimal repro, git diff. The next Agent proposal on top of two wrong ones is a guess raised to the third power. |
+| *"The Agent rephrased the same fix, so it counts as a new route."* | Causal equivalence, not wording or count, decides. Freeze the non-informative route and gather discriminating logs, breakpoints, a minimal repro, or a targeted diff before another proposal. |
 | *"The Agent ran the tests — we're good."* | Verify the test was failing BEFORE the fix. A test that passes both before and after the fix is testing the wrong thing. Run the test against the unfixed code to confirm it actually catches the bug. |
-| *(Autonomous Agent thinking)* *"This is a small enough fix that I can just ship it."* | For anything Mode 2 — anything user-visible in prod, anything in a write path, anything touching system-of-record data — the autonomous Agent posts a `question`-status MC update with the CONTEXT / QUESTION / OPTIONS format and waits for Operator sign-off BEFORE applying. The review gate moves to MC; it does not disappear. |
+| *(Autonomous Agent thinking)* *"This is a small enough fix that I can ignore the authority boundary."* | Mode does not grant authority. The Agent may investigate and apply authorized, reversible, in-scope changes, recording the causal story and evidence. It pauses before irreversible or external actions, material scope changes, missing-authority steps, or owner-only trade-offs, and presents the smallest blocked decision. |
 
 ---
 

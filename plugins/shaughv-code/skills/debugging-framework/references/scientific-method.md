@@ -6,6 +6,17 @@ The Code Complete §23 source material that grounds the formal protocol in `SKIL
 
 All page citations refer to the page-numbered Markdown extract of Steve McConnell's *Code Complete, 2nd Edition*, Chapter 23 "Debugging." Page numbers are the printed page (which matches the file naming `page-NNN/markdown.md` in the OCR processed copy).
 
+## Contents
+
+- [Why this matters — the 20-to-1 gap](#why-this-matters--the-20-to-1-gap)
+- [Foundational mindset](#foundational-mindset)
+- [The scientific method — five steps](#the-scientific-method--five-steps)
+- [Anti-patterns — what guarantees thrashing](#anti-patterns--what-guarantees-thrashing)
+- [Psychological barriers](#psychological-barriers)
+- [When to stop and reset](#when-to-stop-and-reset)
+- [Tools](#tools)
+- [How this maps to SKILL.md](#how-this-maps-to-skillmd)
+
 ---
 
 ## Why this matters — the 20-to-1 gap
@@ -44,7 +55,12 @@ McConnell's five steps map cleanly onto the seven beats in `SKILL.md` (we split 
 
 > *"If a defect doesn't occur reliably, it's almost impossible to diagnose."* — page-579
 
-Simplify the test case until changing any one aspect changes the behavior. A bug you cannot reproduce is a bug you cannot fix — and a "fix" applied to an unstable bug is at best lucky and at worst a band-aid that makes the real bug intermittent.
+Simplify the test case until changing any one aspect changes the behavior. Exact reproduction is
+the strongest starting point, but some production, race, hardware, and distributed failures
+cannot be reproduced on demand. Set a finite stabilization budget; if it expires, preserve the
+strongest repeatable signature (for example correlated traces, state evidence, a crash dump, or
+a measured failure rate), instrument the uncertain boundary, and make only a bounded
+hypothesis-driven change that the chosen oracle can distinguish.
 
 ### Step 2 — Locate the source
 
@@ -76,7 +92,10 @@ If you cannot articulate WHY the fix works in one sentence, you are not done deb
 
 > *"Rerun the whole program to check for side effects of your changes."* — page-591
 
-The full suite, not just the new test. A fix that breaks two other tests is not a fix — it is a trade-off you have not negotiated.
+Preserve the intent—check side effects—without treating an unrelated exhaustive suite as ritual.
+Run the affected regression checks plus the broader suite, integration path, or target-environment
+gate required by the claim, risk, and release contract. A fix that breaks another required check
+is not a fix; it is a trade-off you have not negotiated.
 
 ### Step 5 — Look for similar errors
 

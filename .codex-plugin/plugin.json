@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "0.36.1",
-  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for loop escape and convergence recovery, evidence-aware retries, progressive basic-to-complete slicing, critical thinking (seven agent-first thinking frameworks incl. strategic/adversarial reasoning via Art of War, 36 Stratagems, Five Rings, and game theory), OpenAI audio, PreText, Quiver AI, a comprehensive Mistral AI API skill (OCR, audio transcription, text-to-speech, chat, agents, and the full API surface), brand design, animated brandmark, human changelog, CDN usage, naming conventions, Google Cloud Storage, bug triage, code design patterns, debugging, defensive programming, git workflow, a security audit & red-team skill, a session handoff document generator, an iterative milestone-planning method, a workflow-optimization facilitator, image generation, a fal.ai Crystal image upscaler, deliberate learning, logical reasoning, personal productivity, the wb300 git branch / worktree / agent control tower, a usage status-line installer, and the TT;DR \"Too Tired; Didn't Read\" summary convention. (The Claude-only subagent model/effort preference skill is intentionally omitted from the Codex surface. The task + workplace-memory system now lives in the standalone shaughv-tasks plugin.)",
+  "version": "0.37.0",
+  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for advanced long-horizon agentic prompt engineering across software, data, mathematics, and science; falsifiable contracts, evidence receipts, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, convergence recovery, evidence-aware retries, progressive slicing, critical thinking, OpenAI audio, PreText, Quiver AI, Mistral AI, brand design, animated brandmark, human changelog, CDN, naming, Google Cloud Storage, bug triage, design patterns, evidence-backed debugging, defensive programming, git workflow, security audit/red-team, typed session handoffs, iterative milestone planning, proportional workflow optimization, image generation/upscaling, deliberate learning, logical reasoning, personal productivity, wb300, usage status line, and TT;DR. (The Claude-only subagent model/effort preference skill is omitted from Codex. The task + workplace-memory system lives in shaughv-tasks.)",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -22,6 +22,12 @@
     "openai-audio",
     "quiver",
     "critical-thinking",
+    "agentic-prompt-engineering",
+    "prompt-engineering",
+    "long-horizon",
+    "erdos",
+    "gpt-5.6-sol",
+    "completion-receipt",
     "loop-escape",
     "convergence",
     "stuck",
@@ -72,7 +78,7 @@
   "interface": {
     "displayName": "shaughv-code",
     "shortDescription": "Emmett's personal Codex skill bundle.",
-    "longDescription": "Use Emmett Shaughnessy's personal skills in Codex for loop escape and convergence recovery, evidence-aware retries, progressive slicing, SHAUGHV brand work, OpenAI audio, Quiver AI vector generation, naming conventions, human changelogs, CDN usage, and Google Cloud Storage workflows. The Codex surface bundles the same MCP servers as the Claude surface (Remotion documentation, Craft Docs, Shaughv Health, and Pipedream); the /create-video slash command remains Claude-only. Codex installs from a tracked, self-contained package under plugins/shaughv-code/, regenerated from repo root by build-codex-plugin.ps1.",
+    "longDescription": "Use Emmett Shaughnessy's personal skills in Codex for advanced long-horizon prompt engineering, evidence-grounded software/data/math/science workflows, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, progressive slicing, typed handoffs, proportional workflow optimization, SHAUGHV brand work, audio, vector generation, naming, changelogs, CDN, and storage workflows. The Codex surface bundles the same MCP servers as Claude; /create-video remains Claude-only. The package is regenerated under plugins/shaughv-code/.",
     "developerName": "Emmett Shaughnessy",
     "category": "Coding",
     "capabilities": [
@@ -83,6 +89,7 @@
     "websiteURL": "https://github.com/RealEmmettS/shaughv-code",
     "defaultPrompt": [
       "Use shaughv-design to build a SHAUGHV-branded page.",
+      "Use agentic-prompt-engineering to design a reliable long-horizon prompt with acceptance oracles and truthful terminal states.",
       "Use openai-audio to plan a Realtime voice agent.",
       "Use naming-conventions to name files, branches, and commits.",
       "Use loop-escape when work is going in circles without new evidence."

@@ -69,7 +69,8 @@ guidance on how to investigate different types of issues.
 
 ### The Investigation Loop
 
-Follow this cycle — repeat as many times as needed:
+Follow this cycle while it produces information. Set a bounded investigation window for the
+current route:
 
 **1. Gather data through repeatable experiments.**
    - Navigate to the affected tool/page using browser tools
@@ -94,11 +95,18 @@ Follow this cycle — repeat as many times as needed:
    - Did the results support or contradict your hypothesis?
    - If supported: you've likely found the cause. Document it.
    - If contradicted: form a new hypothesis with the expanded data set. Loop back.
+   - Record the evidence pointer, material state change, and what belief narrowed.
 
 **5. Narrow the scope.**
    - With each iteration, narrow down: Is the bug in the frontend, the backend,
      the data layer, the configuration, or the integration between systems?
    - Check what changed recently if you have access to deployment logs or git history.
+
+Each cycle must change at least one of: evidence, hypothesis, discriminator, observer/oracle, or
+verified state. After two structurally equivalent non-informative cycles, stop that route. Preserve
+what was tried, then instrument the failure, ask one material clarification, change the evidence
+source or hypothesis family, or produce a bounded tentative report. Do not repeat the same action
+under different wording.
 
 ### When You Can't Reproduce
 
@@ -108,6 +116,10 @@ too. Document:
 - Possible explanations for why it's not reproducing (timing, data state, permissions,
   caching, user-specific configuration)
 - Suggestions for how to capture more data next time it occurs
+- The strongest alternative oracle available now: authoritative logs, state/query evidence,
+  trace/crash signature, statistical failure rate, or a target-environment observation
+- Status as `NOT_REPRODUCED`, `PARTIAL`, `BLOCKED`, or `INDETERMINATE`; never silently convert
+  absence of reproduction into a solved defect
 
 ### Keep the User in the Loop
 
@@ -129,15 +141,19 @@ This is the bridge between investigation and the formal bug report.
 - Is the issue isolated or could it affect other areas?
 - Is there a workaround the end-user can use in the meantime?
 
-Share your diagnosis with the user and ask if it aligns with their understanding.
-If they have additional context that changes the picture, loop back to Phase 2.
+Share the diagnosis and its evidence state. Ask whether it aligns only when the user's answer could
+materially change the cause, scope, severity, or expected behavior. Otherwise continue with a
+clearly labeled confirmed or tentative diagnosis. If new context contradicts it, return to Phase 2
+with a different discriminating experiment.
 
 ---
 
 ## Phase 4 — Bug Report
 
-Once the investigation is complete and the user confirms the diagnosis, produce a
-formal bug report. Read `references/bug-report-template.md` for the exact structure.
+Once the investigation has enough evidence for a useful handoff—or the bounded route ends—produce
+a formal bug report. User confirmation is welcome but not a universal gate. Read
+`references/bug-report-template.md` for the exact structure and label root cause,
+best-supported hypothesis, reproduction status, missing evidence, and blockers precisely.
 
 The report should be generated as a **markdown file** saved to outputs, with the option
 to convert to docx if the user wants a Word document.

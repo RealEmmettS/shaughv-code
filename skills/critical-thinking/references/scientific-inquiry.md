@@ -12,7 +12,18 @@ isn't a code bug). A purely external, multi-source web research report → the
 End-user tool reports → `bug-triage` intake first.
 
 Run it like every other framework here: ask the sub-questions, batch 2–4 per message,
-canvas every turn, confidence bands on every finding.
+update the canvas after material evidence, decisions, routes, or obligations change and at
+natural checkpoints or the operator's request, and confidence-band every finding.
+
+## Contents
+
+- [Step 1 — Observe / Question](#step-1--observe--question)
+- [Step 2 — Research](#step-2--research)
+- [Step 3 — Hypothesize](#step-3--hypothesize)
+- [Step 4 — Experiment](#step-4--experiment)
+- [Step 5 — Analyze](#step-5--analyze)
+- [Step 6 — Report](#step-6--report)
+- [Worked micro-example](#worked-micro-example)
 
 ## Step 1 — Observe / Question
 

@@ -6,16 +6,16 @@ description: >-
   spawning a subagent, choosing a model or effort/reasoning level for one, writing a Workflow
   script's model/effort params, or authoring a dispatch prompt; also when a new Anthropic lineup
   ships (the mapping-forward procedure lives here) or when installing the rule into a repo/machine
-  (paste-able snippets in references/). Short form: Opus 4.8 [1m] at xhigh (max when needed) for
+  (paste-able snippets in references/). Short form: Opus 5 [1m] at xhigh (max when needed) for
   deep work; Sonnet 5 at max (xhigh when lighter) for fan-out; never Haiku/budget classes, never
-  auto-substitute Fable/mythos, never below xhigh. Set 2026-07-01 per Emmett. Scope: Claude Code /
+  auto-substitute Fable or Mythos, never below xhigh. Set 2026-07-24 per Emmett. Scope: Claude Code /
   Anthropic harnesses only — non-Anthropic agents should ignore this skill.
 ---
 
 # Subagent Model Preference
 
 > **Scope — Claude Code / Anthropic harnesses only.** This convention selects between Anthropic model
-> *classes* (Opus, Sonnet — never Haiku/Fable) and Claude's `xhigh`/`max` effort levels, which exist
+> *classes* (Opus, Sonnet — never Haiku, Fable, or Mythos) and Claude's `xhigh`/`max` effort levels, which exist
 > only on Claude Code and other Claude-model harnesses. On **any non-Anthropic agent, ignore this skill
 > entirely** — its Opus/Sonnet model classes and effort levels have no valid mapping there.
 
@@ -32,7 +32,7 @@ Whenever you spawn a subagent — the `Agent` tool (**including Explore and Plan
 
 **Per model — pick the model that fits the task, then its effort. Prefer the first; never go below either.**
 
-- **Opus 4.8 [1m]:** `xhigh` **preferred** (most situations); `max` allowed when the agent judges it
+- **Opus 5 [1m]:** `xhigh` **preferred** (most situations); `max` allowed when the agent judges it
   needs the deeper reasoning (e.g. the single hardest stage). Role: deep synthesis, planning,
   verification, investigation.
 - **Sonnet 5:** `max` **preferred** (most situations); `xhigh` allowed when the agent doesn't need
@@ -40,9 +40,9 @@ Whenever you spawn a subagent — the `Agent` tool (**including Explore and Plan
   mechanical/bulk work.
 
 Only the **Opus** and **Sonnet** classes are in scope. **Never** a weaker/budget class (no **Haiku**
-or older), and do **not** substitute the **Fable ("mythos") class** — or any other/new class — into
-the Opus or Sonnet slot just because it's new or capable: adopting a different class is a deliberate
-update to this convention, not an automatic remap. **Never below `xhigh`** effort. Which model +
+or older), and do **not** substitute the **Fable or Mythos classes** — or any other/new class — into
+the Opus or Sonnet slot just because either is new or capable: adopting a different class is a
+deliberate update to this convention, not an automatic remap. **Never below `xhigh`** effort. Which model +
 which of its two efforts is the spawning/orchestrating agent's call per situation — just honor each
 model's preferred default and the floor.
 
@@ -62,14 +62,14 @@ an **effort floor**. It is not tied to version numbers. When Anthropic ships a n
 **each named class along its own lineage** (Opus → next Opus, Sonnet → next Sonnet) and keep it in
 role:
 
-- **Opus class — flagship / deepest reasoning.** Today **Opus 4.8 [1m]** → the newest **Opus-class**
+- **Opus class — flagship / deepest reasoning.** Today **Opus 5 [1m]** → the newest **Opus-class**
   model in its **largest-context** variant. Keep **`xhigh` preferred, `max` when needed**.
 - **Sonnet class — workhorse / high-throughput.** Today **Sonnet 5** → the newest **Sonnet-class**
   model. Keep **`max` preferred, `xhigh` when lighter**.
 - **Mind the other classes.** **Haiku** is the excluded budget class (never for subagents). The
-  **Fable ("mythos") class** — and any other or brand-new class — is **not** one of these two slots:
-  do **not** silently map a Fable/mythos model into the Opus or Sonnet role because it's new, large,
-  or capable. Adopting a different class is a *deliberate* update to this convention, never an
+  **Fable and Mythos classes** — and any other or brand-new class — are **not** these two slots:
+  do **not** silently map a Fable or Mythos model into the Opus or Sonnet role because it is new,
+  large, or capable. Adopting a different class is a *deliberate* update to this convention, never an
   automatic role-remap.
 - **The floor holds regardless of names:** never a class below Sonnet, and **never below `xhigh`**
   effort.
@@ -77,7 +77,7 @@ role:
 **At each release:**
 
 1. Find the current **Opus-class** and **Sonnet-class** models (same class lineage as today). Ignore
-   Haiku and any other class (e.g. Fable/mythos) unless this convention is explicitly updated to
+   Haiku and any other class (e.g. Fable or Mythos) unless this convention is explicitly updated to
    include it.
 2. Swap in the new Opus-class and Sonnet-class names; keep each class's preferred/allowed efforts and
    the floor.
@@ -88,7 +88,7 @@ role:
    `{model:'opus'|'sonnet'}` tool aliases if the class keywords change (check current model docs).
 5. Bump the "Set …" date — here, in `references/`, and in any CLAUDE.md installs.
 
-**Rule of thumb:** _Opus + Sonnet classes only (never Haiku, never auto-adopt Fable/mythos), top-ish
+**Rule of thumb:** _Opus + Sonnet classes only (never Haiku, never auto-adopt Fable or Mythos), top-ish
 effort, never below the second-highest effort._
 
 ## Installing the convention outside the plugin

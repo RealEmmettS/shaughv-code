@@ -4,7 +4,7 @@
 > file (`CLAUDE.md`) — or hand it to any repo-scoped Claude Code agent. It sets the model/effort
 > standard for **every subagent spawned while working in this repo**. It mirrors the operator's
 > user-global preference; repo agents should follow it so their fan-out matches the operator's standing
-> default. Set 2026-07-01 per Emmett.
+> default. Set 2026-07-24 per Emmett.
 
 ---
 
@@ -15,14 +15,14 @@ and Plan agents**), `Workflow` agents, or any other subagent — use a top-tier 
 **Never** leave a subagent on a lower model or below `xhigh` effort.
 
 **Per model — pick the model that fits the task, then its effort. Prefer the first; never go below either.**
-- **Opus 4.8 [1m]:** `xhigh` **preferred** (most situations); `max` allowed when the agent judges it
+- **Opus 5 [1m]:** `xhigh` **preferred** (most situations); `max` allowed when the agent judges it
   needs the deeper reasoning (e.g. the single hardest stage).
 - **Sonnet 5:** `max` **preferred** (most situations); `xhigh` allowed when the agent doesn't need the
   extra thinking (e.g. cheaper/faster mechanical fan-out).
 
 Only the **Opus** and **Sonnet** classes are in scope. **Never** a weaker/budget class (no **Haiku** or
-older), and do **not** substitute the **Fable ("mythos")** class or any other/new class into the Opus or
-Sonnet slot just because it's new or capable — adopting a different class is a deliberate change to this
+older), and do **not** substitute the **Fable or Mythos classes** or any other/new class into the Opus or
+Sonnet slot just because it is new or capable — adopting a different class is a deliberate change to this
 convention, not an automatic remap. **Never below `xhigh`** effort. Which model + which of its two efforts
 is the spawning/orchestrating agent's call per situation — just honor each model's preferred default and
 the floor.
@@ -39,22 +39,22 @@ This convention names **two specific model classes** — **Opus** and **Sonnet**
 and an **effort floor**. It is not tied to version numbers. When Anthropic ships a new lineup, advance
 **each named class along its own lineage** (Opus → next Opus, Sonnet → next Sonnet) and keep it in role:
 
-- **Opus class — flagship / deepest reasoning.** Today **Opus 4.8 [1m]** → the newest **Opus-class**
+- **Opus class — flagship / deepest reasoning.** Today **Opus 5 [1m]** → the newest **Opus-class**
   model in its **largest-context** variant. Keep **`xhigh` preferred, `max` when needed**. Role: deep
   synthesis, planning, verification, the single hardest stage.
 - **Sonnet class — workhorse / high-throughput.** Today **Sonnet 5** → the newest **Sonnet-class**
   model. Keep **`max` preferred, `xhigh` when lighter**. Role: high-parallelism fan-out, mechanical/bulk work.
 - **Only the Opus and Sonnet classes are in scope — mind the other classes.** **Haiku** is the excluded
-  budget class (never use it for subagents). The **Fable ("mythos") class** — and any other or brand-new
-  class — is **not** one of these two slots: do **not** silently map a Fable/mythos model into the Opus
-  or Sonnet role just because it's new, large, or capable. Adopting a different class is a *deliberate*
+  budget class (never use it for subagents). The **Fable and Mythos classes** — and any other or brand-new
+  classes — are **not** these two slots: do **not** silently map a Fable or Mythos model into the Opus
+  or Sonnet role just because it is new, large, or capable. Adopting a different class is a *deliberate*
   update to this convention, never an automatic role-remap.
 - **The floor holds regardless of names:** never a class below Sonnet (no Haiku/older), and **never
   below `xhigh`** effort.
 
 **At each release, do this:**
 1. Find the current **Opus-class** and **Sonnet-class** models (same class lineage as today). Ignore
-   Haiku, and ignore any other class (e.g. Fable/mythos) unless this convention is explicitly updated to include it.
+   Haiku, and ignore any other class (e.g. Fable or Mythos) unless this convention is explicitly updated to include it.
 2. Swap in the new Opus-class and Sonnet-class names; keep each class's preferred/allowed efforts and the floor.
 3. If the effort-level names change, preserve the *shape* on the effort ladder: Opus defaults to
    **one below the top** and may go **top**; Sonnet defaults to the **top** and may drop **one below**.
@@ -64,5 +64,5 @@ and an **effort floor**. It is not tied to version numbers. When Anthropic ships
    the `claude-api` reference.)
 5. Bump the "Set …" date.
 
-**Rule of thumb:** _Opus + Sonnet classes only (never Haiku, never auto-adopt Fable/mythos), top-ish
+**Rule of thumb:** _Opus + Sonnet classes only (never Haiku, never auto-adopt Fable or Mythos), top-ish
 effort, never below the second-highest effort._
