@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.1.0] — 2026-07-28
+
+Improved: the SHAUGHV design system now defaults to Makira + Gail Rock, matching the CDN's
+current standard families.
+
+### Changed
+- `skills/shaughv-design/colors_and_type.css` now declares **Gail Rock** (weights 100–700) in
+  place of IBM Plex Mono. `--font-mono` resolves to
+  `"Gail Rock", ui-monospace, "SF Mono", Menlo, monospace`. The token keeps its name because
+  Gail Rock is a true fixed-pitch face (`post.isFixedPitch = 1`, PANOSE proportion 9, uniform
+  `0.650em` advance verified against the live `.woff2` in-browser), so every existing
+  `var(--font-mono)` call site stays correct.
+- `--font-heading` and `--font-sans` are unchanged; Makira still covers display, headings, and
+  body.
+- Both UI kits and the `type-mono` / `type-heading` preview cards follow the token change:
+  `ui_kits/vintage_site/` mono style objects, `ui_kits/personal_site/` `fontFamily` literals,
+  and the vintage footer credit now read Gail Rock.
+
+### Fixed
+- `ui_kits/personal_site/` declared **Unbounded** for every heading in `index.html` and ~40 JSX
+  call sites, but no `@font-face` for it existed — those headings had been silently falling back
+  to `system-ui`. They now use Makira, which is what `--font-heading` already resolved to.
+- `skills/shaughv-design/README.md` claimed "all five families (Unbounded, Makira, IBM Plex
+  Mono)" — a count that never matched its own list — and documented Unbounded as the display
+  face. The type table, the `fonts/` row in both `README.md` and `SKILL.md`, and the substitution
+  notes now describe the real two-family system.
+- `BRANDMARK.md` no longer sets the lockup label in IBM Plex Mono, and its "don't fake the mark"
+  warning no longer references a font the system doesn't ship.
+
+### Removed
+- The 5 orphaned `fonts/IBMPlexMono-*.woff2` and 6 orphaned `fonts/Unbounded-*.woff2` (~844 KB
+  combined). Both families remain available opt-in from the CDN; neither was referenced by any
+  `@font-face` after this change.
+
+### Behind the scenes
+- Added the 7 `fonts/Gail-Rock-*.woff2` weights (~161 KB total), sourced from
+  `cdn.shaughv.com/fonts/gail-rock/woff2/`. Net effect on the skill is ~683 KB smaller.
+- Documented the four practical deltas from IBM Plex Mono in `README.md`: Gail Rock runs ~8%
+  wider (`0.650em` vs `0.600em`), ships no italic cut, and omits the backtick and `→` glyphs —
+  both of which the generic fallbacks in `--font-mono` pick up automatically.
+- Verified all 11 preview cards render with zero horizontal overflow under the wider advance.
+- Claude/Codex manifests and the generated Codex package advance `1.0.2` → `1.1.0`.
+
 ## [1.0.2] — 2026-07-28
 
 Improved: the CDN skill now discovers the live asset catalog instead of carrying a stale copy.

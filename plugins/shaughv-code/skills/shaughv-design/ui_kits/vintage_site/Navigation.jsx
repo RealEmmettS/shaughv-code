@@ -9,7 +9,7 @@ const LINKS = [
 ];
 
 const MONO = {
-  fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+  fontFamily: '"Gail Rock", ui-monospace, monospace',
   fontWeight: 600,
   letterSpacing: "0.14em",
   textTransform: "uppercase",

@@ -1,7 +1,7 @@
 /* global React */
 
 const MONO = {
-  fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+  fontFamily: '"Gail Rock", ui-monospace, monospace',
   fontWeight: 600,
   letterSpacing: "0.14em",
   textTransform: "uppercase",
@@ -104,7 +104,7 @@ function SkillsSection() {
                       minWidth: 22,
                     }}>{String(j + 1).padStart(2, "0")}</span>
                     <span style={{
-                      fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+                      fontFamily: '"Gail Rock", ui-monospace, monospace',
                       fontSize: 12.5, fontWeight: 500, letterSpacing: "0.04em",
                       textTransform: "uppercase",
                       color: "var(--fg)",

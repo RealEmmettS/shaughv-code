@@ -2,7 +2,7 @@
 const { useState } = React;
 
 const MONO = {
-  fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+  fontFamily: '"Gail Rock", ui-monospace, monospace',
   fontWeight: 600,
   letterSpacing: "0.14em",
   textTransform: "uppercase",
@@ -74,7 +74,7 @@ function ProjectCard({ p, isHover, onHover, onLeave }) {
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           {p.tags.map((t) => (
             <span key={t} style={{
-              fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+              fontFamily: '"Gail Rock", ui-monospace, monospace',
               fontWeight: 500, fontSize: 11,
               letterSpacing: "0.06em",
               border: "1px solid rgba(92, 84, 70, 0.30)",

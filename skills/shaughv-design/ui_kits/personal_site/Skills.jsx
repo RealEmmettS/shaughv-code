@@ -18,14 +18,14 @@ function Skills() {
         {SKILL_GROUPS.map((group) => (
           <div key={group.category} style={{ borderLeft: "2px solid #FF5E1A", paddingLeft: 24 }}>
             <h3 style={{
-              fontFamily: "Unbounded", fontWeight: 600, fontSize: 18,
+              fontFamily: "Makira", fontWeight: 600, fontSize: 18,
               color: "#FF5E1A", textTransform: "uppercase",
               margin: "0 0 20px",
             }}>{group.category}</h3>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 10 }}>
               {group.items.map((it) => (
                 <li key={it} style={{
-                  fontFamily: "IBM Plex Mono", fontSize: 13,
+                  fontFamily: "Gail Rock", fontSize: 13,
                   color: "rgba(230,230,230,0.8)",
                   letterSpacing: "0.06em", textTransform: "uppercase",
                 }}>{it}</li>

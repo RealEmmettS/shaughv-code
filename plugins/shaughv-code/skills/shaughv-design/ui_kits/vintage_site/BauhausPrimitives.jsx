@@ -53,11 +53,11 @@ function DotMatrix({ opacity = 0.22, size = 30, color = "rgba(91, 138, 91, 0.7)"
   );
 }
 
-/* Mono caption -- shared style object for IBM Plex Mono labels.
+/* Mono caption -- shared style object for Gail Rock labels.
    Inline-spread into any element that needs the codebase's
    semibold-uppercase-0.14em treatment. */
 const MONO_LABEL = {
-  fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+  fontFamily: '"Gail Rock", ui-monospace, monospace',
   fontWeight: 600,
   letterSpacing: "0.14em",
   textTransform: "uppercase",

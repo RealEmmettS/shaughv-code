@@ -11,8 +11,15 @@
 
 /* --- FONTS ----------------------------------------------------------
    Two-font system:
-     Makira       -- everything visible: display, headings, body
-     IBM Plex Mono -- eyebrows, buttons, labels, metadata, code
+     Makira    -- everything visible: display, headings, body
+     Gail Rock -- eyebrows, buttons, labels, metadata, code
+
+   Both are "standard" families on the SHAUGHV CDN and ship in its
+   combined bundle. IBM Plex Mono and Unbounded are now OPT-IN there --
+   they are no longer part of the default system. If a surface genuinely
+   needs one, link it explicitly rather than reintroducing it here:
+     https://cdn.shaughv.com/fonts/ibm-plex-mono/ibm-plex-mono.css
+     https://cdn.shaughv.com/fonts/unbounded/unbounded.css
    ---------------------------------------------------------------- */
 
 /* Makira -- proprietary, self-hosted. Used for ALL visible type
@@ -61,38 +68,55 @@
   font-display: swap;
 }
 
-/* Monospace -- IBM Plex Mono (metadata, pills, code) */
+/* Monospace -- Gail Rock (eyebrows, labels, metadata, pills, code).
+   A true fixed-pitch face: every glyph advances 0.650em, so tabular
+   metadata and code align. Normal style only -- there is no italic cut,
+   so italics in mono contexts are synthesized. */
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("./fonts/IBMPlexMono-Regular.woff2") format("woff2");
+  font-family: "Gail Rock";
+  src: url("./fonts/Gail-Rock-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gail Rock";
+  src: url("./fonts/Gail-Rock-Extralight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gail Rock";
+  src: url("./fonts/Gail-Rock-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gail Rock";
+  src: url("./fonts/Gail-Rock-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("./fonts/IBMPlexMono-Italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Mono";
-  src: url("./fonts/IBMPlexMono-Medium.woff2") format("woff2");
+  font-family: "Gail Rock";
+  src: url("./fonts/Gail-Rock-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("./fonts/IBMPlexMono-SemiBold.woff2") format("woff2");
+  font-family: "Gail Rock";
+  src: url("./fonts/Gail-Rock-Semibold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("./fonts/IBMPlexMono-Bold.woff2") format("woff2");
+  font-family: "Gail Rock";
+  src: url("./fonts/Gail-Rock-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -201,10 +225,12 @@
 
   /* -- Type tokens ----------------------------------------------------
      Two families: Makira covers ALL display/heading/body type.
-     IBM Plex Mono covers eyebrows, buttons, labels, metadata, code. */
+     Gail Rock covers eyebrows, buttons, labels, metadata, code.
+     Gail Rock has no backtick glyph; the generic fallbacks below pick
+     that one character up automatically. */
   --font-heading: "Makira", "Inter", system-ui, -apple-system, sans-serif;
   --font-sans:    "Makira", "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    "Gail Rock", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Letter-spacing scale */
   --tracking-tight:   -0.02em;
@@ -323,7 +349,7 @@ body {
   line-height: 1.55;
 }
 
-/* Eyebrow -- sage-in-vintage overline above headings. IBM Plex Mono,
+/* Eyebrow -- sage-in-vintage overline above headings. Gail Rock,
    semibold uppercase, 0.14em tracking -- matches the codebase's
    .eyebrow / .control-label pattern. */
 .sv-eyebrow {

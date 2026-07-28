@@ -118,7 +118,7 @@ This is the meta-rule. Any visual transform that doesn't respect layout flow (`s
   <span>© 2026 Emmett Shaughnessy</span>
   <shaughv-mark data-static aria-label="SHAUGHV"
                 className="block h-16 w-auto text-cream-100/70" />
-  <span>Set in Makira &amp; IBM Plex Mono</span>
+  <span>Set in Makira &amp; Gail Rock</span>
 </div>
 ```
 

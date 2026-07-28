@@ -2,7 +2,7 @@
 const { useState } = React;
 
 const MONO = {
-  fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+  fontFamily: '"Gail Rock", ui-monospace, monospace',
   fontWeight: 600,
   letterSpacing: "0.14em",
   textTransform: "uppercase",
@@ -148,7 +148,7 @@ function Field({ label, value, onChange, placeholder, textarea }) {
     background: "var(--sv-cream-50)", color: "var(--fg)",
     border: "1px solid rgba(92, 84, 70, 0.22)",
     padding: "12px 14px",
-    fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+    fontFamily: '"Gail Rock", ui-monospace, monospace',
     fontSize: 13, letterSpacing: "0.02em",
     outline: "none",
     transition: "border-color 180ms ease",

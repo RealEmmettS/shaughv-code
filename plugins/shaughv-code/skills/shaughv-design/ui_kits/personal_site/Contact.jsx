@@ -19,7 +19,7 @@ function Contact() {
       <div style={{ position: "relative", display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: 64, alignItems: "flex-start" }} className="shv-contact-grid">
         <div>
           <h2 style={{
-            fontFamily: "Unbounded", fontWeight: 700,
+            fontFamily: "Makira", fontWeight: 700,
             fontSize: "clamp(56px, 8vw, 128px)", textTransform: "uppercase",
             color: "#E6E6E6", lineHeight: 1, margin: "0 0 32px",
           }}>Get In<br />Touch</h2>
@@ -56,7 +56,7 @@ function Contact() {
           <div style={{ position: "relative", display: "grid", gap: 20 }}>
             {sent ? (
               <div style={{
-                fontFamily: "Unbounded", fontWeight: 600, fontSize: 22,
+                fontFamily: "Makira", fontWeight: 600, fontSize: 22,
                 color: "#FF5E1A", textTransform: "uppercase", textAlign: "center", padding: "60px 0",
               }}>
                 Sent. I&rsquo;ll be in touch.
@@ -71,7 +71,7 @@ function Contact() {
                   data-magnetic
                   style={{
                     background: "#FF5E1A", color: "#E6E6E6", border: "none",
-                    padding: "16px 32px", fontFamily: "Unbounded", fontWeight: 700,
+                    padding: "16px 32px", fontFamily: "Makira", fontWeight: 700,
                     fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
                     cursor: "pointer", justifySelf: "flex-start",
                     transition: "background 300ms ease",
@@ -94,7 +94,7 @@ function Field({ label, value, onChange, placeholder, textarea }) {
   return (
     <label style={{ display: "block" }}>
       <span style={{
-        fontFamily: "IBM Plex Mono", fontSize: 10,
+        fontFamily: "Gail Rock", fontSize: 10,
         color: "rgba(230,230,230,0.6)",
         letterSpacing: "0.2em", textTransform: "uppercase",
         marginBottom: 8, display: "block",
