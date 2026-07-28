@@ -1,7 +1,7 @@
 /* global React */
 
 const MONO = {
-  fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+  fontFamily: '"Gail Rock", ui-monospace, monospace',
   fontWeight: 600,
   letterSpacing: "0.14em",
   textTransform: "uppercase",
@@ -247,7 +247,7 @@ function FooterSection() {
               color: "rgba(250, 250, 248, 0.7)",
             }}
           ></shaughv-mark>
-          <span>Set in Makira &amp; IBM Plex Mono</span>
+          <span>Set in Makira &amp; Gail Rock</span>
         </div>
       </div>
     </footer>
@@ -280,7 +280,7 @@ function FooterColumn({ title, items, external, scrollTo }) {
               style={{
                 display: "flex", justifyContent: "space-between", alignItems: "center",
                 padding: "11px 0",
-                fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
+                fontFamily: '"Gail Rock", ui-monospace, monospace',
                 fontWeight: 500, fontSize: 13, letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 color: "rgba(250, 250, 248, 0.85)",

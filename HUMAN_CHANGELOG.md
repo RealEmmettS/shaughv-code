@@ -6,6 +6,39 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## A new typeface for the brand's labels and code — late July 2026
+
+**Changed**
+- The SHAUGHV design system has a new second typeface. Small text — labels, eyebrows, tech
+  pills, index numbers, code — is now set in Gail Rock instead of IBM Plex Mono. Makira is
+  unchanged and still handles headlines and body text.
+- Both sample site kits and the specimen cards were updated to match, so anything built from
+  them picks up the new face automatically.
+
+**Fixed**
+- The brutalist site kit asked for a display font that was never actually included, so every
+  headline in it had quietly been rendering in the browser's default font instead. Headlines
+  now use Makira, which is what the rest of the system already expected.
+- The written guide claimed the bundle shipped five typefaces, then listed three, and named the
+  wrong one for headings. It now describes the two typefaces that are really there.
+- The brand-mark guide no longer refers to a typeface the bundle doesn't include.
+
+**Removed**
+- Deleted eleven leftover font files for two typefaces that nothing referenced any more. Both
+  are still available on demand from the brand's asset host if a specific project needs them.
+
+**Behind the scenes**
+- Added the seven weights of the new typeface. Even so, the design bundle came out noticeably
+  smaller than before, because far more was removed than added.
+- Wrote down the practical differences from the old typeface: the new one is slightly wider, has
+  no italic version, and is missing two rare characters that the browser fills in automatically.
+- Checked every specimen card to confirm the slightly wider letters don't push any layout out of
+  shape. None did.
+- Confirmed the new typeface really is a fixed-width one — measured directly, rather than
+  trusting the label on it, after the supplied description turned out to be wrong.
+
+---
+
 ## A CDN helper that stays current by design — late July 2026
 
 **Improved**

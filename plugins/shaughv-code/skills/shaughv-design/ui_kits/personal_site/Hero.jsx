@@ -87,7 +87,7 @@ function Hero({ setRoute }) {
         </h2>
 
         <h1 style={{
-          fontFamily: "Unbounded", fontWeight: 800, lineHeight: 0.92,
+          fontFamily: "Makira", fontWeight: 800, lineHeight: 0.92,
           fontSize: "clamp(3rem, 11vw, 11rem)", textTransform: "uppercase",
           color: "#E6E6E6", margin: 0, letterSpacing: "-0.02em",
         }} aria-label="Emmett Shaughnessy" role="img">
@@ -119,7 +119,7 @@ function Hero({ setRoute }) {
             data-magnetic
             style={{
               display: "inline-block", background: "#FF5E1A", color: "#E6E6E6",
-              padding: "18px 38px", fontFamily: "Unbounded", fontWeight: 700, fontSize: 13,
+              padding: "18px 38px", fontFamily: "Makira", fontWeight: 700, fontSize: 13,
               letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none",
               transition: "background 300ms ease",
             }}

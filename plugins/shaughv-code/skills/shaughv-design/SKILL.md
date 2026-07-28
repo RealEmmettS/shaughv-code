@@ -22,7 +22,7 @@ You are an expert designer working in the SHAUGHV brand system — the personal 
 - Import `colors_and_type.css` (or inline the relevant variables).
 - **Place the brand mark per `BRANDMARK.md`:** in any HTML output, drop `assets/animated-brand-mark.js` in and use `<shaughv-mark style="color: var(--fg); height: 56px;"></shaughv-mark>`. In fixed-frame exports (PPTX/PDF) or anywhere JS can't run, embed `assets/SHAUGHV-Official.svg` instead.
 - Use the **vintage palette** (cream + sage + olive + bamboo) as the default — it's the warmer, more print-friendly half of the brand.
-- Use the **brutalist layout language** from `ui_kits/personal_site/` — large uppercase Unbounded headlines, IBM Plex Mono labels, 12-col asymmetric grids, decisive use of sage as the single action color.
+- Use the **brutalist layout language** from `ui_kits/personal_site/` — large uppercase Makira headlines, Gail Rock labels, 12-col asymmetric grids, decisive use of sage as the single action color.
 - **Figurines are optional.** `assets/figurines/` ships five vintage-edition character illustrations of Shaughv at a desk. Use them only on cream/vintage surfaces where the layout has a natural slot for a hero illustration — don't add them by default, and never on the brutalist dark surface. See the FIGURINES section of `README.md` for the placement rules. **When in doubt, leave them out.**
 - For dark-mode or video-first content, switch to the live brand palette (near-black + brand orange `#FF5E1A`) — the brand orange wordmark lives at `assets/SHAUGHV-Orange.png`.
 
@@ -57,7 +57,7 @@ Then build it as an expert designer would: explore, decide on the system, commit
 | `README.md` | Brand context, content fundamentals, visual foundations, iconography |
 | `BRANDMARK.md` | How to render and animate the SHAUGHV mark in any framework — read before placing the mark |
 | `colors_and_type.css` | All design tokens — `@font-face`, palette, semantic vars, type classes |
-| `fonts/` | Self-hosted `.woff2` for Unbounded, Makira, IBM Plex Mono |
+| `fonts/` | Self-hosted `.woff2` for the two standard families: Makira (400–900) and Gail Rock (100–700). IBM Plex Mono and Unbounded are opt-in on the CDN and deliberately not bundled. |
 | `assets/` | SHAUGHV brandmarks: static SVG/PNG + `animated-brand-mark.js` (vanilla drop-in) + `AnimatedBrandMark.jsx` (React/Framer port) + `shaughv-loader.js` (canonical loader, required on every loading state) |
 | `assets/figurines/` | Vintage character illustrations (Shaughv at a desk) — **optional, vintage surfaces only**. See README's FIGURINES section. |
 | `preview/` | Specimen cards showing the system at a glance |

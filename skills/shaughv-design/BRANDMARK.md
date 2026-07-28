@@ -250,7 +250,7 @@ The animated mark is almost always paired with a small monospace label, forming 
     width: auto;
   }
   .brand-lockup-label {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-family: "Gail Rock", ui-monospace, monospace;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     font-size: 0.72rem;
@@ -275,7 +275,7 @@ The label is **optional context** (which surface? which app?). Without it, the m
 2. **Don't bake color into the SVG.** Use `currentColor` and set `color` on the host. This is how the same file works on cream, olive, near-black, and brand-orange backgrounds.
 3. **Don't reduce or "improve" the animation.** The HOLD/PAUSE/STROKE/FILL constants and the 0.16/1/0.3/1 easing are the brand. A 1 s lazy-load fade is not a substitute.
 4. **Don't use the icon variant as the wordmark.** They serve different scales. ≤ 48 px → icon. > 48 px → wordmark.
-5. **Don't replace the mark with text styled like "SHAUGHV" in Unbounded.** The mark is the mark; the geometric letterforms in the SVG do not match Unbounded weight or proportion exactly.
+5. **Don't replace the mark with text styled like "SHAUGHV" in Makira** (or any other face). The mark is the mark; the geometric letterforms in the SVG do not match any system font's weight or proportion exactly.
 6. **Don't animate the static SVG file (`SHAUGHV-Official.svg`) yourself.** Use the JS file. Re-deriving stroke length, stagger timings, and the dual-state morph by hand always produces an off-brand version.
 7. **Don't put the mark inside a coloured shape (badge, pill, circle).** It floats on the surface; the surface provides the contrast.
 8. **Don't render the animated mark below 64 × 64 px.** Hard floor — see [Sizing rules](#sizing-rules). Below that, the morph, stroke math, and timing read as noise. Fall back to the static wordmark (`assets/SHAUGHV-Official.svg`) or `<shaughv-mark data-static>`.

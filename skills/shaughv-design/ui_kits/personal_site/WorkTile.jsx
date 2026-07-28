@@ -35,7 +35,7 @@ function WorkTile({ work, index }) {
       <div style={{ position: "relative", zIndex: 10 }}>
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-          fontFamily: "IBM Plex Mono", fontSize: 11,
+          fontFamily: "Gail Rock", fontSize: 11,
           letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65,
         }}>
           <span>{displayNumber}</span>
@@ -49,13 +49,13 @@ function WorkTile({ work, index }) {
         </div>
         <h3 data-magnetic style={{
           marginTop: 28,
-          fontFamily: "Unbounded", fontWeight: 700,
+          fontFamily: "Makira", fontWeight: 700,
           fontSize: SIZE_TO_TITLE[size], lineHeight: 0.95,
           textTransform: "uppercase", margin: "28px 0 0",
         }}>{work.domain}</h3>
         {work.name !== work.domain && (
           <p style={{
-            marginTop: 10, fontFamily: "IBM Plex Mono", fontSize: 12,
+            marginTop: 10, fontFamily: "Gail Rock", fontSize: 12,
             letterSpacing: "0.18em", textTransform: "uppercase",
             opacity: 0.6, margin: "10px 0 0",
           }}>{work.name}</p>
@@ -74,7 +74,7 @@ function WorkTile({ work, index }) {
                 <a href={c.url} target="_blank" rel="noopener noreferrer" data-magnetic
                   onClick={(e) => e.stopPropagation()}
                   style={{
-                    fontFamily: "IBM Plex Mono", fontSize: 11,
+                    fontFamily: "Gail Rock", fontSize: 11,
                     border: "1px solid currentColor", padding: "4px 10px",
                     borderRadius: 9999, color: "inherit", textDecoration: "none",
                     opacity: 0.8, transition: "all 300ms ease",
@@ -100,7 +100,7 @@ function WorkTile({ work, index }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16 }}>
         {work.tech ? (
           <span style={{
-            fontFamily: "IBM Plex Mono", fontSize: 11,
+            fontFamily: "Gail Rock", fontSize: 11,
             border: "1px solid currentColor", padding: "5px 12px",
             borderRadius: 9999, opacity: 0.75,
           }}>{work.tech}</span>
@@ -128,7 +128,7 @@ function WorkTile({ work, index }) {
           ><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7" /><path d="M8 7h9v9" /></svg></a>
         ) : (
           <span style={{
-            fontFamily: "IBM Plex Mono", fontSize: 11,
+            fontFamily: "Gail Rock", fontSize: 11,
             letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.6,
           }}>Offline</span>
         )}

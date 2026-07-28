@@ -14,7 +14,7 @@ The system is the **intersection of two living codebases**: the brutalist motion
 | `SKILL.md` | Agent-skill front-matter so this folder can be loaded as a Claude Skill |
 | `BRANDMARK.md` | **How to render and animate the SHAUGHV mark in any framework.** Decision tree, drop-in usage, full animation spec, porting checklist. Read this before placing the mark anywhere. |
 | `colors_and_type.css` | All design tokens — `@font-face` declarations, palette, semantic vars, type classes. **The single source of truth for visual atoms.** |
-| `fonts/` | Self-hosted webfonts (Unbounded, Makira, IBM Plex Mono) — `.woff2` |
+| `fonts/` | Self-hosted webfonts (Makira, Gail Rock) — `.woff2` |
 | `assets/` | SHAUGHV brandmarks (static SVG + PNG variants), the **vanilla JS animated drop-in** (`animated-brand-mark.js`), the **React/Framer port** (`AnimatedBrandMark.jsx`), the **canonical loader** (`shaughv-loader.js`), and the **vintage figurine library** (`assets/figurines/` — optional, vintage-only) |
 | `preview/` | Small HTML cards rendered in the Design System tab (one specimen per token cluster) |
 | `ui_kits/personal_site/` | Hi-fi recreation of `emmettshaughnessy.com` — the canonical brutalist surface |
@@ -114,9 +114,11 @@ The non-negotiable visual rules. See `colors_and_type.css` for the underlying to
 
 | Role | Family | Where |
 |---|---|---|
-| Display + headings | **Unbounded** (geometric display) | `h1`–`h4`, billboard hero, section titles |
+| Display + headings | **Makira** (proprietary sans) | `h1`–`h4`, billboard hero, section titles |
 | Body / UI | **Makira** (proprietary sans) | Default body, paragraphs, form inputs |
-| Mono / metadata | **IBM Plex Mono** | Labels, eyebrows, tech pills, index numbers, code |
+| Mono / metadata | **Gail Rock** (proprietary mono) | Labels, eyebrows, tech pills, index numbers, code |
+
+Two families, and only two. Both are `standard` on the SHAUGHV CDN and ship in its combined bundle. **IBM Plex Mono and Unbounded are opt-in** there and are no longer part of the default system — link them explicitly if a surface genuinely needs one.
 
 Aggressive type-step policy: reserve `2xl:` (≥1536 px) for billboard sizes. 13″ laptops at 1280 px should land on the penultimate step.
 
@@ -368,4 +370,26 @@ If you're working on something that needs more pixel-perfect fidelity than this 
 
 ## Font substitution notes
 
-All five families needed (Unbounded, Makira, IBM Plex Mono) ship in `fonts/` with full weight coverage — **no substitutions required**. If a downstream consumer (e.g. PowerPoint export) can't load Makira, use **Inter** as the closest substitute (similar x-height, similar terminal shapes). For Unbounded, fall back to **Archivo Black** or **Inter Display Black**.
+Both families the system needs — **Makira** (400–900) and **Gail Rock** (100–700) — ship in `fonts/` as `.woff2` with full weight coverage, so **no substitutions are required**. In production you can link the CDN bundle instead of copying the files:
+
+```html
+<link rel="stylesheet" href="https://cdn.shaughv.com/fonts/fonts.css">
+```
+
+Keep the local copies for anything sandboxed — Claude Artifacts' CSP blocks every external host, so a CDN-only page renders in fallback faces.
+
+If a downstream consumer (e.g. PowerPoint export) can't load them:
+
+- **Makira** → **Inter** (similar x-height, similar terminal shapes).
+- **Gail Rock** → any true monospace; **IBM Plex Mono** is the closest match and remains available opt-in at `https://cdn.shaughv.com/fonts/ibm-plex-mono/ibm-plex-mono.css`.
+
+### Gail Rock — things to know
+
+Gail Rock replaced IBM Plex Mono as the mono face. It is genuinely fixed-pitch (every glyph advances `0.650em`), so tabular metadata and code align. Four differences from Plex are worth designing around:
+
+| | Detail |
+|---|---|
+| **~8% wider** | `0.650em` per glyph vs Plex's `0.600em`. Mono text runs wider at the same `font-size` — check fixed-width labels, pills, and table columns. |
+| **No italic** | Normal style only, so `<em>` in a mono context gets a synthesized oblique. Prefer color or tracking for emphasis. |
+| **No backtick** | U+0060 is absent; the `ui-monospace` fallback in `--font-mono` picks it up automatically. |
+| **No `→`** | U+2192 is absent (Plex had it). Use an em-dash or the `◆` separator, which no SHAUGHV face carries anyway. |

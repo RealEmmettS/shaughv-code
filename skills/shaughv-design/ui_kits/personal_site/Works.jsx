@@ -47,7 +47,7 @@ function Works({ setRoute }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{
             display: "flex", justifyContent: "space-between",
-            fontFamily: "IBM Plex Mono", fontSize: 12,
+            fontFamily: "Gail Rock", fontSize: 12,
             letterSpacing: "0.18em", textTransform: "uppercase",
           }}>
             <a href="#projects" onClick={(e) => { e.preventDefault(); setRoute("home"); requestAnimationFrame(() => document.getElementById("projects")?.scrollIntoView()); }} data-magnetic
@@ -67,7 +67,7 @@ function Works({ setRoute }) {
             alignItems: "flex-end",
           }} className="shv-works-hero-grid">
             <h1 style={{
-              fontFamily: "Unbounded", fontWeight: 800,
+              fontFamily: "Makira", fontWeight: 800,
               fontSize: "clamp(48px, 10vw, 176px)", lineHeight: 0.88,
               textTransform: "uppercase", color: "#E6E6E6", margin: 0,
               letterSpacing: "-0.02em",
@@ -78,12 +78,12 @@ function Works({ setRoute }) {
             </h1>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
               <span style={{
-                fontFamily: "Unbounded", fontWeight: 700,
+                fontFamily: "Makira", fontWeight: 700,
                 fontSize: "clamp(48px, 5vw, 96px)", color: "#E6E6E6",
                 fontVariantNumeric: "tabular-nums",
               }}><CountUp to={works.length} pad={3} /></span>
               <span style={{
-                fontFamily: "IBM Plex Mono", fontSize: 11,
+                fontFamily: "Gail Rock", fontSize: 11,
                 letterSpacing: "0.18em", textTransform: "uppercase",
                 color: "rgba(230,230,230,0.6)",
               }}>Properties in orbit</span>
@@ -108,7 +108,7 @@ function Works({ setRoute }) {
           <div style={{
             display: "flex", whiteSpace: "nowrap", gap: 56,
             animation: "shv-works-ticker 50s linear infinite",
-            fontFamily: "Unbounded", fontWeight: 600, fontSize: 28,
+            fontFamily: "Makira", fontWeight: 600, fontSize: 28,
             textTransform: "uppercase", color: "#E6E6E6",
           }}>
             {[...works, ...works].map((w, i) => (
@@ -133,7 +133,7 @@ function Works({ setRoute }) {
           display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap",
         }}>
           <span style={{
-            fontFamily: "IBM Plex Mono", fontSize: 11,
+            fontFamily: "Gail Rock", fontSize: 11,
             color: "rgba(230,230,230,0.6)",
             letterSpacing: "0.18em", textTransform: "uppercase",
           }}>Filter:</span>
@@ -193,7 +193,7 @@ function Works({ setRoute }) {
           {filtered.length === 0 && (
             <div style={{
               gridColumn: "1 / -1", padding: 80, textAlign: "center",
-              fontFamily: "IBM Plex Mono", fontSize: 14, color: "rgba(230,230,230,0.6)",
+              fontFamily: "Gail Rock", fontSize: 14, color: "rgba(230,230,230,0.6)",
               letterSpacing: "0.15em", textTransform: "uppercase",
             }}>
               No works match &ldquo;{query}&rdquo;.

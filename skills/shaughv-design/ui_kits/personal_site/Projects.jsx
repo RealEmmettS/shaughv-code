@@ -20,17 +20,17 @@ function ProjectRow({ project, index, hovered, setHover }) {
         position: "relative", overflow: "hidden",
       }}
     >
-      <div style={{ fontFamily: "IBM Plex Mono", fontSize: 12, opacity: isHover ? 0.85 : 0.5 }}>
+      <div style={{ fontFamily: "Gail Rock", fontSize: 12, opacity: isHover ? 0.85 : 0.5 }}>
         00{index + 1}
       </div>
       <div>
         <h3 data-magnetic style={{
-          fontFamily: "Unbounded", fontWeight: 700,
+          fontFamily: "Makira", fontWeight: 700,
           fontSize: "clamp(24px, 3vw, 40px)", textTransform: "uppercase",
           margin: "0 0 8px", lineHeight: 1.05,
         }}>{project.title}</h3>
         <p style={{
-          fontFamily: "IBM Plex Mono", fontSize: 12,
+          fontFamily: "Gail Rock", fontSize: 12,
           letterSpacing: "0.15em", textTransform: "uppercase",
           opacity: 0.6, margin: "0 0 16px",
         }}>{project.category} &mdash; {project.year}</p>
@@ -39,7 +39,7 @@ function ProjectRow({ project, index, hovered, setHover }) {
           opacity: 0.85, margin: "0 0 20px", maxWidth: 420,
         }}>{project.description}</p>
         <span style={{
-          fontFamily: "IBM Plex Mono", fontSize: 11,
+          fontFamily: "Gail Rock", fontSize: 11,
           border: "1px solid currentColor", padding: "5px 12px",
           borderRadius: 9999, display: "inline-block", opacity: 0.7,
         }}>{project.tech}</span>
@@ -59,7 +59,7 @@ function ProjectRow({ project, index, hovered, setHover }) {
         <div style={{
           position: "absolute", inset: 0,
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontFamily: "IBM Plex Mono", fontSize: 12, opacity: 0.6,
+          fontFamily: "Gail Rock", fontSize: 12, opacity: 0.6,
           letterSpacing: "0.2em", textTransform: "uppercase",
         }}>{project.title}</div>
       </div>
@@ -107,12 +107,12 @@ function Projects({ setRoute }) {
         marginBottom: 80, paddingBottom: 24, borderBottom: "1px solid #E6E6E6",
       }}>
         <h2 style={{
-          fontFamily: "Unbounded", fontWeight: 700,
+          fontFamily: "Makira", fontWeight: 700,
           fontSize: "clamp(48px, 7vw, 112px)", textTransform: "uppercase",
           color: "#E6E6E6", lineHeight: 1, margin: 0,
         }}>Selected<br />Works</h2>
         <div style={{
-          fontFamily: "IBM Plex Mono", fontSize: 12,
+          fontFamily: "Gail Rock", fontSize: 12,
           color: "rgba(230,230,230,0.6)",
           letterSpacing: "0.2em", textTransform: "uppercase",
         }}>Index 001 &mdash; {total}</div>
