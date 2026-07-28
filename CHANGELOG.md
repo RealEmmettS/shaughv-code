@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.0.2] — 2026-07-28
+
+Improved: the CDN skill now discovers the live asset catalog instead of carrying a stale copy.
+
+### Improved
+- `skills/shaughv-cdn/SKILL.md` is now a thin router to the CDN's stable `/agents`,
+  `/tree.json`, and `/tree` discovery endpoints. Current family names, asset paths, formats,
+  counts, snippets, cache rules, and license notes remain owned by the live guide and manifest.
+- Opt-in font families, including Gail Rock and Unbounded, are discovered from the live `fonts`
+  block. Future CDN additions no longer require a plugin release just to become visible.
+
+### Fixed
+- Removed the stale 99-asset snapshot, hardcoded font and brand paths, outdated Unbounded format
+  details, and unsupported license claim from the installed skill.
+- Corrected the contributor note that still claimed several skill descriptions exceeded Claude
+  Code's limit after that issue had already been fixed.
+
+### Behind the scenes
+- Claude/Codex manifests and the generated Codex package advance `1.0.1` → `1.0.2`.
+
 ## [1.0.1] — 2026-07-25
 
 Fixed: the Claude surface now matches the documented Claude Code plugin contract exactly. The

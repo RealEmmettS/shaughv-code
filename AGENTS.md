@@ -118,8 +118,8 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
    ---
    ```
    Keep the `description` under **1024 chars** — Claude Code silently skips a
-   skill whose description exceeds the cap (`mistral`, `shaughv-cdn`, and
-   `gcs-storage` currently exceed it and should be trimmed).
+   skill whose description exceeds the cap. All current skills fit; validate
+   the limit again whenever a description changes.
 2. Put supporting docs in `skills/<name>/references/`, code in `examples/`,
    assets in `assets/`.
 3. Bump `version` in `.codex-plugin/plugin.json` if it's a substantive change.

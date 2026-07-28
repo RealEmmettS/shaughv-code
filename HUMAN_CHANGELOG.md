@@ -6,6 +6,22 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## A CDN helper that stays current by design — late July 2026
+
+**Improved**
+- The CDN helper now opens the live guide and catalog whenever it needs an asset instead of
+  carrying a second, aging copy of the catalog inside the bundle.
+- Optional font families now appear through the live font list automatically. Gail Rock and
+  Unbounded are available there today, and future additions will not need another helper rewrite.
+
+**Fixed**
+- Removed an old asset total, remembered file locations, outdated font-format details, and an
+  unsupported license statement from the helper.
+- Corrected a stale contributor note about over-long helper summaries.
+
+**Behind the scenes**
+- Rebuilt both assistant editions of the bundle so they share the new discovery behavior.
+
 ## Making the bundle match Claude's own rulebook — late July 2026
 
 **Fixed**
