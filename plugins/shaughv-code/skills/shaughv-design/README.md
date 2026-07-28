@@ -19,6 +19,23 @@ The system is the **intersection of two living codebases**: the brutalist motion
 | `preview/` | Small HTML cards rendered in the Design System tab (one specimen per token cluster) |
 | `ui_kits/personal_site/` | Hi-fi recreation of `emmettshaughnessy.com` — the canonical brutalist surface |
 | `ui_kits/vintage_site/` | Hi-fi recreation of `shaughv_vintage` — the same brand, vintage edition |
+| `uploads/` | **The original design files — an intentional archive. Do not prune.** See below. |
+
+### About `uploads/`
+
+`uploads/` is the source-material archive: every font cut the brand has ever used (including
+weights, italics, and `.woff` fallbacks that never shipped in `fonts/`), the original brandmark
+and figurine exports, and `SHAUGHV AWS Logo List.md` recording the pre-CDN S3 asset URLs.
+
+**Nothing in this skill references it, and that is correct.** It is not a build input — it's the
+provenance layer, kept so the original files survive independently of whatever the design system
+currently ships. Fonts get swapped, marks get re-exported, hosts get migrated; `uploads/` is what
+makes those decisions reversible.
+
+Keep it **git-tracked**. Do not gitignore it, do not delete it to reduce the skill's size, and do
+not "tidy" the duplicate or hash-suffixed filenames — the duplication is the point. Every heuristic
+that normally flags dead weight (unreferenced, redundant, large) gives the wrong answer here, which
+is exactly why this note exists.
 
 ---
 

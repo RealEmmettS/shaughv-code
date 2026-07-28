@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.1.1] — 2026-07-28
+
+Documented: `skills/shaughv-design/uploads/` is a deliberate archive, not dead weight.
+
+### Added
+- `SKILL.md` gains an `uploads/` row in the file table plus a standing "do not prune" note, and
+  `README.md` gains an **About `uploads/`** section. Both state that the directory holds the
+  original design files — every font cut ever used (including weights, italics, and `.woff`
+  fallbacks absent from `fonts/`), the original brandmark and figurine exports, and the pre-CDN
+  S3 asset list — and that it must stay **git-tracked**.
+- The note records *why* the guidance is needed: `uploads/` is unreferenced, internally duplicated,
+  and comparatively large, so every heuristic normally used to identify removable content points
+  the wrong way. It is the provenance layer that makes font swaps, mark re-exports, and host
+  migrations reversible.
+
+### Behind the scenes
+- No functional or token changes; documentation only. Claude/Codex manifests and the generated
+  Codex package advance `1.1.0` → `1.1.1`.
+
 ## [1.1.0] — 2026-07-28
 
 Improved: the SHAUGHV design system now defaults to Makira + Gail Rock, matching the CDN's

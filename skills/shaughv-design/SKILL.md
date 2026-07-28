@@ -63,3 +63,9 @@ Then build it as an expert designer would: explore, decide on the system, commit
 | `preview/` | Specimen cards showing the system at a glance |
 | `ui_kits/personal_site/` | Brutalist surface recreation — sections, components, click-thru index |
 | `ui_kits/vintage_site/` | Vintage surface recreation — Bauhaus primitives + figurine illustrations |
+| `uploads/` | **Archive — intentional. Do not prune.** The original design files: every font cut ever used (including weights and italics not in `fonts/`), original brandmark and figurine exports, and the pre-CDN asset list. Nothing references it at runtime; that's expected. It exists so the source material survives independently of whatever the system currently ships. Keep it git-tracked. |
+
+> **On `uploads/`:** it is deliberately unreferenced, and it is deliberately kept. Do not
+> "clean it up," gitignore it, or delete it to save space — losing it means losing the
+> original design files. This note exists because every signal an agent normally uses to
+> spot dead weight (unreferenced, duplicated, large) points the wrong way here.
