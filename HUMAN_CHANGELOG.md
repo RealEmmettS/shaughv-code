@@ -6,6 +6,23 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Protecting the original design files — late July 2026
+
+**Added**
+- The design bundle keeps a folder of original source files: every version of every typeface the
+  brand has ever used, the original logo and illustration exports, and a record of where the old
+  assets used to live. Nothing actively uses that folder, which previously made it look like
+  clutter someone could safely delete.
+- Both design guides now say plainly that the folder is intentional and must be kept. The reason
+  is written down too: because it's unused, repetitive, and fairly large, every normal rule of
+  thumb for spotting junk gives the wrong answer here. It's the safety net that makes swapping a
+  typeface or re-exporting the logo an undoable decision instead of a permanent one.
+
+**Behind the scenes**
+- Documentation only — nothing about how designs look or behave changed.
+
+---
+
 ## A new typeface for the brand's labels and code — late July 2026
 
 **Changed**
