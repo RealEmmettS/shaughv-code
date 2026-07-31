@@ -6,6 +6,28 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Repaired a brand icon that wouldn't open — end of July 2026
+
+**Fixed**
+- One of the SHAUGHV icon files — the dark version of the alternative, terracotta-coloured badge —
+  was quietly broken and wouldn't display in anything. A single line inside it said the same thing
+  twice, which is the kind of mistake that makes a strict program give up on the entire file rather
+  than shrug it off. It was spotted while converting the brand icons into artwork for the plugin,
+  which is why that job had to use the green set instead.
+- The duplicated line turned out to be the file's only flaw. The archive of original design files
+  had a clean copy all along, so the repaired file is now an exact match for the original — proof
+  that keeping those originals around, which was written up as a deliberate decision recently,
+  pays for itself. The archived copy was left untouched.
+- The icon now opens and renders properly, which also restores the missing dark half of the
+  terracotta pair. Every other icon and illustration in the design bundle was checked at the same
+  time; all sixteen of them are fine.
+
+**Behind the scenes**
+- The plugin's own artwork didn't change — it still uses the green badge. This release only mends
+  the underlying source file.
+
+---
+
 ## The plugin now shows its own logo in ChatGPT — end of July 2026
 
 **Added**

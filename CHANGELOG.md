@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.2.1] — 2026-07-31
+
+Fixed: `SHAUGHV-Favicon-Dark-Alt.svg` was malformed XML and would not render in any strict parser.
+
+### Fixed
+- `skills/shaughv-design/assets/SHAUGHV-Favicon-Dark-Alt.svg` declared
+  `xmlns:www.serif.com="http://www.serif.com/"` **twice** on the same `<g id="Dark-Alt">` element,
+  which is a well-formedness error, not a warning: strict parsers abort the whole document
+  (`duplicate attribute: line 4, column 65`; librsvg reports
+  `Attribute xmlns:www.serif.com redefined`). The file therefore failed to render anywhere —
+  it was found when converting the brand favicons to PNG for 1.2.0's plugin artwork, which is why
+  that release had to fall back to the sage pair.
+- The duplicate declaration was the file's **only** difference from the pristine export archived at
+  `skills/shaughv-design/uploads/SHAUGHV-Favicon-Dark-Alt.svg`, so removing it makes the two
+  byte-identical (verified by SHA-256). The corruption was introduced when the asset was copied into
+  `assets/`, not present in the original — a concrete instance of the provenance value documented for
+  `uploads/` in 1.1.1. The archived original is untouched.
+- Verified: the file now parses, and renders to a correct 512×512 terracotta-on-near-black icon —
+  the missing dark counterpart to `SHAUGHV-Favicon-Light-Alt.svg`, so the `-Alt` pair is usable
+  again. A sweep of every other SVG under `skills/shaughv-design/` (assets, figurines, and uploads,
+  16 files) found no other well-formedness errors and no other duplicated attribute.
+
+### Behind the scenes
+- Plugin artwork is unchanged: `interface.composerIcon` / `logo` / `logoDark` still point at the
+  sage `assets/shaughv-icon-{dark,light}.png` from 1.2.0. This release only repairs the source SVG.
+- Claude/Codex manifests and the generated Codex package advance `1.2.0` → `1.2.1`.
+
 ## [1.2.0] — 2026-07-31
 
 Added: real SHAUGHV branding on the Codex plugin card, and root `assets/` is now part of the
