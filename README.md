@@ -179,13 +179,15 @@ shaughv-code/
 ├── .codex-plugin/
 │   └── plugin.json          # Codex plugin manifest (skills + MCP)
 ├── .mcp.json                # bundled MCP servers (Remotion, Craft, Health, Pipedream)
+├── assets/                  # plugin branding (Codex interface.composerIcon/logo/logoDark)
 ├── build-codex-plugin.ps1   # regenerates plugins/shaughv-code/ from root
 ├── commands/
 │   └── create-video.md      # /shaughv-code:create-video
 ├── plugins/
 │   └── shaughv-code/        # GENERATED Codex package — do not hand-edit
 │       ├── .codex-plugin/plugin.json   # copy of root manifest
-│       ├── .mcp.json                   # root .mcp.json in Codex's wrapped shape
+│       ├── .mcp.json                   # verbatim copy of root .mcp.json
+│       ├── assets/                     # copy of root assets/
 │       └── skills/                     # copy of root skills/
 └── skills/
     ├── agentic-prompt-engineering/

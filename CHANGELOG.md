@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.2.0] — 2026-07-31
+
+Added: real SHAUGHV branding on the Codex plugin card, and root `assets/` is now part of the
+generated Codex package.
+
+### Added
+- `assets/shaughv-icon-light.png` and `assets/shaughv-icon-dark.png` — 512×512 PNGs rendered from
+  the canonical `skills/shaughv-design/assets/SHAUGHV-Favicon-Light.svg` / `-Dark.svg` (both
+  `viewBox="0 0 250 250"`, each drawing its own filled rounded-square, so they need no padding or
+  background compositing). The `-Alt` (terracotta) pair was not used: `SHAUGHV-Favicon-Dark-Alt.svg`
+  fails to parse (`Attribute xmlns:www.serif.com redefined`), so it cannot supply a light/dark pair.
+- `.codex-plugin/plugin.json` — `interface` gains `composerIcon` and `logoDark`
+  (`./assets/shaughv-icon-dark.png`) plus `logo` (`./assets/shaughv-icon-light.png`). The dark
+  variant serves as the single composer icon because sage-on-near-black keeps the highest internal
+  contrast at composer sizes on either surface. `brandColor` (`#FF5E1A`) and the empty `screenshots`
+  array are unchanged.
+- `build-codex-plugin.ps1` — copies root `assets/` into the package verbatim, file-by-file, using
+  the same loop shape as the skills copy (no exclusions: root `assets/` holds only packaged
+  branding). `assets/` joins the `$required` source preflight, the existing max-path guard covers
+  the new files automatically, and both the build and `-Check` summaries print an `assets` count.
+  Codex resolves `interface.composerIcon` / `logo` / `logoDark` against the **package** root, so
+  shipping the files inside it is what keeps plugin validation from failing with
+  "points to a missing file".
+
+### Changed
+- `.gitattributes` — `*.png -text` pinned beneath the existing `.mcp.json text eol=lf` pin. Git's
+  `* text=auto` already leaves PNGs alone by content sniffing; the explicit pin makes the root ↔
+  package SHA comparison in `-Check` independent of that inference.
+- `README.md` repo-layout tree — adds `assets/` at root and `assets/` inside the generated package,
+  and corrects a stale comment: the package's `.mcp.json` has been a **verbatim copy** since 1.0.1,
+  not "root `.mcp.json` in Codex's wrapped shape".
+- `AGENTS.md`, `CLAUDE.md` — the Codex-package description and the "regenerate after changing root
+  content" trigger lists now include `assets/`; `CLAUDE.md` gains an `assets/` entry under bundled
+  non-skill components noting that Claude Code does not scan it.
+
+### Behind the scenes
+- Verified `shaughv-health` is packaged on **both** surfaces, prompted by a direct question. It was
+  already complete and needed no change: root `.mcp.json`, the byte-identical package copy, the
+  `.codex/config.toml` in-repo fallback, keywords in both plugin manifests plus the marketplace
+  entry, and rows in `README.md` / `AGENTS.md` / `CLAUDE.md` / `CODEX_PROJECT.md`. A live probe of
+  `https://health.emmetts.dev/api/mcp` returns `401` with
+  `WWW-Authenticate: Bearer resource_metadata="…/.well-known/oauth-protected-resource/api/mcp"`,
+  confirming the bundled URL points at a running, OAuth-gated server.
+- A per-MCP-server icon was deliberately **not** added. Neither runtime has a slot for one: Claude
+  Code has no icon field and closed the request to read `icons` from MCP `serverInfo` as not
+  planned, and Codex's icon fields are plugin-level. The correct home for a server's own icon is
+  its `initialize` response (`serverInfo.icons`, MCP SEP-973) — i.e. the health service, not this
+  plugin.
+- Validation on both surfaces: `claude plugin validate ./ --strict` passes, and the Codex plugin
+  validator (`plugin-creator/scripts/validate_plugin.py`) passes against `plugins/shaughv-code/`,
+  which is what proves the three new asset paths resolve to real files inside the archive.
+- No `.mcp.json`, `.codex/config.toml`, or `skills/` content changed. Claude/Codex manifests and the
+  generated Codex package advance `1.1.1` → `1.2.0`; the package now holds 31 skill directories and
+  470 files.
+
 ## [1.1.1] — 2026-07-28
 
 Documented: `skills/shaughv-design/uploads/` is a deliberate archive, not dead weight.

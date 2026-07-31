@@ -10,9 +10,9 @@
     install).
 
     Claude Code still consumes this repo from the root, so root skills/, root
-    .codex-plugin/plugin.json, and root .mcp.json remain the authoring source of
-    truth. This script regenerates the tracked package that Codex snapshots from
-    Git:
+    assets/, root .codex-plugin/plugin.json, and root .mcp.json remain the
+    authoring source of truth. This script regenerates the tracked package that
+    Codex snapshots from Git:
 
         plugins/shaughv-code/
         |-- .codex-plugin/plugin.json   (copied verbatim from root)
@@ -21,6 +21,13 @@
         |                                { "mcpServers": { ... } }, so no rewrite is
         |                                needed. This was a wrap until 1.0.1, when the
         |                                root file adopted the documented shape.)
+        |-- assets/...                  (copied verbatim from root assets/ — the
+        |                                plugin-branding images referenced by the
+        |                                manifest's interface.composerIcon / logo /
+        |                                logoDark. Codex resolves those paths against
+        |                                the PACKAGE root, so the files have to ship
+        |                                inside it or plugin validation fails with
+        |                                "points to a missing file".)
         \-- skills/...                  (copied verbatim from root skills/, EXCEPT
                                          the Claude-only skills listed in
                                          $ExcludeSkills below, which are omitted
@@ -32,7 +39,8 @@
     modifying the worktree.
 
     NEVER hand-edit plugins/shaughv-code/ — it is generated. Edit root content
-    (skills/, .mcp.json, .codex-plugin/plugin.json) and re-run this script.
+    (skills/, assets/, .mcp.json, .codex-plugin/plugin.json) and re-run this
+    script.
 
     Note: .codex/config.toml (the repo-local MCP fallback for Codex sessions run
     inside this repo) is a different, hand-maintained file in a different format
@@ -54,6 +62,7 @@ trap {
 $repoRoot  = $PSScriptRoot
 $mirror    = Join-Path (Join-Path $repoRoot 'plugins') 'shaughv-code'
 $srcSkills = Join-Path $repoRoot 'skills'
+$srcAssets = Join-Path $repoRoot 'assets'
 $srcManif  = Join-Path (Join-Path $repoRoot '.codex-plugin') 'plugin.json'
 $srcMcp    = Join-Path $repoRoot '.mcp.json'
 
@@ -79,7 +88,7 @@ $ExcludeSkills = @('subagent-model-preference')
 $MaxPathWarn = 170
 $MaxPathFail = 200
 
-foreach ($required in @($srcSkills, $srcManif, $srcMcp)) {
+foreach ($required in @($srcSkills, $srcAssets, $srcManif, $srcMcp)) {
     if (-not (Test-Path -LiteralPath $required)) {
         throw "Missing required source: $required"
     }
@@ -142,6 +151,21 @@ function Build-Package {
         $topDir   = ($rel -split '[\\/]', 2)[0]
         if ($ExcludeSkills -contains $topDir) { continue }
         $destPath = Join-Path $Destination (Join-Path 'skills' $rel)
+        $destDir  = [System.IO.Path]::GetDirectoryName($destPath)
+        if (-not (Test-Path -LiteralPath $destDir)) {
+            New-Item -ItemType Directory -Force -Path $destDir | Out-Null
+        }
+        Copy-Item -LiteralPath $file.FullName -Destination $destPath
+    }
+
+    # Copy the branding assets verbatim. interface.composerIcon / logo / logoDark in
+    # the manifest are resolved against the package root, so these files must exist
+    # inside plugins/shaughv-code/ or Codex plugin validation rejects the package.
+    # Nothing here is excluded — root assets/ holds only packaged branding.
+    $assetFiles = Get-ChildItem -LiteralPath $srcAssets -Recurse -File -Force
+    foreach ($file in $assetFiles) {
+        $rel      = Get-RelativePath -Base $srcAssets -Path $file.FullName
+        $destPath = Join-Path $Destination (Join-Path 'assets' $rel)
         $destDir  = [System.IO.Path]::GetDirectoryName($destPath)
         if (-not (Test-Path -LiteralPath $destDir)) {
             New-Item -ItemType Directory -Force -Path $destDir | Out-Null
@@ -234,10 +258,12 @@ if ($Check) {
         }
 
         $skills = (Get-ChildItem -LiteralPath (Join-Path $mirror 'skills') -Directory).Count
+        $assets = (Get-ChildItem -LiteralPath (Join-Path $mirror 'assets') -Recurse -File -Force).Count
         $files  = (Get-ChildItem -LiteralPath $mirror -Recurse -File -Force).Count
         Write-Host "Codex plugin package checked: $mirror" -ForegroundColor Green
         Write-Host "  version : $srcVersion"
         Write-Host "  skills  : $skills directories"
+        Write-Host "  assets  : $assets files"
         Write-Host "  files   : $files"
         Write-Host "  maxpath : $($result.MaxPath) chars (fail limit $MaxPathFail)"
     }
@@ -249,10 +275,12 @@ else {
     $result = Build-Package -Destination $mirror
     $version = (Get-Content -LiteralPath $srcManif -Raw | ConvertFrom-Json).version
     $skills = (Get-ChildItem -LiteralPath (Join-Path $mirror 'skills') -Directory).Count
+    $assets = (Get-ChildItem -LiteralPath (Join-Path $mirror 'assets') -Recurse -File -Force).Count
     $files  = (Get-ChildItem -LiteralPath $mirror -Recurse -File -Force).Count
     Write-Host "Codex plugin package built: $mirror" -ForegroundColor Green
     Write-Host "  version : $version"
     Write-Host "  skills  : $skills directories"
+    Write-Host "  assets  : $assets files"
     Write-Host "  files   : $files"
     Write-Host "  maxpath : $($result.MaxPath) chars (fail limit $MaxPathFail)"
     Write-Host "Never hand-edit plugins/shaughv-code/ - edit root content and re-run this script." -ForegroundColor Cyan

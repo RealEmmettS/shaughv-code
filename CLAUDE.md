@@ -47,16 +47,21 @@ Each of these was added by explicit ask — don't remove them without one:
   the Codex surface. `plugins/shaughv-code/` is a generated, self-contained Codex
   package (a copy of root `skills/` — minus the Claude-only skills in the build
   script's `$ExcludeSkills`, currently `subagent-model-preference` — a verbatim copy
-  of `.mcp.json`, and the Codex
+  of `.mcp.json`, a verbatim copy of root `assets/`, and the Codex
   manifest); `build-codex-plugin.ps1` regenerates it from root; `.codex/config.toml`
   is a repo-local MCP fallback. **Never hand-edit `plugins/shaughv-code/`.** See
   `AGENTS.md` for the full Codex story.
+- **`assets/` at repo root** — the plugin's branding images, referenced from
+  `.codex-plugin/plugin.json` as `interface.composerIcon` / `logo` / `logoDark`.
+  Codex resolves those paths against the *package* root, so the build script copies
+  `assets/` into `plugins/shaughv-code/` and the Codex plugin validator fails if a
+  referenced file is missing. Claude Code does not scan `assets/` and ignores it.
 
 ## Editing a skill
 
 - Edit `skills/<name>/SKILL.md` directly. No `.skill` zip to rebuild — the old
   zip-bundle workflow was retired.
-- After editing root skills (or `.mcp.json` / `.codex-plugin/plugin.json`),
+- After editing root skills (or `assets/` / `.mcp.json` / `.codex-plugin/plugin.json`),
   regenerate the Codex package: `pwsh ./build-codex-plugin.ps1` (verify with
   `-Check`), and commit the regenerated `plugins/shaughv-code/` too.
 - CI (`.github/workflows/validate.yml`) re-runs `build-codex-plugin.ps1 -Check`,

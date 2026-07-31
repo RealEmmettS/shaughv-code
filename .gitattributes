@@ -8,3 +8,9 @@
 # the tracked package stays byte-reproducible. Pin any new *generated* package file
 # the same way.
 .mcp.json text eol=lf
+
+# Same reasoning for the branding images the build script copies into the Codex
+# package: `* text=auto` already leaves them alone because git detects PNG as
+# binary, but pinning them makes the root/package SHA comparison immune to a
+# future attribute change rather than dependent on content sniffing.
+*.png -text

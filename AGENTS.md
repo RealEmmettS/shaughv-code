@@ -54,7 +54,10 @@ flat root (which must stay flat for Claude Code). So the Codex surface is a
 tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 
 - **`plugins/shaughv-code/`** is the self-contained Codex package — a generated
-  copy of root `.codex-plugin/plugin.json`, a verbatim copy of `.mcp.json`, and a
+  copy of root `.codex-plugin/plugin.json`, a verbatim copy of `.mcp.json`, a
+  verbatim copy of root `assets/` (the branding images the manifest's
+  `interface.composerIcon` / `logo` / `logoDark` point at — Codex resolves those
+  paths against the *package* root, so they have to ship inside it), and a
   copy of `skills/` **minus the Claude-only skills excluded by
   `build-codex-plugin.ps1` (`$ExcludeSkills`)** — currently
   `subagent-model-preference`, whose Opus/Sonnet model-class and `xhigh`/`max`
@@ -96,8 +99,8 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 
 - Edit `skills/<name>/SKILL.md` directly. No `.skill` zip to rebuild — the old
   zip-bundle workflow was retired.
-- Regenerate the Codex package after any change to root `skills/`, `.mcp.json`,
-  or `.codex-plugin/plugin.json`: `pwsh ./build-codex-plugin.ps1` (verify with
+- Regenerate the Codex package after any change to root `skills/`, `assets/`,
+  `.mcp.json`, or `.codex-plugin/plugin.json`: `pwsh ./build-codex-plugin.ps1` (verify with
   `-Check`). Commit the regenerated `plugins/shaughv-code/` alongside the root
   change; never hand-edit the package. CI (`.github/workflows/validate.yml`)
   re-runs `build-codex-plugin.ps1 -Check`, validates the JSON manifests, and

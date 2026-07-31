@@ -6,6 +6,34 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## The plugin now shows its own logo in ChatGPT — end of July 2026
+
+**Added**
+- Installing this bundle in ChatGPT's coding assistant used to show it with no artwork. It now
+  carries the SHAUGHV mark — the glasses-and-moustache badge — with one version for light mode and
+  one for dark, so it looks like itself instead of a blank entry in a list.
+- The artwork is built from the brand's own existing icon files, so it matches everything else
+  SHAUGHV rather than being drawn fresh. There is a second, terracotta-coloured set of those icon
+  files, but one of the two is damaged and won't open, so the standard green set was used instead.
+- The packaging step that builds the ChatGPT copy of the bundle now carries the artwork along with
+  it. That matters because the assistant looks for the images *inside* the copy it installs — if
+  they were left behind, it would refuse to install the bundle at all.
+
+**Behind the scenes**
+- Someone asked whether the personal health service is properly bundled for both Claude and
+  ChatGPT. It is, and it already was — nothing needed changing. The connection was checked from
+  end to end, including confirming the live service answers and correctly asks anyone connecting
+  to sign in first. That answer is now written down so the question doesn't have to be re-asked.
+- A health-specific icon was supplied, but there is deliberately nowhere to put it here. Neither
+  assistant currently lets a bundle attach artwork to an individual connected service — Claude
+  looked at supporting it and decided against it. The one place that kind of icon *can* live is
+  inside the health service itself, which is a separate project.
+- Housekeeping alongside the change: the setup notes now mention the new artwork folder, and a
+  stale line describing how one config file gets copied was corrected — it had described an older
+  behaviour that changed a few releases ago. Nothing about the skills themselves changed.
+
+---
+
 ## Protecting the original design files — late July 2026
 
 **Added**
