@@ -74,3 +74,43 @@ jobs:
             exit 1
           }
           Write-Host "version lockstep OK ($codex)"
+
+      - name: CODEX_PROJECT.md freshness (stated release + package counts are real)
+        # CODEX_PROJECT.md silently drifted several releases behind (it still claimed
+        # 0.35.0 / 29 skills / 461 files at 1.2.0) because nothing checked it. These
+        # three numbers are the parts that rot, so they are now asserted against the
+        # manifests and the generated package. Everything else in that file is prose
+        # or a regenerated tree, kept current via the release workflow it documents.
+        shell: pwsh
+        run: |
+          $doc     = Get-Content CODEX_PROJECT.md -Raw
+          $version = (Get-Content .codex-plugin/plugin.json -Raw | ConvertFrom-Json).version
+          $skills  = (Get-ChildItem -LiteralPath plugins/shaughv-code/skills -Directory).Count
+          $files   = (Get-ChildItem -LiteralPath plugins/shaughv-code -Recurse -File -Force).Count
+
+          $mRel = [regex]::Match($doc, '(?m)^- \*\*Current release:\*\* (\d+\.\d+\.\d+)')
+          $mCnt = [regex]::Match($doc, 'contains (\d+) skill directories and (\d+) files')
+          if (-not $mRel.Success) {
+            Write-Error "CODEX_PROJECT.md: could not find the '- **Current release:** X.Y.Z' line. Do not reword it; CI parses it."
+            exit 1
+          }
+          if (-not $mCnt.Success) {
+            Write-Error "CODEX_PROJECT.md: could not find the 'contains N skill directories and M files' phrase. Do not reword it; CI parses it."
+            exit 1
+          }
+
+          $docRel    = $mRel.Groups[1].Value
+          $docSkills = [int]$mCnt.Groups[1].Value
+          $docFiles  = [int]$mCnt.Groups[2].Value
+          Write-Host "doc: release=$docRel skills=$docSkills files=$docFiles"
+          Write-Host "real: release=$version skills=$skills files=$files"
+
+          $problems = @()
+          if ($docRel    -ne $version) { $problems += "release: doc says $docRel, manifests say $version" }
+          if ($docSkills -ne $skills)  { $problems += "skill directories: doc says $docSkills, package has $skills" }
+          if ($docFiles  -ne $files)   { $problems += "files: doc says $docFiles, package has $files" }
+          if ($problems.Count -gt 0) {
+            Write-Error ("CODEX_PROJECT.md IS STALE:" + [Environment]::NewLine + ($problems -join [Environment]::NewLine) + [Environment]::NewLine + "Update its Project status block in this commit (see the release workflow in that file).")
+            exit 1
+          }
+          Write-Host "CODEX_PROJECT.md freshness OK ($version, $skills skills, $files files)"

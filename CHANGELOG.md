@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [Unreleased]
+
+Docs + CI. No plugin version bump: nothing that ships to either surface changed.
+
+### Fixed
+- `CODEX_PROJECT.md` refreshed after drifting several releases. It claimed release `0.35.0`
+  (14 July) with "29 skills and 461 files" while the repo was at `1.2.2` with 31 skill directories
+  and 470 files, and its workspace tree predated root `assets/`. Nothing checked it, so nothing
+  caught it.
+- Corrected a genuine error in its release workflow: it instructed bumping the version in "the
+  Claude plugin manifest, Claude marketplace entry, and Codex plugin manifest". A version in
+  `.claude-plugin/marketplace.json` is exactly what CI rejects — following that step would have
+  broken the build. Now states the two-manifest rule and why.
+- Regenerated the **Complete workspace tree** from `git ls-files`, so it lists what a consumer
+  actually receives on clone rather than a hand-maintained approximation, and documents that
+  definition. Indentation normalized to plain ASCII spaces — the previous block carried
+  non-breaking spaces inside its indent runs (`'│\xa0\xa0         │\xa0\xa0     '`), inconsistently,
+  which broke copy-paste.
+
+### Added
+- `.github/workflows/validate.yml` — a **CODEX_PROJECT.md freshness** step asserting the file's
+  stated release and package counts against the manifests and the generated package. Those three
+  numbers are the parts that actually rot; the check parses two fixed phrasings
+  (`- **Current release:** X.Y.Z` and `contains N skill directories and M files`) and fails with a
+  named diff, or with an explicit "do not reword it; CI parses it" error if a phrase goes missing.
+- `CLAUDE.md`, `AGENTS.md` — the changelog rule and the add-a-skill checklist now require
+  refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
+  and say the phrasings are CI-parsed.
+
 ## [1.2.2] — 2026-07-31
 
 Changed: the Codex plugin card's theme color now matches the artwork it sits next to.

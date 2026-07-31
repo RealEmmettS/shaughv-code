@@ -129,7 +129,8 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
    Bump the same version in `.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` so the plugin surfaces stay aligned.
 4. Regenerate the Codex package: `pwsh ./build-codex-plugin.ps1`.
-5. Add a release entry to both changelogs (see the Changelog rule below).
+5. Add a release entry to both changelogs, and refresh `CODEX_PROJECT.md`'s
+   **Project status** block (see the Changelog rule below).
 
 ## Changelog rule
 
@@ -144,7 +145,13 @@ This repo maintains two changelogs in parallel:
   changed and why it matters.
 
 **Whenever you bump `version` in `.codex-plugin/plugin.json` you MUST
-update BOTH changelogs in the same commit.** Translate each technical
+update BOTH changelogs AND `CODEX_PROJECT.md`'s **Project status** block
+in the same commit** — its `- **Current release:**` line, plus the
+`contains N skill directories and M files` counts if the package changed
+(both numbers are printed by `pwsh ./build-codex-plugin.ps1`). CI parses
+those exact phrasings and fails the build when they disagree with the
+manifests and the generated package, so don't reword them. That file
+drifted several releases behind before the check existed. Translate each technical
 entry by stripping versions / paths / function names / metric details /
 PR numbers, replacing jargon with everyday words, and adding a one-line
 "why it matters" clause where the user-visible effect isn't obvious. Use

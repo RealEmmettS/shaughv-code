@@ -6,6 +6,32 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## The project's own map is honest again — end of July 2026
+
+**Fixed**
+- One of the reference documents — the one that describes the project's shape for an assistant
+  picking it up cold — had quietly fallen out of date. It named a release from two weeks earlier,
+  undercounted the bundled skills and files, and its map of the folder structure predated the
+  artwork folder added a few days ago. Nothing was checking it, so nothing noticed.
+- It also contained a genuinely misleading instruction: it told anyone doing a release to update a
+  version number in a file that must *not* carry one. Following it would have broken the automated
+  checks. That's corrected now, with the reason spelled out.
+- Its folder map is now produced mechanically from the list of files the project actually ships,
+  rather than being kept up by hand, so it reflects what someone downloading the project really
+  gets. Some invisible characters lurking in that map, which quietly broke copy-and-paste, were
+  cleaned out at the same time.
+
+**Added**
+- The automated checks now verify that document against reality on every change, and fail loudly
+  with a plain description of the mismatch if it slips again. The release instructions in both
+  maintainer guides were updated to say it must be refreshed alongside everything else.
+
+**Behind the scenes**
+- Nothing that ships to Claude or ChatGPT changed — no new version was issued. This is entirely
+  about keeping the project's internal documentation trustworthy.
+
+---
+
 ## The plugin card's colour now matches its badge — end of July 2026
 
 **Improved**
