@@ -6,6 +6,24 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## The plugin card's colour now matches its badge — end of July 2026
+
+**Improved**
+- When the bundle appears in ChatGPT's plugin browser, its listing is tinted with a signature
+  colour. That tint was the bright brand orange while the badge sitting right beside it was green
+  and cream, so the two clashed. The tint is now the same green as the badge.
+- The exact green was taken from the badge artwork itself rather than from the brand's written-down
+  green, which is a slightly cooler shade — the whole point was for the two to match on screen. It
+  also happens to line up with the design guide, which already names the warmer, vintage palette as
+  the default and green as the brand's action colour.
+
+**Behind the scenes**
+- This only affects how the listing looks in ChatGPT. It changes nothing in Claude, and nothing
+  about what any of the skills or connected services actually do. The badge artwork itself is
+  untouched — only the colour setting next to it changed.
+
+---
+
 ## Repaired a brand icon that wouldn't open — end of July 2026
 
 **Fixed**

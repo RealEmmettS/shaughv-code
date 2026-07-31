@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) and is kept in lockstep with this file — see the changelog rule in [CLAUDE.md](./CLAUDE.md).
 
+## [1.2.2] — 2026-07-31
+
+Changed: the Codex plugin card's theme color now matches the artwork it sits next to.
+
+### Changed
+- `.codex-plugin/plugin.json` — `interface.brandColor` moves from the brutalist brand orange
+  `#FF5E1A` to sage `#788C5D`. 1.2.0 shipped sage-and-cream icons (`composerIcon` / `logo` /
+  `logoDark`) against an orange card accent; this aligns the two. `#788C5D` is taken from the
+  favicon artwork's own fill (`rgb(120,140,93)`) rather than the design system's named
+  `--sv-sage` token (`#5B8A5B`, a slightly cooler green), because the point of the change is
+  card/icon coherence. This also lines the card up with the design skill's stated default, which
+  calls for the vintage palette and sage as the single action color.
+- Scope note: `brandColor` is Codex-only presentation metadata — the theme color for the plugin
+  card in Codex's plugin browser. It is not the icon, and it has no effect in Claude Code, which
+  never reads `.codex-plugin/plugin.json`. No skill, MCP server, or connection behavior changes.
+
+### Behind the scenes
+- Icons are byte-identical to 1.2.0; only the manifest's color string changed. Claude/Codex
+  manifests and the generated Codex package advance `1.2.1` → `1.2.2`.
+
 ## [1.2.1] — 2026-07-31
 
 Fixed: `SHAUGHV-Favicon-Dark-Alt.svg` was malformed XML and would not render in any strict parser.

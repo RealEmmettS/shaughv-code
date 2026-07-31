@@ -1,6 +1,6 @@
 {
   "name": "shaughv-code",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for self-routing long-horizon agentic prompt engineering and cross-runtime subagent brief compilation across software, data, mathematics, and science; falsifiable contracts, evidence receipts, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, convergence recovery, evidence-aware retries, progressive slicing, critical thinking, OpenAI audio, PreText, Quiver AI, Mistral AI, brand design, animated brandmark, human changelog, CDN, naming, Google Cloud Storage, bug triage, design patterns, evidence-backed debugging, defensive programming, git workflow, security audit/red-team, typed session handoffs, iterative milestone planning, proportional workflow optimization, image generation/upscaling, deliberate learning, logical reasoning, personal productivity, wb300, usage status line, and TT;DR. (The Claude-only subagent model/effort preference skill is omitted from Codex. The task + workplace-memory system lives in shaughv-tasks.)",
   "author": {
     "name": "Emmett Shaughnessy",
@@ -94,7 +94,7 @@
       "Use naming-conventions to name files, branches, and commits.",
       "Use loop-escape when work is going in circles without new evidence."
     ],
-    "brandColor": "#FF5E1A",
+    "brandColor": "#788C5D",
     "composerIcon": "./assets/shaughv-icon-dark.png",
     "logo": "./assets/shaughv-icon-light.png",
     "logoDark": "./assets/shaughv-icon-dark.png",
