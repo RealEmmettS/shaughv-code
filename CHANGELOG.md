@@ -36,6 +36,32 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.2.3] — 2026-08-01
+
+Removed: the `craft-docs` MCP server. Trimmed the Codex card's default prompts to the supported
+maximum.
+
+### Removed
+- `.mcp.json` — the `craft-docs` HTTP MCP server (`https://mcp.craft.do/links/LKUYYz65h6s/mcp`)
+  is dropped from the bundle. The endpoint answers `401 Unauthorized` on every request because
+  its OAuth grant is no longer valid, so the entry contributed a guaranteed-failing connection
+  attempt to every session start on both surfaces. The bundle now ships three MCP servers:
+  `remotion-documentation` (stdio), `shaughv-health`, and `pipedream`.
+- Scope note: `.mcp.json` is copied verbatim into the generated Codex package, so the removal
+  applies to Claude Code and Codex alike. No skill references `craft-docs`; nothing else changes.
+
+### Changed
+- `.codex-plugin/plugin.json` — `interface.defaultPrompt` drops from five entries to three.
+  Codex validates a maximum of three and logged `ignoring interface.defaultPrompt: maximum of 3
+  prompts is supported` for this manifest on every plugin scan, so entries four and five were
+  never presented. The two dropped suggestions pointed at `openai-audio` and
+  `naming-conventions`; the retained three cover `shaughv-design`,
+  `agentic-prompt-engineering`, and `loop-escape`. Claude Code does not read this file.
+
+### Behind the scenes
+- Skill content is unchanged: the package still contains 31 skill directories and 470 files.
+  Claude/Codex manifests and the generated Codex package advance `1.2.2` → `1.2.3`.
+
 ## [1.2.2] — 2026-07-31
 
 Changed: the Codex plugin card's theme color now matches the artwork it sits next to.

@@ -33,8 +33,6 @@
         "gcloud",
         "storage",
         "upload",
-        "craft",
-        "craft-docs",
         "health",
         "shaughv-health",
         "pipedream",

@@ -32,6 +32,29 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Dropped a connection that could no longer sign in — start of August 2026
+
+**Removed**
+- The bundle used to connect to an external notes service. That connection's permission had
+  expired, so every attempt was turned away the moment it was made. Because the bundle tried it
+  afresh at the start of every session, it was a guaranteed dead end that only ever added delay
+  and noise to the startup logs. It's gone. Three connections remain: the video-documentation
+  helper, the personal health service, and the automation service.
+- This applies everywhere the bundle is installed, not just one assistant. Nothing that any of
+  the skills actually do depends on the removed connection, so no capability is lost.
+
+**Fixed**
+- The plugin's listing in ChatGPT offers a few suggested things to ask it. Five were written, but
+  the listing only ever displays three, so the last two were silently discarded every time — and
+  a warning about it was written to the log on every scan. The list is now three, chosen
+  deliberately rather than by whichever happened to be first: branded page design, long-horizon
+  prompt writing, and getting unstuck when work goes in circles.
+
+**Behind the scenes**
+- None of the skills themselves changed — the bundle carries exactly the same set as before.
+
+---
+
 ## The plugin card's colour now matches its badge — end of July 2026
 
 **Improved**

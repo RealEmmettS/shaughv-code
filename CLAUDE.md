@@ -30,10 +30,9 @@ same source — the `skills/` directory — so editing a skill propagates to bot
 
 Each of these was added by explicit ask — don't remove them without one:
 
-- **`.mcp.json` at repo root** — bundles four MCP servers: the Remotion
+- **`.mcp.json` at repo root** — bundles three MCP servers: the Remotion
   documentation server (`npx @remotion/mcp@latest`, exposing a single
-  `remotion-documentation` tool), `craft-docs` (OAuth-gated Streamable HTTP
-  link to a Craft Docs page), `shaughv-health` (OAuth-gated Streamable
+  `remotion-documentation` tool), `shaughv-health` (OAuth-gated Streamable
   HTTP link to `https://health.emmetts.dev/api/mcp`, Emmett's personal
   health-data MCP, Google-sign-in gated), and `pipedream` (OAuth-gated
   Streamable HTTP link to `https://mcp.pipedream.net/v2`, exposing

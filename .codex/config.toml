@@ -11,9 +11,6 @@
 command = "npx"
 args = ["@remotion/mcp@latest"]
 
-[mcp_servers.craft-docs]
-url = "https://mcp.craft.do/links/LKUYYz65h6s/mcp"
-
 [mcp_servers.shaughv-health]
 url = "https://health.emmetts.dev/api/mcp"
 

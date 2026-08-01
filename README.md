@@ -26,7 +26,7 @@ codex plugin marketplace add RealEmmettS/shaughv-code
 codex plugin add shaughv-code@shaughv-code
 ```
 
-Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation, Craft Docs, Shaughv Health, and Pipedream) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
+Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation, Shaughv Health, and Pipedream) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
 
 ### Alternative: install skills-only with `npx skills`
 
@@ -158,7 +158,6 @@ Agents may select the skill automatically from those signals, but automatic sele
 | Server | Source | Purpose |
 |---|---|---|
 | `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
-| `craft-docs` | `https://mcp.craft.do/links/.../mcp` (Streamable HTTP) | Connects to a specific Craft Docs link. OAuth-gated — first tool use pops a Craft sign-in flow, so the bundled URL alone is not a credential. Exposes Craft's standard tools (read/write blocks, revert). |
 | `shaughv-health` | `https://health.emmetts.dev/api/mcp` (Streamable HTTP) | Connects to Emmett's personal health-data MCP server. OAuth-gated via Google sign-in (allowlisted account) — first tool use pops a sign-in flow, so the bundled URL alone is not a credential. Exposes health/nutrition/sleep/exercise query and logging tools. |
 | `pipedream` | `https://mcp.pipedream.net/v2` (Streamable HTTP) | Connects to Pipedream's end-user MCP service, with access to tools from thousands of apps. OAuth-gated — first use prompts the installer to sign in, choose apps, and authorize access; the bundled URL is not a credential. |
 

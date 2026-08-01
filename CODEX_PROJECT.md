@@ -16,7 +16,7 @@ repairs a malformed brand favicon.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.2.2 (31 July 2026).
+- **Current release:** 1.2.3 (1 August 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's
@@ -67,7 +67,6 @@ resolves those paths against the *package* root — so the generator copies
 | Name | Transport/source | Authentication/use |
 |---|---|---|
 | `remotion-documentation` | stdio via `npx @remotion/mcp@latest` | Live Remotion documentation |
-| `craft-docs` | Streamable HTTP | OAuth-gated Craft Docs link |
 | `shaughv-health` | Streamable HTTP | Google-sign-in-gated personal health service |
 | `pipedream` | Streamable HTTP at `https://mcp.pipedream.net/v2` | OAuth on first use; user selects and authorizes apps |
 
