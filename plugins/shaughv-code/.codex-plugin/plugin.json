@@ -1,7 +1,7 @@
 {
   "name": "shaughv-code",
-  "version": "1.2.3",
-  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for self-routing long-horizon agentic prompt engineering and cross-runtime subagent brief compilation across software, data, mathematics, and science; falsifiable contracts, evidence receipts, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, convergence recovery, evidence-aware retries, progressive slicing, critical thinking, OpenAI audio, PreText, Quiver AI, Mistral AI, brand design, animated brandmark, human changelog, CDN, naming, Google Cloud Storage, bug triage, design patterns, evidence-backed debugging, defensive programming, git workflow, security audit/red-team, typed session handoffs, iterative milestone planning, proportional workflow optimization, image generation/upscaling, deliberate learning, logical reasoning, personal productivity, wb300, usage status line, and TT;DR. (The Claude-only subagent model/effort preference skill is omitted from Codex. The task + workplace-memory system lives in shaughv-tasks.)",
+  "version": "1.3.0",
+  "description": "Emmett Shaughnessy's personal Codex skills bundle. Provides SHAUGHV skills for self-routing long-horizon agentic prompt engineering and cross-runtime subagent brief compilation across software, data, mathematics, and science; falsifiable contracts, evidence receipts, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, convergence recovery, evidence-aware retries, progressive slicing, critical thinking, OpenAI audio, PreText, Quiver AI, Mistral AI, brand design, animated brandmark, human changelog, CDN, naming, Google Cloud Storage, bug triage, design patterns, evidence-backed debugging, defensive programming, git workflow, security audit/red-team, typed session handoffs, iterative milestone planning, proportional workflow optimization, image generation/upscaling, deliberate learning, logical reasoning, personal productivity, optional MCP connection guidance, wb300, usage status line, and TT;DR. (The Claude-only subagent model/effort preference skill is omitted from Codex. The task + workplace-memory system lives in shaughv-tasks.)",
   "author": {
     "name": "Emmett Shaughnessy",
     "email": "hey@emmetts.dev",
@@ -15,6 +15,9 @@
     "codex",
     "personal",
     "mcp",
+    "remotion",
+    "health",
+    "shaughv-health",
     "pipedream",
     "skills",
     "brand",
@@ -74,11 +77,10 @@
     "workflow"
   ],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "shaughv-code",
     "shortDescription": "Emmett's personal Codex skill bundle.",
-    "longDescription": "Use Emmett Shaughnessy's personal skills in Codex for advanced long-horizon prompt engineering, evidence-grounded software/data/math/science workflows, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, progressive slicing, typed handoffs, proportional workflow optimization, SHAUGHV brand work, audio, vector generation, naming, changelogs, CDN, and storage workflows. The Codex surface bundles the same MCP servers as Claude; /create-video remains Claude-only. The package is regenerated under plugins/shaughv-code/.",
+    "longDescription": "Use Emmett Shaughnessy's personal skills in Codex for advanced long-horizon prompt engineering, evidence-grounded software/data/math/science workflows, Claude Fable 5 / Opus 5 and GPT-5.6 Sol / Codex overlays, prompt evaluation, loop escape, progressive slicing, typed handoffs, proportional workflow optimization, SHAUGHV brand work, audio, vector generation, naming, changelogs, CDN, storage workflows, and advisory selection of optional MCP connections. The plugin bundles no MCP servers; /create-video remains Claude-only. The package is regenerated under plugins/shaughv-code/.",
     "developerName": "Emmett Shaughnessy",
     "category": "Coding",
     "capabilities": [

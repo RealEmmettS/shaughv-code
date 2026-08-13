@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Optional MCPs"
+  short_description: "Reuse or suggest optional MCP connections"
+  default_prompt: "Use $choose-optional-mcps to decide whether this task would benefit from an optional MCP connection."

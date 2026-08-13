@@ -32,6 +32,32 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Connections are optional now — middle of August 2026
+
+**Removed**
+- Installing the bundle no longer automatically adds the video-documentation helper, personal
+  health service, or automation service. This prevents the bundle from creating a second copy when
+  the client already provides the same connection, which means fewer startup conflicts and less
+  confusing sign-in behavior.
+- Connections installed separately by the operator are left alone. The video-project shortcut is
+  also still included because it does not depend on the documentation connection.
+
+**Added**
+- A new guide helps the assistant recognize when one of those three optional connections would be
+  useful. It checks what the client already offers, reuses an existing connection when possible,
+  and can explain the safest setup choice when something is missing. It never installs, signs in,
+  or changes settings on its own.
+- The guide calls out the extra care required around private health information and actions taken
+  through connected apps. Why it matters: making a connection available is not treated as blanket
+  permission to read, share, or change everything behind it.
+
+**Behind the scenes**
+- The packaging and automated checks were simplified around a skills-focused bundle, and every
+  client-facing description now clearly distinguishes optional connection guidance from something
+  that is installed automatically.
+
+---
+
 ## Dropped a connection that could no longer sign in — start of August 2026
 
 **Removed**

@@ -2,7 +2,7 @@ name: Validate
 
 # Keeps the tracked Codex package (plugins/shaughv-code/) permanently in sync with
 # root content. Runs on every PR into `main` and on every push to `main`: if the
-# package has drifted from root skills/ / .mcp.json / .codex-plugin/plugin.json, if a
+# package has drifted from root skills/ / assets/ / .codex-plugin/plugin.json, if a
 # manifest is malformed, or if the version is out of lockstep across the two plugin
 # manifests + CHANGELOG, the run fails. (`.claude-plugin/marketplace.json` carries no
 # version: Claude Code always prefers the one in plugin.json, so declaring it in both
@@ -35,11 +35,9 @@ jobs:
           $files = @(
             '.claude-plugin/marketplace.json',
             '.claude-plugin/plugin.json',
-            '.mcp.json',
             '.agents/plugins/marketplace.json',
             '.codex-plugin/plugin.json',
-            'plugins/shaughv-code/.codex-plugin/plugin.json',
-            'plugins/shaughv-code/.mcp.json'
+            'plugins/shaughv-code/.codex-plugin/plugin.json'
           )
           foreach ($f in $files) {
             Get-Content $f -Raw | ConvertFrom-Json | Out-Null

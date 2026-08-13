@@ -13,7 +13,7 @@ For first-time install — paste these two lines into any Claude Code session:
 /plugin install shaughv-code@shaughv-code
 ```
 
-That's it. All skills below auto-load whenever their description matches the task. The bundled MCP servers connect on first use; the bundled slash command is available immediately.
+That's it. All skills below auto-load whenever their description matches the task, and the bundled slash command is available immediately. The plugin registers no MCP servers; `choose-optional-mcps` can surface connection guidance when a task needs one.
 
 **Optional follow-up:** for the Remotion team's official skill set, run `npx skills add remotion-dev/skills` separately. Those skills aren't bundled here so they stay upstream-controlled.
 
@@ -26,7 +26,7 @@ codex plugin marketplace add RealEmmettS/shaughv-code
 codex plugin add shaughv-code@shaughv-code
 ```
 
-Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from repo root (`skills/`, `.mcp.json`, `.codex-plugin/plugin.json`) by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The Codex package carries the same skills **and the same MCP servers** (Remotion documentation, Shaughv Health, and Pipedream) as the Claude Code plugin; only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
+Codex installs a marketplace plugin by snapshotting a self-contained plugin **subdirectory** — it can't consume this repo's flat root (which stays flat for Claude Code's install). The repo therefore carries a tracked, generated package at `plugins/shaughv-code/`, built from root `skills/`, `assets/`, and `.codex-plugin/plugin.json` by `build-codex-plugin.ps1`, and `.agents/plugins/marketplace.json` points Codex at it. The package registers no MCP servers; `choose-optional-mcps` documents optional connections without loading them. Only the `/shaughv-code:create-video` slash command stays Claude-only. **Never hand-edit `plugins/shaughv-code/`** — it's generated; edit root content and regenerate with `pwsh ./build-codex-plugin.ps1`.
 
 ### Alternative: install skills-only with `npx skills`
 
@@ -36,7 +36,7 @@ If you're using another agent (Cursor, OpenCode, Gemini CLI, and ~50 others), or
 npx skills add RealEmmettS/shaughv-code
 ```
 
-Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. To get the bundled MCP servers and slash command too, use the Claude Code marketplace flow above instead.
+Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. The skills-only install still includes the optional MCP catalog; use the Claude Code marketplace flow above when you also want the slash command.
 
 ## Update
 
@@ -49,7 +49,7 @@ If you already have it installed and just want to pick up the latest version —
 /reload-plugins
 ```
 
-If a new component (skill, command, or MCP) doesn't show up after `/reload-plugins`, restart Claude Code — some changes (new MCP servers, new commands) only register on a fresh session.
+If a new skill or command doesn't show up after `/reload-plugins`, restart Claude Code — commands may require a fresh session.
 
 ### Codex update
 
@@ -60,7 +60,7 @@ codex plugin marketplace upgrade shaughv-code
 codex plugin add shaughv-code@shaughv-code
 ```
 
-Start a fresh Codex thread after reinstalling so new or changed skills or MCP servers are loaded.
+Start a fresh Codex thread after reinstalling so new or changed skills are loaded.
 
 To develop against a local checkout instead of the published marketplace:
 
@@ -116,6 +116,7 @@ Agents may select the skill automatically from those signals, but automatic sele
 |---|---|
 | `agentic-prompt-engineering` | Self-routing prompt-facing operating system for vague, difficult, or long-horizon agentic work: improves the operator's request from active context, asks compact material questions, infers Author/Audit/Operate/Evaluate and applicable adapters, compiles cross-runtime subagent briefs, builds falsifiable task contracts, tests load-bearing premises, selects information-bearing actions, requires claim-matched receipts, routes true stalls to loop escape, and conditionally loads software/data/math/science, Claude Fable 5 / Opus 5, GPT-5.6 Sol / Codex, and evaluation guidance. |
 | `bug-triage` | Interactive bug-triage and investigation agent for internal tools — actively reproduces and investigates with browser tools and data-platform queries instead of just asking questions. |
+| `choose-optional-mcps` | Advisory catalog for Remotion documentation, Shaughv Health, and Pipedream connections. Checks for an existing client connector or MCP first, avoids duplicate registration, recommends project vs user scope, and surfaces setup/authentication boundaries without loading or installing anything automatically. |
 | `code-design-patterns` | Gang of Four design-patterns reference and analyzer — all 22 GoF patterns (Creational/Structural/Behavioral) with Python, TypeScript, and SQL examples. Triggers on "what pattern fits" / "how should I structure this". |
 | `critical-thinking` | Seven agent-first thinking frameworks for reframing assumptions, changing strategy families, and testing whether a stalled approach is still fit for purpose. Two materially identical cycles force a convergence checkpoint; alternatives must differ through observability, a smaller end-to-end prototype, another runtime/tool, a working reference, or environmental isolation. |
 | `crystal-upscaler` | Upscale, enlarge, and enhance images via fal.ai's Clarity Crystal Upscaler (`clarityai/crystal-upscaler`) — tuned for faces, portraits, and profile pictures. 1x–200x scale, creativity dial, PNG/JPG out. Bundled `upscale.py` handles upload, queue polling, cost reporting, and auto-fitting inputs over the 100 MiB API cap. Reads `$env:FAL_KEY`. |
@@ -153,15 +154,15 @@ Agents may select the skill automatically from those signals, but automatic sele
 |---|---|
 | `/shaughv-code:create-video` | Scaffold a new Remotion Recorder project via `npx create-video@latest --recorder`, then add `@remotion/web-renderer` inside the new project (`npx remotion add @remotion/web-renderer`). Asks for a directory name, then runs both steps non-interactively; falls back to `! npx ...` if either needs a TTY. |
 
-## MCP servers bundled
+## Optional MCP connections (not bundled)
 
-| Server | Source | Purpose |
+| Connection | Source | When it may help |
 |---|---|---|
 | `remotion-documentation` | `npx @remotion/mcp@latest` | Searches the live Remotion documentation. Exposes a single tool — `remotion-documentation` — proxied to `mcp.remotion.dev`. |
-| `shaughv-health` | `https://health.emmetts.dev/api/mcp` (Streamable HTTP) | Connects to Emmett's personal health-data MCP server. OAuth-gated via Google sign-in (allowlisted account) — first tool use pops a sign-in flow, so the bundled URL alone is not a credential. Exposes health/nutrition/sleep/exercise query and logging tools. |
-| `pipedream` | `https://mcp.pipedream.net/v2` (Streamable HTTP) | Connects to Pipedream's end-user MCP service, with access to tools from thousands of apps. OAuth-gated — first use prompts the installer to sign in, choose apps, and authorize access; the bundled URL is not a credential. |
+| `shaughv-health` | `https://health.emmetts.dev/api/mcp` (Streamable HTTP) | Explicitly authorized personal health, nutrition, sleep, or exercise tasks. OAuth-gated via Google sign-in to an allowlisted account. |
+| `pipedream` | `https://mcp.pipedream.net/v2` (Streamable HTTP) | Tools from apps the operator selects and authorizes through Pipedream OAuth. |
 
-Both surfaces bundle these now: Claude Code reads them from the root `.mcp.json`, and the Codex package ships them too (`plugins/shaughv-code/.mcp.json`). Codex sessions run *inside this repo* also pick them up from `.codex/config.toml` before the plugin is installed.
+Neither plugin surface registers these connections. The `choose-optional-mcps` skill carries their identifiers, transports, installation examples, scope guidance, privacy/authorization boundaries, and a reuse-first rule. Loading the plugin therefore cannot duplicate a client-provided or standalone MCP.
 
 ## Repo layout
 
@@ -173,11 +174,8 @@ shaughv-code/
 ├── .claude-plugin/
 │   ├── plugin.json          # plugin manifest
 │   └── marketplace.json     # marketplace entry (single-plugin marketplace)
-├── .codex/
-│   └── config.toml          # repo-local Codex MCP fallback (in-repo sessions)
 ├── .codex-plugin/
-│   └── plugin.json          # Codex plugin manifest (skills + MCP)
-├── .mcp.json                # bundled MCP servers (Remotion, Craft, Health, Pipedream)
+│   └── plugin.json          # Codex plugin manifest (skills only)
 ├── assets/                  # plugin branding (Codex interface.composerIcon/logo/logoDark)
 ├── build-codex-plugin.ps1   # regenerates plugins/shaughv-code/ from root
 ├── commands/
@@ -185,11 +183,11 @@ shaughv-code/
 ├── plugins/
 │   └── shaughv-code/        # GENERATED Codex package — do not hand-edit
 │       ├── .codex-plugin/plugin.json   # copy of root manifest
-│       ├── .mcp.json                   # verbatim copy of root .mcp.json
 │       ├── assets/                     # copy of root assets/
 │       └── skills/                     # copy of root skills/
 └── skills/
     ├── agentic-prompt-engineering/
+    ├── choose-optional-mcps/
     ├── critical-thinking/
     ├── gcs-storage/
     ├── human-changelog/
@@ -205,7 +203,7 @@ shaughv-code/
     └── ttdr/
 ```
 
-Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit skills in place — there is no build step for the Claude Code surface. The **Codex** surface is the one exception: its `plugins/shaughv-code/` package is generated from root by `build-codex-plugin.ps1` and must be regenerated (not hand-edited) whenever root skills, `.mcp.json`, or the Codex manifest change.
+Each skill is a plain folder with `SKILL.md` (plus `references/`, `examples/`, `assets/`, etc.). Edit skills in place — there is no build step for the Claude Code surface. The **Codex** surface is the one exception: its `plugins/shaughv-code/` package is generated from root by `build-codex-plugin.ps1` and must be regenerated (not hand-edited) whenever root skills, assets, or the Codex manifest change.
 
 ## Editing a skill (maintainer workflow)
 
@@ -213,7 +211,7 @@ For consumers: see [Update](#update) above — you don't need this section.
 
 For Emmett / anyone editing the plugin's source:
 
-1. Edit files under `skills/<name>/` (or `.mcp.json` / `.codex-plugin/plugin.json`).
+1. Edit files under `skills/<name>/` (or `assets/` / `.codex-plugin/plugin.json`).
 2. Regenerate the Codex package: `pwsh ./build-codex-plugin.ps1` (verify with `pwsh ./build-codex-plugin.ps1 -Check`). Never hand-edit `plugins/shaughv-code/`.
 3. Commit and push — include both the root change and the regenerated `plugins/shaughv-code/`.
 4. In any Claude Code instance: `/plugin marketplace update shaughv-code` then `/reload-plugins` (or restart).

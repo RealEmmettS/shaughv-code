@@ -36,6 +36,40 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.3.0] — 2026-08-13
+
+Removed all bundled MCP registrations. Added an advisory skill that preserves the connection
+catalog without loading or installing any server.
+
+### Added
+- `choose-optional-mcps` — a high-freedom advisory skill for deciding whether a task would benefit
+  from Remotion documentation, Shaughv Health, or Pipedream. It inspects available client tools
+  first, reuses healthy connections, avoids duplicate names/endpoints, prefers project scope for
+  project-specific needs, and asks before configuration or authentication changes.
+- Its connection reference records current identifiers, transports, endpoints/commands,
+  Codex/Claude registration examples, and the privacy/authorization boundaries for personal
+  health data and Pipedream actions. It declares no MCP dependency metadata and runs no installer.
+
+### Removed
+- Root `.mcp.json`, the generated package copy, and the Codex manifest's `mcpServers` field. Neither
+  Claude Code nor Codex now registers `remotion-documentation`, `shaughv-health`, or `pipedream`
+  merely because `shaughv-code` is installed.
+- `.codex/config.toml`, whose only purpose was to register the same servers for sessions launched
+  inside this repository. User-level/client-provided MCP configuration is outside this removal and
+  remains untouched.
+
+### Changed
+- `build-codex-plugin.ps1`, validation CI, and `.gitattributes` no longer require, copy, parse, or
+  normalize `.mcp.json`. The generated package is now manifest + branding assets + skills.
+- Plugin/marketplace descriptions and maintainer/user documentation now describe the MCP entries
+  as optional advisory connections, while retaining their discovery keywords. The independent
+  `/shaughv-code:create-video` command remains bundled on Claude Code.
+
+### Behind the scenes
+- Claude/Codex manifests and the generated package advance `1.2.3` → `1.3.0`. The Codex package
+  contains 32 skill directories and 472 files, including the new skill and excluding the
+  Claude-only `subagent-model-preference` skill.
+
 ## [1.2.3] — 2026-08-01
 
 Removed: the `craft-docs` MCP server. Trimmed the Codex card's default prompts to the supported

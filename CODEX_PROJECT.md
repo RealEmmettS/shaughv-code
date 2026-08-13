@@ -5,9 +5,9 @@
 `shaughv-code` is Emmett Shaughnessy's personal cross-agent skill bundle. The
 repository root is the authoring source for Claude Code and skills.sh-compatible
 agents; `plugins/shaughv-code/` is a generated, self-contained Codex package.
-Release 1.2.2 gives the Codex plugin card real SHAUGHV branding — square icons
-under a new root `assets/` directory, now part of the generated package — and
-repairs a malformed brand favicon.
+Release 1.3.0 removes automatic MCP registration from every plugin surface and
+adds advisory connection guidance for Remotion documentation, Shaughv Health,
+and Pipedream when a task actually needs one.
 
 ## Project status
 
@@ -16,13 +16,13 @@ repairs a malformed brand favicon.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.2.3 (1 August 2026).
+- **Current release:** 1.3.0 (13 August 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's
-  reusable skills and explicitly approved bundled MCP/command components.
+  reusable skills and the explicitly approved Claude-only slash command.
 - **Current state:** Claude and Codex plugin manifests are version-aligned; the
-  generated Codex package contains 31 skill directories and 470 files.
+  generated Codex package contains 32 skill directories and 472 files.
 - **Validation:** `pwsh ./build-codex-plugin.ps1 -Check` rebuilds into a
   temporary directory, compares file hashes, checks manifest version lockstep,
   and enforces the Windows clone-path ceiling.
@@ -45,16 +45,14 @@ repairs a malformed brand favicon.
 
 | Consumer | Source | Contents |
 |---|---|---|
-| Claude Code marketplace | Repository root | Root skills, `.mcp.json`, and `commands/create-video.md` |
-| Codex marketplace | `plugins/shaughv-code/` | Generated manifest, a verbatim copy of `.mcp.json`, a verbatim copy of root `assets/`, and root skills except explicit Claude-only exclusions |
-| In-repo Codex sessions | `.codex/config.toml` | Hand-maintained native TOML fallback for the bundled MCP servers |
-| skills.sh-compatible agents | Root `skills/` | Skills only; no MCP servers or slash command |
+| Claude Code marketplace | Repository root | Root skills and `commands/create-video.md`; no MCP registrations |
+| Codex marketplace | `plugins/shaughv-code/` | Generated manifest, root assets, and root skills except explicit Claude-only exclusions; no MCP registrations |
+| skills.sh-compatible agents | Root `skills/` | Skills only; no MCP registrations or slash command |
 
-The root `.mcp.json` uses `{"mcpServers": {...}}` — the shape Claude Code's plugin
-reference documents and the shape Codex expects — so the generator copies it into
-the package byte-for-byte. Before 1.0.1 the root file was a bare server map and the
-generator wrapped it; that had the Claude requirement backwards. Never hand-edit the
-generated package.
+The plugin intentionally carries no `.mcp.json`, no manifest `mcpServers` field,
+and no repo-local MCP fallback. `choose-optional-mcps` preserves connection facts
+and setup examples as advisory context without registering, authenticating, or
+loading a server. Never hand-edit the generated package.
 
 Root `assets/` holds the plugin's branding images. `.codex-plugin/plugin.json`
 references them as `interface.composerIcon` / `logo` / `logoDark`, and Codex
@@ -62,13 +60,17 @@ resolves those paths against the *package* root — so the generator copies
 `assets/` into `plugins/shaughv-code/` and Codex plugin validation fails with
 "points to a missing file" if it does not. Claude Code does not scan `assets/`.
 
-## Bundled MCP servers
+## Optional MCP catalog
 
-| Name | Transport/source | Authentication/use |
+| Name | Transport/source | Advisory use |
 |---|---|---|
 | `remotion-documentation` | stdio via `npx @remotion/mcp@latest` | Live Remotion documentation |
 | `shaughv-health` | Streamable HTTP | Google-sign-in-gated personal health service |
 | `pipedream` | Streamable HTTP at `https://mcp.pipedream.net/v2` | OAuth on first use; user selects and authorizes apps |
+
+These are catalog entries inside `choose-optional-mcps`, not plugin components.
+The skill checks for an existing client connector or standalone MCP first and asks
+the operator before any configuration or authentication change.
 
 ## Release workflow
 
@@ -90,11 +92,10 @@ resolves those paths against the *package* root — so the generator copies
 
 ## Key constraints
 
-- Do not add plugin-owned agents, hooks, commands, or MCP servers unless Emmett
+- Do not add top-level plugin agents, hooks, commands, or MCP servers unless Emmett
   explicitly expands scope.
 - Do not hand-edit `plugins/shaughv-code/`.
 - Keep `skills/` lowercase.
-- Keep generated `.mcp.json` output LF-normalized.
 - Keep Claude-only skills in root but list them in `$ExcludeSkills` so the
   Codex package omits them.
 - Treat a direct-push approval as a route decision, not permission to skip
@@ -119,8 +120,6 @@ in the indent runs, which broke copy-paste).
 ├── .claude-plugin
 │   ├── marketplace.json
 │   └── plugin.json
-├── .codex
-│   └── config.toml
 ├── .codex-plugin
 │   └── plugin.json
 ├── .gitattributes
@@ -128,7 +127,6 @@ in the indent runs, which broke copy-paste).
 │   └── workflows
 │       └── validate.yml
 ├── .gitignore
-├── .mcp.json
 ├── AGENTS.md
 ├── CHANGELOG.md
 ├── CLAUDE.md
@@ -145,7 +143,6 @@ in the indent runs, which broke copy-paste).
 │   └── shaughv-code
 │       ├── .codex-plugin
 │       │   └── plugin.json
-│       ├── .mcp.json
 │       ├── assets
 │       │   ├── shaughv-icon-dark.png
 │       │   └── shaughv-icon-light.png
@@ -165,6 +162,12 @@ in the indent runs, which broke copy-paste).
 │           │   └── references
 │           │       ├── bug-report-template.md
 │           │       └── investigation-playbook.md
+│           ├── choose-optional-mcps
+│           │   ├── SKILL.md
+│           │   ├── agents
+│           │   │   └── openai.yaml
+│           │   └── references
+│           │       └── connections.md
 │           ├── code-design-patterns
 │           │   ├── SKILL.md
 │           │   └── references
@@ -717,6 +720,12 @@ in the indent runs, which broke copy-paste).
     │   └── references
     │       ├── bug-report-template.md
     │       └── investigation-playbook.md
+    ├── choose-optional-mcps
+    │   ├── SKILL.md
+    │   ├── agents
+    │   │   └── openai.yaml
+    │   └── references
+    │       └── connections.md
     ├── code-design-patterns
     │   ├── SKILL.md
     │   └── references

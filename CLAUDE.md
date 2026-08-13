@@ -5,12 +5,11 @@ users installing it; this file is for you, future Claude, when editing it.
 
 ## What this repo is
 
-A primarily **skills-only** plugin. The entire purpose is to be a single
-editable source of truth for every skill (and the small set of bundled
-non-skill components below) that should be available across all of Emmett's
-Claude Code instances.
+A **skills-focused** plugin. The entire purpose is to be a single editable source
+of truth for every skill (plus the explicitly retained slash command) that should
+be available across all of Emmett's Claude Code instances.
 
-Don't introduce `agents/`, `hooks/`, additional MCP servers, or additional
+Don't introduce top-level plugin agents, hooks, MCP servers, or additional
 commands unless Emmett explicitly asks to expand scope.
 
 > Note: that rule is about **bundling those things in the plugin itself**. It is
@@ -21,35 +20,29 @@ commands unless Emmett explicitly asks to expand scope.
 > `shaughv-tasks` plugin; see CHANGELOG 0.24.0.)
 
 The bundle is consumable two ways: (1) the Claude Code marketplace install
-documented in the README (delivers skills + the bundled MCP + slash command),
-and (2) `npx skills add RealEmmettS/shaughv-code` for a skills-only install
-in any [skills.sh](https://skills.sh)-supported agent. Both paths read the
-same source — the `skills/` directory — so editing a skill propagates to both.
+documented in the README (skills + slash command), and (2)
+`npx skills add RealEmmettS/shaughv-code` for a skills-only install in any
+[skills.sh](https://skills.sh)-supported agent. Both paths read the same source —
+the `skills/` directory — so editing a skill propagates to both. Neither path
+bundles MCP servers; optional connection knowledge lives in
+`choose-optional-mcps`.
 
 ## Bundled non-skill components
 
 Each of these was added by explicit ask — don't remove them without one:
 
-- **`.mcp.json` at repo root** — bundles three MCP servers: the Remotion
-  documentation server (`npx @remotion/mcp@latest`, exposing a single
-  `remotion-documentation` tool), `shaughv-health` (OAuth-gated Streamable
-  HTTP link to `https://health.emmetts.dev/api/mcp`, Emmett's personal
-  health-data MCP, Google-sign-in gated), and `pipedream` (OAuth-gated
-  Streamable HTTP link to `https://mcp.pipedream.net/v2`, exposing
-  Pipedream integrations selected during authorization).
 - **`commands/create-video.md`** — `/shaughv-code:create-video` slash command
   that scaffolds a Remotion Recorder project via
   `npx create-video@latest --recorder`, then adds `@remotion/web-renderer`
   inside the new project (`npx remotion add @remotion/web-renderer`). Order
   is fixed because `remotion add` has to run from inside an existing project.
-- **`build-codex-plugin.ps1` + `plugins/shaughv-code/` + `.codex/config.toml`** —
+- **`build-codex-plugin.ps1` + `plugins/shaughv-code/`** —
   the Codex surface. `plugins/shaughv-code/` is a generated, self-contained Codex
   package (a copy of root `skills/` — minus the Claude-only skills in the build
   script's `$ExcludeSkills`, currently `subagent-model-preference` — a verbatim copy
-  of `.mcp.json`, a verbatim copy of root `assets/`, and the Codex
-  manifest); `build-codex-plugin.ps1` regenerates it from root; `.codex/config.toml`
-  is a repo-local MCP fallback. **Never hand-edit `plugins/shaughv-code/`.** See
-  `AGENTS.md` for the full Codex story.
+  of root `assets/`, and the Codex manifest); `build-codex-plugin.ps1` regenerates
+  it from root. It declares no MCP servers. **Never hand-edit
+  `plugins/shaughv-code/`.** See `AGENTS.md` for the full Codex story.
 - **`assets/` at repo root** — the plugin's branding images, referenced from
   `.codex-plugin/plugin.json` as `interface.composerIcon` / `logo` / `logoDark`.
   Codex resolves those paths against the *package* root, so the build script copies
@@ -60,7 +53,7 @@ Each of these was added by explicit ask — don't remove them without one:
 
 - Edit `skills/<name>/SKILL.md` directly. No `.skill` zip to rebuild — the old
   zip-bundle workflow was retired.
-- After editing root skills (or `assets/` / `.mcp.json` / `.codex-plugin/plugin.json`),
+- After editing root skills (or `assets/` / `.codex-plugin/plugin.json`),
   regenerate the Codex package: `pwsh ./build-codex-plugin.ps1` (verify with
   `-Check`), and commit the regenerated `plugins/shaughv-code/` too.
 - CI (`.github/workflows/validate.yml`) re-runs `build-codex-plugin.ps1 -Check`,
@@ -131,11 +124,9 @@ tone or structure.
 
 - The `skills/` directory MUST stay lowercase. Case-only renames on Windows
   need a two-step `mv` (e.g. `mv skills tmp && mv tmp skills`).
-- `.gitattributes` pins the Codex package's *generated* `.mcp.json` to LF
-  (`.mcp.json text eol=lf`). `build-codex-plugin.ps1 -Check` SHA-compares
-  byte-exact and the build writes LF, so `* text=auto` would otherwise check it
-  out as CRLF on Windows CI and fail the gate (`hash mismatch: .mcp.json`). Pin
-  any new *generated* (not verbatim-copied) package file to LF the same way.
+- `.gitattributes` pins copied PNG branding as binary so root/package hash
+  comparisons remain byte-stable across platforms. Pin any future copied binary
+  type explicitly rather than relying on content sniffing.
 
 ## What not to do
 

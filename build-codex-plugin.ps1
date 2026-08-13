@@ -10,17 +10,12 @@
     install).
 
     Claude Code still consumes this repo from the root, so root skills/, root
-    assets/, root .codex-plugin/plugin.json, and root .mcp.json remain the
-    authoring source of truth. This script regenerates the tracked package that
+    assets/, and root .codex-plugin/plugin.json remain the authoring source of
+    truth. This script regenerates the tracked package that
     Codex snapshots from Git:
 
         plugins/shaughv-code/
         |-- .codex-plugin/plugin.json   (copied verbatim from root)
-        |-- .mcp.json                   (copied verbatim from root: both Claude and
-        |                                Codex consume the same documented shape,
-        |                                { "mcpServers": { ... } }, so no rewrite is
-        |                                needed. This was a wrap until 1.0.1, when the
-        |                                root file adopted the documented shape.)
         |-- assets/...                  (copied verbatim from root assets/ — the
         |                                plugin-branding images referenced by the
         |                                manifest's interface.composerIcon / logo /
@@ -39,12 +34,8 @@
     modifying the worktree.
 
     NEVER hand-edit plugins/shaughv-code/ — it is generated. Edit root content
-    (skills/, assets/, .mcp.json, .codex-plugin/plugin.json) and re-run this
+    (skills/, assets/, .codex-plugin/plugin.json) and re-run this
     script.
-
-    Note: .codex/config.toml (the repo-local MCP fallback for Codex sessions run
-    inside this repo) is a different, hand-maintained file in a different format
-    (TOML); this script does not generate it.
 #>
 
 [CmdletBinding()]
@@ -64,7 +55,6 @@ $mirror    = Join-Path (Join-Path $repoRoot 'plugins') 'shaughv-code'
 $srcSkills = Join-Path $repoRoot 'skills'
 $srcAssets = Join-Path $repoRoot 'assets'
 $srcManif  = Join-Path (Join-Path $repoRoot '.codex-plugin') 'plugin.json'
-$srcMcp    = Join-Path $repoRoot '.mcp.json'
 
 # --- Claude-only skills excluded from the Codex package ------------------------
 # Root skills whose entire purpose is Claude Code / Anthropic-harness specific and
@@ -88,7 +78,7 @@ $ExcludeSkills = @('subagent-model-preference')
 $MaxPathWarn = 170
 $MaxPathFail = 200
 
-foreach ($required in @($srcSkills, $srcAssets, $srcManif, $srcMcp)) {
+foreach ($required in @($srcSkills, $srcAssets, $srcManif)) {
     if (-not (Test-Path -LiteralPath $required)) {
         throw "Missing required source: $required"
     }
@@ -123,14 +113,6 @@ function Assert-MirrorPath {
     }
 }
 
-function Copy-Mcp {
-    # Root .mcp.json already carries the documented shape both runtimes expect:
-    # { "mcpServers": { "<name>": { ... } } }. Copy it byte-for-byte, the same way
-    # the manifest and the skills are copied, so the package stays reproducible.
-    param([Parameter(Mandatory)] [string] $Destination)
-    Copy-Item -LiteralPath $srcMcp -Destination $Destination
-}
-
 function Build-Package {
     param([Parameter(Mandatory)] [string] $Destination)
 
@@ -140,7 +122,6 @@ function Build-Package {
     New-Item -ItemType Directory -Force -Path (Join-Path $Destination '.codex-plugin') | Out-Null
     $destManifest = Join-Path (Join-Path $Destination '.codex-plugin') 'plugin.json'
     Copy-Item -LiteralPath $srcManif -Destination $destManifest
-    Copy-Mcp -Destination (Join-Path $Destination '.mcp.json')
 
     # Copy skills verbatim, file-by-file (preserves bytes and structure), except
     # the Claude-only skills named in $ExcludeSkills (matched by top-level skill

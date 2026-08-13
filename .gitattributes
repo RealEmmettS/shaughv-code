@@ -1,16 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-# build-codex-plugin.ps1 copies the root .mcp.json into the Codex package verbatim
-# and CI compares the result by SHA256. Pinning every .mcp.json to LF on checkout
-# (any platform) keeps the root file and its packaged copy byte-identical no matter
-# what `* text=auto` + core.eol=native would otherwise do on a Windows runner, so
-# the tracked package stays byte-reproducible. Pin any new *generated* package file
-# the same way.
-.mcp.json text eol=lf
-
-# Same reasoning for the branding images the build script copies into the Codex
-# package: `* text=auto` already leaves them alone because git detects PNG as
-# binary, but pinning them makes the root/package SHA comparison immune to a
-# future attribute change rather than dependent on content sniffing.
+# The build script copies branding images into the Codex package and CI compares
+# them by SHA256. `* text=auto` already leaves PNGs alone, but pinning them makes
+# root/package parity immune to a future attribute change rather than dependent
+# on content sniffing.
 *.png -text

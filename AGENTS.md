@@ -5,12 +5,11 @@ users installing it; this file is for you, future Codex, when editing it.
 
 ## What this repo is
 
-A primarily **skills-only** plugin. The entire purpose is to be a single
-editable source of truth for every skill (and the small set of bundled
-non-skill components below) that should be available across all of Emmett's
-Codex instances.
+A **skills-focused** plugin. The entire purpose is to be a single editable source
+of truth for every skill (plus the explicitly retained Claude-only slash command)
+that should be available across all of Emmett's Codex instances.
 
-Don't introduce `agents/`, `hooks/`, additional MCP servers, or additional
+Don't introduce top-level plugin agents, hooks, MCP servers, or additional
 commands unless Emmett explicitly asks to expand scope.
 
 > Note: that rule is about **bundling those things in the plugin itself**. It is NOT
@@ -20,25 +19,18 @@ commands unless Emmett explicitly asks to expand scope.
 > lives in the standalone `shaughv-tasks` plugin; see CHANGELOG 0.24.0.)
 
 The bundle is consumable three ways: (1) the Claude Code marketplace install
-documented in the README (delivers skills + the bundled MCP servers + slash
-command), (2) the Codex marketplace install documented in the README (skills +
-the same bundled MCP servers), and (3) `npx skills add RealEmmettS/shaughv-code`
-for a skills-only install in any [skills.sh](https://skills.sh)-supported agent.
-Root content — `skills/`, `.mcp.json`, `.codex-plugin/plugin.json` — is the
-authoring source of truth; the Codex surface is a generated copy of it (see
-"Codex plugin surface").
+documented in the README (skills + slash command), (2) the Codex marketplace
+install documented in the README (skills), and (3)
+`npx skills add RealEmmettS/shaughv-code` for a skills-only install in any
+[skills.sh](https://skills.sh)-supported agent. Root `skills/`, `assets/`, and
+`.codex-plugin/plugin.json` are the Codex authoring sources; the Codex surface is
+a generated copy of them (see "Codex plugin surface"). No surface bundles MCP
+servers. Optional connection knowledge lives in the `choose-optional-mcps` skill.
 
 ## Bundled non-skill components
 
 Each of these was added by explicit ask — don't remove them without one:
 
-- **`.mcp.json` at repo root** — bundles three MCP servers: the Remotion
-  documentation server (`npx @remotion/mcp@latest`, exposing a single
-  `remotion-documentation` tool), `shaughv-health` (OAuth-gated Streamable
-  HTTP link to `https://health.emmetts.dev/api/mcp`, Emmett's personal
-  health-data MCP, Google-sign-in gated), and `pipedream` (OAuth-gated
-  Streamable HTTP link to `https://mcp.pipedream.net/v2`, exposing
-  Pipedream integrations selected during authorization).
 - **`commands/create-video.md`** — `/shaughv-code:create-video` slash command
   that scaffolds a Remotion Recorder project via
   `npx create-video@latest --recorder`, then adds `@remotion/web-renderer`
@@ -53,8 +45,8 @@ flat root (which must stay flat for Claude Code). So the Codex surface is a
 tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 
 - **`plugins/shaughv-code/`** is the self-contained Codex package — a generated
-  copy of root `.codex-plugin/plugin.json`, a verbatim copy of `.mcp.json`, a
-  verbatim copy of root `assets/` (the branding images the manifest's
+  copy of root `.codex-plugin/plugin.json`, a verbatim copy of root `assets/`
+  (the branding images the manifest's
   `interface.composerIcon` / `logo` / `logoDark` point at — Codex resolves those
   paths against the *package* root, so they have to ship inside it), and a
   copy of `skills/` **minus the Claude-only skills excluded by
@@ -78,19 +70,7 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
   Claude's marketplace is `.claude-plugin/marketplace.json` and only that.
 - **`.codex-plugin/plugin.json`** is the Codex manifest (source of truth, copied
   verbatim into the package). Keep it lowercase. It points at `./skills/` and
-  `./.mcp.json` and carries the MCP servers — the Codex surface is **not**
-  skills-only.
-- **`.mcp.json`** at root carries the documented shape both runtimes expect,
-  `{ "mcpServers": { "<name>": {…} } }`, so the build script copies it into the
-  package verbatim. Until 1.0.1 the root file was a bare server map
-  (`{ "<name>": {…} }`) and the script wrapped it — that was backwards: the
-  wrapped form is what [Claude Code's plugin
-  reference](https://code.claude.com/docs/en/plugins-reference) documents, and
-  it is also what Codex expects. Keep both files in the wrapped shape.
-- **`.codex/config.toml`** is a repo-local MCP fallback (TOML) so Codex sessions
-  run *inside this repo* get the servers before the plugin is installed. It is
-  hand-maintained (different format from `.mcp.json`) and the build script does
-  not touch it; keep the two in sync by hand.
+  intentionally declares no MCP servers.
 - The Claude marketplace surface remains in `.claude-plugin/`; do not rename or
   remove it when editing the Codex surface.
 
@@ -98,8 +78,8 @@ tracked, generated package, mirroring how the work `theia-tools` plugin does it:
 
 - Edit `skills/<name>/SKILL.md` directly. No `.skill` zip to rebuild — the old
   zip-bundle workflow was retired.
-- Regenerate the Codex package after any change to root `skills/`, `assets/`,
-  `.mcp.json`, or `.codex-plugin/plugin.json`: `pwsh ./build-codex-plugin.ps1` (verify with
+- Regenerate the Codex package after any change to root `skills/`, `assets/`, or
+  `.codex-plugin/plugin.json`: `pwsh ./build-codex-plugin.ps1` (verify with
   `-Check`). Commit the regenerated `plugins/shaughv-code/` alongside the root
   change; never hand-edit the package. CI (`.github/workflows/validate.yml`)
   re-runs `build-codex-plugin.ps1 -Check`, validates the JSON manifests, and
@@ -170,11 +150,9 @@ tone or structure.
 
 - The `skills/` directory MUST stay lowercase. Case-only renames on Windows
   need a two-step `mv` (e.g. `mv skills tmp && mv tmp skills`).
-- `.gitattributes` pins the Codex package's *generated* `.mcp.json` to LF
-  (`.mcp.json text eol=lf`). `build-codex-plugin.ps1 -Check` SHA-compares
-  byte-exact and the build writes LF, so `* text=auto` would otherwise check it
-  out as CRLF on Windows CI and fail the gate (`hash mismatch: .mcp.json`). Pin
-  any new *generated* (not verbatim-copied) package file to LF the same way.
+- `.gitattributes` pins copied PNG branding as binary so root/package hash
+  comparisons remain byte-stable across platforms. Pin any future copied binary
+  type explicitly rather than relying on content sniffing.
 
 ## What not to do
 
