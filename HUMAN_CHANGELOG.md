@@ -6,6 +6,12 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Paper Mono becomes the default — 9 October 2026
+
+**Improved**
+- New branded projects now use Paper Mono for monospace text. The design templates include its full range of weights, and existing Gail Rock designs keep their font files.
+- Assistants now distinguish the recommended fonts from older fonts retained for compatibility.
+
 ## The project's own map is honest again — end of July 2026
 
 **Fixed**

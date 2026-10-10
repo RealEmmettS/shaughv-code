@@ -12,7 +12,7 @@
 /* --- FONTS ----------------------------------------------------------
    Two-font system:
      Makira    -- everything visible: display, headings, body
-     Gail Rock -- eyebrows, buttons, labels, metadata, code
+     Paper Mono -- eyebrows, buttons, labels, metadata, code
 
    Both are "standard" families on the SHAUGHV CDN and ship in its
    combined bundle. IBM Plex Mono and Unbounded are now OPT-IN there --
@@ -68,7 +68,76 @@
   font-display: swap;
 }
 
-/* Monospace -- Gail Rock (eyebrows, labels, metadata, pills, code).
+/* Paper Mono — preferred SHAUGHV monospace.
+   Normal weights 100–800. Original supplied font bytes; SIL OFL 1.1.
+   These bundled faces are static. The CDN also offers "Paper Mono Variable". */
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url("./fonts/PaperMono-Thin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url("./fonts/PaperMono-ExtraLight.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("./fonts/PaperMono-Light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/PaperMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/PaperMono-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/PaperMono-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/PaperMono-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Paper Mono";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("./fonts/PaperMono-ExtraBold.woff2") format("woff2");
+}
+
+
+/* Compatibility monospace -- Gail Rock (eyebrows, labels, metadata, pills, code).
    A true fixed-pitch face: every glyph advances 0.650em, so tabular
    metadata and code align. Normal style only -- there is no italic cut,
    so italics in mono contexts are synthesized. */
@@ -225,12 +294,11 @@
 
   /* -- Type tokens ----------------------------------------------------
      Two families: Makira covers ALL display/heading/body type.
-     Gail Rock covers eyebrows, buttons, labels, metadata, code.
-     Gail Rock has no backtick glyph; the generic fallbacks below pick
-     that one character up automatically. */
+     Paper Mono covers eyebrows, buttons, labels, metadata, code.
+     Generic monospace fallbacks cover unsupported glyphs. */
   --font-heading: "Makira", "Inter", system-ui, -apple-system, sans-serif;
   --font-sans:    "Makira", "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono:    "Gail Rock", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    "Paper Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Letter-spacing scale */
   --tracking-tight:   -0.02em;
@@ -349,7 +417,7 @@ body {
   line-height: 1.55;
 }
 
-/* Eyebrow -- sage-in-vintage overline above headings. Gail Rock,
+/* Eyebrow -- sage-in-vintage overline above headings. Paper Mono,
    semibold uppercase, 0.14em tracking -- matches the codebase's
    .eyebrow / .control-label pattern. */
 .sv-eyebrow {

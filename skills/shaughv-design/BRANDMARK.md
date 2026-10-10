@@ -250,7 +250,7 @@ The animated mark is almost always paired with a small monospace label, forming 
     width: auto;
   }
   .brand-lockup-label {
-    font-family: "Gail Rock", ui-monospace, monospace;
+    font-family: "Paper Mono", ui-monospace, monospace;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     font-size: 0.72rem;

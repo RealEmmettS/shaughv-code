@@ -94,7 +94,7 @@ function Field({ label, value, onChange, placeholder, textarea }) {
   return (
     <label style={{ display: "block" }}>
       <span style={{
-        fontFamily: "Gail Rock", fontSize: 10,
+        fontFamily: "Paper Mono", fontSize: 10,
         color: "rgba(230,230,230,0.6)",
         letterSpacing: "0.2em", textTransform: "uppercase",
         marginBottom: 8, display: "block",

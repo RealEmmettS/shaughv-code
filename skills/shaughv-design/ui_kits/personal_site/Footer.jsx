@@ -42,7 +42,7 @@ function Footer() {
             Get in touch <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7" /><path d="M8 7h9v9" /></svg>
           </a>
           <p style={{
-            marginTop: 64, fontFamily: "Gail Rock", fontSize: 11,
+            marginTop: 64, fontFamily: "Paper Mono", fontSize: 11,
             color: "rgba(245,224,197,0.25)",
             letterSpacing: "0.15em", textTransform: "uppercase",
           }}>&copy; {new Date().getFullYear()} Emmett Shaughnessy.</p>

@@ -23,7 +23,7 @@ function About() {
           }} />
           <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 12 }}>
             <span style={{
-              fontFamily: "Gail Rock", fontSize: 12, color: "#FF5E1A",
+              fontFamily: "Paper Mono", fontSize: 12, color: "#FF5E1A",
               letterSpacing: "0.2em", textTransform: "uppercase",
             }}>About</span>
             <span style={{ height: 1, flex: 1, background: "rgba(230,230,230,0.2)" }} />
@@ -41,7 +41,7 @@ function About() {
               "Motion used for clarity, not clutter",
             ].map((h) => (
               <span key={h} style={{
-                fontFamily: "Gail Rock", fontSize: 11,
+                fontFamily: "Paper Mono", fontSize: 11,
                 border: "1px solid rgba(230,230,230,0.3)", padding: "8px 14px",
                 borderRadius: 9999, color: "rgba(230,230,230,0.8)",
                 textTransform: "uppercase", letterSpacing: "0.05em",
@@ -62,7 +62,7 @@ function About() {
           <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 12 }}>
             <span style={{ height: 1, flex: 1, background: "rgba(230,230,230,0.2)" }} />
             <span style={{
-              fontFamily: "Gail Rock", fontSize: 12, color: "#FF5E1A",
+              fontFamily: "Paper Mono", fontSize: 12, color: "#FF5E1A",
               letterSpacing: "0.2em", textTransform: "uppercase",
             }}>Philosophy</span>
           </div>

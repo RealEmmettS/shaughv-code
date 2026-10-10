@@ -36,6 +36,12 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.3.1] — 2026-10-09
+
+### Changed
+- Make Paper Mono the preferred monospace in `shaughv-design` tokens, templates, previews, and guidance. Bundle all eight static WOFF2 weights and OFL; retain Gail Rock faces for compatibility.
+- Teach `shaughv-cdn` to read `fonts.all.defaults` independently of bundle membership.
+
 ## [1.3.0] — 2026-08-13
 
 Removed all bundled MCP registrations. Added an advisory skill that preserves the connection

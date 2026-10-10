@@ -29,6 +29,8 @@ the stable router into that catalog; it is not an asset inventory.
   freshly fetched guide and manifest.
 - Use the requested named font entry for an opt-in family. Use `fonts.all` only
   when the live guide says the standard combined bundle is intended.
+- Read `fonts.all.defaults` for the preferred sans and monospace families.
+  Bundle membership may include compatibility families and does not imply a default.
 - Use manifest-provided font stylesheets rather than recreating `@font-face`
   declarations.
 - Preserve `crossorigin` on cross-origin font preloads.

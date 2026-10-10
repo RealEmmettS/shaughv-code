@@ -1,7 +1,7 @@
 /* global React */
 
 const MONO = {
-  fontFamily: '"Gail Rock", ui-monospace, monospace',
+  fontFamily: '"Paper Mono", ui-monospace, monospace',
   fontWeight: 600,
   letterSpacing: "0.14em",
   textTransform: "uppercase",

@@ -6,3 +6,6 @@
 # root/package parity immune to a future attribute change rather than dependent
 # on content sniffing.
 *.png -text
+
+# Keep copied original fonts byte-stable in both plugin surfaces.
+*.woff2 -text

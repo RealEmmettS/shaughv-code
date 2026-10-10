@@ -47,7 +47,7 @@ function Works({ setRoute }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{
             display: "flex", justifyContent: "space-between",
-            fontFamily: "Gail Rock", fontSize: 12,
+            fontFamily: "Paper Mono", fontSize: 12,
             letterSpacing: "0.18em", textTransform: "uppercase",
           }}>
             <a href="#projects" onClick={(e) => { e.preventDefault(); setRoute("home"); requestAnimationFrame(() => document.getElementById("projects")?.scrollIntoView()); }} data-magnetic
@@ -83,7 +83,7 @@ function Works({ setRoute }) {
                 fontVariantNumeric: "tabular-nums",
               }}><CountUp to={works.length} pad={3} /></span>
               <span style={{
-                fontFamily: "Gail Rock", fontSize: 11,
+                fontFamily: "Paper Mono", fontSize: 11,
                 letterSpacing: "0.18em", textTransform: "uppercase",
                 color: "rgba(230,230,230,0.6)",
               }}>Properties in orbit</span>
@@ -133,7 +133,7 @@ function Works({ setRoute }) {
           display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap",
         }}>
           <span style={{
-            fontFamily: "Gail Rock", fontSize: 11,
+            fontFamily: "Paper Mono", fontSize: 11,
             color: "rgba(230,230,230,0.6)",
             letterSpacing: "0.18em", textTransform: "uppercase",
           }}>Filter:</span>
@@ -193,7 +193,7 @@ function Works({ setRoute }) {
           {filtered.length === 0 && (
             <div style={{
               gridColumn: "1 / -1", padding: 80, textAlign: "center",
-              fontFamily: "Gail Rock", fontSize: 14, color: "rgba(230,230,230,0.6)",
+              fontFamily: "Paper Mono", fontSize: 14, color: "rgba(230,230,230,0.6)",
               letterSpacing: "0.15em", textTransform: "uppercase",
             }}>
               No works match &ldquo;{query}&rdquo;.

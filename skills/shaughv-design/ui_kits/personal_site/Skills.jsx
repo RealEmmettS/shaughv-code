@@ -25,7 +25,7 @@ function Skills() {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 10 }}>
               {group.items.map((it) => (
                 <li key={it} style={{
-                  fontFamily: "Gail Rock", fontSize: 13,
+                  fontFamily: "Paper Mono", fontSize: 13,
                   color: "rgba(230,230,230,0.8)",
                   letterSpacing: "0.06em", textTransform: "uppercase",
                 }}>{it}</li>
