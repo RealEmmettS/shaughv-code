@@ -5,8 +5,8 @@
 `shaughv-code` is Emmett Shaughnessy's personal cross-agent skill bundle. The
 repository root is the authoring source for Claude Code and skills.sh-compatible
 agents; `plugins/shaughv-code/` is a generated, self-contained Codex package.
-Release 1.3.1 makes Paper Mono the preferred monospace across design templates
-and teaches CDN consumers to read the explicit font defaults.
+Release 1.3.2 teaches CDN consumers to discover equivalent hostnames,
+illustrated usage examples, and structured asset relationships from live metadata.
 
 ## Project status
 
@@ -15,7 +15,7 @@ and teaches CDN consumers to read the explicit font defaults.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.3.1 (9 October 2026).
+- **Current release:** 1.3.2 (10 October 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's

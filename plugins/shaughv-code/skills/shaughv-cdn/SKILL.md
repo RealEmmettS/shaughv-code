@@ -1,6 +1,6 @@
 ---
 name: shaughv-cdn
-description: Discover and consume assets from the SHAUGHV CDN at cdn.shaughv.com through its live /agents guide and /tree.json manifest. Use whenever a task mentions the SHAUGHV CDN, a cdn.shaughv.com URL, SHAUGHV-hosted fonts, brand assets, images, favicons, figurines, scripts, loaders, embeds, or preloads. Fetch the live catalog instead of relying on remembered family names, file paths, formats, counts, snippets, or licensing notes.
+description: Discover and consume assets from the SHAUGHV CDN at cdn.shaughv.com through its live /agents guide and /tree.json manifest. Use whenever a task mentions the SHAUGHV CDN, a cdn.shaughv.com or cdn.emmetts.dev URL, SHAUGHV-hosted fonts, brand assets, images, favicons, figurines, scripts, loaders, embeds, or preloads. Fetch the live catalog instead of relying on remembered family names, file paths, formats, counts, snippets, or licensing notes.
 ---
 
 # SHAUGHV CDN discovery
@@ -24,6 +24,10 @@ the stable router into that catalog; it is not an asset inventory.
 ## Rules
 
 - Keep only the three discovery endpoints above fixed in code or prompts.
+- Read `usage.aliases` for equivalent CDN origins and keep canonical URLs from
+  the manifest. Use `usage.documentation` to discover illustrated examples
+  and structured asset metadata, including variant relationships and source
+  context. Do not infer that similarly named originals and adapted assets are identical.
 - Read names, paths, family variants, weights, styles, formats, MIME types,
   snippets, cache behavior, CORS guidance, and redistribution limits from the
   freshly fetched guide and manifest.

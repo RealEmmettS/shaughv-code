@@ -36,6 +36,11 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.3.2] — 2026-10-10
+
+### Improved
+- Route both CDN hostnames through the live catalog and teach agents to follow its alias, usage-example, and structured asset metadata links. Preserve the live-discovery contract without hardcoding a current asset inventory.
+
 ## [1.3.1] — 2026-10-09
 
 ### Changed

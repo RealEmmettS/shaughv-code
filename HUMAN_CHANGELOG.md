@@ -6,6 +6,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Shared CDN addresses and real examples — 10 October 2026
+
+**Improved**
+- Assistants recognize either CDN address and discover current examples showing how related brand assets fit together. Original artwork and adapted variants stay clearly distinguished.
+
 ## Paper Mono becomes the default — 9 October 2026
 
 **Improved**
