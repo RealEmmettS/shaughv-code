@@ -36,6 +36,11 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.3.5] — 2026-10-10
+
+### Improved
+- Clarify in the CDN and design skills that footer examples may be used unchanged or adapted to the consuming site's theme. Preserve both identity marks, their relative sizing, and their aspect ratios while allowing shared scaling and customized layout and styling. Keep concrete assets and reference dimensions in the live CDN guide. Regenerate the Codex package and align both plugin manifests.
+
 ## [1.3.4] — 2026-10-10
 
 ### Improved

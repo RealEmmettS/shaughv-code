@@ -29,6 +29,7 @@ You are an expert designer working in the SHAUGHV brand system — the personal 
 **If the user wants production code:**
 - Copy `colors_and_type.css` and `fonts/` into their project.
 - Treat the JSX components in `ui_kits/*/` as **reference**, not as importable code — they are simplified single-file recreations of production components. The real implementations live in the source repos linked in `README.md`.
+- For a site footer, use `shaughv-cdn` to discover the current footer guide and asset metadata. Keep both the main wordmark and crest in the footer, preserving their relative sizing and individual aspect ratios. You may use the example as is or customize its layout, spacing, typography, colors, navigation, and copyright placement to fit the site's current theme. Scale the two logos up or down together; take the proportional reference from the live guide instead of pinning dimensions here.
 
 ## Content rules you must follow
 

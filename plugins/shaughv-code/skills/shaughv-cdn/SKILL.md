@@ -15,8 +15,8 @@ the stable router into that catalog; it is not an asset inventory.
 2. Fetch `https://cdn.shaughv.com/tree.json` for the canonical machine-readable
    catalog. `https://cdn.shaughv.com/tree` is an identical alias.
 3. Follow the live guide and resolve the requested item from the manifest.
-4. Use manifest-provided `url`, `embed`, `css_url`, `html`, and `css` values
-   verbatim.
+4. Use manifest-provided asset URLs and font-loading snippets as supplied.
+   Customize surrounding presentation within the live example's stated scope.
 5. If the requested item is absent, report that it is not in the current
    manifest. Do not guess, probe a remembered path, or substitute stale skill
    text.
@@ -33,9 +33,12 @@ the stable router into that catalog; it is not an asset inventory.
 - Read names, paths, family variants, weights, styles, formats, MIME types,
   snippets, cache behavior, CORS guidance, and redistribution limits from the
   freshly fetched guide and manifest.
-- Respect the scope stated by each live example. Layout-only references define
-  structure and spacing; their demonstration colors do not prescribe a palette.
-  Choose colors from the consuming project's design when the example leaves them open.
+- Respect the scope stated by each live example. Distinguish required identity
+  details from illustrative layout values: examples may be used as is or
+  customized to the consuming site's current theme when the live guide allows it.
+  Preserve required assets, their relative sizing, and individual aspect ratios;
+  scale related marks together when permitted. Do not turn reference dimensions,
+  spacing, or demonstration colors into extra requirements.
 - Use the requested named font entry for an opt-in family. Use `fonts.all` only
   when the live guide says the standard combined bundle is intended.
 - Read `fonts.all.defaults` for the preferred sans and monospace families.

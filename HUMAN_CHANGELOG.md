@@ -6,6 +6,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Footer examples that fit the site — 10 October 2026
+
+**Improved**
+- Assistants can use a footer example as shown or tailor it to the site's existing style. Both logos stay in the footer and scale together to preserve their visual balance.
+
 ## Layout examples leave colors open — 10 October 2026
 
 **Improved**
