@@ -6,6 +6,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Layout examples leave colors open — 10 October 2026
+
+**Improved**
+- Assistants keep the structure and spacing shown in layout examples while choosing colors for the project they are working on.
+
 ## One home for CDN examples — 10 October 2026
 
 **Improved**

@@ -36,6 +36,11 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.3.4] — 2026-10-10
+
+### Improved
+- The CDN discovery skill follows each live example's stated scope, preserving layout and spacing without inferring required colors from illustrative previews. Regenerate the Codex package and keep both manifests aligned.
+
 ## [1.3.3] — 2026-10-10
 
 ### Improved

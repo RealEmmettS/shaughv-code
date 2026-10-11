@@ -33,6 +33,9 @@ the stable router into that catalog; it is not an asset inventory.
 - Read names, paths, family variants, weights, styles, formats, MIME types,
   snippets, cache behavior, CORS guidance, and redistribution limits from the
   freshly fetched guide and manifest.
+- Respect the scope stated by each live example. Layout-only references define
+  structure and spacing; their demonstration colors do not prescribe a palette.
+  Choose colors from the consuming project's design when the example leaves them open.
 - Use the requested named font entry for an opt-in family. Use `fonts.all` only
   when the live guide says the standard combined bundle is intended.
 - Read `fonts.all.defaults` for the preferred sans and monospace families.
