@@ -36,6 +36,11 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.3.3] — 2026-10-10
+
+### Improved
+- Discover interactive asset showcases and font examples through the live Blume documentation, now the complete CDN website. Keep removed HTML catalogs out of the agent workflow.
+
 ## [1.3.2] — 2026-10-10
 
 ### Improved

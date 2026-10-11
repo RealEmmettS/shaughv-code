@@ -27,7 +27,9 @@ the stable router into that catalog; it is not an asset inventory.
 - Read `usage.aliases` for equivalent CDN origins and keep canonical URLs from
   the manifest. Use `usage.documentation` to discover illustrated examples
   and structured asset metadata, including variant relationships and source
-  context. Do not infer that similarly named originals and adapted assets are identical.
+  context. Blume is the complete CDN website; discover its interactive showcases
+  and font examples through those live documentation links. Do not recreate a
+  separate inventory from old HTML pages. Do not infer that similarly named originals and adapted assets are identical.
 - Read names, paths, family variants, weights, styles, formats, MIME types,
   snippets, cache behavior, CORS guidance, and redistribution limits from the
   freshly fetched guide and manifest.

@@ -6,6 +6,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## One home for CDN examples — 10 October 2026
+
+**Improved**
+- Assistants find the current interactive previews and font examples alongside the searchable guides, keeping them away from the removed older website.
+
 ## Shared CDN addresses and real examples — 10 October 2026
 
 **Improved**
