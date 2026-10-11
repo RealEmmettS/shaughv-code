@@ -36,6 +36,11 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.4.1] — 2026-10-10
+
+### Fixed
+- Mark original crest SVGs as byte-preserved assets in `.gitattributes` for both authoring and generated package paths. Prevent Windows marketplace checkout newline conversion from invalidating the bundled provenance checksums. Recheck the installed plugin against original asset hashes.
+
 ## [1.4.0] — 2026-10-10
 
 ### Added

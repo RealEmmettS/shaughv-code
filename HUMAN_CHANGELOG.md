@@ -6,6 +6,11 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Original crest files stay intact — 10 October 2026
+
+**Fixed**
+- Keep the supplied crest files exactly intact when the plugin is installed on Windows, so their recorded identity checks continue to match.
+
 ## A complete footer and typography kit — 10 October 2026
 
 **Added**

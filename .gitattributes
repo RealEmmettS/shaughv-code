@@ -9,3 +9,8 @@
 
 # Keep copied original fonts byte-stable in both plugin surfaces.
 *.woff2 -text
+
+# Supplied crest SVGs have published SHA-256 metadata. Preserve their bytes
+# through Windows checkouts and marketplace installs, including line endings.
+skills/shaughv-design/assets/crests/*.svg -text
+plugins/shaughv-code/skills/shaughv-design/assets/crests/*.svg -text
