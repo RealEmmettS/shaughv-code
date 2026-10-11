@@ -2,6 +2,11 @@
 
 Hi-fi recreation of the **shaughv_vintage** edition — the warm cream-and-sage alter ego of the SHAUGHV brand.
 
+This is a historical style reference. Its older footer composition is superseded
+by the complete [paired-logo guide](../../references/footer.md) and
+[runnable examples](../../examples/footer.html). Use those for footer work,
+retaining both logos and their proportions while adapting to the site's theme.
+
 ## What it is
 
 The vintage edition reskins SHAUGHV in a Bauhaus-inspired, figurine-illustrated palette. It uses
@@ -105,22 +110,14 @@ The kit's navbar uses the animated `<shaughv-mark>` loop. If the surface already
 
 This is the meta-rule. Any visual transform that doesn't respect layout flow (`scale`, `translate` with px values, `rotate` with non-square content) needs media-query gates when ported to a responsive codebase. Treat the kit's transforms as **what it should look like at desktop** rather than **how to render at every viewport**.
 
-### Footer bottom rule — stack deliberately, don't `flex-wrap`
+### Footer identity — use the complete paired reference
 
-`FooterSection.jsx` uses `flex-wrap: wrap` on its bottom-rule three-cell strip (copyright / brand mark / "Set in Makira"). On narrow widths the items wrap to multiple rows but `justify-between` produces awkward gaps. Use explicit stacking instead:
-
-```tsx
-<div className="mt-16 pt-6 border-t border-cream-100/20
-                flex flex-col sm:flex-row
-                items-center sm:justify-between gap-6 sm:gap-4
-                font-mono text-label uppercase font-semibold text-cream-100/45
-                text-center sm:text-left">
-  <span>© 2026 Emmett Shaughnessy</span>
-  <shaughv-mark data-static aria-label="SHAUGHV"
-                className="block h-16 w-auto text-cream-100/70" />
-  <span>Set in Makira &amp; Paper Mono</span>
-</div>
-```
+Do not reproduce this historical kit's single-mark bottom strip as the current
+footer contract. Use `../../references/footer.md` and `../../examples/footer.css`:
+both the wordmark and crest belong in the footer, and share one scale value.
+The left and centered examples can be used as is or customized. Navigation,
+copyright placement, typography, colors, gap, padding, and breakpoints may change
+to fit the site. Keep the pair's relative sizing and each mark's natural aspect.
 
 ### `<shaughv-mark>` host sizing — square clips the wordmark in Tailwind
 

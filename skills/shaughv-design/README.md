@@ -2,7 +2,7 @@
 
 > A typographic-brutalist personal brand system recoloured in vintage tones — for **SHAUGHV** / Emmett Shaughnessy. Built to let design agents produce on-brand interfaces, slides, prototypes, and marketing assets without re-discovering the rules every time.
 
-The system is the **intersection of two living codebases**: the brutalist motion-forward identity of [emmetts_personal_website](https://github.com/RealEmmettS/emmetts_personal_website) recoloured against the cream-and-sage palette of [shaughv_vintage](https://github.com/RealEmmettS/shaughv_vintage). Open both for deeper context — they are the source of truth.
+The reference styles originated in [emmetts_personal_website](https://github.com/RealEmmettS/emmetts_personal_website) and [shaughv_vintage](https://github.com/RealEmmettS/shaughv_vintage). Treat the bundled UI kits as style references, not snapshots of the current live sites. For current asset identities, font defaults, and integration guidance, use the `shaughv-cdn` skill and its live catalog. When adding branding to an existing site, adapt to its current theme.
 
 ---
 
@@ -11,11 +11,14 @@ The system is the **intersection of two living codebases**: the brutalist motion
 | File / folder | What's in it |
 |---|---|
 | `README.md` | This document — brand context, content fundamentals, visual foundations, iconography |
-| `SKILL.md` | Agent-skill front-matter so this folder can be loaded as a Claude Skill |
+| `SKILL.md` | Entry point for Codex, Claude Code, and compatible skill consumers |
 | `BRANDMARK.md` | **How to render and animate the SHAUGHV mark in any framework.** Decision tree, drop-in usage, full animation spec, porting checklist. Read this before placing the mark anywhere. |
+| `references/footer.md` | Full footer instructions: paired logos, proportional scaling, adaptable layouts, colors, fonts, accessibility, and framework integration |
+| `references/fonts.md` | Family roles, local and CDN loading, variable faces, optional fonts, and notices |
+| `examples/footer.html` / `examples/footer.css` | Runnable footer examples with both required logos and shared scaling |
 | `colors_and_type.css` | All design tokens — `@font-face` declarations, palette, semantic vars, type classes. **The single source of truth for visual atoms.** |
-| `fonts/` | Self-hosted webfonts (Makira, Paper Mono, plus Gail Rock compatibility) — `.woff2` |
-| `assets/` | SHAUGHV brandmarks (static SVG + PNG variants), the **vanilla JS animated drop-in** (`animated-brand-mark.js`), the **React/Framer port** (`AnimatedBrandMark.jsx`), the **canonical loader** (`shaughv-loader.js`), and the **vintage figurine library** (`assets/figurines/` — optional, vintage-only) |
+| `fonts/` | Static Makira and Paper Mono WOFF2, Paper Mono Variable, notices, and Gail Rock compatibility faces |
+| `assets/` | Wordmarks, favicons, animation and loader scripts, optional figurines, and `crests/` containing the original color, original mono, and small footer derivative |
 | `preview/` | Small HTML cards rendered in the Design System tab (one specimen per token cluster) |
 | `ui_kits/personal_site/` | Hi-fi recreation of `emmettshaughnessy.com` — the canonical brutalist surface |
 | `ui_kits/vintage_site/` | Hi-fi recreation of `shaughv_vintage` — the same brand, vintage edition |
@@ -43,10 +46,10 @@ is exactly why this note exists.
 
 **SHAUGHV** is the personal brand mark of **Emmett Shaughnessy** — software developer, educator, and founder. The mark itself is a wordmark with a hidden glasses-and-mustache motif baked into the **A**-and-letterforms — a half-portrait, half-typographic logotype.
 
-There are **two living surfaces** under the same name:
+The kit contains **two reference styles** under the same name:
 
-1. **emmettshaughnessy.com** — the primary canonical surface. *Brutalist, typography-first, dark-by-default, motion-forward.* Locked to a near-black background with a single signal-color orange (`#FF5E1A`).
-2. **shaughv_vintage** — an alternate, lower-key vintage edition. *Bauhaus-inspired, cream-and-sage, figurine illustrations, serif display.* Uses the same SHAUGHV mark, recoloured.
+1. **Personal-site reference** — *brutalist, typography-first, dark, motion-forward*, with near-black and signal orange (`#FF5E1A`).
+2. **Vintage reference** — *Bauhaus-inspired, cream-and-sage, optional figurine illustrations*. Uses the same SHAUGHV mark, recoloured.
 
 This design system uses **the layout, motion language, and component DNA of the personal site**, paired with **the cream + sage + olive + bamboo palette of the vintage edition**. It is intentionally a hybrid — produced specifically to brand outputs that need to feel less aggressive than the live dark site.
 
@@ -120,9 +123,9 @@ The non-negotiable visual rules. See `colors_and_type.css` for the underlying to
 | Foreground | `--fg` | `#5C5446` | Body copy, headings, hairlines |
 | **Primary accent** | `--accent` | `#5B8A5B` (sage) | CTAs, focus, selection, /works ticker glyphs |
 | Warm secondary | `--warm` | `#C4A876` (bamboo) | Figurine backdrops, illustration tones |
-| Bauhaus red | `--sv-bauhaus-red` | `#BE3A34` | Bauhaus primitive blocks (sparingly) |
-| Bauhaus blue | `--sv-bauhaus-blue` | `#1E4B8E` | Bauhaus primitive blocks (sparingly) |
-| Bauhaus yellow | `--sv-bauhaus-yellow` | `#E8B923` | Bauhaus primitive blocks (sparingly) |
+| Bauhaus red | `--sv-bauhaus-red` | `#B05545` | Bauhaus primitive blocks (sparingly) |
+| Bauhaus blue | `--sv-bauhaus-blue` | `#345670` | Bauhaus primitive blocks (sparingly) |
+| Bauhaus yellow | `--sv-bauhaus-yellow` | `#D6A52E` | Bauhaus primitive blocks (sparingly) |
 | Brand orange (legacy) | `--sv-brand-orange` | `#FF5E1A` | Only on hosted brand media |
 
 **Rule:** never introduce raw hex values in components. Add to `colors_and_type.css` first.
@@ -131,11 +134,10 @@ The non-negotiable visual rules. See `colors_and_type.css` for the underlying to
 
 | Role | Family | Where |
 |---|---|---|
-| Display + headings | **Makira** (proprietary sans) | `h1`–`h4`, billboard hero, section titles |
-| Body / UI | **Makira** (proprietary sans) | Default body, paragraphs, form inputs |
-| Mono / metadata | **Paper Mono** (SIL OFL 1.1) | Labels, eyebrows, tech pills, index numbers, code |
+| Standard sans | **Makira** | Headings, display, body, interfaces, buttons, and labels |
+| Standard monospace | **Paper Mono** (SIL OFL 1.1) | Headings, display, body, interfaces, buttons, code, and data |
 
-Makira and Paper Mono are the preferred defaults. The CDN combined stylesheet also retains Gail Rock for existing consumers; use `fonts.all.defaults` in the live manifest to identify the preferred pair. **IBM Plex Mono and Unbounded are opt-in** there and are no longer part of the default system — link them explicitly if a surface genuinely needs one.
+Makira and Paper Mono are two versatile voices; neither is restricted to one text role. The existing type classes are useful presets and can be reassigned to fit a project. The CDN combined stylesheet also retains Gail Rock for compatibility. **Michelangelus, IBM Plex Mono, and Unbounded are opt-in**, loaded separately only when the design calls for them. Read [`references/fonts.md`](references/fonts.md) for the complete loading and availability guide; use `fonts.all.defaults` in the live catalog for current defaults.
 
 Aggressive type-step policy: reserve `2xl:` (≥1536 px) for billboard sizes. 13″ laptops at 1280 px should land on the penultimate step.
 
@@ -261,18 +263,18 @@ The brand uses **two icon resources**:
    <script>lucide.createIcons();</script>
    ```
 
-2. **The SHAUGHV brand mark** — a custom SVG wordmark with hidden glasses-and-mustache motif. **Always animated when the framework can run JS; static otherwise.** Full spec in [`BRANDMARK.md`](./BRANDMARK.md).
+2. **The SHAUGHV brand mark** — a custom SVG wordmark with hidden glasses-and-mustache motif. Use the canonical animation where it fits; the paired footer deliberately uses a static wordmark, and reduced-motion users receive a static mark. Full spec in [`BRANDMARK.md`](./BRANDMARK.md).
 
    | File | Use |
    |---|---|
    | `assets/animated-brand-mark.js` | **Vanilla JS drop-in — the default**. One `<script>` tag + a `<shaughv-mark>` element (or `[data-shaughv-mark]`). No dependencies. Honors `prefers-reduced-motion`. |
    | `assets/AnimatedBrandMark.jsx` | React + Framer Motion port. Drop into any codebase already using `framer-motion`. |
-   | `assets/SHAUGHV-Official.svg` | **Static fallback** wordmark, monochrome `currentColor`. Use whenever the consumer can't run JS (PPTX, PDF, generated images, plain markdown). |
+   | `assets/SHAUGHV-Official.svg` | **Static fallback** wordmark on a square canvas. An external image does not inherit the parent's text color; use a mask or the documented contrast filter when needed. |
    | `assets/SHAUGHV-Green.png` | Sage-coloured lockup PNG — only when the consumer can't render SVG at all. |
    | `assets/SHAUGHV-Orange.png` | Brand-orange lockup PNG — only when the consumer can't render SVG at all. |
    | `assets/SHAUGHV-Favicon-Light.svg` / `-Dark.svg` / `-*-Alt.svg` | 1:1 **icon mark** (mustache + glasses only, no letters) — use at favicon / ≤ 48 px scale, where the wordmark is illegible. |
 
-   **Default placement:** top-left of every primary SHAUGHV surface (navbar / header), **40–64 px tall**, color inherited from the surrounding lockup via `currentColor`. On the live navbar the loop is: wordmark holds 10 s → undraws → 3 s pause → mustache + glasses icon draws → holds 10 s → undraws → 3 s pause → wordmark redraws → loop. See `BRANDMARK.md` for the full timing table and animation recipe.
+   **Default placement:** a primary header or feature surface, inheriting its foreground color. For animation, provide at least 64px on both axes; smaller placements use a static mark. The supplied loop is: wordmark holds 10 s → undraws → 3 s pause → mustache + glasses icon draws → holds 10 s → undraws → 3 s pause → wordmark redraws. See `BRANDMARK.md` for timing and static footer guidance.
 
    **When the target framework cannot run the JS drop-in** (slide exports, PDF, image consumers, frameworks where you cannot mount a real DOM node), fall back to embedding `assets/SHAUGHV-Official.svg` directly — it is the source-of-truth static wordmark and works anywhere SVG works.
 
@@ -280,7 +282,22 @@ The brand uses **two icon resources**:
 - **Never draw your own SVG icons.** If a glyph isn't in Lucide, use a Lucide stand-in or omit.
 - **Never use emoji as iconography** (or anywhere — see Content Fundamentals).
 - **Never use Unicode characters as icons** with one exception: `◆` (`\u25C6`) as a marquee separator in the orange brand color.
-- Brand mark uses `currentColor` and must inherit text colour — don't hardcode it.
+- The JS-rendered mark uses `currentColor`. Standalone SVG images and supplied PNG/favicon variants have their own color behavior; preserve the artwork and use the integration described in `BRANDMARK.md`.
+
+## FOOTER IDENTITY
+
+Keep the main SHAUGHV wordmark and Shaughnessy crest together in the footer,
+preserving their relative sizing and individual aspect ratios. Either example
+may be used as is or customized to the site's existing theme. Layout, navigation,
+copyright placement, typography, colors, padding, and breakpoints are flexible.
+Scale both logos up or down together; exact pixel dimensions are reference values.
+
+The complete recipe is in [`references/footer.md`](references/footer.md), with
+both layouts in [`examples/footer.html`](examples/footer.html). The bundled
+`assets/crests/Shaughnessy-Crest-Footer.svg` is the strengthened small-size
+derivative; the original color and mono crests remain separate. The footer uses
+the static JS wordmark so its proportions match the reference, and loads Makira
+and Paper Mono through the local kit or CDN as appropriate for the project.
 
 ---
 

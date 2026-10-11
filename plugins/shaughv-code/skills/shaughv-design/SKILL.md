@@ -1,6 +1,6 @@
 ---
 name: shaughv-design
-description: Use this skill to generate well-branded interfaces and assets for SHAUGHV (Emmett Shaughnessy's personal brand), either for production or throwaway prototypes/mocks. Contains the brand's typography, palette, fonts, mark, motion vocabulary, and full UI kits for both the live brutalist personal site and the vintage-edition variant.
+description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
 ---
 
 # SHAUGHV Design Skill
@@ -9,27 +9,35 @@ You are an expert designer working in the SHAUGHV brand system — the personal 
 
 ## Before you do anything
 
+Use the consuming site's established theme when adding branding to an existing
+site. The reference UI kits and vintage tokens are starting points for new work,
+not a requirement to restyle an existing site. Current asset identities, font
+defaults, and integration policies come from the CDN: use `shaughv-cdn` to fetch
+the live guide and catalog. The bundled references are also usable offline.
+
 1. **Read `README.md`** — the brand context, content fundamentals, visual foundations, and iconography rules.
 2. **Read `colors_and_type.css`** — the single source of truth for all design tokens. Never invent hex values; reference variables from this file.
 3. **Read `BRANDMARK.md`** before placing the SHAUGHV mark anywhere — it contains the decision tree (animated vs static vs icon variant), the drop-in usage for HTML/React/everything-else, and the full animation spec. The mark is part of every SHAUGHV surface; getting it right is non-optional.
 4. **If your output has any loading state**, use `assets/shaughv-loader.js` (`<shaughv-loader>`). It is the *only* loader allowed on SHAUGHV surfaces — no framework defaults, no custom spinners. See README's LOADER section.
-5. **Skim `ui_kits/`** — there are two UI kits: `personal_site/` (brutalist primary surface) and `vintage_site/` (Bauhaus vintage edition). Open the `index.html` of whichever is closer to what you're building, and consult its JSX components.
+5. **Skim `ui_kits/`** — there are two historical style references: `personal_site/` (brutalist) and `vintage_site/` (Bauhaus vintage). Open the closer reference if useful. Their older footer compositions are superseded by the complete paired-logo instructions and examples below.
+6. **For a website footer, read `references/footer.md`.** It contains the complete paired-logo contract, assets, font loading, both layouts, scaling, color handling, framework notes, and verification guidance. Start from the runnable `examples/footer.html` and `examples/footer.css` if useful.
+7. **Read `references/fonts.md` before choosing or loading type.** Makira and Paper Mono are the standard pair; either can handle headings, interfaces, body copy, and buttons. The reference distinguishes bundled files, CDN variable families, compatibility fonts, and opt-in fonts.
 
 ## How to design
 
 **If the user wants a visual artifact** (slide deck, mock, throwaway prototype, marketing asset, social card):
-- Copy the assets you need out of `assets/` and `fonts/` into your working folder.
+- Use the supplied assets and fonts for authorized SHAUGHV work, retaining their notices. For public web projects, prefer the CDN font stylesheets; see `references/fonts.md` for local and hosted loading.
 - Import `colors_and_type.css` (or inline the relevant variables).
-- **Place the brand mark per `BRANDMARK.md`:** in any HTML output, drop `assets/animated-brand-mark.js` in and use `<shaughv-mark style="color: var(--fg); height: 56px;"></shaughv-mark>`. In fixed-frame exports (PPTX/PDF) or anywhere JS can't run, embed `assets/SHAUGHV-Official.svg` instead.
+- **Place the brand mark per `BRANDMARK.md`:** for animation, give `<shaughv-mark>` at least 64px on both axes. Use `data-static` for the paired footer identity or smaller placements. In fixed-frame exports or anywhere JS can't run, embed `assets/SHAUGHV-Official.svg` and account for its different framing.
 - Use the **vintage palette** (cream + sage + olive + bamboo) as the default — it's the warmer, more print-friendly half of the brand.
 - Use the **brutalist layout language** from `ui_kits/personal_site/` — large uppercase Makira headlines, Paper Mono labels, 12-col asymmetric grids, decisive use of sage as the single action color.
 - **Figurines are optional.** `assets/figurines/` ships five vintage-edition character illustrations of Shaughv at a desk. Use them only on cream/vintage surfaces where the layout has a natural slot for a hero illustration — don't add them by default, and never on the brutalist dark surface. See the FIGURINES section of `README.md` for the placement rules. **When in doubt, leave them out.**
 - For dark-mode or video-first content, switch to the live brand palette (near-black + brand orange `#FF5E1A`) — the brand orange wordmark lives at `assets/SHAUGHV-Orange.png`.
 
 **If the user wants production code:**
-- Copy `colors_and_type.css` and `fonts/` into their project.
+- Choose hosted font loading or the bundled local files as described in `references/fonts.md`. `colors_and_type.css` includes page-wide theme rules; do not import it wholesale merely to add a footer to an existing site. Reuse the site's tokens and take only the needed font and footer rules.
 - Treat the JSX components in `ui_kits/*/` as **reference**, not as importable code — they are simplified single-file recreations of production components. The real implementations live in the source repos linked in `README.md`.
-- For a site footer, use `shaughv-cdn` to discover the current footer guide and asset metadata. Keep both the main wordmark and crest in the footer, preserving their relative sizing and individual aspect ratios. You may use the example as is or customize its layout, spacing, typography, colors, navigation, and copyright placement to fit the site's current theme. Scale the two logos up or down together; take the proportional reference from the live guide instead of pinning dimensions here.
+- Keep both footer logos and their relative sizing. Use the complete local recipe in `references/footer.md` as shown or adapt its layout and styling to the site. Scale the two logos together using the recipe's shared scale value, preserving each aspect ratio. When online, compare the reference with the guide and metadata discovered through `shaughv-cdn`.
 
 ## Content rules you must follow
 
@@ -57,9 +65,12 @@ Then build it as an expert designer would: explore, decide on the system, commit
 |---|---|
 | `README.md` | Brand context, content fundamentals, visual foundations, iconography |
 | `BRANDMARK.md` | How to render and animate the SHAUGHV mark in any framework — read before placing the mark |
+| `references/footer.md` | Complete footer instructions, required logo pair, adaptable layouts, shared scaling, colors, fonts, and implementation checks |
+| `references/fonts.md` | Current family roles, bundled and hosted loading, variable fonts, optional families, and notices |
+| `examples/footer.html` / `examples/footer.css` | Runnable left and centered footer examples, with shared proportional scaling |
 | `colors_and_type.css` | All design tokens — `@font-face`, palette, semantic vars, type classes |
-| `fonts/` | Self-hosted `.woff2` for the two standard families: Makira (400–900) and Paper Mono (100–800), plus Gail Rock compatibility files. IBM Plex Mono and Unbounded are opt-in on the CDN and deliberately not bundled. |
-| `assets/` | SHAUGHV brandmarks: static SVG/PNG + `animated-brand-mark.js` (vanilla drop-in) + `AnimatedBrandMark.jsx` (React/Framer port) + `shaughv-loader.js` (canonical loader, required on every loading state) |
+| `fonts/` | Static WOFF2 for Makira and Paper Mono, Paper Mono Variable, notices, and Gail Rock compatibility faces. Michelangelus, IBM Plex Mono, and Unbounded are opt-in through the CDN. |
+| `assets/` | Wordmark, favicons, PNGs, animation and loader scripts, figurines, plus `crests/` with original color, original mono, footer derivative, and provenance metadata |
 | `assets/figurines/` | Vintage character illustrations (Shaughv at a desk) — **optional, vintage surfaces only**. See README's FIGURINES section. |
 | `preview/` | Specimen cards showing the system at a glance |
 | `ui_kits/personal_site/` | Brutalist surface recreation — sections, components, click-thru index |

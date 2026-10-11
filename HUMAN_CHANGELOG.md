@@ -6,6 +6,18 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## A complete footer and typography kit — 10 October 2026
+
+**Added**
+- The design skill now includes both footer layouts, the original and footer crest artwork, and complete guidance for keeping the two logos balanced at different sizes.
+- Added a continuous-weight version of Paper Mono alongside the existing fonts and explained how to load the optional font families.
+
+**Improved**
+- Agents can work from the included examples or adapt them to the site's current theme. Both standard fonts are suitable for headings, body text, and controls.
+
+**Fixed**
+- Corrected outdated animation, logo-color, and font-feature instructions so the footer stays static and the supplied artwork and typography render as intended.
+
 ## Footer examples that fit the site — 10 October 2026
 
 **Improved**

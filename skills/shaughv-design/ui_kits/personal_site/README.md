@@ -1,8 +1,13 @@
 # Personal Site UI Kit
 
-Hi-fi recreation of **emmettshaughnessy.com** — the canonical brutalist brand surface for SHAUGHV.
+Historical personal-site style reference for SHAUGHV. This kit is not a snapshot of the current live site.
 
-## Stack (real)
+For footer work, use the complete [paired-logo guide](../../references/footer.md)
+and [runnable examples](../../examples/footer.html). They supersede this kit's
+older single-mark footer composition. Preserve both logos and their proportions
+while adapting the surrounding layout to the site's current theme.
+
+## Source stack at the time of this reference
 
 | Layer | Tech |
 |---|---|
@@ -36,6 +41,7 @@ Components are cosmetic recreations — not production-quality. The real product
 
 ## Palette
 
-This kit ships in the **canonical brutalist dark palette** (near-black `#090909` + brand orange
-`#FF5E1A`) — that's how the live site looks today. For the vintage cream-and-sage variant of the
-same brand, see `ui_kits/vintage_site/`.
+This kit demonstrates a **brutalist dark palette** (near-black `#090909` + brand
+orange `#FF5E1A`). For the vintage cream-and-sage reference, see
+`ui_kits/vintage_site/`. An existing site's current theme takes precedence when
+installing the footer.

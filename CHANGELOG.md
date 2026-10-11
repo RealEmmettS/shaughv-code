@@ -36,6 +36,21 @@ Docs + CI. No plugin version bump: nothing that ships to either surface changed.
   refreshing `CODEX_PROJECT.md`'s **Project status** block in the same commit as a version bump,
   and say the phrasings are CI-parsed.
 
+## [1.4.0] — 2026-10-10
+
+### Added
+- Complete `shaughv-design/references/footer.md` and `references/fonts.md`, with local and live discovery workflows, both footer layouts, adaptable styling, shared proportional scaling, framework cleanup, font roles, and optional family guidance.
+- Runnable `examples/footer.html` and `examples/footer.css`; bundle the three exact crest variants and their metadata, plus original Paper Mono Variable WOFF2 and its copyright notice.
+
+### Improved
+- Refresh the design skill entry point and README so existing site themes take precedence over reference UI kits. Makira and Paper Mono can each serve display, interface, body, and control roles; document Michelangelus alongside the other opt-in CDN families.
+- Verify existing wordmark, animation, loader, standard favicons, and all 21 static font files against the canonical CDN source. Preserve the valid bundled alternate dark favicon rather than replacing it with a source copy containing a duplicate namespace declaration.
+
+### Fixed
+- Replace always-animate footer guidance with the static paired identity; align animated examples with the 64px minimum, explain SVG image color and viewBox differences, and remove an incorrect total-loop duration claim.
+- Align the README's Bauhaus swatches with actual tokens and remove inherited global `ss01` so font-specific alternates remain deliberate local choices.
+- Regenerate the 32-skill, 491-file Codex package and align both manifests and project status.
+
 ## [1.3.5] — 2026-10-10
 
 ### Improved

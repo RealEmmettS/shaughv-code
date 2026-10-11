@@ -5,8 +5,9 @@
 `shaughv-code` is Emmett Shaughnessy's personal cross-agent skill bundle. The
 repository root is the authoring source for Claude Code and skills.sh-compatible
 agents; `plugins/shaughv-code/` is a generated, self-contained Codex package.
-Release 1.3.5 clarifies that footer examples can be used as is or adapted to the
-site's theme while keeping both logos and their relative proportions intact.
+Release 1.4.0 refreshes the design skill with complete footer and font references,
+bundled crests, runnable footer examples, proportional logo scaling, and current
+static-mark and typography guidance.
 
 ## Project status
 
@@ -15,13 +16,13 @@ site's theme while keeping both logos and their relative proportions intact.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.3.5 (10 October 2026).
+- **Current release:** 1.4.0 (10 October 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's
   reusable skills and the explicitly approved Claude-only slash command.
 - **Current state:** Claude and Codex plugin manifests are version-aligned; the
-  generated Codex package contains 32 skill directories and 481 files.
+  generated Codex package contains 32 skill directories and 491 files.
 - **Validation:** `pwsh ./build-codex-plugin.ps1 -Check` rebuilds into a
   temporary directory, compares file hashes, checks manifest version lockstep,
   and enforces the Windows clone-path ceiling.
@@ -481,6 +482,11 @@ in the indent runs, which broke copy-paste).
 │           │   └── SKILL.md
 │           ├── shaughv-design
 │           │   ├── assets
+│           │   │   ├── crests
+│           │   │   │   ├── crest-info.json
+│           │   │   │   ├── Shaughnessy-Crest-Footer.svg
+│           │   │   │   ├── Shaughnessy-Crest-Mono.svg
+│           │   │   │   └── Shaughnessy-Crest.svg
 │           │   │   ├── figurines
 │           │   │   │   ├── transparent
 │           │   │   │   │   ├── figurine-404.webp
@@ -505,6 +511,9 @@ in the indent runs, which broke copy-paste).
 │           │   │   ├── shaughv-loader.js
 │           │   │   ├── SHAUGHV-Official.svg
 │           │   │   └── SHAUGHV-Orange.png
+│           │   ├── examples
+│           │   │   ├── footer.css
+│           │   │   └── footer.html
 │           │   ├── fonts
 │           │   │   ├── Gail-Rock-Bold.woff2
 │           │   │   ├── Gail-Rock-Extralight.woff2
@@ -522,12 +531,14 @@ in the indent runs, which broke copy-paste).
 │           │   │   ├── PaperMono-Bold.woff2
 │           │   │   ├── PaperMono-ExtraBold.woff2
 │           │   │   ├── PaperMono-ExtraLight.woff2
+│           │   │   ├── PaperMono-LICENSE.txt
 │           │   │   ├── PaperMono-Light.woff2
 │           │   │   ├── PaperMono-Medium.woff2
 │           │   │   ├── PaperMono-OFL.txt
 │           │   │   ├── PaperMono-Regular.woff2
 │           │   │   ├── PaperMono-SemiBold.woff2
-│           │   │   └── PaperMono-Thin.woff2
+│           │   │   ├── PaperMono-Thin.woff2
+│           │   │   └── PaperMono-Variable.woff2
 │           │   ├── preview
 │           │   │   ├── _card-base.css
 │           │   │   ├── brand-animated-mark.html
@@ -558,6 +569,9 @@ in the indent runs, which broke copy-paste).
 │           │   │   ├── type-eyebrow.html
 │           │   │   ├── type-heading.html
 │           │   │   └── type-mono.html
+│           │   ├── references
+│           │   │   ├── fonts.md
+│           │   │   └── footer.md
 │           │   ├── ui_kits
 │           │   │   ├── personal_site
 │           │   │   │   ├── About.jsx
@@ -1048,6 +1062,11 @@ in the indent runs, which broke copy-paste).
 │   │   └── SKILL.md
 │   ├── shaughv-design
 │   │   ├── assets
+│   │   │   ├── crests
+│   │   │   │   ├── crest-info.json
+│   │   │   │   ├── Shaughnessy-Crest-Footer.svg
+│   │   │   │   ├── Shaughnessy-Crest-Mono.svg
+│   │   │   │   └── Shaughnessy-Crest.svg
 │   │   │   ├── figurines
 │   │   │   │   ├── transparent
 │   │   │   │   │   ├── figurine-404.webp
@@ -1072,6 +1091,9 @@ in the indent runs, which broke copy-paste).
 │   │   │   ├── shaughv-loader.js
 │   │   │   ├── SHAUGHV-Official.svg
 │   │   │   └── SHAUGHV-Orange.png
+│   │   ├── examples
+│   │   │   ├── footer.css
+│   │   │   └── footer.html
 │   │   ├── fonts
 │   │   │   ├── Gail-Rock-Bold.woff2
 │   │   │   ├── Gail-Rock-Extralight.woff2
@@ -1089,12 +1111,14 @@ in the indent runs, which broke copy-paste).
 │   │   │   ├── PaperMono-Bold.woff2
 │   │   │   ├── PaperMono-ExtraBold.woff2
 │   │   │   ├── PaperMono-ExtraLight.woff2
+│   │   │   ├── PaperMono-LICENSE.txt
 │   │   │   ├── PaperMono-Light.woff2
 │   │   │   ├── PaperMono-Medium.woff2
 │   │   │   ├── PaperMono-OFL.txt
 │   │   │   ├── PaperMono-Regular.woff2
 │   │   │   ├── PaperMono-SemiBold.woff2
-│   │   │   └── PaperMono-Thin.woff2
+│   │   │   ├── PaperMono-Thin.woff2
+│   │   │   └── PaperMono-Variable.woff2
 │   │   ├── preview
 │   │   │   ├── _card-base.css
 │   │   │   ├── brand-animated-mark.html
@@ -1125,6 +1149,9 @@ in the indent runs, which broke copy-paste).
 │   │   │   ├── type-eyebrow.html
 │   │   │   ├── type-heading.html
 │   │   │   └── type-mono.html
+│   │   ├── references
+│   │   │   ├── fonts.md
+│   │   │   └── footer.md
 │   │   ├── ui_kits
 │   │   │   ├── personal_site
 │   │   │   │   ├── About.jsx

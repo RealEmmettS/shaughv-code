@@ -5,28 +5,26 @@
 The SHAUGHV brand mark is **always one of three things**:
 
 1. **Animated brand mark** — the canonical surface treatment. Wordmark fades out, the hidden mustache-and-glasses icon draws itself in, holds, then the wordmark redraws. Loops forever. Used on every primary SHAUGHV surface (personal site navbar, control rooms, splash screens).
-2. **Static wordmark** — fallback for frameworks/contexts that can't animate SVG. Renders `assets/SHAUGHV-Official.svg` once, in `currentColor`.
+2. **Static wordmark** — required for the paired footer reference and useful for small, quiet, reduced-motion, or non-JS contexts. Use `<shaughv-mark data-static>` to keep the renderer's tight framing; use `assets/SHAUGHV-Official.svg` when JavaScript is unavailable.
 3. **Static icon mark** — the mustache-and-glasses-only variant. Used at favicon scale or when the wordmark would be illegibly small.
 
-**All three inherit color via `currentColor`.** The host element's CSS `color` property is the only color knob. Never bake fills into the SVG.
+**The JS-rendered variants inherit `currentColor`.** Their host's CSS `color` is the color control. An external SVG `<img>` does not inherit its parent's color; the standalone wordmark has a square canvas and the supplied favicon variants have baked colors. For a monochrome image, use a CSS mask with `background: currentColor`, or `filter: brightness(0) invert(1)` for white on dark. Preserve original asset bytes.
 
 ---
 
 ## Decision tree — which mark do I use?
 
 ```
-Is the output an HTML artifact (any flavour: vanilla, React, deck, prototype)?
-├── YES → can it host the mark at ≥ 64 × 64 px AND run a 4 kB JS file?
-│   ├── YES → ANIMATED MARK   (assets/animated-brand-mark.js)
-│   └── NO  → STATIC WORDMARK (assets/SHAUGHV-Official.svg, or <shaughv-mark data-static>)
-└── NO  → is it a fixed-frame export (PPTX, PDF, screenshot, video frame)?
-    ├── YES → STATIC WORDMARK (assets/SHAUGHV-Official.svg)
-    └── NO  → tiny surface (≤ 48 px), avatar, or favicon?
-        ├── YES → STATIC ICON MARK (assets/SHAUGHV-Favicon-*.svg)
-        └── NO  → STATIC WORDMARK
+Paired footer identity?
+  Yes → STATIC WORDMARK + CREST (references/footer.md)
+Otherwise, favicon or tiny icon placement?
+  Yes → STATIC ICON (assets/SHAUGHV-Favicon-*.svg)
+Otherwise, JavaScript available and both axes at least 64px?
+  Yes → ANIMATED MARK where motion fits; static is also supported
+  No  → STATIC WORDMARK (data-static, or standalone SVG without JS)
 ```
 
-**Default for every SHAUGHV-branded site or app**: animated mark, **≥ 64 × 64 px**, on the primary feature surface (hero, splash, control-room masthead, navbar lockup), color `var(--fg)` (vintage palette) or `#FFFFFF` (brutalist dark palette). On hover/focus of the surrounding lockup, no color change — the animation IS the affordance. Anything smaller than 64 × 64 px falls back to the **static wordmark**.
+**Default on a primary feature surface**: animated mark with at least 64px on both axes where animation fits the project, inheriting the site's foreground color. Smaller placements and the paired footer use the **static wordmark**. The footer's paired-logo proportions are documented in `references/footer.md`; the animated minimum does not prevent scaling that static pair down.
 
 ---
 
@@ -34,11 +32,13 @@ Is the output an HTML artifact (any flavour: vanilla, React, deck, prototype)?
 
 | Path | What it is | When to use |
 |---|---|---|
-| `assets/SHAUGHV-Official.svg` | Source-of-truth static wordmark — monochrome, `currentColor` | Static contexts; default fallback for everything |
+| `assets/SHAUGHV-Official.svg` | Original static wordmark on a 250 × 250 canvas | Non-JS contexts; account for its canvas and external-image color behavior |
 | `assets/animated-brand-mark.js` | **Vanilla JS drop-in** that renders & animates the mark — no framework, no deps | Any HTML artifact, deck slide, prototype, plain-JS site |
 | `assets/AnimatedBrandMark.jsx` | **React + Framer Motion** port of the same animation | React/Next.js codebases (already using `framer-motion`) |
 | `assets/SHAUGHV-Favicon-Light.svg` / `-Dark.svg` / `-*-Alt.svg` | Icon-mark-only variants (mustache + glasses, no letters) | Favicons, ≤ 48 px surfaces, avatar contexts |
 | `assets/SHAUGHV-Green.png` / `SHAUGHV-Orange.png` | Pre-baked colour PNGs of the wordmark | Only when consumer can't render SVG — PPTX exports, social cards |
+| `assets/crests/Shaughnessy-Crest-Footer.svg` | Strengthened mono crest for small footer display | Pair with the static main wordmark; see `references/footer.md` |
+| `assets/crests/Shaughnessy-Crest.svg` / `Shaughnessy-Crest-Mono.svg` | Supplied color and mono originals | Other crest uses; distinct from the footer derivative |
 
 ---
 
@@ -54,7 +54,7 @@ This is what an agent should reach for **first** in throwaway prototypes, decks,
   <style>
     .brand-mark {
       display: inline-block;
-      height: 56px;
+      height: 64px;
       width: auto;
       color: var(--fg, #5C5446); /* olive on cream by default */
     }
@@ -107,7 +107,7 @@ import AnimatedBrandMark from "./components/AnimatedBrandMark";
 </div>
 ```
 
-It is **the exact source the production navbar uses** — no re-discovery needed. Sizing comes from CSS on `.brand-lockup-mark` (set `height: 56px; width: auto;`).
+This is the supplied React source port. Sizing comes from CSS on `.brand-lockup-mark` (for animation, set `height: 64px; width: auto;` and verify both dimensions meet the minimum). For the static footer, use the vanilla mount with `{ static: true }` and destroy it on teardown, as shown in `references/footer.md`.
 
 ### C) Anywhere else (Vue / Svelte / static-site generator / unknown framework)
 
@@ -228,7 +228,7 @@ This is non-negotiable. The animation is decorative; it must never block reading
 | Favicon / avatar (≤ 48 px) | use icon-mark variant (`assets/SHAUGHV-Favicon-*.svg`) | **Static icon** | The wordmark is illegible below ~40 px height. |
 | PPTX / PDF / image export | ~ 64–128 px equivalent | **Static wordmark** | Static `SHAUGHV-Official.svg`. |
 
-Set sizing on the **host element**, never on the SVG itself. The SVG fills its host with `display: block; width: 100%; height: 100%`.
+Set sizing on the **host element** and preserve the generated SVG's natural aspect ratio. The vanilla renderer uses the tight `2.5 52.7 245 165` viewBox; the standalone SVG uses a square `0 0 250 250` viewBox. They need different framing at the same apparent logo size. The footer recipe uses the tight renderer and must not be replaced with a square image at identical CSS dimensions without a visual check.
 
 ---
 
@@ -246,7 +246,7 @@ The animated mark is almost always paired with a small monospace label, forming 
   }
   .brand-lockup-mark {
     display: inline-block;
-    height: 56px;
+    height: 64px;
     width: auto;
   }
   .brand-lockup-label {
@@ -302,6 +302,6 @@ If any of those are infeasible in the target framework, **stop and fall back to 
 
 ## Why the animation exists
 
-The SHAUGHV identity has a quiet trick built into it: the mustache and glasses are baked into the SHAUGHV wordmark, *inside* the letterforms, not on top of them. The animation makes that legibility move explicit — the eye sees letters, the letters fade, the glasses-and-mustache remain, and then the letters rebuild around them. It's a 23-second loop that teaches the viewer to see the hidden portrait, then re-see the wordmark with that knowledge.
+The SHAUGHV identity has a quiet trick built into it: the mustache and glasses are baked into the SHAUGHV wordmark, *inside* the letterforms, not on top of them. The animation makes that legibility move explicit — the eye sees letters, the letters fade, the glasses-and-mustache remain, and then the letters rebuild around them. The supplied script's holds, pauses, and staggered draw phases define the complete loop.
 
 This is why the animation has to be *exactly this* — same hold time, same easing, same stagger. It's a single visual idea, expressed once. Reuse it; don't redesign it.

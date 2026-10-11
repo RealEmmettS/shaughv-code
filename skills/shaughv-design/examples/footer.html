@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHAUGHV footer examples</title>
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <link rel="stylesheet" href="footer.css">
+  <style>
+    body { margin: 0; padding: 24px; }
+    main { max-width: 960px; margin-inline: auto; }
+    h1 { font-size: clamp(24px, 4vw, 40px); line-height: 1.15; }
+    h2 { font-size: 20px; margin-block: 36px 16px; }
+    p { max-width: 72ch; line-height: 1.6; }
+    .identity-footer { border: 1px solid var(--border-hairline); }
+    @media (max-width: 400px) { body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Footer identity</h1>
+    <p>Use either example as shown or adapt it to the site's theme. Keep both
+      logos and their relative proportions. Change <code>--identity-scale</code>
+      to scale the pair together. Colors, layout, spacing, typography, and
+      navigation are customizable.</p>
+
+    <h2>Left aligned with navigation</h2>
+    <footer class="identity-footer" aria-label="Left footer example">
+      <div class="identity-brand">
+        <div class="identity-lockup">
+          <shaughv-mark data-static aria-label="SHAUGHV"></shaughv-mark>
+          <span class="family-crest" role="img" aria-label="Shaughnessy family crest — Fortis et stabilis"></span>
+        </div>
+        <small>© 2026 Emmett Shaughnessy</small>
+      </div>
+      <nav class="footer-navigation" aria-label="Example portfolio navigation">
+        <span>Navigate</span>
+        <a href="https://shaughv.com/#about">About</a>
+        <a href="https://shaughv.com/#projects">Projects</a>
+        <a href="https://shaughv.com/tasks">Tasks</a>
+      </nav>
+    </footer>
+
+    <h2>Centered</h2>
+    <footer class="identity-footer is-centered" aria-label="Centered footer example">
+      <div class="identity-brand">
+        <div class="identity-lockup">
+          <shaughv-mark data-static aria-label="SHAUGHV"></shaughv-mark>
+          <span class="family-crest" role="img" aria-label="Shaughnessy family crest — Fortis et stabilis"></span>
+        </div>
+        <small>© 2026 Emmett Shaughnessy</small>
+      </div>
+    </footer>
+    <p>For white on black, add <code>is-inverted</code> to either footer. These
+      neutral colors demonstrate contrast; use the site's own tokens when desired.</p>
+  </main>
+  <script src="../assets/animated-brand-mark.js"></script>
+</body>
+</html>

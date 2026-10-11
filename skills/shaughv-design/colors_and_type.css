@@ -5,26 +5,26 @@
    Typography + semantic patterns derived from RealEmmettS/emmetts_personal_website
    (brutalist, typography-first identity).
 
-   Single source of truth. Never introduce raw hex values in components --
-   add a CSS variable here first.
+   Default tokens for a new SHAUGHV surface. Existing sites can retain their
+   theme; do not import these page-wide rules just to install a footer.
    ===================================================================== */
 
 /* --- FONTS ----------------------------------------------------------
    Two-font system:
-     Makira    -- everything visible: display, headings, body
-     Paper Mono -- eyebrows, buttons, labels, metadata, code
+     Makira     -- sans voice for display, headings, body, controls, labels
+     Paper Mono -- mono voice for those same roles, plus code and data
 
    Both are "standard" families on the SHAUGHV CDN and ship in its
-   combined bundle. IBM Plex Mono and Unbounded are now OPT-IN there --
+   combined bundle. Michelangelus, IBM Plex Mono, and Unbounded are OPT-IN --
    they are no longer part of the default system. If a surface genuinely
    needs one, link it explicitly rather than reintroducing it here:
      https://cdn.shaughv.com/fonts/ibm-plex-mono/ibm-plex-mono.css
      https://cdn.shaughv.com/fonts/unbounded/unbounded.css
+   See references/fonts.md for current loading, availability, and notices.
    ---------------------------------------------------------------- */
 
-/* Makira -- proprietary, self-hosted. Used for ALL visible type
-   (display, headings, body, captions). UPPERCASE for headings/buttons,
-   sentence case for body. */
+/* Makira -- licensed sans for authorized SHAUGHV use. One of two versatile
+   standard families. Prefer hosted CSS for public project integrations. */
 @font-face {
   font-family: "Makira";
   src: url("./fonts/Makira-Regular.woff2") format("woff2");
@@ -70,7 +70,7 @@
 
 /* Paper Mono — preferred SHAUGHV monospace.
    Normal weights 100–800. Original supplied font bytes; SIL OFL 1.1.
-   These bundled faces are static. The CDN also offers "Paper Mono Variable". */
+   Static faces plus "Paper Mono Variable" are bundled with their notices. */
 
 @font-face {
   font-family: "Paper Mono";
@@ -136,8 +136,15 @@
   src: url("./fonts/PaperMono-ExtraBold.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "Paper Mono Variable";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("./fonts/PaperMono-Variable.woff2") format("woff2");
+}
 
-/* Compatibility monospace -- Gail Rock (eyebrows, labels, metadata, pills, code).
+/* Compatibility monospace -- Gail Rock (display, body, UI, labels, and code).
    A true fixed-pitch face: every glyph advances 0.650em, so tabular
    metadata and code align. Normal style only -- there is no italic cut,
    so italics in mono contexts are synthesized. */
@@ -319,7 +326,8 @@ body {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.6;
-  font-feature-settings: "ss01", "kern";
+  font-feature-settings: normal;
+  font-kerning: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;

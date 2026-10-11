@@ -1,0 +1,72 @@
+{
+  "title": "Shaughnessy crests",
+  "viewBox": "0 0 1122 1402",
+  "ownership": "Owner-supplied brand assets; public hosting does not grant redistribution rights.",
+  "variants": [
+    {
+      "key": "original-color",
+      "url": "https://cdn.shaughv.com/brand/crests/Shaughnessy-Crest.svg",
+      "bytes": 1724148,
+      "sha256": "977aed0b83c2d9fd5e2e3c19f4c34f5937ac5e3fda07d926ff3b2ce1f835f79a",
+      "note": "Unchanged supplied original."
+    },
+    {
+      "key": "original-mono",
+      "url": "https://cdn.shaughv.com/brand/crests/Shaughnessy-Crest-Mono.svg",
+      "bytes": 1277035,
+      "sha256": "d0a70559c0b3e75aec9461f5319ecd004d9cfb53a6ee86be0525404790d172ac",
+      "note": "Unchanged supplied original."
+    },
+    {
+      "key": "footer",
+      "url": "https://cdn.shaughv.com/brand/crests/Shaughnessy-Crest-Footer.svg",
+      "bytes": 1700885,
+      "sha256": "0f79a4229e82d9a0ae1906809adbfe3927692d76e680a2f6b479b93352dff1bf",
+      "note": "Exact existing portfolio derivative, with translucent vector fills strengthening small-size detail. Distinct from the supplied original mono SVG."
+    }
+  ],
+  "usage_example": {
+    "title": "Portfolio footer lockup",
+    "documentation_url": "https://cdn.shaughv.com/footer-lockup",
+    "source_project": "shaughv_vintage",
+    "source_file": "src/components/sections/FooterSection.tsx",
+    "source_commit": "59b37a73fa5047bc0b4350dc8769ad97ebeeb117",
+    "source_url": "https://shaughv.com",
+    "main_logo_url": "https://cdn.shaughv.com/brand/shaughv/logos/SHAUGHV-Official.svg",
+    "crest_variant": "footer",
+    "layout_policy": "Use either example as is, or customize the layout, alignment, spacing, padding, typography, colors, navigation, copyright placement, and responsive behavior to fit the consuming site's current theme. Exact reproduction is optional. Keep both the main SHAUGHV wordmark and Shaughnessy crest in the footer as a recognizable pair, preserving their relative sizing and each logo's aspect ratio.",
+    "color_policy": "Black and white are neutral demonstration colors, not a required palette. Choose footer colors from the consuming project's design; do not infer them from these previews or the source portfolio.",
+    "preview_contrast": {
+      "default": "Black foreground on white background.",
+      "inverse": "White foreground on black background, selectable independently for each example.",
+      "scope": "Preview control only; changing contrast preserves logo dimensions, spacing, alignment, and padding. A consuming site does not need this toggle."
+    },
+    "sizing_policy": "The documented dimensions are a proportional reference, not fixed installation sizes. Scale both logos up or down by the same factor to suit the site. Preserve the reference relationship of a 64px-high wordmark to an 80px-wide by 100px-high crest, and each logo's natural aspect ratio. Scale the 7px wordmark optical offset with the pair when using the same renderer. Gap, surrounding padding, and breakpoints are customizable.",
+    "example_spacing": {
+      "padding_block_px": 32,
+      "padding_inline_px": 40,
+      "narrow_padding_inline_px": 28,
+      "narrow_max_width_px": 580
+    },
+    "layout": {
+      "gap_px": 24,
+      "wordmark_height_px": 64,
+      "wordmark_optical_offset_y_px": 7,
+      "crest_width_px": 80,
+      "crest_height_px": 100
+    },
+    "rendering": "The examples use a static wordmark paired with a currentColor CSS mask of the footer crest; copyright is beneath them. This arrangement is optional; retain both logos and their relative sizing when customizing it.",
+    "typography": "Makira and Paper Mono; Michelangelus is not used in this source footer.",
+    "layout_variants": [
+      {
+        "key": "left-with-navigation",
+        "identity": "Wordmark and crest together on the left; copyright below them, left aligned.",
+        "navigation": "Sample About, Projects, and Tasks links on the right; stack below on small screens."
+      },
+      {
+        "key": "centered",
+        "identity": "Wordmark and crest side by side, centered horizontally; copyright beneath, centered."
+      }
+    ]
+  }
+}

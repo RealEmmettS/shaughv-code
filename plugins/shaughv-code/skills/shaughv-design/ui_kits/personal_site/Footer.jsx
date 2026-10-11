@@ -1,4 +1,6 @@
 /* global React */
+// Historical composition reference. For current footer integration use
+// ../../references/footer.md and ../../examples/footer.html: retain both logos.
 
 const socialLinks = [
   { name: "GitHub", href: "https://github.com/RealEmmettS" },

@@ -1,0 +1,60 @@
+/* Copyable footer baseline. Adapt the surrounding layout to the site's theme.
+   Both logo dimensions share --identity-scale; keep that relationship. */
+.identity-footer {
+  --identity-scale: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 32px;
+  padding: 32px 40px;
+  background: var(--footer-background, #fff);
+  color: var(--footer-foreground, #000);
+  font-family: var(--footer-font, "Paper Mono", ui-monospace, monospace);
+}
+.identity-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  min-width: 0;
+}
+.identity-brand small { font-size: 11px; line-height: 1.6; }
+.identity-lockup {
+  display: flex;
+  align-items: center;
+  gap: var(--identity-gap, calc(24px * var(--identity-scale)));
+}
+.identity-lockup shaughv-mark {
+  display: block;
+  flex: none;
+  height: calc(64px * var(--identity-scale));
+  width: auto;
+  transform: translateY(calc(7px * var(--identity-scale)));
+}
+.family-crest {
+  display: block;
+  flex: none;
+  width: calc(80px * var(--identity-scale));
+  height: calc(100px * var(--identity-scale));
+  background: currentColor;
+  mask: url("../assets/crests/Shaughnessy-Crest-Footer.svg") center / contain no-repeat;
+}
+.footer-navigation { display: flex; flex-direction: column; font-size: 13px; }
+.footer-navigation span { font-size: 11px; margin-bottom: 8px; }
+.footer-navigation a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+.footer-navigation a:hover { text-decoration: underline; }
+.footer-navigation a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.identity-footer.is-centered { grid-template-columns: 1fr; }
+.identity-footer.is-centered .identity-brand { align-items: center; text-align: center; }
+.identity-footer.is-inverted { --footer-background: #000; --footer-foreground: #fff; }
+@media (max-width: 580px) {
+  .identity-footer { grid-template-columns: 1fr; padding-inline: 28px; }
+  .footer-navigation { flex-direction: row; flex-wrap: wrap; column-gap: 20px; }
+  .footer-navigation span { flex-basis: 100%; }
+}
