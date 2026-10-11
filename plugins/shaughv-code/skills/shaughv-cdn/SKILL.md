@@ -52,3 +52,14 @@ the stable router into that catalog; it is not an asset inventory.
 Never add a current asset list, count snapshot, concrete asset URL, or family-
 specific integration recipe to this skill. Those belong in the live CDN guide
 and manifest so an installed plugin cannot drift from production.
+
+## Optional shared cursor
+
+When a website wants the custom cursor, discover it through the live CDN guide
+and catalog's documentation links. Read the cursor example and metadata for its
+current API and color presets. Choose orange, vintage sage, black, white, or a
+custom CSS color to suit the website, while retaining the shared circular view,
+responsive spring, eased hover growth, and 90% opacity. Use the hosted component
+rather than inventing a new cursor animation. It is optional per website; keep
+native text/control cursors, touch fallback, reduced motion, and lifecycle cleanup.
+The CDN website itself enables it only on its dedicated cursor guide page.

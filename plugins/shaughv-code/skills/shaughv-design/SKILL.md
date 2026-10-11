@@ -81,3 +81,14 @@ Then build it as an expert designer would: explore, decide on the system, commit
 > "clean it up," gitignore it, or delete it to save space — losing it means losing the
 > original design files. This note exists because every signal an agent normally uses to
 > spot dead weight (unreferenced, duplicated, large) points the wrong way here.
+
+## Optional shared cursor
+
+When a website wants the custom cursor, discover it through the live CDN guide
+and catalog's documentation links. Read the cursor example and metadata for its
+current API and color presets. Choose orange, vintage sage, black, white, or a
+custom CSS color to suit the website, while retaining the shared circular view,
+responsive spring, eased hover growth, and 90% opacity. Use the hosted component
+rather than inventing a new cursor animation. It is optional per website; keep
+native text/control cursors, touch fallback, reduced motion, and lifecycle cleanup.
+The CDN website itself enables it only on its dedicated cursor guide page.

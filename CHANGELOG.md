@@ -9,6 +9,12 @@ A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) an
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-10-10
+
+### Added
+- Route optional custom cursor requests through live CDN documentation and metadata in shaughv-cdn and shaughv-design. Permit custom colors while preserving shared geometry, motion, opacity, accessibility, and lifecycle behavior.
+
+
 Docs + CI. No plugin version bump: nothing that ships to either surface changed.
 
 ### Fixed

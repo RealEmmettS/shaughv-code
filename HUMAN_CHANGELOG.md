@@ -6,6 +6,10 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## Your cursor across websites — 10 October 2026
+
+**Added:** Website-building agents can find your reusable cursor, match its color to each site, and keep the familiar smooth movement and hover response. It stays optional and leaves text editing and touch controls usable.
+
 ## Original crest files stay intact — 10 October 2026
 
 **Fixed**
