@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Optional motion for a page
+
+### Added
+- Agents can now discover and add the moving background from QorkMe, match it to a site's colors, and preserve its short fading mouse trail. It remains an optional design choice.
+
 ## October 21, 2026
 
 ### Improved

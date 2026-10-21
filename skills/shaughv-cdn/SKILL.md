@@ -1,6 +1,6 @@
 ---
 name: shaughv-cdn
-description: Discover and consume assets from the SHAUGHV CDN at cdn.shaughv.com through its live /agents guide and /tree.json manifest. Use whenever a task mentions the SHAUGHV CDN, a cdn.shaughv.com or cdn.emmetts.dev URL, SHAUGHV-hosted fonts, brand assets, images, favicons, figurines, scripts, loaders, drop-in custom cursors, frosted dropdowns, shared site defaults, magnetic button outlines, embeds, or preloads. Fetch the live catalog instead of relying on remembered family names, file paths, formats, counts, snippets, or licensing notes.
+description: Discover and consume assets from the SHAUGHV CDN at cdn.shaughv.com through its live /agents guide and /tree.json manifest. Use whenever a task mentions the SHAUGHV CDN, a cdn.shaughv.com or cdn.emmetts.dev URL, SHAUGHV-hosted fonts, brand assets, images, favicons, figurines, scripts, loaders, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic button outlines, embeds, or preloads. Fetch the live catalog instead of relying on remembered family names, file paths, formats, counts, snippets, or licensing notes.
 ---
 
 # SHAUGHV CDN discovery
@@ -110,3 +110,14 @@ rather than inventing a new cursor animation. Keep native-control fallbacks,
 touch behavior, reduced motion, and lifecycle cleanup. The CDN documentation
 uses it across every page with the default orange base color; its cursor guide
 allows temporary color customization.
+
+## Optional ambient background
+
+Discover the optional dither background and finite cursor wake through
+`usage.components.ambient` in the live CDN catalog. Read the linked guide and
+source notices before installing it. Use the shared color presets or the site's
+custom colors while preserving the original field, wake, masks, and timing.
+Keep content above the transparent canvases, retain motion/touch/visibility
+fallbacks, and destroy framework-owned mounts on teardown. Background decoration
+is opt-in; the required cursor, dropdowns, and paired footer stay the baseline.
+Do not copy current script paths or color tables into installed skills.

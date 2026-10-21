@@ -1,6 +1,6 @@
 ---
 name: shaughv-design
-description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, drop-in custom cursors, frosted dropdowns, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
+description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
 ---
 
 # SHAUGHV Design Skill
@@ -139,3 +139,14 @@ rather than inventing a new cursor animation. Keep native-control fallbacks,
 touch behavior, reduced motion, and lifecycle cleanup. The CDN documentation
 uses it across every page with the default orange base color; its cursor guide
 allows temporary color customization.
+
+## Optional ambient background
+
+Discover the optional dither background and finite cursor wake through
+`usage.components.ambient` in the live CDN catalog. Read the linked guide and
+source notices before installing it. Use the shared color presets or the site's
+custom colors while preserving the original field, wake, masks, and timing.
+Keep content above the transparent canvases, retain motion/touch/visibility
+fallbacks, and destroy framework-owned mounts on teardown. Background decoration
+is opt-in; the required cursor, dropdowns, and paired footer stay the baseline.
+Do not copy current script paths or color tables into installed skills.

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.0] - 2026-10-21
+
+### Added
+- Route optional ambient-background requests through the live CDN component metadata and guide in both CDN and design skills; preserve QorkMe field/wake behavior, site colors, layering, cleanup and license notices without adding a new required site component.
+- Regenerated the Codex package from the updated source skills.
+
 ## [1.7.0] - 2026-10-21
 
 ### Added
