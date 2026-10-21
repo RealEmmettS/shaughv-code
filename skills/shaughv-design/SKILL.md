@@ -135,7 +135,7 @@ IME, selected text, forced colors, blur, and cleanup. Preserve selection, scroll
 resize handles and input accessories; reduced motion removes travel, squash, blinking, and the wave,
 and touch gets no custom effect. No extra field markup is needed.
 Use the hosted component
-rather than inventing a new cursor animation. Unknown and disabled page elements keep the custom circle; color pickers and other simple controls grow it without outlines. Preserve coverage for dynamic content, pseudo-elements, and open shadow components. Explicit native opt-outs, external documents, browser/OS windows, and private closed shadow styles remain boundaries. Keep native editing mechanics,
+rather than inventing a new cursor animation. Unknown and disabled page elements keep the custom circle; color pickers and other simple controls grow it without outlines. Preserve coverage for dynamic content, pseudo-elements, and open shadow components. Keep the component-owned page-wide pointer suppression active while scrolling and resizing. Use a small circle during scrolling, then restore the hover shape under the stationary mouse. Do not add unconditional pointer-hiding CSS outside the component lifecycle. Hosted updates arrive as caches refresh and preserve site color options; use the current script URL from the live catalog for an immediate rollout. Explicit native opt-outs, external documents, browser/OS windows, and private closed shadow styles remain boundaries. Keep native editing mechanics,
 touch behavior, reduced motion, and lifecycle cleanup. The CDN documentation
 uses it across every page with the default orange base color; its cursor guide
 allows temporary color customization.

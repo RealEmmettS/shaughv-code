@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.3] - 2026-10-21
+
+### Fixed
+- Synchronize both CDN design skills with persistent component-owned pointer suppression during scrolling and resizing, circle-to-hover recovery, and lifecycle cleanup.
+- Clarify how hosted component changes reach consuming sites through cache refresh while preserving configured colors.
+
 ## [1.8.2] - 2026-10-21
 
 ### Fixed

@@ -1,5 +1,10 @@
 # Human Changelog
 
+## A cursor that stays visible while scrolling
+
+### Improved
+- Both website guides now keep the custom circle visible during scrolling and explain how shared updates reach other sites without replacing their chosen colors.
+
 ## A consistent cursor and clearer background
 
 ### Improved
