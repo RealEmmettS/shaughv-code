@@ -1,5 +1,12 @@
 # Human Changelog
 
+## October 21, 2026
+
+### Improved
+- The shared cursor becomes the typing caret and follows your text, then returns when you move the mouse.
+- Sites using the shared design assets now have a clear starting point: the custom cursor, frosted dropdowns, and a footer with both logos and copyright.
+- Full-screen designs keep their main view intact, with the footer below. Agents get the same guidance as people reading the website.
+
 ## A gentle touch for text fields — 20 October 2026
 
 ### Improved

@@ -6,13 +6,24 @@ layout, alignment, navigation, copyright placement, typography, colors, gap,
 padding, and responsive breakpoints are flexible.
 
 The requirement is to keep **both the main SHAUGHV wordmark and Shaughnessy
-crest in the footer**, as a recognizable pair. Preserve their relative sizing
+crest in the footer**, as a recognizable pair, plus copyright text. Preserve their relative sizing
 and each logo's natural aspect ratio. Scale the two together; do not stretch
 either one or make one disproportionately larger than the other.
 
 When online, use the `shaughv-cdn` skill to fetch `/agents` and `/tree.json`.
 Follow `usage.documentation.footer_example` and `crest_metadata` for the current
 guide and provenance. This reference and its local assets also work offline.
+
+## Full-screen layouts
+
+Keep a full-screen main experience one full viewport (`min-height: 100svh` with
+a `100vh` fallback, `width: 100%`). Place the footer after main in normal flow,
+below the initial viewport. Do not shrink main by the footer's height or overlay
+its controls. Let content grow for narrow screens and text zoom. One full
+viewport means 100vh, not 1vh.
+
+CDN-based sites also include the shared cursor and frosted dropdowns. Read the
+live `usage.site_defaults` contract through the `shaughv-cdn` skill.
 
 ## Assets included in this skill
 

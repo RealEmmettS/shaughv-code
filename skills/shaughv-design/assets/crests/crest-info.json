@@ -34,7 +34,7 @@
     "source_url": "https://shaughv.com",
     "main_logo_url": "https://cdn.shaughv.com/brand/shaughv/logos/SHAUGHV-Official.svg",
     "crest_variant": "footer",
-    "layout_policy": "Use either example as is, or customize the layout, alignment, spacing, padding, typography, colors, navigation, copyright placement, and responsive behavior to fit the consuming site's current theme. Exact reproduction is optional. Keep both the main SHAUGHV wordmark and Shaughnessy crest in the footer as a recognizable pair, preserving their relative sizing and each logo's aspect ratio.",
+    "layout_policy": "Use either example as is, or customize the layout, alignment, spacing, padding, typography, colors, navigation, copyright placement, and responsive behavior to fit the consuming site's current theme. Exact reproduction is optional. Keep both the main SHAUGHV wordmark and Shaughnessy crest in the footer as a recognizable pair, preserving their relative sizing and each logo's aspect ratio. Copyright text is required. Full-viewport sites keep main at one full viewport and place the footer below it in normal flow.",
     "color_policy": "Black and white are neutral demonstration colors, not a required palette. Choose footer colors from the consuming project's design; do not infer them from these previews or the source portfolio.",
     "preview_contrast": {
       "default": "Black foreground on white background.",
@@ -67,6 +67,18 @@
         "key": "centered",
         "identity": "Wordmark and crest side by side, centered horizontally; copyright beneath, centered."
       }
-    ]
-  }
+    ],
+    "required_for_cdn_sites": true,
+    "minimum": [
+      "SHAUGHV main logo",
+      "Shaughnessy crest",
+      "Copyright text"
+    ],
+    "full_viewport_layout": {
+      "main": "Keep the main experience one full viewport when the design calls for it; use min-height: 100svh with a 100vh fallback and width: 100%.",
+      "footer": "Place the footer after main in normal document flow, below the first viewport. Do not subtract its height from main or overlay controls.",
+      "units": "A full viewport is 100vh/100svh, not 1vh. Prefer width:100% to avoid 100vw scrollbar overflow. Allow content to grow when needed."
+    }
+  },
+  "site_defaults": "https://cdn.shaughv.com/brand/shaughv/site-defaults.json"
 }

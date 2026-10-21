@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.7.0] - 2026-10-21
+
+### Added
+- Required CDN site baseline in `shaughv-cdn` and `shaughv-design`: shared cursor, frosted dropdowns, and both footer logos plus copyright, discovered through the live metadata.
+- Full-viewport layout guidance that keeps main at a full viewport and places the footer below it in normal flow.
+
+### Changed
+- Document the shared cursor's insertion-point morph, typing caret, mouse return, native fallbacks, and reduced-motion behavior.
+- Updated cursor defaults, dropdown lifecycle guidance, and bundled footer metadata; regenerated the Codex package.
+
 ## [1.6.0] - 2026-10-20
 
 ### Improved

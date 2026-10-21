@@ -1,6 +1,6 @@
 ---
 name: shaughv-design
-description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, drop-in custom cursors, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
+description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, drop-in custom cursors, frosted dropdowns, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
 ---
 
 # SHAUGHV Design Skill
@@ -85,9 +85,30 @@ Then build it as an expert designer would: explore, decide on the system, commit
 > original design files. This note exists because every signal an agent normally uses to
 > spot dead weight (unreferenced, duplicated, large) points the wrong way here.
 
-## Optional shared cursor
+## Required CDN site baseline
 
-When a website wants the custom cursor, discover it through the live CDN guide
+Every website using the CDN includes the shared cursor, frosted dropdowns, and
+a footer with both the SHAUGHV main logo and Shaughnessy crest plus copyright.
+Read `usage.site_defaults` and `usage.components.dropdown` from the live catalog
+and follow their documentation links. Humans and agents use the same contract.
+Keep the current font defaults; customize color, spacing, type, and layout to
+the site while preserving the components' behavior and logo proportions.
+
+For a full-screen design, keep main one full viewport using `min-height: 100svh`
+with a `100vh` fallback and `width: 100%`. Put the footer after main in normal
+document flow, below the first viewport. Do not subtract the footer's height or
+overlay controls. A full viewport is 100vh, not 1vh; allow content to grow.
+
+Use the hosted frosted dropdown to enhance labelled native single selects.
+Page-rendered options keep the custom cursor through open menus. Retain form
+semantics, keyboard navigation, touch targets, reduced motion, and the live
+guide's native exceptions. Refresh after direct value or inherited theme
+changes, and destroy framework-owned instances on teardown. Do not replace the
+native select's form state or invent a separate dropdown design.
+
+## Shared cursor
+
+For every CDN-based website, discover the custom cursor through the live CDN guide
 and catalog's documentation links. Read the cursor example and metadata for its
 current API and color presets. Choose orange, vintage sage, black, white, or a
 custom CSS color to suit the website, while retaining the shared circular view,
@@ -96,8 +117,8 @@ surface-calibrated difference blending by default, and 90% opacity. Use `usage.c
 from the live catalog for ready-to-copy HTML and JavaScript lifecycle recipes.
 Set the base color to suit the site; standard semantic controls need no extra
 markup. Icon-only controls keep a slightly enlarged circle instead of a box;
-custom icons can use `data-cursor="icon"`. Native dropdown popups keep their
-system pointer. The selected hue is calibrated against surrounding CSS backgrounds
+custom icons can use `data-cursor="icon"`. The required frosted dropdown keeps the cursor
+through its page-rendered menu. Documented native popup exceptions use the system pointer. The selected hue is calibrated against surrounding CSS backgrounds
 in light and dark themes; text and graphics still blend, while photos and gradients
 can shift the result. Control outlines use a centered 2 px stroke with a 3 px clear gap. Text links
 have more breathing room: 7 px horizontally and 5 px vertically, without moving
@@ -106,10 +127,15 @@ actual dimensions and individual corners, including resizing editors. The wave
 eases flat on focus, leaving a steady outline while hovered. The circle morphs
 into a slim custom I-beam over 140 ms. It uses the selected color, then tracks
 the mouse exactly; pressing cancels any entry offset for precise selection. It
-hides while typing and returns on movement. Preserve the native insertion
-caret, selection, scrolling, resize handles and input accessories; reduced motion removes the wave,
+travels to the insertion point with a 220 ms squash-and-stretch when typing
+starts, then becomes the 2 px typing caret and follows the text. Hide the native
+caret only while this measured custom bar is active; mouse movement restores
+the pointer. Preserve native editing and fallback carets for unsupported fields,
+IME, selected text, forced colors, blur, and cleanup. Preserve selection, scrolling,
+resize handles and input accessories; reduced motion removes travel, squash, blinking, and the wave,
 and touch gets no custom effect. No extra field markup is needed.
 Use the hosted component
-rather than inventing a new cursor animation. It is optional per website; keep
-native text/control cursors, touch fallback, reduced motion, and lifecycle cleanup.
-The CDN website itself enables it only on its dedicated cursor guide page.
+rather than inventing a new cursor animation. Keep native-control fallbacks,
+touch behavior, reduced motion, and lifecycle cleanup. The CDN documentation
+uses it across every page with the default orange base color; its cursor guide
+allows temporary color customization.
