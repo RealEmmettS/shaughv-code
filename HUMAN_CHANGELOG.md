@@ -1,5 +1,11 @@
 # Human Changelog
 
+## Cursor colors that follow your choice
+
+### Improved
+
+- The shared cursor keeps its chosen hue in light and dark themes while preserving the inverse effect over text. Button outlines are clearer and no longer drift over the border.
+
 A plain-English companion to [CHANGELOG.md](./CHANGELOG.md). Every change in the technical changelog has a layman's-terms version here. No version numbers, no code references — just what changed and why.
 
 For the technical version with versions, file paths, and PR links, see CHANGELOG.md.

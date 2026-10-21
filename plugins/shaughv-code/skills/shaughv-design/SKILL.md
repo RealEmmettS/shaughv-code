@@ -89,12 +89,15 @@ and catalog's documentation links. Read the cursor example and metadata for its
 current API and color presets. Choose orange, vintage sage, black, white, or a
 custom CSS color to suit the website, while retaining the shared circular view,
 MCP spring, automatic button/link/dropdown outlines, checkbox/radio snapping,
-difference blending by default, and 90% opacity. Use `usage.components.cursor`
+surface-calibrated difference blending by default, and 90% opacity. Use `usage.components.cursor`
 from the live catalog for ready-to-copy HTML and JavaScript lifecycle recipes.
 Set the base color to suit the site; standard semantic controls need no extra
 markup. Icon-only controls keep a slightly enlarged circle instead of a box;
 custom icons can use `data-cursor="icon"`. Native dropdown popups keep their
-system pointer. Black needs an explicit solid-color override. Use the hosted component
+system pointer. The selected hue is calibrated against surrounding CSS backgrounds
+in light and dark themes; text and graphics still blend, while photos and gradients
+can shift the result. Outlines use a centered 2 px stroke with a 3 px clear gap.
+Use the hosted component
 rather than inventing a new cursor animation. It is optional per website; keep
 native text/control cursors, touch fallback, reduced motion, and lifecycle cleanup.
 The CDN website itself enables it only on its dedicated cursor guide page.

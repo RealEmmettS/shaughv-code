@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.1] - 2026-10-20
+
+### Fixed
+
+- Synchronize CDN and design skills with adaptive cursor color calibration and centered 2 px outlines with a 3 px clear gap. Remove obsolete black-cursor blending guidance.
+
 All notable changes to this plugin are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
