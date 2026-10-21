@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.0] - 2026-10-20
+
+### Improved
+
+- Synchronize CDN and design skills with automatic physical text-field border ripples, custom exact-position I-beams, focus and native editing behavior, dynamic field geometry, and extra spacing around text-link outlines. Continue routing agents to the live catalog drop-in recipes. Require cdn.shaughv.com in all generated CDN links and asset code, even when discovery starts from an alias.
+
 ## [1.5.1] - 2026-10-20
 
 ### Fixed

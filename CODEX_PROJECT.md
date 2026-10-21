@@ -5,7 +5,7 @@
 `shaughv-code` is Emmett Shaughnessy's personal cross-agent skill bundle. The
 repository root is the authoring source for Claude Code and skills.sh-compatible
 agents; `plugins/shaughv-code/` is a generated, self-contained Codex package.
-Release 1.5.1 aligns cursor guidance with surface-calibrated base colors and clearer centered outlines. Earlier releases refresh the design skill with complete footer and font references,
+Release 1.6.0 adds cursor guidance for text-field ripples, custom typing pointers, roomier link outlines, and canonical CDN URLs. Earlier releases refresh the design skill with complete footer and font references,
 bundled crests, runnable footer examples, proportional logo scaling, and current
 static-mark and typography guidance. Original crest bytes survive Windows
 checkouts and marketplace installs without newline conversion.
@@ -17,7 +17,7 @@ checkouts and marketplace installs without newline conversion.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.5.1 (20 October 2026).
+- **Current release:** 1.6.0 (20 October 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's

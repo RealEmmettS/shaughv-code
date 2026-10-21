@@ -1,5 +1,11 @@
 # Human Changelog
 
+## A gentle touch for text fields — 20 October 2026
+
+### Improved
+
+- The shared cursor softly ripples around text fields, uses a matching slim typing pointer, settles while you type, and follows fields of different shapes and sizes. Link outlines have more breathing room, and agents can use these details without extra setup. Agents also use the preferred CDN address in new links, even if you give them an alias.
+
 ## Cursor colors that follow your choice
 
 ### Improved
