@@ -1,5 +1,10 @@
 # Human Changelog
 
+## A circle until you type
+
+### Fixed
+- Website guidance now keeps the cursor as a small circle until you type. It becomes the caret as you write and returns to the circle when you move the mouse.
+
 ## Optional motion for a page
 
 ### Added

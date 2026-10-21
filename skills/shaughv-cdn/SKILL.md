@@ -95,13 +95,12 @@ can shift the result. Control outlines use a centered 2 px stroke with a 3 px cl
 have more breathing room: 7 px horizontally and 5 px vertically, without moving
 layout or click targets. Text fields get a gentle 2 px physical border ripple that follows their
 actual dimensions and individual corners, including resizing editors. The wave
-eases flat on focus, leaving a steady outline while hovered. The circle morphs
-into a slim custom I-beam over 140 ms. It uses the selected color, then tracks
-the mouse exactly; pressing cancels any entry offset for precise selection. It
-travels to the insertion point with a 220 ms squash-and-stretch when typing
-starts, then becomes the 2 px typing caret and follows the text. Hide the native
-caret only while this measured custom bar is active; mouse movement restores
-the pointer. Preserve native editing and fallback carets for unsupported fields,
+eases flat on focus, leaving a steady outline while hovered. Keep the small
+circle while hovering or clicking into a field. Only when typing starts does
+that same circle travel to the insertion point with a 220 ms squash-and-stretch
+and morph into the 2 px typing caret. It follows the text in the selected color
+with adaptive inversion. Hide the native caret only while the measured custom
+bar is active; mouse movement releases it back into the circle at the mouse. Preserve native editing and fallback carets for unsupported fields,
 IME, selected text, forced colors, blur, and cleanup. Preserve selection, scrolling,
 resize handles and input accessories; reduced motion removes travel, squash, blinking, and the wave,
 and touch gets no custom effect. No extra field markup is needed.

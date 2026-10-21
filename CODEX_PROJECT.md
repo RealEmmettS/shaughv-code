@@ -17,7 +17,7 @@ checkouts and marketplace installs without newline conversion.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.8.0 (21 October 2026).
+- **Current release:** 1.8.1 (21 October 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's

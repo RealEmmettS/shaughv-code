@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.1] - 2026-10-21
+
+### Fixed
+- Align both CDN design skills with the circle-to-caret interaction: hover and focus keep the circle, typing morphs it into the measured caret, and mouse movement returns it to the circle.
+
 ## [1.8.0] - 2026-10-21
 
 ### Added
