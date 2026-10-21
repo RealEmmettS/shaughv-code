@@ -1,6 +1,6 @@
 ---
 name: shaughv-design
-description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
+description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, drop-in custom cursors, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
 ---
 
 # SHAUGHV Design Skill
@@ -88,7 +88,13 @@ When a website wants the custom cursor, discover it through the live CDN guide
 and catalog's documentation links. Read the cursor example and metadata for its
 current API and color presets. Choose orange, vintage sage, black, white, or a
 custom CSS color to suit the website, while retaining the shared circular view,
-responsive spring, eased hover growth, and 90% opacity. Use the hosted component
+MCP spring, automatic button/link/dropdown outlines, checkbox/radio snapping,
+difference blending by default, and 90% opacity. Use `usage.components.cursor`
+from the live catalog for ready-to-copy HTML and JavaScript lifecycle recipes.
+Set the base color to suit the site; standard semantic controls need no extra
+markup. Icon-only controls keep a slightly enlarged circle instead of a box;
+custom icons can use `data-cursor="icon"`. Native dropdown popups keep their
+system pointer. Black needs an explicit solid-color override. Use the hosted component
 rather than inventing a new cursor animation. It is optional per website; keep
 native text/control cursors, touch fallback, reduced motion, and lifecycle cleanup.
 The CDN website itself enables it only on its dedicated cursor guide page.

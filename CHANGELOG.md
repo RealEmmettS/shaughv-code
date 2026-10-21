@@ -9,6 +9,11 @@ A plain-English companion lives at [HUMAN_CHANGELOG.md](./HUMAN_CHANGELOG.md) an
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-20
+
+### Improved
+- Route custom cursor requests to the live catalog drop-in recipes. Preserve default difference blending, automatic bounding-box outlines for standard controls and dropdowns, icon-only circle enlargement, MCP spring motion, and checkbox/radio snapping. Keep base colors configurable and native fallbacks intact.
+
 ## [1.4.2] - 2026-10-10
 
 ### Added

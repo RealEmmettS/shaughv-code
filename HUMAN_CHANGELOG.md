@@ -6,6 +6,10 @@ For the technical version with versions, file paths, and PR links, see CHANGELOG
 
 ---
 
+## A ready-made cursor for any site — 20 October 2026
+
+**Improved:** Agents can add your cursor with a chosen base color using the live drop-in recipe. It reacts to the background, smoothly outlines buttons, links, and dropdowns, gently enlarges over icons, and snaps to checkboxes and radio buttons by default.
+
 ## Your cursor across websites — 10 October 2026
 
 **Added:** Website-building agents can find your reusable cursor, match its color to each site, and keep the familiar smooth movement and hover response. It stays optional and leaves text editing and touch controls usable.
