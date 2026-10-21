@@ -73,8 +73,9 @@ overlay controls. A full viewport is 100vh, not 1vh; allow content to grow.
 Use the hosted frosted dropdown to enhance labelled native single selects.
 Page-rendered options keep the custom cursor through open menus. Retain form
 semantics, keyboard navigation, touch targets, reduced motion, and the live
-guide's native exceptions. Refresh after direct value or inherited theme
-changes, and destroy framework-owned instances on teardown. Do not replace the
+guide's native exceptions. Ancestor class/style/theme and system color-scheme
+changes synchronize automatically. Refresh after direct value assignments or
+stylesheet-only theme changes, and destroy framework-owned instances on teardown. Do not replace the
 native select's form state or invent a separate dropdown design.
 
 ## Shared cursor
@@ -105,7 +106,7 @@ IME, selected text, forced colors, blur, and cleanup. Preserve selection, scroll
 resize handles and input accessories; reduced motion removes travel, squash, blinking, and the wave,
 and touch gets no custom effect. No extra field markup is needed.
 Use the hosted component
-rather than inventing a new cursor animation. Keep native-control fallbacks,
+rather than inventing a new cursor animation. Unknown and disabled page elements keep the custom circle; color pickers and other simple controls grow it without outlines. Preserve coverage for dynamic content, pseudo-elements, and open shadow components. Explicit native opt-outs, external documents, browser/OS windows, and private closed shadow styles remain boundaries. Keep native editing mechanics,
 touch behavior, reduced motion, and lifecycle cleanup. The CDN documentation
 uses it across every page with the default orange base color; its cursor guide
 allows temporary color customization.
@@ -115,7 +116,7 @@ allows temporary color customization.
 Discover the optional dither background and finite cursor wake through
 `usage.components.ambient` in the live CDN catalog. Read the linked guide and
 source notices before installing it. Use the shared color presets or the site's
-custom colors while preserving the original field, wake, masks, and timing.
+custom colors while preserving the field motion, wake, masks, and timing. The shared field ink is 40% stronger than the original source for visibility; discover current rendering details in the live metadata.
 Keep content above the transparent canvases, retain motion/touch/visibility
 fallbacks, and destroy framework-owned mounts on teardown. Background decoration
 is opt-in; the required cursor, dropdowns, and paired footer stay the baseline.

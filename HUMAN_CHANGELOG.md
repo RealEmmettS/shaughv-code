@@ -1,5 +1,10 @@
 # Human Changelog
 
+## A consistent cursor and clearer background
+
+### Improved
+- Sites keep the custom cursor over color pickers and unfamiliar controls, and the optional background is easier to see. Both design guides now describe the shared behavior and explain how dropdowns follow theme changes.
+
 ## A circle until you type
 
 ### Fixed

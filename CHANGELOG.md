@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.2] - 2026-10-21
+
+### Fixed
+- Synchronize CDN/design guidance with default custom-pointer coverage, expanded circles for color inputs and other simple controls, and documented browser boundaries.
+- Record stronger ambient field ink while preserving motion, masks, and finite wake.
+- Clarify automatic dropdown theme synchronization and when a manual refresh is still required.
+
 ## [1.8.1] - 2026-10-21
 
 ### Fixed
