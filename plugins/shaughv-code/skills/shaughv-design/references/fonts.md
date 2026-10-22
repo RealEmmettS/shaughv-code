@@ -84,6 +84,12 @@ static Paper Mono faces.
   `details` metadata before applying `zero`, stylistic sets, or ligatures.
   Features belong to the selected font; a tag can mean something different
   in another family. Apply them to the smallest relevant selector.
+- When available, start with `details.recommended_presets`: preserve
+  `keeps_default`, use only the listed `enables`, and honor `avoids`. Read each
+  feature's documented `changes` and CSS rather than inferring its effect from
+  a visual nickname. Respect `exclusive_with` and `combining.note`, and use
+  `default_style.css` to keep base glyphs in code or data under an inherited
+  display alternate. Missing metadata does not establish feature support.
 - Verify actual loaded fonts and weights in the browser. A plausible fallback
   or a successful CSS response is not proof that the intended face rendered.
 

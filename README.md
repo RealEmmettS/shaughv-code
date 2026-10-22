@@ -38,6 +38,22 @@ npx skills add RealEmmettS/shaughv-code
 
 Defaults to a project install at `.claude/skills/` (or your agent's equivalent — the CLI auto-detects). Add `-g` for a global install at `~/.claude/skills/`. Update later with `npx skills update`. The skills-only install still includes the optional MCP catalog; use the Claude Code marketplace flow above when you also want the slash command.
 
+### CDN skill on its own
+
+Install just the CDN skill for your agents with:
+
+```bash
+npx skills add RealEmmettS/shaughv-code --skill shaughv-cdn -g
+```
+
+The same `SKILL.md` is hosted at [the standalone CDN download](https://cdn.shaughv.com/skills/shaughv-cdn/SKILL.md).
+Save it as `shaughv-cdn/SKILL.md` inside your agent's skill directory; no other
+plugin files are needed. The [CDN Quickstart](https://cdn.shaughv.com/quickstart)
+explains installation, updates, and the separate live guide and docs skill.
+The maintained source is `skills/shaughv-cdn/SKILL.md` in this repository.
+Refresh a skills-only global installation with `npx skills update shaughv-cdn -g -y`;
+for a manual download, replace that file with the latest download.
+
 ## Update
 
 ### Claude Code update

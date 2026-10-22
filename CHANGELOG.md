@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0] - 2026-10-22
+
+### Improved
+- Audit `shaughv-cdn` against the current live guide and catalog, retaining the shared cursor, frosted dropdowns, paired footer, optional ambient background, canonical URLs, and component lifecycle contracts.
+- Add font preset and OpenType metadata guidance, live-source precedence, discovery failure handling, and the distinction between asset and generated documentation skills. Align the design skill's font reference.
+- Explain standalone CDN distribution and installed-skill versus hosted-component updates; regenerate the Codex package.
+
 ## [1.8.3] - 2026-10-21
 
 ### Fixed

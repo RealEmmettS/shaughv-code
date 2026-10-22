@@ -1,5 +1,11 @@
 # Human Changelog
 
+## Current CDN guidance wherever you work
+
+### Improved
+- The CDN skill now covers the latest shared components and explains how to choose font features without changing the wrong characters. Agents check the live guidance before using remembered details.
+- You can get the same skill on its own from the CDN or through the plugin. Clearer update instructions explain how to keep installed guidance and website components current.
+
 ## A cursor that stays visible while scrolling
 
 ### Improved

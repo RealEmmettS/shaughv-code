@@ -7,6 +7,9 @@ description: Discover and consume assets from the SHAUGHV CDN at cdn.shaughv.com
 
 Treat the CDN as a live, self-describing catalog. This installed skill is only
 the stable router into that catalog; it is not an asset inventory.
+The same standalone skill is available from the CDN; it does not require the
+rest of the plugin. Discover its download through the catalog's
+`usage.documentation.installable_skill` entry.
 
 ## Required workflow
 
@@ -20,6 +23,11 @@ the stable router into that catalog; it is not an asset inventory.
 5. If the requested item is absent, report that it is not in the current
    manifest. Do not guess, probe a remembered path, or substitute stale skill
    text.
+
+The freshly fetched guide, catalog, and linked component metadata take precedence
+over behavioral details in an installed copy. If live discovery fails, report
+what could not be fetched; do not present cached paths or defaults as current.
+Fetching guidance does not authorize publishing or changing CDN infrastructure.
 
 ## Rules
 
@@ -55,6 +63,39 @@ the stable router into that catalog; it is not an asset inventory.
 Never add a current asset list, count snapshot, concrete asset URL, or family-
 specific integration recipe to this skill. Those belong in the live CDN guide
 and manifest so an installed plugin cannot drift from production.
+
+## Font features and presets
+
+Read the selected family's `details` and `details_url` when present. Availability,
+weights, styles, variable family names, verified glyph behavior, and licensing
+come from that entry; do not infer them from another font or a feature tag.
+
+- Start with a task-matching `details.recommended_presets` entry. Use its CSS,
+  preserve `keeps_default`, enable only `enables`, and honor `avoids`.
+- Read each OpenType feature's `label`, `changes`, `recommended_for`, and `css`.
+  A feature affecting a numeral need not affect a similarly shaped letter.
+- Apply alternates at the narrowest useful selector. Use `default_style.css`
+  where code or data must keep base glyphs despite inherited display alternates.
+- Respect `exclusive_with` and `combining.note`; combine only documented
+  independent features. If metadata is absent, do not invent feature support.
+- Verify actual font loading and the requested glyphs in context; a successful
+  stylesheet response or a plausible fallback does not prove the face rendered.
+
+## Documentation, downloads, and updates
+
+Use `usage.documentation` to find the Blume pages, Markdown index and full corpus,
+page JSON index, OpenAPI, AI catalog, and visual examples. Use returned page URLs
+instead of deriving routes from titles. The generated documentation skill helps
+navigate those pages; it supplements the `/agents` operating guide and never
+replaces the manifest as the authority for assets, font defaults, or snippets.
+
+The standalone download and the plugin skill are the same maintained instructions.
+Reinstall the skill or update the plugin to refresh installed text; each CDN task
+still fetches the live guide and catalog. Follow the live cache policy: hosted
+component updates reach sites as caches refresh, preserving configured colors.
+For an immediate rollout, use the current catalog's script URL, including its
+query string. Do not invent cache-busting parameters or promise instant updates
+to already open pages. Changed immutable binaries require a new asset filename.
 
 ## Required CDN site baseline
 
