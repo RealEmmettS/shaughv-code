@@ -97,6 +97,25 @@ For an immediate rollout, use the current catalog's script URL, including its
 query string. Do not invent cache-busting parameters or promise instant updates
 to already open pages. Changed immutable binaries require a new asset filename.
 
+## Optional recommended skills
+
+Discover `usage.recommended_skills` in the live manifest and read its linked
+catalog and documentation. Recommend only relevant entries; read their sources,
+licenses, complete downloads, digests, and setup notes. Check existing project
+and global installations before proposing changes.
+
+Ask which agent and whether the user wants this project or globally on this
+machine. Global means the current user's selected agent across projects, not
+every OS user. Show the exact command, destination, and setup changes and obtain
+approval before installation, updates, or configuration. Do not silently use
+`--all` or `-y`, change scope, or overwrite an existing installation. Additional
+dependencies, MCP connections, authentication, or first-run helper downloads need
+approval for those setup changes. Reading the guide or downloading a bundle does
+not authorize installation. After approval, use the catalog's selected install
+source and verify the actual entrypoint and supporting files in the approved
+scope. Preserve the project's design system and CDN defaults; recommendations
+are optional. Never maintain the recommendation inventory in this router skill.
+
 ## Required CDN site baseline
 
 Every website using the CDN includes the shared cursor, frosted dropdowns, and
