@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.10.1] - 2026-10-29
+
+### Fixed
+- Use the recommendation catalog's per-entry installer command prefix and agent/scope flags rather than assuming every skill uses one installer.
+
 ## [1.10.0] - 2026-10-29
 
 ### Added

@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Use each skill's supported installer
+
+### Fixed
+- Recommended skills can use different official installers while keeping the same agent and project or global choice.
+
 ## Choose helpful skills and where they belong
 
 ### Added

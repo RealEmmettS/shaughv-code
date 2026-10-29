@@ -113,7 +113,8 @@ dependencies, MCP connections, authentication, or first-run helper downloads nee
 approval for those setup changes. Reading the guide or downloading a bundle does
 not authorize installation. After approval, use the catalog's selected install
 source and verify the actual entrypoint and supporting files in the approved
-scope. Preserve the project's design system and CDN defaults; recommendations
+scope. Use the selected entry's `installation.command_prefix` and agent/scope
+flags; different entries can require different installers. Preserve the project's design system and CDN defaults; recommendations
 are optional. Never maintain the recommendation inventory in this router skill.
 
 ## Required CDN site baseline
