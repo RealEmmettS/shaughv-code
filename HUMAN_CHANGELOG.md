@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Choose helpful skills and where they belong
+
+### Added
+- The CDN guide can suggest optional design and development skills from its live catalog. You choose the agent and whether to install into the project or across your projects, then approve installation and setup before anything runs.
+
 ## Current CDN guidance wherever you work
 
 ### Improved

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.10.0] - 2026-10-29
+
+### Added
+- Discover optional recommended skills through the CDN's live manifest and catalog, retaining the router's inventory-free design.
+- Require the selected agent, project or user-level global scope, and approval of the exact install and setup changes before installation, updates, or configuration. Verify installed files and reuse existing installations when suitable.
+
 ## [1.9.0] - 2026-10-22
 
 ### Improved
