@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.2] - 2026-10-30
+
+### Improved
+- Resolve ambient field intensity through current CDN component metadata instead of pinning a numeric value in both router/design skills. Preserve the field, wake, mask, and timing contract while the CDN modestly raises default visibility.
+
 ## [1.11.1] - 2026-10-30
 
 ### Improved
