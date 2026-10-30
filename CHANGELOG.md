@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.11.0] - 2026-10-30
+
+### Improved
+- Extend the CDN router to discover the serif default and inspect variable axis semantics without embedding a catalog inventory.
+- Set Geist Serif as the design contract's default serif; document Geist and Geist Mono as alternates and Michelangelus as the serif alternate. Add a hosted serif face/token without bundling font binaries. Keep existing sans and mono defaults and distinguish supplied weight, style, and shape coverage.
+
 ## [1.10.1] - 2026-10-29
 
 ### Fixed

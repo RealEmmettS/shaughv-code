@@ -10,18 +10,28 @@
    ===================================================================== */
 
 /* --- FONTS ----------------------------------------------------------
-   Two-font system:
+   Core sans and mono voices, plus a serif default when needed:
      Makira     -- sans voice for display, headings, body, controls, labels
      Paper Mono -- mono voice for those same roles, plus code and data
 
-   Both are "standard" families on the SHAUGHV CDN and ship in its
-   combined bundle. Michelangelus, IBM Plex Mono, and Unbounded are OPT-IN --
-   they are no longer part of the default system. If a surface genuinely
-   needs one, link it explicitly rather than reintroducing it here:
+   Geist Serif is the default serif and is hosted in the combined CDN bundle.
+   Geist, Geist Mono, Michelangelus, IBM Plex Mono, and Unbounded are OPT-IN.
+   Link alternates explicitly when the design calls for them:
      https://cdn.shaughv.com/fonts/ibm-plex-mono/ibm-plex-mono.css
      https://cdn.shaughv.com/fonts/unbounded/unbounded.css
    See references/fonts.md for current loading, availability, and notices.
    ---------------------------------------------------------------- */
+
+/* Geist Serif — default serif, SIL OFL 1.1; notices travel with the CDN files.
+   Only 400 normal is supplied. This hosted face is not bundled for offline use. */
+@font-face {
+  font-family: "Geist Serif";
+  src: url("https://cdn.shaughv.com/fonts/geist-serif/woff2/GeistSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root { --font-serif: "Geist Serif", Georgia, serif; }
 
 /* Makira -- licensed sans for authorized SHAUGHV use. One of two versatile
    standard families. Prefer hosted CSS for public project integrations. */
