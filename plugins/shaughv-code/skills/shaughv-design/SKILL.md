@@ -1,6 +1,6 @@
 ---
 name: shaughv-design
-description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira and Paper Mono guidance, optional CDN fonts, motion, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
+description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira, Paper Mono, and Geist Serif defaults, alternate CDN fonts, motion, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
 ---
 
 # SHAUGHV Design Skill
@@ -24,7 +24,7 @@ bundled references are also usable offline.
 4. **If your output has any loading state**, use `assets/shaughv-loader.js` (`<shaughv-loader>`). It is the *only* loader allowed on SHAUGHV surfaces — no framework defaults, no custom spinners. See README's LOADER section.
 5. **Skim `ui_kits/`** — there are two historical style references: `personal_site/` (brutalist) and `vintage_site/` (Bauhaus vintage). Open the closer reference if useful. Their older footer compositions are superseded by the complete paired-logo instructions and examples below.
 6. **For a website footer, read `references/footer.md`.** It contains the complete paired-logo contract, assets, font loading, both layouts, scaling, color handling, framework notes, and verification guidance. Start from the runnable `examples/footer.html` and `examples/footer.css` if useful.
-7. **Read `references/fonts.md` before choosing or loading type.** Makira and Paper Mono are the standard pair; either can handle headings, interfaces, body copy, and buttons. The reference distinguishes bundled files, CDN variable families, compatibility fonts, and opt-in fonts.
+7. **Read `references/fonts.md` before choosing or loading type.** Makira is the default sans and Paper Mono the default mono; either can handle headings, interfaces, body copy, and buttons. Geist Serif is the default whenever serif typography is used. Geist is the alternate sans, Geist Mono an alternate mono, and Michelangelus the alternate serif. The reference distinguishes bundled files, CDN variable families, compatibility fonts, and opt-in fonts.
 
 ## How to design
 

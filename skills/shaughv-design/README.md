@@ -137,7 +137,7 @@ The non-negotiable visual rules. See `colors_and_type.css` for the underlying to
 | Standard sans | **Makira** | Headings, display, body, interfaces, buttons, and labels |
 | Standard monospace | **Paper Mono** (SIL OFL 1.1) | Headings, display, body, interfaces, buttons, code, and data |
 
-Makira and Paper Mono are two versatile voices; neither is restricted to one text role. The existing type classes are useful presets and can be reassigned to fit a project. The CDN combined stylesheet also retains Gail Rock for compatibility. **Michelangelus, IBM Plex Mono, and Unbounded are opt-in**, loaded separately only when the design calls for them. Read [`references/fonts.md`](references/fonts.md) for the complete loading and availability guide; use `fonts.all.defaults` in the live catalog for current defaults.
+Makira and Paper Mono are two versatile voices; neither is restricted to one text role. The existing type classes are useful presets and can be reassigned to fit a project. Geist Serif is the default whenever serif typography is used. The CDN combined stylesheet includes it and retains Gail Rock for compatibility. **Geist, Geist Mono, Michelangelus, IBM Plex Mono, and Unbounded are opt-in**, loaded separately only when the design calls for them. Read [`references/fonts.md`](references/fonts.md) for the complete loading and availability guide; use `fonts.all.defaults` in the live catalog for current defaults.
 
 Aggressive type-step policy: reserve `2xl:` (≥1536 px) for billboard sizes. 13″ laptops at 1280 px should land on the penultimate step.
 
@@ -404,7 +404,7 @@ If you're working on something that needs more pixel-perfect fidelity than this 
 
 ## Font substitution notes
 
-Both families the system needs — **Makira** (400–900) and **Paper Mono** (100–800) — ship in `fonts/` as `.woff2` with full weight coverage, so **no substitutions are required**. In production you can link the CDN bundle instead of copying the files:
+The two locally bundled core families — **Makira** (400–900) and **Paper Mono** (100–800) — ship in `fonts/` as `.woff2`. Geist Serif is the hosted serif default; see the font reference for supplied weight ranges and offline export requirements. In production you can link the CDN bundle instead of copying the files:
 
 ```html
 <link rel="stylesheet" href="https://cdn.shaughv.com/fonts/fonts.css">

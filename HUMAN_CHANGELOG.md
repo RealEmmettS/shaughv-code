@@ -1,5 +1,11 @@
 # Human Changelog
 
+## A default serif and more font choices
+
+### Improved
+- Geist Serif is the default whenever a design calls for serif type. Geist and Geist Mono are alternate sans and monospace choices, while Michelangelus is the serif alternate with bold and italics.
+- Agents read the current font defaults and supported controls from the CDN, including the difference between changing a font's shape and its weight.
+
 ## Use each skill's supported installer
 
 ### Fixed

@@ -52,7 +52,9 @@ Fetching guidance does not authorize publishing or changing CDN infrastructure.
   spacing, or demonstration colors into extra requirements.
 - Use the requested named font entry for an opt-in family. Use `fonts.all` only
   when the live guide says the standard combined bundle is intended.
-- Read `fonts.all.defaults` for the preferred sans and monospace families.
+- Read `fonts.all.defaults` for the preferred sans, monospace, and serif families.
+  Use the live serif default whenever serif typography is requested. Alternates
+  remain explicit choices.
   Bundle membership may include compatibility families and does not imply a default.
 - Use manifest-provided font stylesheets rather than recreating `@font-face`
   declarations.
@@ -78,6 +80,9 @@ come from that entry; do not infer them from another font or a feature tag.
   where code or data must keep base glyphs despite inherited display alternates.
 - Respect `exclusive_with` and `combining.note`; combine only documented
   independent features. If metadata is absent, do not invent feature support.
+- Read `details.verification.variable_axes` before configuring a variable face.
+  A shape axis such as `ELSH` does not imply variable weight, bold, or italic
+  support; use only the supplied axis range and documented styles.
 - Verify actual font loading and the requested glyphs in context; a successful
   stylesheet response or a plausible fallback does not prove the face rendered.
 
