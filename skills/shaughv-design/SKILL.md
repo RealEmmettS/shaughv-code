@@ -145,7 +145,7 @@ allows temporary color customization.
 Discover the optional dither background and finite cursor wake through
 `usage.components.ambient` in the live CDN catalog. Read the linked guide and
 source notices before installing it. Use the shared color presets or the site's
-custom colors while preserving the field motion, wake, masks, and timing. The shared field ink is 40% stronger than the original source for visibility; discover current rendering details in the live metadata.
+custom colors while preserving the field motion, wake, masks, and timing. The shared field ink is tuned for visibility; discover its current intensity and rendering details in the live metadata.
 Keep content above the transparent canvases, retain motion/touch/visibility
 fallbacks, and destroy framework-owned mounts on teardown. Background decoration
 is opt-in; the required cursor, dropdowns, and paired footer stay the baseline.

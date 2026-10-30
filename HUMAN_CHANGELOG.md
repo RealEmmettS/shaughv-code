@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Current ambient background guidance
+
+### Improved
+- Agents read the current background strength from the CDN so their guidance follows the slightly more visible shared default.
+
 ## Geist Mono becomes the standard mono
 
 ### Improved
