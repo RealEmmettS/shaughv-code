@@ -12,15 +12,32 @@
 /* --- FONTS ----------------------------------------------------------
    Core sans and mono voices, plus a serif default when needed:
      Makira     -- sans voice for display, headings, body, controls, labels
-     Paper Mono -- mono voice for those same roles, plus code and data
+     Geist Mono -- mono voice for those same roles, plus code and data
 
-   Geist Serif is the default serif and is hosted in the combined CDN bundle.
-   Geist, Geist Mono, Michelangelus, IBM Plex Mono, and Unbounded are OPT-IN.
+   Geist Mono and Geist Serif are defaults in the combined CDN bundle.
+   Paper Mono remains locally bundled as an alternate and compatibility family.
+   Geist, Michelangelus, IBM Plex Mono, and Unbounded are OPT-IN.
    Link alternates explicitly when the design calls for them:
      https://cdn.shaughv.com/fonts/ibm-plex-mono/ibm-plex-mono.css
      https://cdn.shaughv.com/fonts/unbounded/unbounded.css
    See references/fonts.md for current loading, availability, and notices.
    ---------------------------------------------------------------- */
+
+/* Geist Mono — default monospace, SIL OFL 1.1; original hosted variable faces. */
+@font-face {
+  font-family: "Geist Mono";
+  src: url("https://cdn.shaughv.com/fonts/geist-mono/variable/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("https://cdn.shaughv.com/fonts/geist-mono/variable/GeistMono-Italic-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
 
 /* Geist Serif — default serif, SIL OFL 1.1; notices travel with the CDN files.
    Only 400 normal is supplied. This hosted face is not bundled for offline use. */
@@ -78,7 +95,7 @@
   font-display: swap;
 }
 
-/* Paper Mono — preferred SHAUGHV monospace.
+/* Paper Mono — alternate SHAUGHV monospace, retained for compatibility.
    Normal weights 100–800. Original supplied font bytes; SIL OFL 1.1.
    Static faces plus "Paper Mono Variable" are bundled with their notices. */
 
@@ -311,11 +328,11 @@
 
   /* -- Type tokens ----------------------------------------------------
      Two families: Makira covers ALL display/heading/body type.
-     Paper Mono covers eyebrows, buttons, labels, metadata, code.
+     Geist Mono covers eyebrows, buttons, labels, metadata, code.
      Generic monospace fallbacks cover unsupported glyphs. */
   --font-heading: "Makira", "Inter", system-ui, -apple-system, sans-serif;
   --font-sans:    "Makira", "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono:    "Paper Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono:    "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Letter-spacing scale */
   --tracking-tight:   -0.02em;
@@ -435,7 +452,7 @@ body {
   line-height: 1.55;
 }
 
-/* Eyebrow -- sage-in-vintage overline above headings. Paper Mono,
+/* Eyebrow -- sage-in-vintage overline above headings. Geist Mono,
    semibold uppercase, 0.14em tracking -- matches the codebase's
    .eyebrow / .control-label pattern. */
 .sv-eyebrow {

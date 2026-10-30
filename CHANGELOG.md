@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.1] - 2026-10-30
+
+### Improved
+- Make Geist Mono the default mono and Paper Mono an alternate following the updated brand choice. Synchronize the design guide, hosted font declarations, tokens, footer example, and preview labels; retain bundled Paper Mono files for compatibility and distinguish hosted defaults from offline assets.
+
 ## [1.11.0] - 2026-10-30
 
 ### Improved

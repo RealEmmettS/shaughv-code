@@ -12,7 +12,7 @@ either one or make one disproportionately larger than the other.
 
 When online, use the `shaughv-cdn` skill to fetch `/agents` and `/tree.json`.
 Follow `usage.documentation.footer_example` and `crest_metadata` for the current
-guide and provenance. This reference and its local assets also work offline.
+guide and provenance. The identity assets work offline; hosted font defaults require licensed local copies for a fully offline export.
 
 ## Full-screen layouts
 
@@ -72,9 +72,9 @@ use a transform to resize the pair while leaving an oversized empty box.
 ## Fonts
 
 The examples load the skill's local `colors_and_type.css`, including its
-bundled fonts. Makira and Paper Mono are the standard pair. Either can carry
+bundled fonts and hosted Geist defaults. Makira and Geist Mono are the standard pair. Either can carry
 headings, body text, UI, and buttons; they are not limited to a headline/body
-split. The footer example uses Paper Mono for small supporting text. Use the
+split. The footer example uses Geist Mono for small supporting text. Use the
 consuming site's type styles when adapting the footer.
 
 For an existing public website, prefer the CDN stylesheet returned for

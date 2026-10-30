@@ -1,6 +1,6 @@
 ---
 name: shaughv-design
-description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira, Paper Mono, and Geist Serif defaults, alternate CDN fonts, motion, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
+description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira, Geist Mono, and Geist Serif defaults, alternate CDN fonts, motion, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
 ---
 
 # SHAUGHV Design Skill
@@ -24,7 +24,7 @@ bundled references are also usable offline.
 4. **If your output has any loading state**, use `assets/shaughv-loader.js` (`<shaughv-loader>`). It is the *only* loader allowed on SHAUGHV surfaces — no framework defaults, no custom spinners. See README's LOADER section.
 5. **Skim `ui_kits/`** — there are two historical style references: `personal_site/` (brutalist) and `vintage_site/` (Bauhaus vintage). Open the closer reference if useful. Their older footer compositions are superseded by the complete paired-logo instructions and examples below.
 6. **For a website footer, read `references/footer.md`.** It contains the complete paired-logo contract, assets, font loading, both layouts, scaling, color handling, framework notes, and verification guidance. Start from the runnable `examples/footer.html` and `examples/footer.css` if useful.
-7. **Read `references/fonts.md` before choosing or loading type.** Makira is the default sans and Paper Mono the default mono; either can handle headings, interfaces, body copy, and buttons. Geist Serif is the default whenever serif typography is used. Geist is the alternate sans, Geist Mono an alternate mono, and Michelangelus the alternate serif. The reference distinguishes bundled files, CDN variable families, compatibility fonts, and opt-in fonts.
+7. **Read `references/fonts.md` before choosing or loading type.** Makira is the default sans and Geist Mono the default mono; either can handle headings, interfaces, body copy, and buttons. Geist Serif is the default whenever serif typography is used. Geist is the alternate sans, Paper Mono an alternate mono, and Michelangelus the alternate serif. Historical UI kits may name older mono choices; map new implementations to the live default. The reference distinguishes bundled files, CDN variable families, compatibility fonts, and opt-in fonts.
 
 ## How to design
 
@@ -33,7 +33,7 @@ bundled references are also usable offline.
 - Import `colors_and_type.css` (or inline the relevant variables).
 - **Place the brand mark per `BRANDMARK.md`:** for animation, give `<shaughv-mark>` at least 64px on both axes. Use `data-static` for the paired footer identity or smaller placements. In fixed-frame exports or anywhere JS can't run, embed `assets/SHAUGHV-Official.svg` and account for its different framing.
 - Use the **vintage palette** (cream + sage + olive + bamboo) as the default — it's the warmer, more print-friendly half of the brand.
-- Use the **brutalist layout language** from `ui_kits/personal_site/` — large uppercase Makira headlines, Paper Mono labels, 12-col asymmetric grids, decisive use of sage as the single action color.
+- Use the **brutalist layout language** from `ui_kits/personal_site/` — large uppercase Makira headlines, Geist Mono labels, 12-col asymmetric grids, decisive use of sage as the single action color.
 - **Figurines are optional.** `assets/figurines/` ships five vintage-edition character illustrations of Shaughv at a desk. Use them only on cream/vintage surfaces where the layout has a natural slot for a hero illustration — don't add them by default, and never on the brutalist dark surface. See the FIGURINES section of `README.md` for the placement rules. **When in doubt, leave them out.**
 - For dark-mode or video-first content, switch to the live brand palette (near-black + brand orange `#FF5E1A`) — the brand orange wordmark lives at `assets/SHAUGHV-Orange.png`.
 
@@ -72,7 +72,7 @@ Then build it as an expert designer would: explore, decide on the system, commit
 | `references/fonts.md` | Current family roles, bundled and hosted loading, variable fonts, optional families, and notices |
 | `examples/footer.html` / `examples/footer.css` | Runnable left and centered footer examples, with shared proportional scaling |
 | `colors_and_type.css` | All design tokens — `@font-face`, palette, semantic vars, type classes |
-| `fonts/` | Static WOFF2 for Makira and Paper Mono, Paper Mono Variable, notices, and Gail Rock compatibility faces. Michelangelus, IBM Plex Mono, and Unbounded are opt-in through the CDN. |
+| `fonts/` | Static WOFF2 for Makira and Paper Mono, Paper Mono Variable, notices, and Gail Rock compatibility faces. Geist Mono and Geist Serif defaults load through the CDN. Paper Mono is an alternate. Geist, Michelangelus, IBM Plex Mono, and Unbounded are opt-in. |
 | `assets/` | Wordmark, favicons, PNGs, animation and loader scripts, figurines, plus `crests/` with original color, original mono, footer derivative, and provenance metadata |
 | `assets/figurines/` | Vintage character illustrations (Shaughv at a desk) — **optional, vintage surfaces only**. See README's FIGURINES section. |
 | `preview/` | Specimen cards showing the system at a glance |

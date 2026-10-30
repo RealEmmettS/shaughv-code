@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Geist Mono becomes the standard mono
+
+### Improved
+- New designs use Geist Mono for monospace type. Paper Mono remains an alternate, and existing designs can keep using it. The font guide, footer examples, and shared styling follow the new default.
+
 ## A default serif and more font choices
 
 ### Improved
