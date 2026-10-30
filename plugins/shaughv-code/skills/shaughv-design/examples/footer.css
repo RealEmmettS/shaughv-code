@@ -9,7 +9,7 @@
   padding: 32px 40px;
   background: var(--footer-background, #fff);
   color: var(--footer-foreground, #000);
-  font-family: var(--footer-font, "Paper Mono", ui-monospace, monospace);
+  font-family: var(--footer-font, "Geist Mono", ui-monospace, monospace);
 }
 .identity-brand {
   display: flex;

@@ -1,11 +1,11 @@
 # Fonts for SHAUGHV design
 
-Makira and Paper Mono are the standard pair. Both are versatile enough for
-titles, display text, interfaces, body copy, buttons, and labels. Paper Mono
+Makira and Geist Mono are the standard sans and mono voices. Both are versatile enough for
+titles, display text, interfaces, body copy, buttons, and labels. Geist Mono
 also provides a grid for code and data. Geist Serif is the default whenever
 serif typography is used; Michelangelus is the serif alternate. Geist is the
-alternate sans and Geist Mono an alternate mono. Choose their roles for the design;
-do not restrict Makira to headings or Paper Mono to tiny metadata.
+alternate sans and Paper Mono an alternate mono. Choose their roles for the design;
+do not restrict Makira to headings or Geist Mono to tiny metadata.
 
 When updating an existing site, keep its deliberate type choices unless the
 task calls for a change. Installing the paired footer alone does not require
@@ -20,18 +20,18 @@ URLs, available formats, family names, and feature metadata from the catalog.
 | Family | Status | CSS family and range | Bundled in this skill |
 | --- | --- | --- | --- |
 | Makira | Standard sans | `Makira`, static 300–900 on CDN; `Makira VF`, variable 400–900 on CDN | Six static WOFF2 faces, 400–900; CDN also provides custom Light 300 |
-| Paper Mono | Standard mono | `Paper Mono`, static 100–800; `Paper Mono Variable`, continuous 100–800 | Eight static WOFF2 faces, variable WOFF2, OFL and copyright notices |
+| Paper Mono | Alternate mono / compatibility import | `Paper Mono`, static 100–800; `Paper Mono Variable`, continuous 100–800 | Eight static WOFF2 faces, variable WOFF2, OFL and copyright notices |
 | Gail Rock | Compatibility | `Gail Rock`, static 100–700; `Gail Rock VF` on CDN | Seven static WOFF2 faces |
 | Geist Serif | Default serif | `Geist Serif`, Square, Triangle, Heart, and `Geist Serif Variable`; 400 normal, ELSH shape axis 0–100 | Hosted through the CDN; no binaries bundled |
 | Geist | Alternate sans | `Geist`, `Geist Variable`; 100–900 normal and italic | Hosted through the CDN; no binaries bundled |
-| Geist Mono | Alternate mono | `Geist Mono`, `Geist Mono Variable`; 100–900 normal and italic | Hosted through the CDN; no binaries bundled |
+| Geist Mono | Default mono | `Geist Mono`, `Geist Mono Variable`; 100–900 normal and italic | Hosted through the CDN; no binaries bundled |
 | Michelangelus | Alternate serif | `Michelangelus`, 400/700, normal and real italic | Load separately through the CDN; not bundled |
 | IBM Plex Mono | Opt-in mono | Use the live entry's declared normal/italic faces and weights | Load separately through the CDN; not bundled |
 | Unbounded | Opt-in display | `Unbounded`, `Unbounded Blond`, and `Unbounded Variable`; verify ranges in the live entry | Load separately through the CDN; not bundled |
 
-The combined CDN stylesheet loads Makira, Paper Mono, and Geist Serif plus Gail
-Rock for compatibility. Geist, Geist Mono, Michelangelus, IBM Plex Mono, and
-Unbounded are separate opt-in families. Merely importing
+The combined CDN stylesheet loads Makira, Geist Mono, and Geist Serif, retaining
+Paper Mono and Gail Rock for compatibility. Geist, Michelangelus, IBM Plex Mono,
+and Unbounded are separate opt-in families. Merely importing
 a face does not make it the preferred default, and browsers fetch faces when
 they are used.
 
@@ -45,14 +45,14 @@ declarations. A typical integration then assigns the loaded families:
 ```css
 :root {
   --font-sans: "Makira", system-ui, sans-serif;
-  --font-mono: "Paper Mono", ui-monospace, monospace;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
   --font-serif: "Geist Serif", Georgia, serif;
 }
 .editorial-title { font-family: var(--font-mono); }
 .body-copy { font-family: var(--font-sans); }
 .serif { font-family: var(--font-serif); font-weight: 400; font-synthesis: none; }
 .continuous-weight {
-  font-family: "Paper Mono Variable", ui-monospace, monospace;
+  font-family: "Geist Mono Variable", ui-monospace, monospace;
   font-weight: 450;
 }
 ```
@@ -62,9 +62,11 @@ on font preloads and preload only files the first view actually uses.
 
 ## Local loading
 
-`colors_and_type.css` declares the bundled fonts using relative `fonts/` URLs.
+`colors_and_type.css` declares bundled alternate/compatibility fonts using relative
+`fonts/` URLs and the Geist Mono/Geist Serif defaults using hosted CDN URLs.
 For a standalone SHAUGHV prototype, keep that stylesheet beside the `fonts/`
-directory and link it from the document. The footer examples do this.
+directory and link it from the document. Offline use of the hosted defaults
+requires authorized local copies with their license notices. The footer examples do this.
 
 The stylesheet also supplies the vintage palette, page-wide styles, and type
 presets. For an existing site, take only the needed `@font-face` declarations
@@ -72,8 +74,8 @@ and map its own tokens, or use CDN loading. Avoid overriding its theme just
 to load fonts. Copy files only where their license and the project allow it;
 keep the notice files with Paper Mono.
 
-The default token values are Makira for sans/headings, Paper Mono for mono,
-and Geist Serif for serif. The serif face uses the canonical CDN asset;
+The default token values are Makira for sans/headings, Geist Mono for mono,
+and Geist Serif for serif. The Geist defaults use canonical CDN assets;
 standalone offline exports must embed a licensed original explicitly.
 These are presets, not a restriction on either family. The variable face is
 opted into with its distinct family name; it does not silently replace the
@@ -89,7 +91,7 @@ static Paper Mono faces.
   weight axis or real italic/bold support. Use Michelangelus deliberately when
   serif bold or italics are required.
 - Geist and Geist Mono provide static and variable 100–900 normal and real
-  italic faces. Both remain alternates with their own stylesheets.
+  italic faces. Geist is the sans alternate; Geist Mono is the default mono. Both also have standalone stylesheets.
 - Michelangelus supplies Regular, Italic, Bold, and Bold Italic as original
   TTF files. It is suitable for body text as well as headings. Start with
   normal tracking for paragraphs; remove inherited tight uppercase sans

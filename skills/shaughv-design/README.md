@@ -135,9 +135,9 @@ The non-negotiable visual rules. See `colors_and_type.css` for the underlying to
 | Role | Family | Where |
 |---|---|---|
 | Standard sans | **Makira** | Headings, display, body, interfaces, buttons, and labels |
-| Standard monospace | **Paper Mono** (SIL OFL 1.1) | Headings, display, body, interfaces, buttons, code, and data |
+| Standard monospace | **Geist Mono** (SIL OFL 1.1) | Headings, display, body, interfaces, buttons, code, and data |
 
-Makira and Paper Mono are two versatile voices; neither is restricted to one text role. The existing type classes are useful presets and can be reassigned to fit a project. Geist Serif is the default whenever serif typography is used. The CDN combined stylesheet includes it and retains Gail Rock for compatibility. **Geist, Geist Mono, Michelangelus, IBM Plex Mono, and Unbounded are opt-in**, loaded separately only when the design calls for them. Read [`references/fonts.md`](references/fonts.md) for the complete loading and availability guide; use `fonts.all.defaults` in the live catalog for current defaults.
+Makira and Geist Mono are two versatile voices; neither is restricted to one text role. The existing type classes are useful presets and can be reassigned to fit a project. Geist Serif is the default whenever serif typography is used. The CDN combined stylesheet includes it and retains Paper Mono and Gail Rock for compatibility. **Geist, Michelangelus, IBM Plex Mono, and Unbounded are opt-in**, loaded separately only when the design calls for them. Read [`references/fonts.md`](references/fonts.md) for the complete loading and availability guide; use `fonts.all.defaults` in the live catalog for current defaults.
 
 Aggressive type-step policy: reserve `2xl:` (≥1536 px) for billboard sizes. 13″ laptops at 1280 px should land on the penultimate step.
 
@@ -297,7 +297,7 @@ both layouts in [`examples/footer.html`](examples/footer.html). The bundled
 `assets/crests/Shaughnessy-Crest-Footer.svg` is the strengthened small-size
 derivative; the original color and mono crests remain separate. The footer uses
 the static JS wordmark so its proportions match the reference, and loads Makira
-and Paper Mono through the local kit or CDN as appropriate for the project.
+and Geist Mono through the CDN as appropriate for the project. Offline defaults require licensed local copies; historical kits may retain older font names.
 
 ---
 
@@ -404,7 +404,7 @@ If you're working on something that needs more pixel-perfect fidelity than this 
 
 ## Font substitution notes
 
-The two locally bundled core families — **Makira** (400–900) and **Paper Mono** (100–800) — ship in `fonts/` as `.woff2`. Geist Serif is the hosted serif default; see the font reference for supplied weight ranges and offline export requirements. In production you can link the CDN bundle instead of copying the files:
+The two locally bundled core families — **Makira** (400–900) and **Paper Mono** (100–800) — ship in `fonts/` as `.woff2`. Geist Mono and Geist Serif are the hosted mono and serif defaults; Paper Mono is an alternate; see the font reference for supplied weight ranges and offline export requirements. In production you can link the CDN bundle instead of copying the files:
 
 ```html
 <link rel="stylesheet" href="https://cdn.shaughv.com/fonts/fonts.css">
@@ -417,7 +417,11 @@ If a downstream consumer (e.g. PowerPoint export) can't load them:
 - **Makira** → **Inter** (similar x-height, similar terminal shapes).
 - **Paper Mono** → any true monospace; **IBM Plex Mono** is the closest match and remains available opt-in at `https://cdn.shaughv.com/fonts/ibm-plex-mono/ibm-plex-mono.css`.
 
-### Paper Mono — things to know
+### Geist Mono — the default monospace
+
+Use the hosted family at weights 100–900, normal and real italic. The separate variable family supports continuous weights. The skill loads its regular variable WOFF2 from the CDN; offline exports must include a licensed original explicitly.
+
+### Paper Mono — alternate monospace
 
 Eight normal weights (100–800) and a variable build are available on the CDN. The bundled static WOFF2 files are unchanged originals with their SIL OFL license. ASCII advances are fixed; do not promise identical advances for every extended glyph or claim a supplied italic.
 
