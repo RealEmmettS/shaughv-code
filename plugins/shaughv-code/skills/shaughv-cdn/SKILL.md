@@ -122,6 +122,13 @@ scope. Use the selected entry's `installation.command_prefix` and agent/scope
 flags; different entries can require different installers. Preserve the project's design system and CDN defaults; recommendations
 are optional. Never maintain the recommendation inventory in this router skill.
 
+The page's All Skills option prepares every catalog entry for one agent and
+scope. Use it only when the user explicitly selects all recommendations. Confirm
+the actual terminal before chaining: macOS/Linux shells, WSL, Git Bash,
+PowerShell 7+, and Command Prompt use `&&` (stop after failure); Windows
+PowerShell 5.1 uses `;` (continue after failure). OS detection is only a default
+and cannot identify the user's terminal. Review every entry's setup notes.
+
 ## Required CDN site baseline
 
 Every website using the CDN includes the shared cursor, frosted dropdowns, and

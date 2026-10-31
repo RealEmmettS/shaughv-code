@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.3] - 2026-10-30
+
+### Improved
+- Keep the CDN router aligned with the recommendation picker's explicit All Skills selection, shared agent/scope, per-entry installers, and terminal-specific command chaining. Explain PowerShell 5.1 continuation versus `&&` failure handling without duplicating the live inventory.
+
 ## [1.11.2] - 2026-10-30
 
 ### Improved

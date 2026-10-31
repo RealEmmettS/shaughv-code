@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Install recommendations with the right terminal commands
+
+### Improved
+- Agents can help prepare all recommended skills when you choose them, while keeping your preferred agent and installation location. They check your terminal so copied commands use the right separator and explain what happens if an installation fails.
+
 ## Current ambient background guidance
 
 ### Improved
