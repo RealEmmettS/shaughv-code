@@ -404,7 +404,7 @@ If you're working on something that needs more pixel-perfect fidelity than this 
 
 ## Font substitution notes
 
-The two locally bundled core families — **Makira** (400–900) and **Paper Mono** (100–800) — ship in `fonts/` as `.woff2`. Geist Mono and Geist Serif are the hosted mono and serif defaults; Paper Mono is an alternate; see the font reference for supplied weight ranges and offline export requirements. In production you can link the CDN bundle instead of copying the files:
+The two locally bundled core families — **Makira** (400–900) and **Paper Mono** (100–800) — ship in `fonts/` as `.woff2`. Geist Mono and Geist Serif are the hosted mono and serif defaults; Paper Mono is an alternate; see the font reference for supplied weight ranges and offline export requirements. The shared stylesheet loads current Makira, Geist Mono, and Geist Serif through the CDN; the bundled files are retained for authorized local use. Resolve current downloads from the family metadata when preparing an offline export. In production link the CDN bundle:
 
 ```html
 <link rel="stylesheet" href="https://cdn.shaughv.com/fonts/fonts.css">
@@ -419,7 +419,7 @@ If a downstream consumer (e.g. PowerPoint export) can't load them:
 
 ### Geist Mono — the default monospace
 
-Use the hosted family at weights 100–900, normal and real italic. The separate variable family supports continuous weights. The skill loads its regular variable WOFF2 from the CDN; offline exports must include a licensed original explicitly.
+Use the hosted family at weights 100–900, normal and real italic. The separate variable family supports continuous weights. The skill imports its hosted family stylesheet from the standard bundle; offline exports must include a licensed original explicitly.
 
 ### Paper Mono — alternate monospace
 

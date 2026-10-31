@@ -53,11 +53,20 @@ Fetching guidance does not authorize publishing or changing CDN infrastructure.
 - Use the requested named font entry for an opt-in family. Use `fonts.all` only
   when the live guide says the standard combined bundle is intended.
 - Read `fonts.all.defaults` for the preferred sans, monospace, and serif families.
+  Resolve each role's family key to its current `fonts` entry before choosing
+  CSS family names or loading snippets.
   Use the live serif default whenever serif typography is requested. Alternates
   remain explicit choices.
   Bundle membership may include compatibility families and does not imply a default.
 - Use manifest-provided font stylesheets rather than recreating `@font-face`
   declarations.
+- For direct font downloads or preloads, read the selected family's current
+  `details.faces` and resolve each exact `file` through the asset tree. Preserve
+  digest suffixes; never construct a binary filename from its family or style.
+  Check the selected face's weight, style, format, version, and variable axes
+  individually. A family need not have the same version or range in every format.
+  Use the current hosted stylesheet for website defaults; bundled design-kit
+  font files do not establish the current CDN release.
 - Preserve `crossorigin` on cross-origin font preloads.
 - Link to CDN-hosted assets. Do not mirror licensed or brand-owned files unless
   the user explicitly authorizes redistribution.

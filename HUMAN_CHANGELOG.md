@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Current fonts wherever agents build
+
+### Improved
+- Design examples load the current hosted default fonts. Agents follow the live font choices and exact download names, so new work uses the supplied family consistently.
+
 ## Install recommendations with the right terminal commands
 
 ### Improved

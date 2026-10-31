@@ -72,7 +72,7 @@ use a transform to resize the pair while leaving an oversized empty box.
 ## Fonts
 
 The examples load the skill's local `colors_and_type.css`, including its
-bundled fonts and hosted Geist defaults. Makira and Geist Mono are the standard pair. Either can carry
+hosted default fonts and bundled compatibility faces. Makira and Geist Mono are the standard pair. Either can carry
 headings, body text, UI, and buttons; they are not limited to a headline/body
 split. The footer example uses Geist Mono for small supporting text. Use the
 consuming site's type styles when adapting the footer.

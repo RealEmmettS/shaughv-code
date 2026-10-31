@@ -16,10 +16,14 @@ replacing the site's typography.
 Use `shaughv-cdn` to fetch `/agents` and `/tree.json` before online integration.
 `fonts.all.defaults` is the current default contract; resolve actual stylesheet
 URLs, available formats, family names, and feature metadata from the catalog.
+For a direct download or preload, resolve the selected family's `details.faces`
+through the asset tree and preserve the exact filename, including any digest
+suffix. Inspect versions, weights, and axes per face and format. Do not derive
+filenames from style names or treat bundled font copies as the current release.
 
 | Family | Status | CSS family and range | Bundled in this skill |
 | --- | --- | --- | --- |
-| Makira | Standard sans | `Makira`, static 300–900 on CDN; `Makira VF`, variable 400–900 on CDN | Six static WOFF2 faces, 400–900; CDN also provides custom Light 300 |
+| Makira | Standard sans | `Makira`, static 300–900 on CDN; `Makira VF`, variable 400–900 on CDN | Six retained static WOFF2 faces, 400–900; current website defaults load from the CDN |
 | Paper Mono | Alternate mono / compatibility import | `Paper Mono`, static 100–800; `Paper Mono Variable`, continuous 100–800 | Eight static WOFF2 faces, variable WOFF2, OFL and copyright notices |
 | Gail Rock | Compatibility | `Gail Rock`, static 100–700; `Gail Rock VF` on CDN | Seven static WOFF2 faces |
 | Geist Serif | Default serif | `Geist Serif`, Square, Triangle, Heart, and `Geist Serif Variable`; 400 normal, ELSH shape axis 0–100 | Hosted through the CDN; no binaries bundled |
@@ -59,23 +63,27 @@ declarations. A typical integration then assigns the loaded families:
 
 Either family can be swapped into either text role. Preserve `crossorigin`
 on font preloads and preload only files the first view actually uses.
+For Makira, normal weight 400 selects Regular. Select static weight 300 for
+Light; the separate variable family covers 400–900. No Makira italics are supplied.
 
 ## Local loading
 
-`colors_and_type.css` declares bundled alternate/compatibility fonts using relative
-`fonts/` URLs and the Geist Mono/Geist Serif defaults using hosted CDN URLs.
+`colors_and_type.css` imports the hosted standard bundle for the current Makira,
+Geist Mono, and Geist Serif defaults. It declares retained alternate/compatibility
+fonts using relative `fonts/` URLs.
 For a standalone SHAUGHV prototype, keep that stylesheet beside the `fonts/`
 directory and link it from the document. Offline use of the hosted defaults
 requires authorized local copies with their license notices. The footer examples do this.
 
 The stylesheet also supplies the vintage palette, page-wide styles, and type
-presets. For an existing site, take only the needed `@font-face` declarations
-and map its own tokens, or use CDN loading. Avoid overriding its theme just
+presets. For an existing site, link the selected hosted stylesheet and map its
+own tokens. For an authorized offline export, declare verified local faces
+explicitly. Avoid overriding its theme just
 to load fonts. Copy files only where their license and the project allow it;
 keep the notice files with Paper Mono.
 
 The default token values are Makira for sans/headings, Geist Mono for mono,
-and Geist Serif for serif. The Geist defaults use canonical CDN assets;
+and Geist Serif for serif. All three defaults use the canonical CDN stylesheet;
 standalone offline exports must embed a licensed original explicitly.
 These are presets, not a restriction on either family. The variable face is
 opted into with its distinct family name; it does not silently replace the

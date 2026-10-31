@@ -23,77 +23,11 @@
    See references/fonts.md for current loading, availability, and notices.
    ---------------------------------------------------------------- */
 
-/* Geist Mono — default monospace, SIL OFL 1.1; original hosted variable faces. */
-@font-face {
-  font-family: "Geist Mono";
-  src: url("https://cdn.shaughv.com/fonts/geist-mono/variable/GeistMono-Variable.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Geist Mono";
-  src: url("https://cdn.shaughv.com/fonts/geist-mono/variable/GeistMono-Italic-Variable.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* Geist Serif — default serif, SIL OFL 1.1; notices travel with the CDN files.
-   Only 400 normal is supplied. This hosted face is not bundled for offline use. */
-@font-face {
-  font-family: "Geist Serif";
-  src: url("https://cdn.shaughv.com/fonts/geist-serif/woff2/GeistSerif-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+/* Current defaults: resolve this standard bundle through fonts.all.css_url.
+   Makira includes static Light 300 and Regular–Black 400–900; its variable
+   family covers 400–900. Keep local font copies for explicit offline use. */
+@import url("https://cdn.shaughv.com/fonts/fonts.css");
 :root { --font-serif: "Geist Serif", Georgia, serif; }
-
-/* Makira -- licensed sans for authorized SHAUGHV use. One of two versatile
-   standard families. Prefer hosted CSS for public project integrations. */
-@font-face {
-  font-family: "Makira";
-  src: url("./fonts/Makira-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Makira";
-  src: url("./fonts/Makira-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Makira";
-  src: url("./fonts/Makira-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Makira";
-  src: url("./fonts/Makira-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Makira";
-  src: url("./fonts/Makira-ExtraBold.woff2") format("woff2");
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Makira";
-  src: url("./fonts/Makira-Black.woff2") format("woff2");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* Paper Mono — alternate SHAUGHV monospace, retained for compatibility.
    Normal weights 100–800. Original supplied font bytes; SIL OFL 1.1.

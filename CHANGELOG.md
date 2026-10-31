@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.11.4] - 2026-10-30
+
+### Improved
+- Resolve typography defaults through the live role mapping and each family entry. Require exact current face metadata, digest filenames, and per-format weight, version, and axis checks for direct font downloads and preloads.
+- Load Makira, Geist Mono, and Geist Serif through the hosted standard stylesheet in the shared design tokens. Align the design skill, font reference, footer guidance, and README while retaining bundled font archives and ownership notices.
+
 ## [1.11.3] - 2026-10-30
 
 ### Improved
