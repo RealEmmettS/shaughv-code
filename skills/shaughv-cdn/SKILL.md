@@ -138,6 +138,10 @@ PowerShell 7+, and Command Prompt use `&&` (stop after failure); Windows
 PowerShell 5.1 uses `;` (continue after failure). OS detection is only a default
 and cannot identify the user's terminal. Review every entry's setup notes.
 
+## Shared styles
+
+When available, resolve the component stylesheet and animated mark from `usage.site_defaults`. A direct stylesheet link follows CDN updates on reload. Use the footer guide’s Copy CSS option and its isolated outer class when the site should keep a fixed footer. Both modes use the original footer crest. Follow the live examples for local color, mark size, paired-logo scaling, and cursor overrides. An animated mark needs its hosted script once per page. Preserve existing script-only integrations.
+
 ## Required CDN site baseline
 
 Every website using the CDN includes the shared cursor, frosted dropdowns, and

@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Choose how your footer updates
+
+### Improved
+- Sites can follow shared design updates or keep their current footer. Agents now find the matching setup and show how to keep local colors and sizes.
+
 ## Current fonts wherever agents build
 
 ### Improved

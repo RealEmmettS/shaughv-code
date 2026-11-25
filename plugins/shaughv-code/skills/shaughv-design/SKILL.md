@@ -40,6 +40,7 @@ bundled references are also usable offline.
 **If the user wants production code:**
 - Choose hosted font loading or the bundled local files as described in `references/fonts.md`. `colors_and_type.css` includes page-wide theme rules; do not import it wholesale merely to add a footer to an existing site. Reuse the site's tokens and take only the needed font and footer rules.
 - Treat the JSX components in `ui_kits/*/` as **reference**, not as importable code — they are simplified single-file recreations of production components. The real implementations live in the source repos linked in `README.md`.
+- For online sites, resolve the shared component stylesheet through the CDN catalog. Use linked styles for updates on reload, or the footer guide’s complete CSS snapshot for a fixed footer. Respect site overrides for colors and logo size. The animated mark uses the hosted script and stylesheet.
 - Keep both footer logos and their relative sizing. Use the complete local recipe in `references/footer.md` as shown or adapt its layout and styling to the site. Scale the two logos together using the recipe's shared scale value, preserving each aspect ratio. When online, compare the reference with the guide and metadata discovered through `shaughv-cdn`.
 
 ## Content rules you must follow

@@ -14,6 +14,8 @@ When online, use the `shaughv-cdn` skill to fetch `/agents` and `/tree.json`.
 Follow `usage.documentation.footer_example` and `crest_metadata` for the current
 guide and provenance. The identity assets work offline; hosted font defaults require licensed local copies for a fully offline export.
 
+For web installations, the live footer guide provides Link CSS and Copy CSS. The link follows shared defaults on reload and supports local overrides. To freeze a footer, copy its CSS and use the guide’s isolated footer class even on a site linking shared styles for another component. Both modes retain the original SVG crest.
+
 ## Full-screen layouts
 
 Keep a full-screen main experience one full viewport (`min-height: 100svh` with

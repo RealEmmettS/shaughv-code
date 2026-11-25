@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.5] - 2026-11-24
+
+### Improved
+- Discover shared component styles and the animated mark through the CDN catalog. Use the linked footer for automatic updates or its isolated CSS snapshot for fixed installations. Preserve local overrides and the original SVG crest.
+
 ## [1.11.4] - 2026-10-30
 
 ### Improved
