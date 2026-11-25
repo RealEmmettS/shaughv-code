@@ -44,12 +44,8 @@ function Navbar({ route, setRoute }) {
     >
       <div style={{ maxWidth: 1920, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <a href="#top" onClick={go("#top")} aria-label="SHAUGHV - Home" data-magnetic style={{ display: "block" }}>
-          <div style={{
-            fontFamily: "Makira", fontWeight: 900, fontSize: 22, letterSpacing: "0.02em",
-            color: "#FFFFFF", textTransform: "uppercase",
-          }}>
-            SHAUGHV
-          </div>
+          <img src="../../assets/footer-wordmark-3a434d1a6202.svg" alt=""
+            width="65" height="44" style={{ display: "block", filter: "brightness(0) invert(1)" }} />
         </a>
         <nav style={{ display: "flex", gap: 32, alignItems: "center" }} className="shv-nav-desktop">
           {navLinks.map((l) => (

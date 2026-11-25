@@ -1,21 +1,21 @@
 ---
 name: shaughv-cdn
-description: Discover and consume assets from the SHAUGHV CDN at cdn.shaughv.com through its live /agents guide and /tree.json manifest. Use whenever a task mentions the SHAUGHV CDN, a cdn.shaughv.com or cdn.emmetts.dev URL, SHAUGHV-hosted fonts, brand assets, images, favicons, figurines, scripts, loaders, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic button outlines, embeds, or preloads. Fetch the live catalog instead of relying on remembered family names, file paths, formats, counts, snippets, or licensing notes.
+description: Discover and consume assets from the SHAUGHV CDN at cdn.shaughv.com through its live /agents guide and /tree.json manifest. Use whenever a task mentions the SHAUGHV CDN, a cdn.shaughv.com or cdn.emmetts.dev URL, SHAUGHV-hosted fonts, brand assets, images, favicons, figurines, scripts, loaders, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic button outlines, color palettes, theme starter packs, responsive layouts, framework integrations, embeds, or preloads. Fetch the live catalog instead of relying on remembered family names, file paths, formats, counts, snippets, or licensing notes.
 ---
 
 # SHAUGHV CDN discovery
 
-Treat the CDN as a live, self-describing catalog. This installed skill is only
-the stable router into that catalog; it is not an asset inventory.
+The CDN publishes design assets, fonts, browser components, reusable styles,
+examples, optional skill downloads and machine-readable documentation.
 The same standalone skill is available from the CDN; it does not require the
 rest of the plugin. Discover its download through the catalog's
 `usage.documentation.installable_skill` entry.
 
 ## Required workflow
 
-1. Fetch `https://cdn.shaughv.com/agents` at the start of the task. Treat the
+1. Fetch the [agent guide](https://cdn.shaughv.com/agents) at the start of the task. Treat the
    returned Markdown as the current operating guide.
-2. Fetch `https://cdn.shaughv.com/tree.json` for the canonical machine-readable
+2. Fetch the [asset tree](https://cdn.shaughv.com/tree.json) for the canonical machine-readable
    catalog. `https://cdn.shaughv.com/tree` is an identical alias.
 3. Follow the live guide and resolve the requested item from the manifest.
 4. Use manifest-provided asset URLs and font-loading snippets as supplied.
@@ -29,9 +29,28 @@ over behavioral details in an installed copy. If live discovery fails, report
 what could not be fetched; do not present cached paths or defaults as current.
 Fetching guidance does not authorize publishing or changing CDN infrastructure.
 
+## What the CDN offers
+
+Survey the [website](https://cdn.shaughv.com/), [showcase](https://cdn.shaughv.com/showcase)
+and [complete page index](https://cdn.shaughv.com/api/docs/pages.json). For each
+guide, the index supplies the current rendered URL, Markdown and structured page
+JSON. Follow newly listed pages too. Look up actual imports in the asset tree.
+
+| Area | Live resources and what to retrieve |
+| --- | --- |
+| Getting started | The [quickstart](https://cdn.shaughv.com/quickstart) has the baseline head and body markup. [Recipes](https://cdn.shaughv.com/recipes) combine fonts, favicons, components and footer for marketing pages and app shells. |
+| Brand and artwork | [Brand assets](https://cdn.shaughv.com/brand) and the [showcase](https://cdn.shaughv.com/showcase) identify wordmarks, light/dark favicons, the signature, figurines, opaque/transparent variants and crests. Inspect the selected file and any provenance metadata under `tree.brand`. Keep original and adapted assets distinct. |
+| Typography | Start with [Fonts](https://cdn.shaughv.com/fonts) and `fonts.all.defaults`. Specimens cover [Makira](https://cdn.shaughv.com/fonts/makira), [Geist Mono](https://cdn.shaughv.com/fonts/geist-mono), [Geist Serif](https://cdn.shaughv.com/fonts/geist-serif), [Geist Sans](https://cdn.shaughv.com/fonts/geist), [Paper Mono](https://cdn.shaughv.com/fonts/paper-mono), [Gail Rock](https://cdn.shaughv.com/fonts/gail-rock), [Michelangelus](https://cdn.shaughv.com/fonts/michelangelus) and [opt-in families](https://cdn.shaughv.com/fonts/opt-in). Look up the live family entry for stylesheets, faces, features, presets and licensing. |
+| Color | [Palette explorer](https://cdn.shaughv.com/palettes) and [palette data](https://cdn.shaughv.com/brand/shaughv/palettes.json), when advertised. Explore starter packs, named colors, semantic roles, source attributions and scoped CSS. |
+| Shared styles and identity | [Site defaults](https://cdn.shaughv.com/brand/shaughv/site-defaults.json) includes the stylesheet snippet, ivory token, component baseline and full-viewport layout. The [footer guide](https://cdn.shaughv.com/footer-lockup) and [crest metadata](https://cdn.shaughv.com/brand/crests/crest-info.json) cover both layouts, linked and fixed CSS, artwork, proportions and overrides. |
+| Motion and controls | [Motion](https://cdn.shaughv.com/motion) demonstrates the animated mark and portrait loader. [Cursor](https://cdn.shaughv.com/cursor) and its [metadata](https://cdn.shaughv.com/brand/shaughv/cursor/cursor-info.json) cover pointer states and lifecycle. [Dropdowns](https://cdn.shaughv.com/dropdowns) and their [metadata](https://cdn.shaughv.com/brand/shaughv/dropdown/dropdown-info.json) cover forms, keyboard operation, theming and fallback. [Ambient background](https://cdn.shaughv.com/ambient-background) and its [metadata](https://cdn.shaughv.com/brand/shaughv/ambient/ambient-info.json) cover an optional field, cursor wake, placement, performance and notices. |
+| Hosting and integration | [Links and updates](https://cdn.shaughv.com/hosting) explains canonical URLs, caching and troubleshooting. [Technical reference](https://cdn.shaughv.com/reference) covers namespaces, embeds, CORS and file delivery. |
+| Skills | [Recommended skills](https://cdn.shaughv.com/recommended-skills), their [catalog](https://cdn.shaughv.com/recommended-skills/catalog.json) and [discovery index](https://cdn.shaughv.com/recommended-skills/.well-known/agent-skills/index.json) describe optional packages, configuration and installation. The [standalone CDN skill](https://cdn.shaughv.com/skills/shaughv-cdn/SKILL.md) is the separately installable version of these instructions. |
+| Machine clients | Start with the [compact index](https://cdn.shaughv.com/llms.txt) or [full Markdown corpus](https://cdn.shaughv.com/llms-full.txt). Use the [page index](https://cdn.shaughv.com/api/docs/pages.json) for individual pages and the [generated documentation skill](https://cdn.shaughv.com/skill.md) for navigation. [OpenAPI](https://cdn.shaughv.com/openapi.json) and the [AI catalog](https://cdn.shaughv.com/.well-known/ai-catalog.json) describe discovery to tools. |
+
 ## Rules
 
-- Keep only the three discovery endpoints above fixed in code or prompts.
+- Use the guide and tree as stable entry points. The links below are navigation shortcuts. Check their current destinations against the live catalog and page index before implementing anything.
 - Always use `https://cdn.shaughv.com` in new CDN links, imports, embeds,
   preloads, examples and documentation, even when the user supplied an alias.
   Read `usage.url_policy`; aliases are discovery/compatibility entry points only.
@@ -71,9 +90,33 @@ Fetching guidance does not authorize publishing or changing CDN infrastructure.
 - Link to CDN-hosted assets. Do not mirror licensed or brand-owned files unless
   the user explicitly authorizes redistribution.
 
-Never add a current asset list, count snapshot, concrete asset URL, or family-
-specific integration recipe to this skill. Those belong in the live CDN guide
-and manifest so an installed plugin cannot drift from production.
+Walk `tree` recursively for the complete file list. An object with `url` is a file leaf. Read its `type`, `bytes`, `kind` and optional `embed`. Use the entry for the exact variant required. Read `usage.cors` and the resource’s notices before reusing a download.
+
+## Resolve a resource for an implementation
+
+Use the catalog while authoring the project. A page can load the resulting
+stylesheet, image or script directly. For example, this JavaScript prints
+ready-to-use values for the current default sans, shared component styles and
+cursor installation. Run it in a modern Node session or browser console.
+
+```js
+const response = await fetch("https://cdn.shaughv.com/tree.json");
+if (!response.ok) throw new Error(`CDN catalog returned ${response.status}`);
+const { fonts, usage, tree } = await response.json();
+console.log(fonts[fonts.all.defaults.sans].html);
+console.log(usage.site_defaults.stylesheet.html);
+console.log(usage.components.cursor.integration.html);
+console.log(Object.keys(tree.brand)); // choose an artwork group, then inspect its leaves
+```
+
+For an image, copy the selected leaf's embed or use its URL with meaningful
+alternative text (empty for decorative artwork). Choose the favicon variant
+for the viewer's color scheme. For the signature, consult the metadata beside
+the artwork. For animation, the motion guide covers the framework-independent
+custom element, the React source port, static and reduced-motion states, and
+the loader's Anime.js dependency. Load only the scripts the page uses.
+For a failed embed, compare the final browser request, MIME type, cache headers
+and rendered result with the current catalog entry and live example.
 
 ## Font features and presets
 
@@ -108,7 +151,7 @@ Reinstall the skill or update the plugin to refresh installed text; each CDN tas
 still fetches the live guide and catalog. Follow the live cache policy: hosted
 component updates reach sites as caches refresh, preserving configured colors.
 For an immediate rollout, use the current catalog's script URL, including its
-query string. Do not invent cache-busting parameters or promise instant updates
+query string. A version query separates cache entries and still serves the current script when refetched. Do not invent cache-busting parameters or promise instant updates
 to already open pages. Changed immutable binaries require a new asset filename.
 
 ## Optional recommended skills
@@ -137,6 +180,20 @@ the actual terminal before chaining: macOS/Linux shells, WSL, Git Bash,
 PowerShell 7+, and Command Prompt use `&&` (stop after failure); Windows
 PowerShell 5.1 uses `;` (continue after failure). OS detection is only a default
 and cannot identify the user's terminal. Review every entry's setup notes.
+
+## Optional website palettes
+
+When the catalog advertises `usage.documentation.palettes`, open that visual
+guide for theme previews and scoped, copyable CSS. Read
+`usage.documentation.palette_catalog` for the machine-readable data. Resolve
+a selected theme's `roles` to named entries in `colors` and look up provenance
+in `sources`. The guide's body and button contrast figures apply to the
+demonstrated pairs. Check links, muted text, hover, focus and selection in the
+rendered site, especially after overriding a color or placing it over imagery.
+Keep an existing theme, adopt a whole pack, or take only the roles the project
+needs. Scope copied properties to the intended container. If discovery omits
+the palette links, use the project's theme and report the missing resource
+when the task specifically requires it.
 
 ## Shared styles
 
@@ -170,38 +227,24 @@ changes synchronize automatically. Refresh after direct value assignments or
 stylesheet-only theme changes, and destroy framework-owned instances on teardown. Do not replace the
 native select's form state or invent a separate dropdown design.
 
-## Shared cursor
+## Client lifecycle and interaction
 
-For every CDN-based website, discover the custom cursor through the live CDN guide
-and catalog's documentation links. Read the cursor example and metadata for its
-current API and color presets. Choose orange, vintage sage, black, white, or a
-custom CSS color to suit the website, while retaining the shared circular view,
-MCP spring, automatic button/link/dropdown outlines, checkbox/radio snapping,
-surface-calibrated difference blending by default, and 90% opacity. Use `usage.components.cursor`
-from the live catalog for ready-to-copy HTML and JavaScript lifecycle recipes.
-Set the base color to suit the site; standard semantic controls need no extra
-markup. Icon-only controls keep a slightly enlarged circle instead of a box;
-custom icons can use `data-cursor="icon"`. The required frosted dropdown keeps the cursor
-through its page-rendered menu. Documented native popup exceptions use the system pointer. The selected hue is calibrated against surrounding CSS backgrounds
-in light and dark themes; text and graphics still blend, while photos and gradients
-can shift the result. Control outlines use a centered 2 px stroke with a 3 px clear gap. Text links
-have more breathing room: 7 px horizontally and 5 px vertically, without moving
-layout or click targets. Text fields get a gentle 2 px physical border ripple that follows their
-actual dimensions and individual corners, including resizing editors. The wave
-eases flat on focus, leaving a steady outline while hovered. Keep the small
-circle while hovering or clicking into a field. Only when typing starts does
-that same circle travel to the insertion point with a 220 ms squash-and-stretch
-and morph into the 2 px typing caret. It follows the text in the selected color
-with adaptive inversion. Hide the native caret only while the measured custom
-bar is active; mouse movement releases it back into the circle at the mouse. Preserve native editing and fallback carets for unsupported fields,
-IME, selected text, forced colors, blur, and cleanup. Preserve selection, scrolling,
-resize handles and input accessories; reduced motion removes travel, squash, blinking, and the wave,
-and touch gets no custom effect. No extra field markup is needed.
-Use the hosted component
-rather than inventing a new cursor animation. Unknown and disabled page elements keep the custom circle; color pickers and other simple controls grow it without outlines. Preserve coverage for dynamic content, pseudo-elements, and open shadow components. Keep the component-owned page-wide pointer suppression active while scrolling and resizing. Use a small circle during scrolling, then restore the hover shape under the stationary mouse. Do not add unconditional pointer-hiding CSS outside the component lifecycle. Hosted updates arrive as caches refresh and preserve site color options; use the current script URL from the live catalog for an immediate rollout. Explicit native opt-outs, external documents, browser/OS windows, and private closed shadow styles remain boundaries. Keep native editing mechanics,
-touch behavior, reduced motion, and lifecycle cleanup. The CDN documentation
-uses it across every page with the default orange base color; its cursor guide
-allows temporary color customization.
+- For static HTML, SSR and prerendered pages, render footer markup and labelled
+  native selects in the document. Link the shared CSS in the page head. Both
+  linked and copied footer styles render the logo pair without JavaScript.
+- For a routed app, use one cursor in the persistent layout. For a component or
+  island that owns an imperative mount, wait for the hosted script and DOM
+  target, then call the returned handle's `destroy()` on teardown. Choose
+  either the catalog's declarative setup or its JavaScript setup for the same
+  owner. Use these recipes within the project's existing framework.
+- Read `usage.components.cursor.integration` and the cursor metadata for
+  supported colors, magnetic outlines, checkbox/radio snapping, field ripple,
+  typing caret and scroll behavior. Let the component manage pointer hiding
+  and native opt-outs. Preserve keyboard focus, touch, forced colors, reduced
+  motion, native editing and the system pointer when scripts are unavailable.
+- Check an actual form with keyboard and touch, including selection, validation,
+  reset and a framework remount if applicable. Verify the footer, focus and
+  text contrast in the project's themes and the narrowest supported layout.
 
 ## Optional ambient background
 

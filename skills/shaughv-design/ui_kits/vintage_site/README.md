@@ -2,10 +2,8 @@
 
 Hi-fi recreation of the **shaughv_vintage** edition — the warm cream-and-sage alter ego of the SHAUGHV brand.
 
-This is a historical style reference. Its older footer composition is superseded
-by the complete [paired-logo guide](../../references/footer.md) and
-[runnable examples](../../examples/footer.html). Use those for footer work,
-retaining both logos and their proportions while adapting to the site's theme.
+This historical style reference uses the live CDN pointer and footer styles.
+See the [paired-logo guide](../../references/footer.md) and [local examples](../../examples/footer.html).
 
 ## What it is
 
@@ -14,8 +12,8 @@ the same logo, the same typography hierarchy, the same brand voice — but trade
 near-black canvas for cream surfaces, swaps the orange action color for sage, and decorates with
 geometric circles, lines, and vintage-character figurine illustrations.
 
-This is the **default palette** of this design system. If you're building something in the
-SHAUGHV brand and aren't sure which direction to take it, start here.
+This palette is one starting point. A site's established theme and the optional
+packs in the [live palette explorer](https://cdn.shaughv.com/palettes) are other choices.
 
 ## Source
 
@@ -31,7 +29,7 @@ the production implementation. This kit is a cosmetic recreation.
 - `ProjectsSection.jsx` — vertical project list cards.
 - `SkillsSection.jsx` — Bauhaus-stripe skill columns.
 - `ContactSection.jsx` — calm contact panel.
-- `FooterSection.jsx` — closing brand watermark.
+- `FooterSection.jsx` — closing section with the paired footer identity.
 - `BauhausPrimitives.jsx` — `<BauhausCircle>` and `<BauhausLine>` decoration helpers.
 
 ## Imagery
@@ -110,38 +108,16 @@ The kit's navbar uses the animated `<shaughv-mark>` loop. If the surface already
 
 This is the meta-rule. Any visual transform that doesn't respect layout flow (`scale`, `translate` with px values, `rotate` with non-square content) needs media-query gates when ported to a responsive codebase. Treat the kit's transforms as **what it should look like at desktop** rather than **how to render at every viewport**.
 
-### Footer identity — use the complete paired reference
+### Footer identity
 
-Do not reproduce this historical kit's single-mark bottom strip as the current
-footer contract. Use `../../references/footer.md` and `../../examples/footer.css`:
-both the wordmark and crest belong in the footer, and share one scale value.
-The left and centered examples can be used as is or customized. Navigation,
-copyright placement, typography, colors, gap, padding, and breakpoints may change
-to fit the site. Keep the pair's relative sizing and each mark's natural aspect.
+The kit adapts the linked CDN identity to the existing footer. Its wordmark and
+crest use CSS masks. Copy the [live footer snapshot](https://cdn.shaughv.com/footer-lockup#install)
+with its isolated class to keep a fixed version. Keep scale and aspect ratio
+consistent across the pair.
 
-### `<shaughv-mark>` host sizing — square clips the wordmark in Tailwind
+### Animated mark sizing
 
-The brand-mark drop-in renders an SVG inside the `<shaughv-mark>` host and assigns its dimensions from the host's **inline** styles:
-
-```js
-svg.style.width  = host.style.width  || "auto";
-svg.style.height = host.style.height || "100%";
-```
-
-When sizing via Tailwind classes (`h-24 w-24`), `host.style.width` is empty, so the drop-in falls back to `auto`. The SVG then renders at its natural ~1.485:1 aspect (viewBox `2.5 52.7 245 165`), producing a ~142×96 SVG that overflows a 96×96 host horizontally. The `V` at the right end of the wordmark gets clipped.
-
-**Two fixes that work:**
-
-1. **Preferred — let the host shrink to fit the wordmark's natural aspect:**
-   ```tsx
-   <shaughv-mark data-static className="block h-16 w-auto" />
-   ```
-   At `h-16` the wordmark is 64 px tall and ≈ 95 px wide. No clipping, natural reading.
-
-2. **Square host — set the SVG width/height via inline style so the drop-in scales the wordmark to fit:**
-   ```tsx
-   <shaughv-mark data-static style={{ display: 'block', width: 96, height: 96 }} />
-   ```
-   Now `host.style.width = "96px"` is non-empty, the drop-in copies it to the SVG, `preserveAspectRatio="xMidYMid meet"` (the default) fits the wordmark inside the 96×96 box. The wordmark renders ~96 × 65 with vertical centering inside the square.
-
-The kit demo (`FooterSection.jsx`) uses option 2 — inline styles — so the bottom-rule mark renders correctly in the kit's `index.html` preview. The clipping bug surfaces only when a production codebase translates the kit literally but switches from inline styles to Tailwind classes for the size. If you're using Tailwind, prefer option 1.
+For a moving mark elsewhere on the page, load the current shared stylesheet
+and script. Set `--shaughv-mark-size` for a square host, and allow at least
+64px on both axes when animating. The [motion guide](https://cdn.shaughv.com/motion)
+shows how the artwork fits the host and how to override color per instance.

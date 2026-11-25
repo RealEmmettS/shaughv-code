@@ -1,11 +1,16 @@
 # SHAUGHV Brand Mark — Specification & Animation Recipe
 
-> Canonical reference for **how to render and animate the SHAUGHV brand mark** in any output produced from this design system. Designed so any agent — working in HTML, React, Vue, Svelte, vanilla JS, or a static export — can drop in the mark correctly without re-discovering the rules.
+For a website, start with the [live motion guide](https://cdn.shaughv.com/motion)
+and `usage.site_defaults.animated_mark` in the [catalog](https://cdn.shaughv.com/tree.json).
+Use its stylesheet and script once, then set `--shaughv-mark-color` and
+`--shaughv-mark-size` per placement. The paired footer uses the guide’s two
+static CSS masks. The examples below cover bundled assets and custom animation
+integrations for local projects and exports.
 
 The SHAUGHV brand mark is **always one of three things**:
 
 1. **Animated brand mark** — the canonical surface treatment. Wordmark fades out, the hidden mustache-and-glasses icon draws itself in, holds, then the wordmark redraws. Loops forever. Used on every primary SHAUGHV surface (personal site navbar, control rooms, splash screens).
-2. **Static wordmark** — required for the paired footer reference and useful for small, quiet, reduced-motion, or non-JS contexts. Use `<shaughv-mark data-static>` to keep the renderer's tight framing; use `assets/SHAUGHV-Official.svg` when JavaScript is unavailable.
+2. **Static wordmark** — use the CSS mask for the paired footer. Use `<shaughv-mark data-static>` for small or quiet web placements, or static artwork in a fixed export.
 3. **Static icon mark** — the mustache-and-glasses-only variant. Used at favicon scale or when the wordmark would be illegibly small.
 
 **The JS-rendered variants inherit `currentColor`.** Their host's CSS `color` is the color control. An external SVG `<img>` does not inherit its parent's color; the standalone wordmark has a square canvas and the supplied favicon variants have baked colors. For a monochrome image, use a CSS mask with `background: currentColor`, or `filter: brightness(0) invert(1)` for white on dark. Preserve original asset bytes.
@@ -107,7 +112,7 @@ import AnimatedBrandMark from "./components/AnimatedBrandMark";
 </div>
 ```
 
-This is the supplied React source port. Sizing comes from CSS on `.brand-lockup-mark` (for animation, set `height: 64px; width: auto;` and verify both dimensions meet the minimum). For the static footer, use the vanilla mount with `{ static: true }` and destroy it on teardown, as shown in `references/footer.md`.
+This is the supplied React source port. Sizing comes from CSS on `.brand-lockup-mark` (for animation, set `height: 64px; width: auto;` and verify both dimensions meet the minimum). For the footer, use the static CSS masks in [the footer guide](references/footer.md).
 
 ### C) Anywhere else (Vue / Svelte / static-site generator / unknown framework)
 
@@ -228,7 +233,7 @@ This is non-negotiable. The animation is decorative; it must never block reading
 | Favicon / avatar (≤ 48 px) | use icon-mark variant (`assets/SHAUGHV-Favicon-*.svg`) | **Static icon** | The wordmark is illegible below ~40 px height. |
 | PPTX / PDF / image export | ~ 64–128 px equivalent | **Static wordmark** | Static `SHAUGHV-Official.svg`. |
 
-Set sizing on the **host element** and preserve the generated SVG's natural aspect ratio. The vanilla renderer uses the tight `2.5 52.7 245 165` viewBox; the standalone SVG uses a square `0 0 250 250` viewBox. They need different framing at the same apparent logo size. The footer recipe uses the tight renderer and must not be replaced with a square image at identical CSS dimensions without a visual check.
+Set sizing on the **host element** and preserve the generated SVG's natural aspect ratio. The vanilla renderer uses the tight `2.5 52.7 245 165` viewBox; the standalone SVG uses a square `0 0 250 250` viewBox. They need different framing at the same apparent logo size. The footer recipe uses a tight-framed static SVG and must not be replaced with a square image at identical CSS dimensions without a visual check.
 
 ---
 
@@ -250,7 +255,7 @@ The animated mark is almost always paired with a small monospace label, forming 
     width: auto;
   }
   .brand-lockup-label {
-    font-family: "Paper Mono", ui-monospace, monospace;
+    font-family: "Geist Mono", ui-monospace, monospace;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     font-size: 0.72rem;

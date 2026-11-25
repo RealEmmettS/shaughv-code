@@ -24,12 +24,14 @@
   align-items: center;
   gap: var(--identity-gap, calc(24px * var(--identity-scale)));
 }
-.identity-lockup shaughv-mark {
+.identity-wordmark {
   display: block;
   flex: none;
+  width: calc(95px * var(--identity-scale));
   height: calc(64px * var(--identity-scale));
-  width: auto;
   transform: translateY(calc(7px * var(--identity-scale)));
+  background: currentColor;
+  mask: url("../assets/footer-wordmark-3a434d1a6202.svg") center / contain no-repeat;
 }
 .family-crest {
   display: block;

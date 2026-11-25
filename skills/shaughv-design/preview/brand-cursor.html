@@ -1,17 +1,24 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card-base.css"></head>
-<body class="card" style="min-height:200px">
-  <div class="section-label">Custom cursor · desktop only · sage dot</div>
-  <div style="height:128px;background:var(--bg-raised);border:1px solid var(--border-hairline);position:relative;margin-top:6px;overflow:hidden">
-    <!-- target text -->
-    <div style="position:absolute;left:24px;top:36px;font-family:var(--font-heading);font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-0.02em;color:var(--fg)">VIEW WORK <span style="color:var(--accent)">→</span></div>
-    <!-- cursor dot default -->
-    <div style="position:absolute;left:60%;top:30%;width:14px;height:14px;background:var(--accent);border-radius:9999px;mix-blend-mode:multiply"></div>
-    <!-- cursor dot expanded over CTA -->
-    <div style="position:absolute;left:32%;top:60%;width:36px;height:36px;background:var(--accent);border-radius:9999px;mix-blend-mode:multiply;opacity:0.85"></div>
-    <div style="position:absolute;left:30%;top:60%;font-family:var(--font-mono);font-size:9px;color:var(--fg-soft);letter-spacing:0.12em;text-transform:uppercase;transform:translate(-50%,40px)">scale 2.5×</div>
-  </div>
-  <div style="font-family:var(--font-sans);font-size:12px;color:var(--fg-muted);margin-top:14px">
-    Spring physics (mass 0.4, stiffness 900, damping 28). Scales 2.5× over <code style="font-family:var(--font-mono);font-size:11px">[data-magnetic]</code> targets. Hidden on coarse pointers.
-  </div>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shared cursor specimen</title>
+  <link rel="stylesheet" href="_card-base.css">
+  <link rel="stylesheet" href="https://cdn.shaughv.com/brand/shaughv/components.css">
+  <script defer src="https://cdn.shaughv.com/js/shaughv-cursor.js?v=2026-10-21.4"></script>
+  <script defer data-auto src="https://cdn.shaughv.com/js/shaughv-dropdown.js?v=2026-10-21.2"></script>
+  <style>
+    body.card { width: 100%; max-width: 700px; }
+    label, input, a { display: block; margin-block: 12px; }
+    input { padding: 8px; max-width: 100%; }
+    a { width: fit-content; color: inherit; }
+  </style>
+</head>
+<body class="card">
+  <shaughv-cursor color="sage"></shaughv-cursor>
+  <label for="sample">Try the typing caret</label>
+  <input id="sample" type="text" autocomplete="off">
+  <a href="https://cdn.shaughv.com/cursor">Explore cursor states on the CDN</a>
+</body>
+</html>

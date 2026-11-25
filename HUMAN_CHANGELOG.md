@@ -1,5 +1,11 @@
 # Human Changelog
 
+## Design with the live SHAUGHV collection
+
+### Improved
+- The CDN guide links to the fonts, artwork, color packs and controls you can use. The design guide shows how to bring them together for the page you’re building, from the first heading to the way a field responds as you type.
+- Both portfolio examples now show the shared cursor and both footer logos. The local footer examples keep their logos visible with JavaScript turned off.
+
 ## Ivory as a design white
 
 ### Improved

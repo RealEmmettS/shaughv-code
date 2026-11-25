@@ -1,53 +1,113 @@
 ---
 name: shaughv-design
-description: Create or update SHAUGHV-branded sites, interfaces, footers, and visual assets for Emmett Shaughnessy. Includes the paired wordmark and crest footer, proportional logo scaling, local logo assets and fonts, Makira, Geist Mono, and Geist Serif defaults, alternate CDN fonts, motion, drop-in custom cursors, frosted dropdowns, optional ambient backgrounds, shared site defaults, magnetic controls, palettes, and reference UI kits. Use when installing SHAUGHV branding or adapting its footer to an existing site's theme.
+description: Design and implement SHAUGHV-branded websites, app screens, footers and visual assets for a specific project. Explore the live CDN’s typography, palettes, artwork, component previews and recommendations, then apply them to the project’s framework, layout, navigation and accessible interaction states. Use for paired logos, live or fixed footer styles, the animated mark, loader, cursor, frosted dropdowns, optional ambient motion and project-specific visual or UX refinements.
 ---
 
 # SHAUGHV Design Skill
 
 You are an expert designer working in the SHAUGHV brand system — the personal brand of **Emmett Shaughnessy**.
 
-## Before you do anything
+## Start with the project and the live CDN
 
-Use the consuming site's established theme when adding branding to an existing
-site. The reference UI kits and vintage tokens are starting points for new work,
-not a requirement to restyle an existing site. Current asset identities, font
-defaults, and integration policies come from the CDN: use `shaughv-cdn` to fetch
-the live guide and catalog. For all new CDN links and asset implementations,
-use `https://cdn.shaughv.com` even if discovery began from an alias supplied by
-the user. Preserve the canonical catalog URLs; see `usage.url_policy`. The
-bundled references are also usable offline.
+For web work, fetch the [operating guide](https://cdn.shaughv.com/agents) and
+the [asset catalog](https://cdn.shaughv.com/tree.json) directly, including when
+this is the only skill installed. Prefer `https://cdn.shaughv.com` for new links even when discovery starts at an alias. The [Blume website](https://cdn.shaughv.com/)
+shows the rendered examples. Resolve font roles, assets and integration snippets
+from the catalog and keep the canonical URLs, including query strings. If a
+resource is unavailable, say which one. For offline work, identify bundled
+assets as local references and retain their notices.
 
-When a design calls for white, start with SHAUGHV ivory (`#FAF8F3`). Use
-`var(--shaughv-white)` from the shared stylesheet for white page backgrounds,
-surfaces, light text, and details. A palette can omit white entirely. True white
-is an intentional option for artwork, contrast, print, or the design itself.
-For the current token and value, read `usage.site_defaults.design_white`.
+Inspect the consuming project's navigation, layout, theme tokens, fonts and
+framework first. Keep its visual choices when adding branding. For a new
+composition, the vintage kit offers warm print-like colors, and the personal
+site kit shows asymmetric grids and large Makira headings. Choose the layout
+and palette independently to suit the content.
 
-1. **Read `README.md`** — the brand context, content fundamentals, visual foundations, and iconography rules.
-2. **Read `colors_and_type.css`** — the single source of truth for all design tokens. Never invent hex values; reference variables from this file.
-3. **Read `BRANDMARK.md`** before placing the SHAUGHV mark anywhere — it contains the decision tree (animated vs static vs icon variant), the drop-in usage for HTML/React/everything-else, and the full animation spec. The mark is part of every SHAUGHV surface; getting it right is non-optional.
-4. **If your output has any loading state**, use `assets/shaughv-loader.js` (`<shaughv-loader>`). It is the *only* loader allowed on SHAUGHV surfaces — no framework defaults, no custom spinners. See README's LOADER section.
-5. **Skim `ui_kits/`** — there are two historical style references: `personal_site/` (brutalist) and `vintage_site/` (Bauhaus vintage). Open the closer reference if useful. Their older footer compositions are superseded by the complete paired-logo instructions and examples below.
-6. **For a website footer, read `references/footer.md`.** It contains the complete paired-logo contract, assets, font loading, both layouts, scaling, color handling, framework notes, and verification guidance. Start from the runnable `examples/footer.html` and `examples/footer.css` if useful.
-7. **Read `references/fonts.md` before choosing or loading type.** Makira is the default sans and Geist Mono the default mono; either can handle headings, interfaces, body copy, and buttons. Geist Serif is the default whenever serif typography is used. Geist is the alternate sans, Paper Mono an alternate mono, and Michelangelus the alternate serif. Resolve `fonts.all.defaults` and the selected families from the live catalog; use their hosted stylesheets and exact current file metadata for downloads or preloads. Historical UI kits and bundled font copies do not establish the current font release. The reference distinguishes offline assets, CDN variable families, compatibility fonts, and opt-in fonts.
+## Explore the CDN for this project
 
-## How to design
+For a full project, survey the current [page index](https://cdn.shaughv.com/api/docs/pages.json)
+and [showcase](https://cdn.shaughv.com/showcase) before choosing a direction.
+Follow new or changed topics from the index, including the Markdown version
+of a page for instructions and its rendered preview for appearance. For a
+targeted change, inspect the affected surface and the guides it depends on.
 
-**If the user wants a visual artifact** (slide deck, mock, throwaway prototype, marketing asset, social card):
-- Use the supplied assets and fonts for authorized SHAUGHV work, retaining their notices. For public web projects, prefer the CDN font stylesheets; see `references/fonts.md` for local and hosted loading.
-- Import `colors_and_type.css` (or inline the relevant variables).
-- **Place the brand mark per `BRANDMARK.md`:** for animation, give `<shaughv-mark>` at least 64px on both axes. Use `data-static` for the paired footer identity or smaller placements. In fixed-frame exports or anywhere JS can't run, embed `assets/SHAUGHV-Official.svg` and account for its different framing.
-- Use the **vintage palette** (cream + sage + olive + bamboo) as the default — it's the warmer, more print-friendly half of the brand.
-- Use the **brutalist layout language** from `ui_kits/personal_site/` — large uppercase Makira headlines, Geist Mono labels, 12-col asymmetric grids, decisive use of sage as the single action color.
-- **Figurines are optional.** `assets/figurines/` ships five vintage-edition character illustrations of Shaughv at a desk. Use them only on cream/vintage surfaces where the layout has a natural slot for a hero illustration — don't add them by default, and never on the brutalist dark surface. See the FIGURINES section of `README.md` for the placement rules. **When in doubt, leave them out.**
-- For dark-mode or video-first content, switch to the live brand palette (near-black + brand orange `#FF5E1A`) — the brand orange wordmark lives at `assets/SHAUGHV-Orange.png`.
+| Project decision | What to explore |
+| --- | --- |
+| Page structure | Compare the [quickstart](https://cdn.shaughv.com/quickstart) and [page recipes](https://cdn.shaughv.com/recipes) with the project's entry points, information hierarchy and responsive breakpoints. |
+| Type, imagery and identity | Try a representative heading, paragraph and data label in the [font specimens](https://cdn.shaughv.com/fonts). Compare silhouettes, light/dark favicons, signature, transparent illustrations and crest variants in [brand assets](https://cdn.shaughv.com/brand). |
+| Color and interaction states | When advertised, preview [website palettes](https://cdn.shaughv.com/palettes) and inspect their [role data](https://cdn.shaughv.com/brand/shaughv/palettes.json). Compare with the project's current surfaces, accent and focus treatment. |
+| Interaction and motion | Try the [cursor and caret](https://cdn.shaughv.com/cursor), [frosted selects](https://cdn.shaughv.com/dropdowns), [animated mark and loader](https://cdn.shaughv.com/motion) and optional [ambient field](https://cdn.shaughv.com/ambient-background) on their live controls. |
+| Footer and ongoing updates | Inspect both [footer layouts and installation modes](https://cdn.shaughv.com/footer-lockup#install). Check [how CDN updates reach a site](https://cdn.shaughv.com/hosting) before choosing a live link or a fixed copy. |
+| Additional guidance | Explore [recommended skills](https://cdn.shaughv.com/recommended-skills) for guidance relevant to this project's platform, motion or accessibility needs. Review existing guidance first. Follow the catalog's scope and approval process for any installation. |
 
-**If the user wants production code:**
-- Choose hosted font loading or the bundled local files as described in `references/fonts.md`. `colors_and_type.css` includes page-wide theme rules; do not import it wholesale merely to add a footer to an existing site. Reuse the site's tokens and take only the needed font and footer rules.
-- Treat the JSX components in `ui_kits/*/` as **reference**, not as importable code — they are simplified single-file recreations of production components. The real implementations live in the source repos linked in `README.md`.
-- For online sites, resolve the shared component stylesheet through the CDN catalog. Use linked styles for updates on reload, or the footer guide’s complete CSS snapshot for a fixed footer. Respect site overrides for colors and logo size. The animated mark uses the hosted script and stylesheet.
-- Keep both footer logos and their relative sizing. Use the complete local recipe in `references/footer.md` as shown or adapt its layout and styling to the site. Scale the two logos together using the recipe's shared scale value, preserving each aspect ratio. When online, compare the reference with the guide and metadata discovered through `shaughv-cdn`.
+## Compose the actual screen
+
+Start with the project's most important task and real content. Identify where a
+visitor enters, what they need to read or operate, and what confirms success.
+Inspect adjacent screens and the smallest supported viewport. Use those findings
+to choose type roles, grid, reading order and breakpoints. Let a hero stack,
+a row wrap or navigation change shape before shrinking text or tap targets.
+
+For example, a portfolio might give one large project image and a Makira title
+the first viewport. A small animated mark can introduce the identity, then a
+quiet static footer closes the page. In a settings screen, spend that emphasis
+on the active field, the available choices and clear save feedback. Use the
+project's existing layout for both cases. Translate the selected references
+into that project's layout component, theme tokens, control states and footer.
+
+Give motion a specific job. A magnetic outline previews the clickable area. A
+frosted select can track keyboard focus as the visitor moves through options.
+The field ripple settles on focus and the typing caret follows insertion. Use
+the hosted behaviors so these small interactions feel related. For a playful
+moment, try the brand reveal in a hero or a bounded ambient field in an empty
+part of the layout. Preview it with the real text and controls. Keep decoration
+out of the reading path, retain feedback on touch, and make reduced motion
+communicate the same state immediately.
+
+## Choose colors
+
+- For optional website starter packs, follow `usage.documentation.palettes`
+  to the visual guide and `usage.documentation.palette_catalog` to its data.
+  If those fields are absent, continue with the site's tokens or the bundled
+  kit. Read the current entries when choosing a pack.
+- Follow a theme's role values into `colors` and its source IDs into `sources`.
+  Copy the guide's scoped theme CSS onto the intended page or section, then
+  map its roles to the project's tokens. Use the supplied text/background,
+  action/label and selection pairs together. Check muted text, links, hover,
+  keyboard focus and selection against the actual surfaces after overrides.
+  A motion or cursor color is a color option, independent of enabling an effect.
+- When a design calls for white, start with SHAUGHV ivory (`#FAF8F3`) from
+  `usage.site_defaults.design_white` and the shared `--shaughv-white` token.
+  True white can suit artwork, contrast, print or the design itself. A palette
+  can omit white entirely.
+
+## Choose an implementation
+
+1. Read [the design reference](README.md) for voice, visual examples and
+   iconography. The bundled `colors_and_type.css` provides the vintage theme
+   and applies page-wide styles. Reuse the host project's tokens for an
+   existing site.
+2. Read [the type guide](references/fonts.md). Resolve `fonts.all.defaults`
+   for sans, monospace and serif. Makira and Geist Mono can each serve display,
+   UI or body text. Geist Serif is the default serif. Load the selected family
+   through its current catalog stylesheet. For a direct preload or download
+   use the exact face and format listed in the live family metadata.
+3. Use [the brand mark guide](BRANDMARK.md) for logos. The hosted animated mark
+   uses the shared stylesheet and one script per page. Allow at least 64px on
+   both axes for animation and respect reduced motion. For fixed exports use
+   the supplied static artwork. When a loading state is needed, use the
+   SHAUGHV loader, sized and colored for its context. Resolve its script for
+   online work, or use the bundled version for local work. The animated loader also needs
+   Anime.js. For a disconnected export, choose static artwork.
+4. For a web footer, follow `usage.site_defaults.footer.installation.guide`
+   for linked CSS or its isolated Copy CSS snapshot. Both render the static
+   wordmark and original footer crest without JavaScript. Keep the pair,
+   relative proportions and copyright, with local alignment, size and color.
+   The [footer reference](references/footer.md) also covers local assets.
+5. For a visual artifact, use authorized local fonts and assets. The vintage
+   figurines are optional illustrations for vintage surfaces. For a prototype,
+   consult the closer UI kit. Keep production components in the project's
+   framework and use its existing conventions for layout and navigation.
 
 ## Content rules you must follow
 
@@ -58,16 +118,11 @@ For the current token and value, read `usage.site_defaults.design_white`.
 - **Punctuation:** em-dashes with hair spaces; `/` as a glyph separator (often coloured sage); `◆` as the only Unicode "icon" allowed (used as a marquee separator).
 - **Tone:** confident, dry, slightly understated. Opening-title-sequence energy, not startup-dashboard.
 
-## When invoked without specific guidance
+## When the brief is open
 
-Ask the user what they want to build and ask 3–5 focused questions:
-1. Is this for the **brutalist dark surface** (live emmettshaughnessy.com look) or the **vintage cream surface** (this system's default)?
-2. Will it need real photography / mark assets, or placeholders?
-3. Is this static (HTML artifact) or do they need React components?
-4. Do they want motion (Anime.js / Framer Motion vocabulary from the brand) or static?
-5. What's the surface — slide deck, marketing landing, prototype screen, social asset?
-
-Then build it as an expert designer would: explore, decide on the system, commit to it, and produce HTML or production code accordingly.
+Use the requested medium, audience and existing project to guide the design.
+If the output itself is unclear, ask what the user wants to make. Choose the
+appropriate existing stack for a website or a static format for an export.
 
 ## Files in this skill
 
@@ -78,7 +133,7 @@ Then build it as an expert designer would: explore, decide on the system, commit
 | `references/footer.md` | Complete footer instructions, required logo pair, adaptable layouts, shared scaling, colors, fonts, and implementation checks |
 | `references/fonts.md` | Current family roles, bundled and hosted loading, variable fonts, optional families, and notices |
 | `examples/footer.html` / `examples/footer.css` | Runnable left and centered footer examples, with shared proportional scaling |
-| `colors_and_type.css` | All design tokens — `@font-face`, palette, semantic vars, type classes |
+| `colors_and_type.css` | Vintage kit tokens — `@font-face`, palette, semantic vars, type classes |
 | `fonts/` | Retained local Makira, Paper Mono, Paper Mono Variable, notices, and Gail Rock compatibility faces. Current Makira, Geist Mono, and Geist Serif defaults load through the CDN. For offline work, verify authorized copies against current family metadata. Paper Mono is an alternate. Geist, Michelangelus, IBM Plex Mono, and Unbounded are opt-in. |
 | `assets/` | Wordmark, favicons, PNGs, animation and loader scripts, figurines, plus `crests/` with original color, original mono, footer derivative, and provenance metadata |
 | `assets/figurines/` | Vintage character illustrations (Shaughv at a desk) — **optional, vintage surfaces only**. See README's FIGURINES section. |
@@ -92,68 +147,39 @@ Then build it as an expert designer would: explore, decide on the system, commit
 > original design files. This note exists because every signal an agent normally uses to
 > spot dead weight (unreferenced, duplicated, large) points the wrong way here.
 
-## Required CDN site baseline
+## Web integration and verification
 
-Every website using the CDN includes the shared cursor, frosted dropdowns, and
-a footer with both the SHAUGHV main logo and Shaughnessy crest plus copyright.
-Read `usage.site_defaults` and `usage.components.dropdown` from the live catalog
-and follow their documentation links. Humans and agents use the same contract.
-Keep the current font defaults; customize color, spacing, type, and layout to
-the site while preserving the components' behavior and logo proportions.
-
-For a full-screen design, keep main one full viewport using `min-height: 100svh`
-with a `100vh` fallback and `width: 100%`. Put the footer after main in normal
-document flow, below the first viewport. Do not subtract the footer's height or
-overlay controls. A full viewport is 100vh, not 1vh; allow content to grow.
-
-Use the hosted frosted dropdown to enhance labelled native single selects.
-Page-rendered options keep the custom cursor through open menus. Retain form
-semantics, keyboard navigation, touch targets, reduced motion, and the live
-guide's native exceptions. Ancestor class/style/theme and system color-scheme
-changes synchronize automatically. Refresh after direct value assignments or
-stylesheet-only theme changes, and destroy framework-owned instances on teardown. Do not replace the
-native select's form state or invent a separate dropdown design.
-
-## Shared cursor
-
-For every CDN-based website, discover the custom cursor through the live CDN guide
-and catalog's documentation links. Read the cursor example and metadata for its
-current API and color presets. Choose orange, vintage sage, black, white, or a
-custom CSS color to suit the website, while retaining the shared circular view,
-MCP spring, automatic button/link/dropdown outlines, checkbox/radio snapping,
-surface-calibrated difference blending by default, and 90% opacity. Use `usage.components.cursor`
-from the live catalog for ready-to-copy HTML and JavaScript lifecycle recipes.
-Set the base color to suit the site; standard semantic controls need no extra
-markup. Icon-only controls keep a slightly enlarged circle instead of a box;
-custom icons can use `data-cursor="icon"`. The required frosted dropdown keeps the cursor
-through its page-rendered menu. Documented native popup exceptions use the system pointer. The selected hue is calibrated against surrounding CSS backgrounds
-in light and dark themes; text and graphics still blend, while photos and gradients
-can shift the result. Control outlines use a centered 2 px stroke with a 3 px clear gap. Text links
-have more breathing room: 7 px horizontally and 5 px vertically, without moving
-layout or click targets. Text fields get a gentle 2 px physical border ripple that follows their
-actual dimensions and individual corners, including resizing editors. The wave
-eases flat on focus, leaving a steady outline while hovered. Keep the small
-circle while hovering or clicking into a field. Only when typing starts does
-that same circle travel to the insertion point with a 220 ms squash-and-stretch
-and morph into the 2 px typing caret. It follows the text in the selected color
-with adaptive inversion. Hide the native caret only while the measured custom
-bar is active; mouse movement releases it back into the circle at the mouse. Preserve native editing and fallback carets for unsupported fields,
-IME, selected text, forced colors, blur, and cleanup. Preserve selection, scrolling,
-resize handles and input accessories; reduced motion removes travel, squash, blinking, and the wave,
-and touch gets no custom effect. No extra field markup is needed.
-Use the hosted component
-rather than inventing a new cursor animation. Unknown and disabled page elements keep the custom circle; color pickers and other simple controls grow it without outlines. Preserve coverage for dynamic content, pseudo-elements, and open shadow components. Keep the component-owned page-wide pointer suppression active while scrolling and resizing. Use a small circle during scrolling, then restore the hover shape under the stationary mouse. Do not add unconditional pointer-hiding CSS outside the component lifecycle. Hosted updates arrive as caches refresh and preserve site color options; use the current script URL from the live catalog for an immediate rollout. Explicit native opt-outs, external documents, browser/OS windows, and private closed shadow styles remain boundaries. Keep native editing mechanics,
-touch behavior, reduced motion, and lifecycle cleanup. The CDN documentation
-uses it across every page with the default orange base color; its cursor guide
-allows temporary color customization.
-
-## Optional ambient background
-
-Discover the optional dither background and finite cursor wake through
-`usage.components.ambient` in the live CDN catalog. Read the linked guide and
-source notices before installing it. Use the shared color presets or the site's
-custom colors while preserving the field motion, wake, masks, and timing. The shared field ink is tuned for visibility; discover its current intensity and rendering details in the live metadata.
-Keep content above the transparent canvases, retain motion/touch/visibility
-fallbacks, and destroy framework-owned mounts on teardown. Background decoration
-is opt-in; the required cursor, dropdowns, and paired footer stay the baseline.
-Do not copy current script paths or color tables into installed skills.
+- Read `usage.site_defaults` for every CDN-based website. Load the shared
+  stylesheet once in the document head, then apply unlayered site overrides.
+  On a full-screen page, use `width: 100%`, followed by a `min-height: 100vh`
+  fallback and `min-height: 100svh`. Place the footer after main in document
+  flow. Let content grow with text zoom and narrow viewports.
+- Choose how updates reach this project. With Link CSS, apply its own colors,
+  spacing and scale in normal site CSS. With Copy CSS, take the entire footer
+  snapshot from the current guide, use its isolated outer class, and retain
+  its artwork URLs. The site then owns updates to that CSS. A palette CSS copy
+  is also local and scoped. A linked mark, cursor or dropdown still receives
+  hosted changes on reload, even alongside a fixed footer.
+- In HTML or a server-rendered layout, start with the catalog's HTML recipes.
+  In React/Next, Vue/Nuxt, Svelte/SvelteKit or Astro islands, render the footer
+  and labelled native controls in the initial HTML. Load browser-only scripts
+  once in a shared layout. Choose declarative setup or mount after the script
+  and target are ready in a client lifecycle. Destroy each owned instance on
+  teardown. A shared app shell can keep a single cursor across route changes.
+- Use `usage.components.cursor.integration` for the shared pointer and its
+  companion dropdown. Choose the site's cursor color. Let the component own
+  pointer hiding, magnetic outlines, editing carets, native fallbacks and
+  reduced motion. Keep ordinary controls semantic and their focus visible.
+- Enhance eligible labelled single selects with
+  `usage.components.dropdown.integration`. Keep the select as form state,
+  including validation and reset. Refresh after direct value assignments or
+  stylesheet-only theme changes. Preserve native listboxes and documented
+  native exceptions. Avoid overlapping automatic and framework mounts.
+- For optional ambient motion, follow `usage.components.ambient` for layering,
+  color, source notices and cleanup. Keep decorative canvases clear of input,
+  content and assistive technology.
+- Check the finished page in a narrow viewport and with keyboard input. Check
+  the actual fonts, focus and text contrast in each theme, both footer marks
+  with JavaScript disabled, and native select and cursor fallbacks when the
+  scripts are unavailable. In a routed app, revisit the page and check for a
+  duplicate mount. Verify reduced motion and touch behavior for effects used.

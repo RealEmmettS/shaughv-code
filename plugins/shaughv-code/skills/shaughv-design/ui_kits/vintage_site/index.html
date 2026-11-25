@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SHAUGHV — UI Kit · Vintage Edition</title>
   <link rel="stylesheet" href="../../colors_and_type.css" />
+  <link rel="stylesheet" href="https://cdn.shaughv.com/brand/shaughv/components.css">
+  <script defer src="https://cdn.shaughv.com/js/shaughv-cursor.js?v=2026-10-21.4"></script>
+  <script defer data-auto src="https://cdn.shaughv.com/js/shaughv-dropdown.js?v=2026-10-21.2"></script>
   <style>
     html, body { margin: 0; padding: 0; }
     body { font-family: "Makira", "Inter", system-ui, sans-serif; }
-    ::selection { background: var(--sv-sage); color: var(--sv-cream-100); }
+    ::selection { background: var(--sv-sage-dark); color: var(--sv-cream-100); }
 
     @media (max-width: 900px) {
       .shv-grid,
       .shv-footer-grid { grid-template-columns: 1fr !important; }
       .shv-skills-grid { grid-template-columns: repeat(2, 1fr) !important; }
-      .shv-nav-desktop { display: none !important; }
+      .shv-nav-desktop { flex-wrap: wrap; justify-content: flex-end; }
       .shv-vintage-decor { display: none; }
     }
   </style>
@@ -27,6 +30,7 @@
   <script src="../../assets/animated-brand-mark.js"></script>
 </head>
 <body>
+  <shaughv-cursor color="sage"></shaughv-cursor>
   <div id="root"></div>
 
   <script type="text/babel" src="BauhausPrimitives.jsx"></script>
@@ -45,11 +49,13 @@
           {/* Sage dot-matrix wash -- the signature codebase background pattern */}
           <window.DotMatrix />
           <window.Navigation />
-          <window.HeroSection />
-          <window.AboutSection />
-          <window.ProjectsSection />
-          <window.SkillsSection />
-          <window.ContactSection />
+          <main>
+            <window.HeroSection />
+            <window.AboutSection />
+            <window.ProjectsSection />
+            <window.SkillsSection />
+            <window.ContactSection />
+          </main>
           <window.FooterSection />
         </div>
       );

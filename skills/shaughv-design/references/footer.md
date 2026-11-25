@@ -10,11 +10,11 @@ crest in the footer**, as a recognizable pair, plus copyright text. Preserve the
 and each logo's natural aspect ratio. Scale the two together; do not stretch
 either one or make one disproportionately larger than the other.
 
-When online, use the `shaughv-cdn` skill to fetch `/agents` and `/tree.json`.
+For a website, fetch the [agent guide](https://cdn.shaughv.com/agents) and [catalog](https://cdn.shaughv.com/tree.json).
 Follow `usage.documentation.footer_example` and `crest_metadata` for the current
 guide and provenance. The identity assets work offline; hosted font defaults require licensed local copies for a fully offline export.
 
-For web installations, the live footer guide provides Link CSS and Copy CSS. The link follows shared defaults on reload and supports local overrides. To freeze a footer, copy its CSS and use the guide’s isolated footer class even on a site linking shared styles for another component. Both modes retain the original SVG crest.
+For web installations, the [live footer guide](https://cdn.shaughv.com/footer-lockup#install) provides Link CSS and Copy CSS. The link follows shared defaults on reload and supports local overrides. To freeze a footer, copy its CSS and use the guide’s isolated footer class even on a site linking shared styles for another component. Both modes retain the original SVG crest.
 
 ## Full-screen layouts
 
@@ -33,7 +33,7 @@ Paths in this table are relative to the skill root.
 
 | Asset | Purpose |
 | --- | --- |
-| `assets/animated-brand-mark.js` | Renders `<shaughv-mark data-static>` with the same tight framing as the footer reference |
+| `assets/footer-wordmark-3a434d1a6202.svg` | Tight-framed static wordmark from the CDN footer stylesheet, used as a CSS mask |
 | `assets/SHAUGHV-Official.svg` | Original static wordmark for non-JS use; its square canvas differs from the renderer |
 | `assets/crests/Shaughnessy-Crest-Footer.svg` | Exact small-footer derivative, with translucent fills that strengthen fine detail |
 | `assets/crests/Shaughnessy-Crest.svg` | Unchanged supplied color original |
@@ -53,7 +53,7 @@ These are **reference dimensions**, not mandatory installation sizes:
 | --- | --- |
 | Wordmark | 64px high, approximately 95px wide at its natural aspect ratio |
 | Crest | 80px wide × 100px high |
-| Wordmark optical offset | 7px downward with the tight JS renderer |
+| Wordmark optical offset | 7px downward with the tight-framed wordmark |
 | Suggested gap | 24px; adjustable to the composition |
 
 Use one shared scale value for both logos. At 0.75×, the wordmark is 48px high
@@ -103,7 +103,7 @@ consuming site's routes.
 <footer class="identity-footer project-footer">
   <div class="identity-brand">
     <div class="identity-lockup">
-      <shaughv-mark data-static aria-label="SHAUGHV"></shaughv-mark>
+      <span class="identity-wordmark" role="img" aria-label="SHAUGHV"></span>
       <span class="family-crest" role="img"
         aria-label="Shaughnessy family crest — Fortis et stabilis"></span>
     </div>
@@ -116,7 +116,6 @@ consuming site's routes.
     <a href="/tasks">Tasks</a>
   </nav>
 </footer>
-<script src="/assets/animated-brand-mark.js"></script>
 ```
 
 For the centered example, add `is-centered` to the footer and omit the
@@ -144,7 +143,7 @@ consuming site's design tokens, or use the example unchanged.
 }
 ```
 
-The JS wordmark inherits `currentColor`. The crest uses the original footer SVG
+The wordmark inherits `currentColor` through its mask. The crest uses the original footer SVG
 as a CSS mask and `background: currentColor`, preserving its detailed alpha
 while following the same color. An external SVG `<img>` does not inherit the
 parent's text color. Use the supplied color image when its original colors are
@@ -154,28 +153,14 @@ The website's invert controls are preview tools, not required footer UI.
 
 ## Frameworks and static fallback
 
-The footer uses a static wordmark even when JavaScript is available. The
-animation's 64 × 64px minimum does not apply to this static pair.
+The linked, snapshot and local examples use two CSS masks and work with
+JavaScript disabled. Render the markup in HTML, a server template or a
+framework component. Use `className` in JSX. Keep copyright and navigation
+links in the project's own template.
 
-For React, Vue, or another framework, load the supplied script once, mount it
-into a framework-owned empty element, and clean up on unmount:
-
-```js
-const handle = window.ShaughvMark.mount(node, { static: true });
-// In the framework's effect/lifecycle cleanup:
-handle.destroy();
-```
-
-Give that host the wordmark sizing and optical-offset rules from the example
-CSS. When using `data-static` on the custom element, let the script mount it;
-do not also call the manual API on the same element.
-
-For non-JS output, embed `assets/SHAUGHV-Official.svg` with meaningful alt text,
-or use it as an accessible CSS mask. It has a square `0 0 250 250` canvas;
-the JS renderer has a tight `2.5 52.7 245 165` viewBox. The same CSS height
-therefore produces different visible logo sizes. Match the visible wordmark
-to the crest reference and verify the result; do not blindly transfer the
-64px height and 7px offset to the square file. Preserve the original artwork.
+For a non-CSS export, embed the tight-framed footer wordmark and footer crest
+as images. If using the original square-canvas wordmark instead, compensate
+for its extra whitespace and check the visible proportions.
 
 ## Check the installed result
 

@@ -2,7 +2,7 @@
 
 > A typographic-brutalist personal brand system recoloured in vintage tones — for **SHAUGHV** / Emmett Shaughnessy. Built to let design agents produce on-brand interfaces, slides, prototypes, and marketing assets without re-discovering the rules every time.
 
-The reference styles originated in [emmetts_personal_website](https://github.com/RealEmmettS/emmetts_personal_website) and [shaughv_vintage](https://github.com/RealEmmettS/shaughv_vintage). Treat the bundled UI kits as style references, not snapshots of the current live sites. For current asset identities, font defaults, and integration guidance, use the `shaughv-cdn` skill and its live catalog. When adding branding to an existing site, adapt to its current theme.
+The reference styles originated in [emmetts_personal_website](https://github.com/RealEmmettS/emmetts_personal_website) and [shaughv_vintage](https://github.com/RealEmmettS/shaughv_vintage). Treat the bundled UI kits as style references, not snapshots of the current live sites. For current asset identities, font defaults, and integration guidance, fetch the [operating guide](https://cdn.shaughv.com/agents) and [live catalog](https://cdn.shaughv.com/tree.json). Browse the [showcase](https://cdn.shaughv.com/showcase) and follow the project workflow in [the design skill](SKILL.md). When adding branding to an existing site, adapt to its current theme.
 
 ---
 
@@ -16,7 +16,7 @@ The reference styles originated in [emmetts_personal_website](https://github.com
 | `references/footer.md` | Full footer instructions: paired logos, proportional scaling, adaptable layouts, colors, fonts, accessibility, and framework integration |
 | `references/fonts.md` | Family roles, local and CDN loading, variable faces, optional fonts, and notices |
 | `examples/footer.html` / `examples/footer.css` | Runnable footer examples with both required logos and shared scaling |
-| `colors_and_type.css` | All design tokens — `@font-face` declarations, palette, semantic vars, type classes. **The single source of truth for visual atoms.** |
+| `colors_and_type.css` | Vintage kit tokens, font loading, semantic variables and type classes. |
 | `fonts/` | Static Makira and Paper Mono WOFF2, Paper Mono Variable, notices, and Gail Rock compatibility faces |
 | `assets/` | Wordmarks, favicons, animation and loader scripts, optional figurines, and `crests/` containing the original color, original mono, and small footer derivative |
 | `preview/` | Small HTML cards rendered in the Design System tab (one specimen per token cluster) |
@@ -51,9 +51,9 @@ The kit contains **two reference styles** under the same name:
 1. **Personal-site reference** — *brutalist, typography-first, dark, motion-forward*, with near-black and signal orange (`#FF5E1A`).
 2. **Vintage reference** — *Bauhaus-inspired, cream-and-sage, optional figurine illustrations*. Uses the same SHAUGHV mark, recoloured.
 
-This design system uses **the layout, motion language, and component DNA of the personal site**, paired with **the cream + sage + olive + bamboo palette of the vintage edition**. It is intentionally a hybrid — produced specifically to brand outputs that need to feel less aggressive than the live dark site.
-
-> The original brand orange (`#FF5E1A`) is preserved as `--sv-brand-orange` for hosted media (logo files, the SHAUGHV ad video, favicons) and the orange-variant lockup. **Sage (`#5B8A5B`) is the action color in this system.** Use orange only when surfacing official brand assets.
+The bundled styles combine the personal-site grid with vintage colors. Use
+that combination, the project's existing theme or an optional CDN starter pack.
+Sage is the vintage accent. The personal-site example uses orange for actions.
 
 ---
 
@@ -112,7 +112,7 @@ Opening-title-sequence energy, not startup dashboard. Slightly theatrical. Confi
 
 ## VISUAL FOUNDATIONS
 
-The non-negotiable visual rules. See `colors_and_type.css` for the underlying tokens.
+The following values describe the bundled vintage reference. Use these choices where they fit the project. For current alternatives, follow the palette and font links in [the design skill](SKILL.md).
 
 ### Palette
 
@@ -127,9 +127,9 @@ The non-negotiable visual rules. See `colors_and_type.css` for the underlying to
 | Bauhaus red | `--sv-bauhaus-red` | `#B05545` | Bauhaus primitive blocks (sparingly) |
 | Bauhaus blue | `--sv-bauhaus-blue` | `#345670` | Bauhaus primitive blocks (sparingly) |
 | Bauhaus yellow | `--sv-bauhaus-yellow` | `#D6A52E` | Bauhaus primitive blocks (sparingly) |
-| Brand orange (legacy) | `--sv-brand-orange` | `#FF5E1A` | Only on hosted brand media |
+| Brand orange (legacy) | `--sv-brand-orange` | `#FF5E1A` | Official media and the personal-site example |
 
-**Rule:** never introduce raw hex values in components. Add to `colors_and_type.css` first.
+Keep reusable colors in the consuming project’s tokens. For a CDN pack, copy the scoped CSS and use its text and action color pairs. Check the resulting foreground, hover, focus and selection on the actual background.
 
 ### Type
 
@@ -240,7 +240,7 @@ Motion is **decisive and brief** — never decorative.
 ### Layout fixed elements
 
 - **Navbar:** `fixed top-0 z-50`, transparent, uses `mix-blend-difference` against the cream background. White text.
-- **CustomCursor:** `fixed`, `z-9999`, sage dot, `mix-blend-difference`, spring physics.
+- **Pointer:** use the [shared cursor](https://cdn.shaughv.com/cursor). The hosted component handles outlines, caret transitions, pointer hiding and native fallbacks. Set its color to suit the site.
 - **DotMatrix:** `fixed inset-0 z-[-1]`, pointer-events-none.
 - Everything else scrolls.
 
@@ -296,9 +296,7 @@ Scale both logos up or down together; exact pixel dimensions are reference value
 The complete recipe is in [`references/footer.md`](references/footer.md), with
 both layouts in [`examples/footer.html`](examples/footer.html). The bundled
 `assets/crests/Shaughnessy-Crest-Footer.svg` is the strengthened small-size
-derivative; the original color and mono crests remain separate. The footer uses
-the static JS wordmark so its proportions match the reference, and loads Makira
-and Geist Mono through the CDN as appropriate for the project. Offline defaults require licensed local copies; historical kits may retain older font names.
+derivative; the original color and mono crests remain separate. The footer uses a tight-framed static wordmark and a crest mask. Both work without JavaScript. Choose linked CSS or a fixed snapshot in the [footer guide](https://cdn.shaughv.com/footer-lockup#install). Offline defaults require licensed local copies; historical kits may retain older font names.
 
 ---
 
