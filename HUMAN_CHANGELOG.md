@@ -1,5 +1,10 @@
 # Human Changelog
 
+## WB-300 retired
+
+### Removed
+- The plugin no longer offers the WB-300 worktree tool or recommends installing it.
+
 ## Choose how your footer updates
 
 ### Improved

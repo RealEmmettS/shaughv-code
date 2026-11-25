@@ -17,13 +17,13 @@ checkouts and marketplace installs without newline conversion.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.11.5 (24 November 2026).
+- **Current release:** 1.11.6 (24 November 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's
   reusable skills and the explicitly approved Claude-only slash command.
 - **Current state:** Claude and Codex plugin manifests are version-aligned; the
-  generated Codex package contains 32 skill directories and 491 files.
+  generated Codex package contains 31 skill directories and 487 files.
 - **Validation:** `pwsh ./build-codex-plugin.ps1 -Check` rebuilds into a
   temporary directory, compares file hashes, checks manifest version lockstep,
   and enforces the Windows clone-path ceiling.
@@ -698,12 +698,6 @@ in the indent runs, which broke copy-paste).
 │           │   │   ├── install.mjs
 │           │   │   └── statusline-usage.mjs
 │           │   └── SKILL.md
-│           ├── wb300
-│           │   ├── references
-│           │   │   ├── agent-json.md
-│           │   │   ├── install.md
-│           │   │   └── tui.md
-│           │   └── SKILL.md
 │           └── workflow-optimization
 │               ├── references
 │               │   ├── business-process-reengineering.md
@@ -1282,12 +1276,6 @@ in the indent runs, which broke copy-paste).
 │   │   ├── scripts
 │   │   │   ├── install.mjs
 │   │   │   └── statusline-usage.mjs
-│   │   └── SKILL.md
-│   ├── wb300
-│   │   ├── references
-│   │   │   ├── agent-json.md
-│   │   │   ├── install.md
-│   │   │   └── tui.md
 │   │   └── SKILL.md
 │   └── workflow-optimization
 │       ├── references

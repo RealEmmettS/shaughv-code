@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.6] - 2026-11-24
+
+### Removed
+- Removed the WB-300 skill and its installer and agent references from the Claude, Codex, and skills CLI distributions.
+
 ## [1.11.5] - 2026-11-24
 
 ### Improved
