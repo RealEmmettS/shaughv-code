@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Compare choices at a glance
+
+### Improved
+- The design guides now show when to put choices side by side and when a dropdown makes a longer list easier to use. They also explain how to keep essential instructions visible and labels lined up as the screen narrows.
+
 ## Footer credits follow the visitor’s calendar
 
 ### Improved

@@ -64,6 +64,28 @@ part of the layout. Preview it with the real text and controls. Keep decoration
 out of the reading path, retain feedback on touch, and make reduced motion
 communicate the same state immediately.
 
+### Visible choices and optional details
+
+When people need to compare a few options, show them together. For a palette
+picker, use labelled swatches with the name and selected state visible. A
+native radio group works well when exactly one option is active. Let the
+options wrap on small screens and keep a visible keyboard focus indicator.
+
+Use a labelled select when someone needs to choose one value from a longer,
+familiar list and seeing every value at once offers little benefit. Use
+informational disclosures sparingly. Keep instructions, differences between
+choices, and the next action visible. Reserve a disclosure for optional depth,
+such as the source notes behind a palette, and give its summary a specific name.
+
+### Alignment and spacing
+
+Use the project's content gutter for section headings, option groups and the
+content they control. Align adjacent labels on a common text baseline and use
+the project's spacing scale for gaps within a group and between sections.
+Check wide, intermediate and narrow layouts with real labels and enlarged
+text. When controls wrap or columns stack, check that labels stay with their
+controls, rows keep even gaps and content still lines up with its heading.
+
 ## Choose colors
 
 - For optional website starter packs, follow `usage.documentation.palettes`
