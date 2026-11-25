@@ -17,7 +17,7 @@ kit demonstrates left-aligned, centered and custom footer layouts.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.12.1 (25 November 2026).
+- **Current release:** 1.12.2 (25 November 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's

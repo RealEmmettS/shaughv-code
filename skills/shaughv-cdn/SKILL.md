@@ -219,8 +219,8 @@ copyright line as accessible text in the footer with any installation.
 
 ## Required CDN site baseline
 
-Every website using the CDN includes the shared cursor, frosted dropdowns, and
-a footer with the SHAUGHV wordmark and Shaughnessy family crest together. Read
+Every CDN site includes the shared cursor, support for the frosted dropdown,
+and a footer with the SHAUGHV wordmark and Shaughnessy family crest together. Read
 `usage.site_defaults.footer.artwork` for the pair and
 `usage.site_defaults.footer.copyright` for the year helper and notice.
 Linked CSS, Copy CSS, Marks only and custom layouts all require the same
@@ -251,13 +251,23 @@ with a `100vh` fallback and `width: 100%`. Put the footer after main in normal
 document flow, below the first viewport. Do not subtract the footer's height or
 overlay controls. A full viewport is 100vh, not 1vh; allow content to grow.
 
-Use the hosted frosted dropdown to enhance labelled native single selects.
+Use the hosted frosted dropdown where the project calls for a labelled native
+single select, such as choosing one value from a long list. A page can support
+the component without adding a select. Keep short comparisons visible, such
+as a row of labelled palette choices. Use informational disclosures sparingly
+for optional reference material. Keep the details needed to choose in view.
+
 Page-rendered options keep the custom cursor through open menus. Retain form
 semantics, keyboard navigation, touch targets, reduced motion, and the live
 guide's native exceptions. Ancestor class/style/theme and system color-scheme
 changes synchronize automatically. Refresh after direct value assignments or
 stylesheet-only theme changes, and destroy framework-owned instances on teardown. Do not replace the
 native select's form state or invent a separate dropdown design.
+
+When adapting a [palette](https://cdn.shaughv.com/palettes) or
+[dropdown](https://cdn.shaughv.com/dropdowns) example, use the site's gutters
+and spacing scale. Check label baselines and row gaps at desktop and mobile
+widths, including where a label wraps or controls stack.
 
 ## Client lifecycle and interaction
 

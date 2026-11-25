@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.12.2] - 2026-11-25
+
+### Improved
+- Guide control choice in the design and CDN skills. Keep short comparisons visible, enhance genuine single-select fields, and reserve informational disclosures for optional detail. Add responsive checks for shared gutters, text baselines, wrapping and spacing.
+
 ## [1.12.1] - 2026-11-25
 
 ### Improved
