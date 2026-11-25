@@ -118,6 +118,7 @@ The non-negotiable visual rules. See `colors_and_type.css` for the underlying to
 
 | Role | Token | Hex | Where it lives |
 |---|---|---|---|
+| Design white | `--sv-white` | `#FAF8F3` | Preferred when choosing white for surfaces, light text, or details. Resolves the CDN token `--shaughv-white` when available. |
 | Background | `--bg` | `#F5F5F0` | Page gradient: cream-200 → cream-100 → cream-200 |
 | Raised surface | `--bg-raised` | `#FAFAF8` | Cards, panels, navbar fills |
 | Foreground | `--fg` | `#5C5446` | Body copy, headings, hairlines |

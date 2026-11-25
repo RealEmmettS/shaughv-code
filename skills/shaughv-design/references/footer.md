@@ -125,8 +125,8 @@ that fit the site are equally valid.
 
 ## Color and contrast
 
-The reference starts with black artwork on white. White on black is an equally
-valid contrast demonstration. These are not required site palettes. Set
+The reference starts with black artwork on ivory. Its inverse shows ivory on
+black. Choose either combination or adapt the colors to the site. Set
 `--footer-background`, `--footer-foreground`, and `--footer-font` from the
 consuming site's design tokens, or use the example unchanged.
 
@@ -140,7 +140,7 @@ consuming site's design tokens, or use the example unchanged.
 /* Optional inverse demonstration. */
 .project-footer.is-inverted {
   --footer-background: #000;
-  --footer-foreground: #fff;
+  --footer-foreground: var(--shaughv-white, #FAF8F3);
 }
 ```
 
