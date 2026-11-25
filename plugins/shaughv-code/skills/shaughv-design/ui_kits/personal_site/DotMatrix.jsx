@@ -80,46 +80,4 @@ function DotMatrix() {
   }} />;
 }
 
-function CustomCursor() {
-  const dotRef = useRef(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    const dot = dotRef.current;
-    if (!dot) return;
-    let x = 0, y = 0, tx = 0, ty = 0, scale = 1, ts = 1;
-    let raf;
-
-    const onMove = (e) => { tx = e.clientX; ty = e.clientY; };
-    const onOver = (e) => {
-      const target = e.target;
-      const magnetic = target.closest("a, button, [data-magnetic], [role='button']");
-      ts = magnetic ? 2.5 : 1;
-    };
-    const loop = () => {
-      x += (tx - x) * 0.25;
-      y += (ty - y) * 0.25;
-      scale += (ts - scale) * 0.2;
-      dot.style.transform = `translate(${x - 7}px, ${y - 7}px) scale(${scale})`;
-      raf = requestAnimationFrame(loop);
-    };
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerover", onOver);
-    loop();
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerover", onOver);
-    };
-  }, []);
-
-  return <div ref={dotRef} style={{
-    position: "fixed", left: 0, top: 0, width: 14, height: 14,
-    background: "#FF5E1A", borderRadius: "50%",
-    mixBlendMode: "difference", pointerEvents: "none",
-    zIndex: 9999, willChange: "transform",
-  }} />;
-}
-
 window.DotMatrix = DotMatrix;
-window.CustomCursor = CustomCursor;

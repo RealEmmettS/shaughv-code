@@ -1,6 +1,5 @@
 /* global React */
-// Historical composition reference. For current footer integration use
-// ../../references/footer.md and ../../examples/footer.html: retain both logos.
+// The linked footer identity sits inside the project’s existing composition.
 
 const MONO = {
   fontFamily: '"Paper Mono", ui-monospace, monospace',
@@ -208,48 +207,16 @@ function FooterSection() {
           />
         </div>
 
-        {/* Bottom rule + meta.
-
-            ┌─ PRODUCTION-RESPONSIVE NOTE ──────────────────────────────────────┐
-            │ This kit uses `flex-wrap: wrap` to handle narrow widths -- items │
-            │ wrap to multiple rows but `justify-between` leaves awkward gaps. │
-            │ For real responsive code prefer explicit stacking:               │
-            │   `flex flex-col sm:flex-row items-center sm:justify-between`    │
-            │   `text-center sm:text-left`                                     │
-            │ See README "Production implementation notes" for the recipe.     │
-            │                                                                  │
-            │ ALSO: the `<shaughv-mark>` has `width: 96, height: 96` as INLINE │
-            │ styles. The drop-in copies inline styles to the SVG, so the     │
-            │ wordmark fits inside a 96x96 square via `preserveAspectRatio`.   │
-            │ This WORKS for the kit demo. In production code that uses        │
-            │ Tailwind classes (e.g. `h-24 w-24`) instead of inline styles,    │
-            │ the drop-in falls back to `auto` width + `100%` height, which    │
-            │ produces a ~142x96 SVG that overflows a 96px host horizontally   │
-            │ and CLIPS the "V" on the right.                                  │
-            │                                                                  │
-            │ Production recipe: use `h-16 w-auto` (or similar) so the host    │
-            │ shrinks to the wordmark's natural ~1.5:1 aspect ratio.           │
-            └──────────────────────────────────────────────────────────────────┘ */}
-        <div style={{
-          marginTop: 64, paddingTop: 24,
-          borderTop: "1px solid rgba(250, 250, 248, 0.18)",
-          display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
-          alignItems: "center",
-          ...MONO, fontSize: "0.62rem",
-          color: "rgba(250, 250, 248, 0.45)",
-        }}>
-          <span>&copy; {new Date().getFullYear()} Emmett Shaughnessy</span>
-          <shaughv-mark
-            data-static
-            aria-label="SHAUGHV"
-            style={{
-              display: "inline-block",
-              height: 96,
-              width: 96,
-              color: "rgba(250, 250, 248, 0.7)",
-            }}
-          ></shaughv-mark>
-          <span>Set in Makira &amp; Paper Mono</span>
+        <div style={{ marginTop: 64, padding: 24, background: "var(--sv-sage-dark)", color: "var(--shaughv-white)" }}>
+          <div className="shaughv-footer" style={{ padding: 0 }}>
+            <div className="shaughv-footer__brand">
+              <div className="shaughv-footer__marks">
+                <span className="shaughv-footer__wordmark" role="img" aria-label="SHAUGHV" />
+                <span className="shaughv-footer__crest" role="img" aria-label="Shaughnessy family crest" />
+              </div>
+              <small>&copy; {new Date().getFullYear()} Emmett Shaughnessy</small>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

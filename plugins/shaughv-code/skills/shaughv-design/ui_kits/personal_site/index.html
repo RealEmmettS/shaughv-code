@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SHAUGHV — UI Kit · Personal Site</title>
   <link rel="stylesheet" href="../../colors_and_type.css" />
+  <link rel="stylesheet" href="https://cdn.shaughv.com/brand/shaughv/components.css">
+  <script defer src="https://cdn.shaughv.com/js/shaughv-cursor.js?v=2026-10-21.4"></script>
+  <script defer data-auto src="https://cdn.shaughv.com/js/shaughv-dropdown.js?v=2026-10-21.2"></script>
   <style>
     :root {
       /* Override system tokens with brutalist dark for this kit */
@@ -27,11 +30,8 @@
       font-family: "Makira", system-ui, sans-serif;
       overflow-x: hidden;
     }
-    body { cursor: none; }
-    @media (pointer: coarse) { body { cursor: auto; } }
-    a, button, [role="button"], input, textarea, select { cursor: none; }
     h1, h2, h3, h4, h5, h6 { font-family: "Makira", system-ui, sans-serif; }
-    ::selection { background: #FF5E1A; color: #E6E6E6; }
+    ::selection { background: #FF5E1A; color: #090909; }
 
     @keyframes shv-works-ticker {
       0% { transform: translateX(0); }
@@ -45,7 +45,7 @@
       .shv-contact-grid,
       .shv-works-hero-grid { grid-template-columns: 1fr !important; }
       .shv-skills-grid { grid-template-columns: repeat(2, 1fr) !important; }
-      .shv-nav-desktop { display: none !important; }
+      .shv-nav-desktop { gap: 0.8rem !important; flex-wrap: wrap; justify-content: flex-end; }
     }
   </style>
 
@@ -54,6 +54,7 @@
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head>
 <body>
+  <shaughv-cursor color="orange"></shaughv-cursor>
   <div id="root"></div>
 
   <script src="data.js"></script>
@@ -77,23 +78,21 @@
       return (
         <div data-screen-label={route === "home" ? "01 Home" : "02 The Index"}>
           <window.DotMatrix />
-          <window.CustomCursor />
           <window.Navbar route={route} setRoute={setRoute} />
-          {route === "home" ? (
-            <>
-              <window.Hero />
-              <window.About />
-              <window.Projects setRoute={setRoute} />
-              <window.Skills />
-              <window.Contact />
-              <window.Footer />
-            </>
-          ) : (
-            <>
+          <main>
+            {route === "home" ? (
+              <>
+                <window.Hero />
+                <window.About />
+                <window.Projects setRoute={setRoute} />
+                <window.Skills />
+                <window.Contact />
+              </>
+            ) : (
               <window.Works setRoute={setRoute} />
-              <window.Footer />
-            </>
-          )}
+            )}
+          </main>
+          <window.Footer />
         </div>
       );
     }

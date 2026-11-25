@@ -1,6 +1,5 @@
 /* global React */
-// Historical composition reference. For current footer integration use
-// ../../references/footer.md and ../../examples/footer.html: retain both logos.
+// The linked footer identity sits inside the project’s existing composition.
 
 const socialLinks = [
   { name: "GitHub", href: "https://github.com/RealEmmettS" },
@@ -43,11 +42,6 @@ function Footer() {
           >
             Get in touch <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7" /><path d="M8 7h9v9" /></svg>
           </a>
-          <p style={{
-            marginTop: 64, fontFamily: "Paper Mono", fontSize: 11,
-            color: "rgba(245,224,197,0.25)",
-            letterSpacing: "0.15em", textTransform: "uppercase",
-          }}>&copy; {new Date().getFullYear()} Emmett Shaughnessy.</p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 24 }}>
@@ -66,8 +60,15 @@ function Footer() {
               </a>
             ))}
           </div>
-          <img src="../../assets/SHAUGHV-Orange.png" alt="" aria-hidden="true"
-            style={{ height: 64, width: "auto", opacity: 0.4, marginTop: 24 }} />
+          <div className="shaughv-footer" style={{ padding: 0 }}>
+            <div className="shaughv-footer__brand">
+              <div className="shaughv-footer__marks">
+                <span className="shaughv-footer__wordmark" role="img" aria-label="SHAUGHV" />
+                <span className="shaughv-footer__crest" role="img" aria-label="Shaughnessy family crest" />
+              </div>
+              <small>&copy; {new Date().getFullYear()} Emmett Shaughnessy</small>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
