@@ -103,7 +103,11 @@ communicate the same state immediately.
    for linked CSS or its isolated Copy CSS snapshot. Both render the static
    wordmark and original footer crest without JavaScript. Keep the pair,
    relative proportions and copyright, with local alignment, size and color.
-   The [footer reference](references/footer.md) also covers local assets.
+   For a custom project footer, inspect `usage.site_defaults.footer.artwork`.
+   When present, choose its one-image lockup or the separate wordmark and crest.
+   Size from the supplied dimensions, give the marks an accessible name, and
+   render copyright as real text. See the [standalone artwork](https://cdn.shaughv.com/footer-lockup#standalone-artwork)
+   and the [local footer reference](references/footer.md).
 5. For a visual artifact, use authorized local fonts and assets. The vintage
    figurines are optional illustrations for vintage surfaces. For a prototype,
    consult the closer UI kit. Keep production components in the project's

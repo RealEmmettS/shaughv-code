@@ -4,7 +4,7 @@
 
 ### Improved
 - Expand the CDN skill with live guides, metadata, page indexes and optional palette discovery. The design skill applies these resources to a project’s framework, layout, typography, interactions and accessibility.
-- Update the portfolio kits to use the hosted cursor and paired footer. Refresh the bundled mark renderer and use the CDN’s tight-framed static wordmark for script-free local footer examples.
+- Update the portfolio kits to use the hosted cursor and paired footer. Refresh the bundled mark renderer and use the CDN’s tight-framed static wordmark for script-free local footer examples. Document discovery of standalone paired or individual artwork for custom layouts.
 
 ## [1.11.7] - 2026-11-25
 

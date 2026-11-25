@@ -15,5 +15,5 @@
 skills/shaughv-design/assets/crests/*.svg -text
 plugins/shaughv-code/skills/shaughv-design/assets/crests/*.svg -text
 
-# The CDN footer wordmark is named by its content digest.
-**/shaughv-design/assets/footer-wordmark-*.svg -text
+# Preserve the original bytes of the bundled CDN footer wordmark.
+**/shaughv-design/assets/SHAUGHV-Footer-Wordmark.svg -text

@@ -16,6 +16,17 @@ guide and provenance. The identity assets work offline; hosted font defaults req
 
 For web installations, the [live footer guide](https://cdn.shaughv.com/footer-lockup#install) provides Link CSS and Copy CSS. The link follows shared defaults on reload and supports local overrides. To freeze a footer, copy its CSS and use the guide’s isolated footer class even on a site linking shared styles for another component. Both modes retain the original SVG crest.
 
+## Standalone artwork in a custom layout
+
+For an existing footer with its own layout, read `usage.site_defaults.footer.artwork`
+from the live catalog when available. Choose `pair_url` for a single image
+with the wordmark and crest already arranged. Use `wordmark_url` and `crest_url`
+for separate images when the layout needs individual control. The [live
+artwork guide](https://cdn.shaughv.com/footer-lockup#standalone-artwork) supplies
+the current files and dimensions. Give the image a meaningful accessible name,
+preserve its aspect ratio, and place the site's copyright beside or below it.
+If the catalog omits the entry, use the documented CSS recipe.
+
 ## Full-screen layouts
 
 Keep a full-screen main experience one full viewport (`min-height: 100svh` with
@@ -33,7 +44,7 @@ Paths in this table are relative to the skill root.
 
 | Asset | Purpose |
 | --- | --- |
-| `assets/footer-wordmark-3a434d1a6202.svg` | Tight-framed static wordmark from the CDN footer stylesheet, used as a CSS mask |
+| `assets/SHAUGHV-Footer-Wordmark.svg` | Tight-framed static wordmark from the CDN footer stylesheet, used as a CSS mask |
 | `assets/SHAUGHV-Official.svg` | Original static wordmark for non-JS use; its square canvas differs from the renderer |
 | `assets/crests/Shaughnessy-Crest-Footer.svg` | Exact small-footer derivative, with translucent fills that strengthen fine detail |
 | `assets/crests/Shaughnessy-Crest.svg` | Unchanged supplied color original |

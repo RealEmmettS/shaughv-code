@@ -31,7 +31,7 @@
   height: calc(64px * var(--identity-scale));
   transform: translateY(calc(7px * var(--identity-scale)));
   background: currentColor;
-  mask: url("../assets/footer-wordmark-3a434d1a6202.svg") center / contain no-repeat;
+  mask: url("../assets/SHAUGHV-Footer-Wordmark.svg") center / contain no-repeat;
 }
 .family-crest {
   display: block;
