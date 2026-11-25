@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Ivory as a design white
+
+### Improved
+- When a design calls for white, agents now start with a warm ivory for backgrounds, light text, and details. Designers can still choose pure white or use a different palette.
+
 ## WB-300 retired
 
 ### Removed

@@ -140,6 +140,12 @@ and cannot identify the user's terminal. Review every entry's setup notes.
 
 ## Shared styles
 
+When a design calls for white, start with the ivory in `usage.site_defaults.design_white`.
+Resolve its CSS custom property from the shared stylesheet for page backgrounds,
+surfaces, light text, and other white details. A palette can omit white entirely.
+Choose true white deliberately when it suits the design. Preserve artwork colors,
+text contrast, system colors, and print choices.
+
 When available, resolve the component stylesheet and animated mark from `usage.site_defaults`. A direct stylesheet link follows CDN updates on reload. Use the footer guide’s Copy CSS option and its isolated outer class when the site should keep a fixed footer. Both modes use the original footer crest. Follow the live examples for local color, mark size, paired-logo scaling, and cursor overrides. An animated mark needs its hosted script once per page. Preserve existing script-only integrations.
 
 ## Required CDN site baseline

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.11.7] - 2026-11-25
+
+### Improved
+- Teach the CDN and design skills to start with ivory (`#FAF8F3`) when choosing white for surfaces, light text, or details. Resolve `--shaughv-white` through the live catalog and provide the same color in the offline design kit.
+
 ## [1.11.6] - 2026-11-24
 
 ### Removed

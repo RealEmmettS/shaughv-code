@@ -7,7 +7,7 @@
   align-items: start;
   gap: 32px;
   padding: 32px 40px;
-  background: var(--footer-background, #fff);
+  background: var(--footer-background, var(--shaughv-white, #FAF8F3));
   color: var(--footer-foreground, #000);
   font-family: var(--footer-font, "Geist Mono", ui-monospace, monospace);
 }
@@ -52,7 +52,7 @@
 .footer-navigation a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 .identity-footer.is-centered { grid-template-columns: 1fr; }
 .identity-footer.is-centered .identity-brand { align-items: center; text-align: center; }
-.identity-footer.is-inverted { --footer-background: #000; --footer-foreground: #fff; }
+.identity-footer.is-inverted { --footer-background: #000; --footer-foreground: var(--shaughv-white, #FAF8F3); }
 @media (max-width: 580px) {
   .identity-footer { grid-template-columns: 1fr; padding-inline: 28px; }
   .footer-navigation { flex-direction: row; flex-wrap: wrap; column-gap: 20px; }

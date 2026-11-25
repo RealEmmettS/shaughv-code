@@ -18,6 +18,12 @@ use `https://cdn.shaughv.com` even if discovery began from an alias supplied by
 the user. Preserve the canonical catalog URLs; see `usage.url_policy`. The
 bundled references are also usable offline.
 
+When a design calls for white, start with SHAUGHV ivory (`#FAF8F3`). Use
+`var(--shaughv-white)` from the shared stylesheet for white page backgrounds,
+surfaces, light text, and details. A palette can omit white entirely. True white
+is an intentional option for artwork, contrast, print, or the design itself.
+For the current token and value, read `usage.site_defaults.design_white`.
+
 1. **Read `README.md`** — the brand context, content fundamentals, visual foundations, and iconography rules.
 2. **Read `colors_and_type.css`** — the single source of truth for all design tokens. Never invent hex values; reference variables from this file.
 3. **Read `BRANDMARK.md`** before placing the SHAUGHV mark anywhere — it contains the decision tree (animated vs static vs icon variant), the drop-in usage for HTML/React/everything-else, and the full animation spec. The mark is part of every SHAUGHV surface; getting it right is non-optional.
