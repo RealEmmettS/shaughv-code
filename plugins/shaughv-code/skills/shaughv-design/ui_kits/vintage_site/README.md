@@ -5,6 +5,10 @@ Hi-fi recreation of the **shaughv_vintage** edition — the warm cream-and-sage 
 This historical style reference uses the live CDN pointer and footer styles.
 See the [paired-logo guide](../../references/footer.md) and [local examples](../../examples/footer.html).
 
+The browser-rendered footer reads the viewer’s local year on each load and
+displays **© [current year] SHAUGHV and ES Development LLC** alongside the
+wordmark and family crest.
+
 ## What it is
 
 The vintage edition reskins SHAUGHV in a Bauhaus-inspired, figurine-illustrated palette. It uses

@@ -205,19 +205,42 @@ text contrast, system colors, and print choices.
 
 When available, resolve the component stylesheet and animated mark from `usage.site_defaults`. A direct stylesheet link follows CDN updates on reload. Use the footer guide’s Copy CSS option and its isolated outer class when the site should keep a fixed footer. Both modes use the original footer crest. Follow the live examples for local color, mark size, paired-logo scaling, and cursor overrides. An animated mark needs its hosted script once per page. Preserve existing script-only integrations.
 
-### Standalone artwork for custom footers
+### Marks only and standalone artwork for custom footers
 
 The [footer artwork guide](https://cdn.shaughv.com/footer-lockup#standalone-artwork)
 also offers direct images when `usage.site_defaults.footer.artwork` is present.
 Read `pair_url` for a single image containing both marks, or `wordmark_url`
 and `crest_url` for the individual files. Use the returned dimensions to
-preserve proportions. The site supplies copyright as text. If this entry is
-absent, use the linked or fixed footer from the current guide.
+preserve proportions. Place the pair anywhere **within the site's footer**.
+Use the Marks only snippet in `artwork.html`, or link `artwork.stylesheet`
+and apply `artwork.css_class` to a named image role inside the footer. The
+project controls the surrounding layout. Individual marks elsewhere are optional. Keep the
+copyright line as accessible text in the footer with any installation.
 
 ## Required CDN site baseline
 
 Every website using the CDN includes the shared cursor, frosted dropdowns, and
-a footer with both the SHAUGHV main logo and Shaughnessy crest plus copyright.
+a footer with the SHAUGHV wordmark and Shaughnessy family crest together. Read
+`usage.site_defaults.footer.artwork` for the pair and
+`usage.site_defaults.footer.copyright` for the year helper and notice.
+Linked CSS, Copy CSS, Marks only and custom layouts all require the same
+visible line **© [viewer’s current year] SHAUGHV and ES Development LLC**.
+
+In HTML, load the [year helper](https://cdn.shaughv.com/js/shaughv-year.js)
+once with the catalog’s `footer.copyright.html` snippet.
+
+```html
+<script defer src="https://cdn.shaughv.com/js/shaughv-year.js"></script>
+<small>© <shaughv-year></shaughv-year> SHAUGHV and ES Development LLC</small>
+```
+
+A framework may instead set the year with `new Date().getFullYear()` on client
+mount. Use the viewer’s local clock on each page load, including when HTML is
+cached, prerendered or server-rendered. A fixed year, UTC calculation or
+build-time-only expression can show the wrong year. If the helper is unavailable,
+use the same local-date calculation in the browser. For a JavaScript-free
+site with a known viewer timezone, render the year per request in that timezone
+and keep caches from serving a stale year.
 Read `usage.site_defaults` and `usage.components.dropdown` from the live catalog
 and follow their documentation links. Humans and agents use the same contract.
 Keep the current font defaults; customize color, spacing, type, and layout to

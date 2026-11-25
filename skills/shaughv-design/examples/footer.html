@@ -13,13 +13,23 @@
     h2 { font-size: 20px; margin-block: 36px 16px; }
     p { max-width: 72ch; line-height: 1.6; }
     .identity-footer { border: 1px solid var(--border-hairline); }
+    .project-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-block: 20px;
+      border-block-start: 1px solid currentColor;
+      --identity-scale: 0.75;
+    }
     @media (max-width: 400px) { body { padding: 16px; } }
   </style>
 </head>
 <body>
   <main>
     <h1>Footer identity</h1>
-    <p>Use either example as shown or adapt it to the site's theme. Keep both
+    <p>Choose a footer layout or adapt the marks-only group to the site's theme. Keep both
       logos and their relative proportions. Change <code>--identity-scale</code>
       to scale the pair together. Colors, layout, spacing, typography, and
       navigation are customizable. For hosted or fixed CSS, see the
@@ -32,7 +42,7 @@
           <span class="identity-wordmark" role="img" aria-label="SHAUGHV"></span>
           <span class="family-crest" role="img" aria-label="Shaughnessy family crest — Fortis et stabilis"></span>
         </div>
-        <small>© 2026 Emmett Shaughnessy</small>
+        <small>© <span data-viewer-year></span> SHAUGHV and ES Development LLC</small>
       </div>
       <nav class="footer-navigation" aria-label="Example portfolio navigation">
         <span>Navigate</span>
@@ -49,11 +59,25 @@
           <span class="identity-wordmark" role="img" aria-label="SHAUGHV"></span>
           <span class="family-crest" role="img" aria-label="Shaughnessy family crest — Fortis et stabilis"></span>
         </div>
-        <small>© 2026 Emmett Shaughnessy</small>
+        <small>© <span data-viewer-year></span> SHAUGHV and ES Development LLC</small>
       </div>
     </footer>
-    <p>For ivory on black, add <code>is-inverted</code> to either footer. These
+    <h2>Marks only in a custom footer</h2>
+    <footer class="project-footer" aria-label="Custom footer example">
+      <div class="identity-lockup">
+        <span class="identity-wordmark" role="img" aria-label="SHAUGHV"></span>
+        <span class="family-crest" role="img" aria-label="Shaughnessy family crest — Fortis et stabilis"></span>
+      </div>
+      <small>© <span data-viewer-year></span> SHAUGHV and ES Development LLC</small>
+    </footer>
+    <p>For ivory on black, add <code>is-inverted</code> to either full footer layout. These
       neutral colors demonstrate contrast; use the site's own tokens when desired.</p>
   </main>
+  <script>
+    const viewerYear = String(new Date().getFullYear());
+    for (const field of document.querySelectorAll("[data-viewer-year]")) {
+      field.textContent = viewerYear;
+    }
+  </script>
 </body>
 </html>

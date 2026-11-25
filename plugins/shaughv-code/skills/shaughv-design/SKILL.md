@@ -99,15 +99,20 @@ communicate the same state immediately.
    SHAUGHV loader, sized and colored for its context. Resolve its script for
    online work, or use the bundled version for local work. The animated loader also needs
    Anime.js. For a disconnected export, choose static artwork.
-4. For a web footer, follow `usage.site_defaults.footer.installation.guide`
-   for linked CSS or its isolated Copy CSS snapshot. Both render the static
-   wordmark and original footer crest without JavaScript. Keep the pair,
-   relative proportions and copyright, with local alignment, size and color.
-   For a custom project footer, inspect `usage.site_defaults.footer.artwork`.
-   When present, choose its one-image lockup or the separate wordmark and crest.
-   Size from the supplied dimensions, give the marks an accessible name, and
-   render copyright as real text. See the [standalone artwork](https://cdn.shaughv.com/footer-lockup#standalone-artwork)
-   and the [local footer reference](references/footer.md).
+4. Every CDN site displays the SHAUGHV wordmark and Shaughnessy family crest
+   **together in its footer**. Individual marks may also appear elsewhere.
+   Choose linked styles, the isolated Copy CSS snapshot, or Marks only from
+   [the footer guide](https://cdn.shaughv.com/footer-lockup#install). For
+   custom layouts, use `usage.site_defaults.footer.artwork` for the paired
+   image or both individual files. Preserve the relative scale and aspect
+   ratios wherever the pair sits within the footer.
+   All four integrations include **© [viewer’s current year] SHAUGHV and ES Development LLC**
+   as real text. Read `usage.site_defaults.footer.copyright`. Load the
+   [year helper](https://cdn.shaughv.com/js/shaughv-year.js) once and place
+   `<shaughv-year></shaughv-year>` between the copyright symbol and names, or
+   calculate `new Date().getFullYear()` on client mount. This must run on
+   every page load in the viewer’s timezone, including on static and cached
+   sites. See the [copyable markup and local examples](references/footer.md).
 5. For a visual artifact, use authorized local fonts and assets. The vintage
    figurines are optional illustrations for vintage surfaces. For a prototype,
    consult the closer UI kit. Keep production components in the project's
@@ -136,7 +141,7 @@ appropriate existing stack for a website or a static format for an export.
 | `BRANDMARK.md` | How to render and animate the SHAUGHV mark in any framework — read before placing the mark |
 | `references/footer.md` | Complete footer instructions, required logo pair, adaptable layouts, shared scaling, colors, fonts, and implementation checks |
 | `references/fonts.md` | Current family roles, bundled and hosted loading, variable fonts, optional families, and notices |
-| `examples/footer.html` / `examples/footer.css` | Runnable left and centered footer examples, with shared proportional scaling |
+| `examples/footer.html` / `examples/footer.css` | Left, centered and custom marks-only footers with proportional scaling and a viewer-local year |
 | `colors_and_type.css` | Vintage kit tokens — `@font-face`, palette, semantic vars, type classes |
 | `fonts/` | Retained local Makira, Paper Mono, Paper Mono Variable, notices, and Gail Rock compatibility faces. Current Makira, Geist Mono, and Geist Serif defaults load through the CDN. For offline work, verify authorized copies against current family metadata. Paper Mono is an alternate. Geist, Michelangelus, IBM Plex Mono, and Unbounded are opt-in. |
 | `assets/` | Wordmark, favicons, PNGs, animation and loader scripts, figurines, plus `crests/` with original color, original mono, footer derivative, and provenance metadata |
@@ -185,5 +190,6 @@ appropriate existing stack for a website or a static format for an export.
 - Check the finished page in a narrow viewport and with keyboard input. Check
   the actual fonts, focus and text contrast in each theme, both footer marks
   with JavaScript disabled, and native select and cursor fallbacks when the
-  scripts are unavailable. In a routed app, revisit the page and check for a
+  scripts are unavailable. Reload around New Year in two viewer timezones
+  and check the year and both rightsholder names in the footer. In a routed app, revisit the page and check for a
   duplicate mount. Verify reduced motion and touch behavior for effects used.

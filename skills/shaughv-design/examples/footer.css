@@ -1,7 +1,6 @@
 /* Copyable footer baseline. Adapt the surrounding layout to the site's theme.
    Both logo dimensions share --identity-scale; keep that relationship. */
 .identity-footer {
-  --identity-scale: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
@@ -22,22 +21,22 @@
 .identity-lockup {
   display: flex;
   align-items: center;
-  gap: var(--identity-gap, calc(24px * var(--identity-scale)));
+  gap: var(--identity-gap, calc(24px * var(--identity-scale, 1)));
 }
 .identity-wordmark {
   display: block;
   flex: none;
-  width: calc(95px * var(--identity-scale));
-  height: calc(64px * var(--identity-scale));
-  transform: translateY(calc(7px * var(--identity-scale)));
+  width: calc(95px * var(--identity-scale, 1));
+  height: calc(64px * var(--identity-scale, 1));
+  transform: translateY(calc(7px * var(--identity-scale, 1)));
   background: currentColor;
   mask: url("../assets/SHAUGHV-Footer-Wordmark.svg") center / contain no-repeat;
 }
 .family-crest {
   display: block;
   flex: none;
-  width: calc(80px * var(--identity-scale));
-  height: calc(100px * var(--identity-scale));
+  width: calc(80px * var(--identity-scale, 1));
+  height: calc(100px * var(--identity-scale, 1));
   background: currentColor;
   mask: url("../assets/crests/Shaughnessy-Crest-Footer.svg") center / contain no-repeat;
 }

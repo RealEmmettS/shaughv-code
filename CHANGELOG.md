@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.12.1] - 2026-11-25
+
+### Improved
+- Require the SHAUGHV wordmark and Shaughnessy family crest together inside every CDN site footer, with the viewer’s current local year and both rightsholders, SHAUGHV and ES Development LLC. Document the hosted year helper and client-rendered alternative for linked, copied, marks-only and custom footers.
+- Update both React kits and the local HTML examples, including a custom footer with a freely positioned marks-only group.
+
 ## [1.12.0] - 2026-11-25
 
 ### Improved

@@ -6,6 +6,10 @@ The prototype uses the linked CDN cursor and paired footer with the project's
 own colors. See the [footer guide](../../references/footer.md) and [runnable
 local examples](../../examples/footer.html) for integration details.
 
+The browser-rendered footer reads the viewer’s local year on each load and
+displays **© [current year] SHAUGHV and ES Development LLC** alongside the
+wordmark and family crest.
+
 ## Source stack at the time of this reference
 
 | Layer | Tech |

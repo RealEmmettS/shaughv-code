@@ -4,7 +4,9 @@ For a website, start with the [live motion guide](https://cdn.shaughv.com/motion
 and `usage.site_defaults.animated_mark` in the [catalog](https://cdn.shaughv.com/tree.json).
 Use its stylesheet and script once, then set `--shaughv-mark-color` and
 `--shaughv-mark-size` per placement. The paired footer uses the guide’s two
-static CSS masks. The examples below cover bundled assets and custom animation
+static CSS masks. Keep the wordmark and family crest together inside every
+CDN site’s footer, including when placing either mark individually elsewhere.
+The [footer reference](references/footer.md) covers the required current-year notice. The examples below cover bundled assets and custom animation
 integrations for local projects and exports.
 
 The SHAUGHV brand mark is **always one of three things**:

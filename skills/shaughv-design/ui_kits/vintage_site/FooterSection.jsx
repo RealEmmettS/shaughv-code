@@ -214,7 +214,7 @@ function FooterSection() {
                 <span className="shaughv-footer__wordmark" role="img" aria-label="SHAUGHV" />
                 <span className="shaughv-footer__crest" role="img" aria-label="Shaughnessy family crest" />
               </div>
-              <small>&copy; {new Date().getFullYear()} Emmett Shaughnessy</small>
+              <small>&copy; {new Date().getFullYear()} SHAUGHV and ES Development LLC</small>
             </div>
           </div>
         </div>
