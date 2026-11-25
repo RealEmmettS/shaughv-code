@@ -287,14 +287,17 @@ The brand uses **two icon resources**:
 
 ## FOOTER IDENTITY
 
-Keep the main SHAUGHV wordmark and Shaughnessy crest together in the footer,
-preserving their relative sizing and individual aspect ratios. Either example
-may be used as is or customized to the site's existing theme. Layout, navigation,
-copyright placement, typography, colors, padding, and breakpoints are flexible.
-Scale both logos up or down together; exact pixel dimensions are reference values.
+On every CDN site, place the SHAUGHV wordmark and Shaughnessy family crest
+together inside the footer and include **© [viewer’s current year] SHAUGHV and ES Development LLC**.
+Individual marks elsewhere on the page are optional. The footer can use linked
+CSS, copied CSS, Marks only, or a custom layout. Scale the two marks together,
+preserve each aspect ratio and adapt the surrounding layout to the site.
+Read `usage.site_defaults.footer.artwork` and `usage.site_defaults.footer.copyright`
+in the live catalog. Fill the year on each page load with the CDN year helper
+or a client-side local date.
 
 The complete recipe is in [`references/footer.md`](references/footer.md), with
-both layouts in [`examples/footer.html`](examples/footer.html). The bundled
+three layouts in [`examples/footer.html`](examples/footer.html). The bundled
 `assets/crests/Shaughnessy-Crest-Footer.svg` is the strengthened small-size
 derivative; the original color and mono crests remain separate. The footer uses a tight-framed static wordmark and a crest mask. Both work without JavaScript. Choose linked CSS or a fixed snapshot in the [footer guide](https://cdn.shaughv.com/footer-lockup#install). Offline defaults require licensed local copies; historical kits may retain older font names.
 

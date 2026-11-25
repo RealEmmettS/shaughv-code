@@ -5,10 +5,10 @@
 `shaughv-code` is Emmett Shaughnessy's personal cross-agent skill bundle. The
 repository root is the authoring source for Claude Code and skills.sh-compatible
 agents; `plugins/shaughv-code/` is a generated, self-contained Codex package.
-Release 1.8.0 adds discovery and integration guidance for the optional ambient background. Release 1.7.0 establishes the shared CDN site baseline: cursor, frosted dropdowns, and both footer logos with copyright, including full-viewport footer placement. Earlier releases refresh the design skill with complete footer and font references,
-bundled crests, runnable footer examples, proportional logo scaling, and current
-static-mark and typography guidance. Original crest bytes survive Windows
-checkouts and marketplace installs without newline conversion.
+The CDN and design skills cover live resource discovery and project-specific
+implementation. Every CDN site pairs the wordmark and family crest in the
+footer with the viewer’s current year and both rightsholder names. The design
+kit demonstrates left-aligned, centered and custom footer layouts.
 
 ## Project status
 
@@ -17,7 +17,7 @@ checkouts and marketplace installs without newline conversion.
 > with the manifests and the generated package. Update them in the same commit as
 > any version bump; see the release workflow below.
 
-- **Current release:** 1.12.0 (25 November 2026).
+- **Current release:** 1.12.1 (25 November 2026).
 - **Default branch:** `main`.
 - **Repository:** `RealEmmettS/shaughv-code`.
 - **Primary purpose:** Maintain one editable source of truth for Emmett's

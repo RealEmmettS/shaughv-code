@@ -5,16 +5,48 @@ being implemented elsewhere on the site. Both approaches are valid. Exact
 layout, alignment, navigation, copyright placement, typography, colors, gap,
 padding, and responsive breakpoints are flexible.
 
-The requirement is to keep **both the main SHAUGHV wordmark and Shaughnessy
-crest in the footer**, as a recognizable pair, plus copyright text. Preserve their relative sizing
-and each logo's natural aspect ratio. Scale the two together; do not stretch
-either one or make one disproportionately larger than the other.
+Every CDN site places the **SHAUGHV wordmark and Shaughnessy family crest
+together inside its footer**. The site may additionally show either mark on
+its own elsewhere. Position the pair to fit the footer, scale both marks by
+the same factor and preserve each mark’s aspect ratio.
 
-For a website, fetch the [agent guide](https://cdn.shaughv.com/agents) and [catalog](https://cdn.shaughv.com/tree.json).
-Follow `usage.documentation.footer_example` and `crest_metadata` for the current
-guide and provenance. The identity assets work offline; hosted font defaults require licensed local copies for a fully offline export.
+For a website, fetch the [agent guide](https://cdn.shaughv.com/agents) and
+[live catalog](https://cdn.shaughv.com/tree.json). Use
+`usage.site_defaults.footer.artwork` for the marks and
+`usage.site_defaults.footer.copyright` for the notice. Follow
+`usage.documentation.footer_example` and `usage.documentation.crest_metadata`
+for current installation snippets and provenance. Link CSS follows shared
+defaults on reload. Copy CSS uses the guide’s isolated outer class to keep a
+fixed layout. The [live footer guide](https://cdn.shaughv.com/footer-lockup#install)
+also offers Marks only for use inside an existing project footer.
 
-For web installations, the [live footer guide](https://cdn.shaughv.com/footer-lockup#install) provides Link CSS and Copy CSS. The link follows shared defaults on reload and supports local overrides. To freeze a footer, copy its CSS and use the guide’s isolated footer class even on a site linking shared styles for another component. Both modes retain the original SVG crest.
+## Copyright on every page load
+
+Every footer variant includes **© [viewer’s current year] SHAUGHV and ES Development LLC**
+as visible text. The year comes from the viewer’s local calendar each time
+the page loads. Keep both names in the HTML. For the hosted integration,
+load the [year helper](https://cdn.shaughv.com/js/shaughv-year.js) once in
+the page head.
+
+```html
+<script defer src="https://cdn.shaughv.com/js/shaughv-year.js"></script>
+```
+
+Place this line inside the footer for Link CSS, Copy CSS, Marks only or a
+custom composition.
+
+```html
+<small>© <shaughv-year></shaughv-year> SHAUGHV and ES Development LLC</small>
+```
+
+For a local static site, the runnable HTML example fills its year spans with
+`new Date().getFullYear()` after parsing the markup. For a prerendered or
+server-rendered framework, use the helper above or compute the year in a
+client mount hook after hydration. A build timestamp or a UTC year can be
+wrong for a visitor near midnight on January 1. With JavaScript disabled, the
+static marks and rightsholder names remain visible. A JavaScript-free site
+can supply the year on each request when the viewer’s timezone is known.
+Account for that timezone and year rollover in any HTML cache.
 
 ## Standalone artwork in a custom layout
 
@@ -24,8 +56,12 @@ with the wordmark and crest already arranged. Use `wordmark_url` and `crest_url`
 for separate images when the layout needs individual control. The [live
 artwork guide](https://cdn.shaughv.com/footer-lockup#standalone-artwork) supplies
 the current files and dimensions. Give the image a meaningful accessible name,
-preserve its aspect ratio, and place the site's copyright beside or below it.
-If the catalog omits the entry, use the documented CSS recipe.
+preserve its aspect ratio, and include the same current-year notice in the footer.
+To inherit the site's color while using one element, start with
+`usage.site_defaults.footer.artwork.html`. Its stylesheet and class render
+the whole pair. Set `--shaughv-lockup-width` on the group to scale both marks,
+their gap and optical offset together. Place the year line in the same footer.
+If the catalog omits the artwork entry, use the documented full-footer recipe.
 
 ## Full-screen layouts
 
@@ -102,10 +138,11 @@ Open `examples/footer.html` through a local static server. It shows:
 1. Both logos on the left, copyright beneath them, and sample navigation on
    the right. Navigation moves below the identity on narrow screens.
 2. Both logos centered horizontally, with the copyright centered beneath them.
+3. A custom footer that places the marks-only group and notice in its own layout.
 
 Copy the relevant markup and `examples/footer.css` into the project, update
 the relative asset paths for its public directory, and set real navigation
-destinations and copyright text. The defaults use 32px vertical padding and
+destinations. Keep the current-year notice and its client-side year implementation. The defaults use 32px vertical padding and
 40px horizontal padding, reduced to 28px on narrow screens. These are adjustable
 starting values. The example links go to the portfolio; replace them with the
 consuming site's routes.
@@ -118,7 +155,7 @@ consuming site's routes.
       <span class="family-crest" role="img"
         aria-label="Shaughnessy family crest — Fortis et stabilis"></span>
     </div>
-    <small>© 2026 Emmett Shaughnessy</small>
+    <small>© <shaughv-year></shaughv-year> SHAUGHV and ES Development LLC</small>
   </div>
   <nav class="footer-navigation" aria-label="Footer">
     <span>Navigate</span>
@@ -164,8 +201,8 @@ The website's invert controls are preview tools, not required footer UI.
 
 ## Frameworks and static fallback
 
-The linked, snapshot and local examples use two CSS masks and work with
-JavaScript disabled. Render the markup in HTML, a server template or a
+The linked, snapshot and local examples render both marks with CSS masks
+even when JavaScript is disabled. The viewer-local year is filled at runtime. Render the markup in HTML, a server template or a
 framework component. Use `className` in JSX. Keep copyright and navigation
 links in the project's own template.
 
@@ -175,7 +212,8 @@ for its extra whitespace and check the visible proportions.
 
 ## Check the installed result
 
-- Both logos are present, in the footer, without stretching or cropping.
+- The wordmark and crest appear together in the footer, including when either mark also appears elsewhere.
+- On fresh loads near New Year, verify the exact notice in two timezones on opposite sides of midnight. Repeat with cached HTML. Check the two names and the viewer-local year for the chosen layout.
 - Their relative size is preserved at the chosen shared scale.
 - The footer fits the site's theme, whether the example was copied or adapted.
 - The correct crest variant, wordmark, and chosen fonts load successfully.

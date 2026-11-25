@@ -1,5 +1,10 @@
 # Human Changelog
 
+## Footer credits follow the visitor’s calendar
+
+### Improved
+- The footer keeps the SHAUGHV wordmark and family crest together, even in a custom layout. Its copyright line names SHAUGHV and ES Development LLC and shows the current year where the visitor is.
+
 ## Design with the live SHAUGHV collection
 
 ### Improved
